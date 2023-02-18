@@ -1,0 +1,46 @@
+import Stack from "@mui/material/Stack";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert, { AlertColor, AlertProps } from "@mui/material/Alert";
+import { forwardRef, SyntheticEvent, useEffect, useState } from "react";
+import { CoreModule, getCoreModuleRoute } from "lib/router";
+import { useNavigate } from "react-router-dom";
+
+const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+
+interface SnackbarProps {
+  message: string;
+  severerity: AlertColor;
+  isOpen: boolean;
+  navigateTo: CoreModule;
+}
+
+export const CustomizedSnackbar = ({ message, severerity, isOpen, navigateTo }: SnackbarProps) => {
+  const [open, setOpen] = useState(isOpen);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    setOpen(isOpen);
+  }, [isOpen]);
+
+  const handleClose = (event?: SyntheticEvent | Event, reason?: string) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
+    navigate(getCoreModuleRoute(navigateTo));
+  };
+
+  return (
+    <Stack spacing={2} sx={{ width: "100%" }}>
+      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity={severerity} sx={{ width: "100%" }}>
+          {message}
+        </Alert>
+      </Snackbar>
+    </Stack>
+  );
+};

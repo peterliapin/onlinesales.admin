@@ -2,6 +2,8 @@ import { Button } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { ContactDetailsDto } from "lib/network/swagger-client";
 import { ContactsTableContainer } from "./index.styled";
+import { CoreModule, getEditModuleRoute } from "lib/router";
+import { GhostLink } from "components/ghost-link";
 
 type ContactsTableProps = {
   contacts?: ContactDetailsDto[];
@@ -13,7 +15,7 @@ const columns: GridColDef<ContactDetailsDto>[] = [
   {
     field: "name",
     headerName: "Name",
-    minWidth: 150,
+    minWidth: 100,
     flex: 1,
     renderCell: ({ row }) => (
       <div>
@@ -23,16 +25,16 @@ const columns: GridColDef<ContactDetailsDto>[] = [
     ),
   },
   {
+    field: "address1",
+    headerName: "Address",
+  },
+  {
+    field: "phone",
+    headerName: "Phone",
+  },
+  {
     field: "location",
     headerName: "Location",
-  },
-  {
-    field: "orders",
-    headerName: "Orders",
-  },
-  {
-    field: "spent",
-    headerName: "Spent",
   },
   {
     field: "actions",
@@ -41,10 +43,15 @@ const columns: GridColDef<ContactDetailsDto>[] = [
     headerAlign: "right",
     sortable: false,
     disableColumnMenu: true,
-    renderCell: () => {
+    renderCell: (params) => {
       return (
         <div>
-          <Button>edit</Button>
+          <Button
+            to={getEditModuleRoute(CoreModule.contacts, params.id as number)}
+            component={GhostLink}
+          >
+            edit
+          </Button>
         </div>
       );
     },
