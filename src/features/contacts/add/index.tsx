@@ -1,5 +1,12 @@
 import { useState } from "react";
-import { Breadcrumbs, Link, Typography, AlertColor } from "@mui/material";
+import {
+  Breadcrumbs,
+  Link,
+  Typography,
+  AlertColor,
+  Backdrop,
+  CircularProgress,
+} from "@mui/material";
 import { NavigateNext } from "@mui/icons-material";
 import { ContactCreateDto, ContactDetailsDto } from "lib/network/swagger-client";
 import {
@@ -19,6 +26,8 @@ export const ContactAdd = () => {
 
   const [contact, setContact] = useState<ContactDetailsDto>({ email: "" });
 
+  const [isSaving, setIsSaving] = useState(false);
+
   const [snackBarParams, setParams] = useState({
     message: "",
     isOpen: false,
@@ -37,11 +46,14 @@ export const ContactAdd = () => {
 
     (async () => {
       try {
+        setIsSaving(true);
         await client.api.contactsCreate(createDto);
         setParams({ message: "Saved Successfully", isOpen: true, severerity: "success" });
       } catch (e) {
         console.log(e);
-        setParams({ message: "Server error occurred. ", isOpen: true, severerity: "error" });
+        setParams({ message: "Server Error Occurred. ", isOpen: true, severerity: "error" });
+      } finally {
+        setIsSaving(false);
       }
     })();
   };
@@ -73,6 +85,9 @@ export const ContactAdd = () => {
         handleInputChange={handleInputChange}
         handleSave={handleSave}
       />
+      <Backdrop open={isSaving} style={{ zIndex: 999 }}>
+        <CircularProgress color="inherit" />
+      </Backdrop>
       <CustomizedSnackbar
         isOpen={snackBarParams.isOpen}
         severerity={snackBarParams.severerity}

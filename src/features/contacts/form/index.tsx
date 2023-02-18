@@ -1,10 +1,4 @@
-import {
-  Button,
-  Card,
-  CardContent,
-  Grid,
-  TextField,
-} from "@mui/material";
+import { Button, Card, CardContent, Grid, TextField } from "@mui/material";
 import { ContactDetailsDto } from "lib/network/swagger-client";
 
 interface ContactFormProps {

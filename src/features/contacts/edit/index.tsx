@@ -1,5 +1,12 @@
 import { useEffect, useState } from "react";
-import { Breadcrumbs, Link, Typography, AlertColor } from "@mui/material";
+import {
+  Breadcrumbs,
+  Link,
+  Typography,
+  AlertColor,
+  Backdrop,
+  CircularProgress,
+} from "@mui/material";
 import { NavigateNext } from "@mui/icons-material";
 import { ContactDetailsDto, ContactUpdateDto } from "lib/network/swagger-client";
 import {
@@ -24,6 +31,8 @@ export const ContactEdit = () => {
     firstName: "",
     email: "",
   });
+
+  const [isSaving, setIsSaving] = useState(false);
 
   const [snackBarParams, setParams] = useState({
     message: "",
@@ -54,11 +63,14 @@ export const ContactEdit = () => {
 
     (async () => {
       try {
+        setIsSaving(true);
         await client.api.contactsPartialUpdate(id, updateDto);
         setParams({ message: "Updated Successfully", isOpen: true, severerity: "success" });
       } catch (e) {
         console.log(e);
         setParams({ message: "Server error occurred. ", isOpen: true, severerity: "error" });
+      } finally {
+        setIsSaving(false);
       }
     })();
   };
@@ -90,6 +102,9 @@ export const ContactEdit = () => {
         handleInputChange={handleInputChange}
         handleSave={handleSave}
       />
+      <Backdrop open={isSaving} style={{ zIndex: 999 }}>
+        <CircularProgress color="inherit" />
+      </Backdrop>
       <CustomizedSnackbar
         isOpen={snackBarParams.isOpen}
         severerity={snackBarParams.severerity}

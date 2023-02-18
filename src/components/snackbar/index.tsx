@@ -4,6 +4,7 @@ import MuiAlert, { AlertColor, AlertProps } from "@mui/material/Alert";
 import { forwardRef, SyntheticEvent, useEffect, useState } from "react";
 import { CoreModule, getCoreModuleRoute } from "lib/router";
 import { useNavigate } from "react-router-dom";
+import { Backdrop } from "@mui/material";
 
 const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -31,16 +32,20 @@ export const CustomizedSnackbar = ({ message, severerity, isOpen, navigateTo }: 
     }
 
     setOpen(false);
-    navigate(getCoreModuleRoute(navigateTo));
+    if (severerity === "success") {
+      navigate(getCoreModuleRoute(navigateTo));
+    }
   };
 
   return (
-    <Stack spacing={2} sx={{ width: "100%" }}>
-      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-        <Alert onClose={handleClose} severity={severerity} sx={{ width: "100%" }}>
-          {message}
-        </Alert>
-      </Snackbar>
-    </Stack>
+    <Backdrop open={open}>
+      <Stack spacing={2} sx={{ width: "100%" }}>
+        <Snackbar open={open} autoHideDuration={2000} onClose={handleClose}>
+          <Alert onClose={handleClose} severity={severerity} sx={{ width: "100%" }}>
+            {message}
+          </Alert>
+        </Snackbar>
+      </Stack>
+    </Backdrop>
   );
 };
