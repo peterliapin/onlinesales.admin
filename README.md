@@ -29,17 +29,19 @@ Create `.env` file and add configurations as shown in `.env.sample` file. Refer 
 
     CORE_API_SWAGGER=http://localhost:45437/swagger/v1/swagger.json
 
-Fix any code formatting errors/warnings before do git commit
+Fix any code formatting errors/warnings before do git commit.
 
 - Run `eslint` to list code formatting issues
 
-    npm run lint
+        npm run lint
 
 - Run `prettier` to automatically fix possible formatting issues:
 
-    npm run format
+        npm run format
 
-- Fix any remaining errors/warnings manually
+- Fix any remaining errors/warnings manually before commit.
+
+    Note: `git commit` will not work without fixing all formatting issues due to husky pre-commit hook.
 
 Start development server:
 
