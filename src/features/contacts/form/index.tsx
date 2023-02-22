@@ -1,5 +1,6 @@
 import { Button, Card, CardContent, Grid, TextField } from "@mui/material";
 import { ContactDetailsDto } from "lib/network/swagger-client";
+import { useState } from "react";
 
 interface ContactFormProps {
   contact: ContactDetailsDto;
@@ -8,6 +9,26 @@ interface ContactFormProps {
 }
 
 export const ContactForm = ({ contact, handleInputChange, handleSave }: ContactFormProps) => {
+  const [isInvalidEmail, setIsInvalidEmail] = useState(false);
+
+  const [isInvalidNumber, setIsInvalidNumber] = useState(false);
+
+  const isValidEmail = (email: string) => {
+    const regex =
+    /^[a-zA-Z0-9]+@(?:[a-zA-Z0-9]+\.)+[A-Za-z]+$/;
+    return email && regex.test(email);
+  };
+
+  const validateAndSave = () => {
+    setIsInvalidEmail(false);
+    setIsInvalidNumber(false);
+
+    if (!isValidEmail(contact.email)) setIsInvalidEmail(true);
+    else if (!contact.timezone || isNaN(contact.timezone!)) {
+      setIsInvalidNumber(true);
+    } else handleSave();
+  };
+
   return (
     <Card>
       <CardContent>
@@ -44,7 +65,8 @@ export const ContactForm = ({ contact, handleInputChange, handleSave }: ContactF
               variant="outlined"
               onChange={handleInputChange}
               fullWidth
-              required
+              error={isInvalidEmail}
+              helperText={isInvalidEmail ? "Enter a valid email address" : ""}
             ></TextField>
           </Grid>
           <Grid xs={12} sm={6} item>
@@ -122,6 +144,8 @@ export const ContactForm = ({ contact, handleInputChange, handleSave }: ContactF
               variant="outlined"
               onChange={handleInputChange}
               fullWidth
+              error={isInvalidNumber}
+              helperText={isInvalidNumber ? "Timezone should be a number" : ""}
             ></TextField>
           </Grid>
           <Grid xs={12} sm={6} item>
@@ -141,7 +165,7 @@ export const ContactForm = ({ contact, handleInputChange, handleSave }: ContactF
               type="submit"
               variant="contained"
               color="primary"
-              onClick={handleSave}
+              onClick={validateAndSave}
               fullWidth
             >
               Submit

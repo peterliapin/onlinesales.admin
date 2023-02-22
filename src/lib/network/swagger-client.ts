@@ -967,7 +967,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @secure
      */
     accountImportCreate: (data: AccountImportDto[], params: RequestParams = {}) =>
-      this.request<void, ProblemDetails>({
+      this.request<void, void | ProblemDetails>({
         path: `/api/account/import`,
         method: "POST",
         body: data,
@@ -985,7 +985,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @secure
      */
     accountDetail: (id: number, params: RequestParams = {}) =>
-      this.request<AccountDetailsDto, ProblemDetails>({
+      this.request<AccountDetailsDto, void | ProblemDetails>({
         path: `/api/account/${id}`,
         method: "GET",
         secure: true,
@@ -1002,7 +1002,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @secure
      */
     accountPartialUpdate: (id: number, data: AccountUpdateDto, params: RequestParams = {}) =>
-      this.request<AccountDetailsDto, ProblemDetails>({
+      this.request<AccountDetailsDto, void | ProblemDetails>({
         path: `/api/account/${id}`,
         method: "PATCH",
         body: data,
@@ -1021,7 +1021,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @secure
      */
     accountDelete: (id: number, params: RequestParams = {}) =>
-      this.request<void, ProblemDetails>({
+      this.request<void, void | ProblemDetails>({
         path: `/api/account/${id}`,
         method: "DELETE",
         secure: true,
@@ -1037,7 +1037,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @secure
      */
     accountCreate: (data: AccountCreateDto, params: RequestParams = {}) =>
-      this.request<AccountDetailsDto, ProblemDetails>({
+      this.request<AccountDetailsDto, void | ProblemDetails>({
         path: `/api/account`,
         method: "POST",
         body: data,
@@ -1061,7 +1061,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       },
       params: RequestParams = {}
     ) =>
-      this.request<AccountDetailsDto[], ProblemDetails>({
+      this.request<AccountDetailsDto[], void | ProblemDetails>({
         path: `/api/account`,
         method: "GET",
         query: query,
@@ -1432,7 +1432,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @secure
      */
     emailVerifyDetail: (email: string, params: RequestParams = {}) =>
-      this.request<void, ProblemDetails>({
+      this.request<void, void | ProblemDetails>({
         path: `/api/email/verify/${email}`,
         method: "GET",
         secure: true,

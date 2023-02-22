@@ -16,26 +16,71 @@ import { ContactsTable } from "./contacts-table";
 import { ExtraActionsContainer } from "./index.styled";
 import { SearchBar } from "./search-bar";
 
+type FilterParams = {
+  [key: string]: number | string | boolean;
+};
+
 export const Contacts = () => {
   const { client } = useRequestContext();
 
   const [contacts, setContacts] = useState<ContactDetailsDto[]>();
   const [searchTerm, setSearchTerm] = useState("");
+  const [filterLimit, setFilterLimit] = useState(10);
+  const [filterOrderColumn, setFilterOrderColumn] = useState("");
+  const [filterOrderDirection, setFilterOrderDirection] = useState("");
+  const [whereField, setWhereField] = useState("");
+  const [whereFieldValue, setWhereFieldValue] = useState("");
+  const [skipLimit, setSkipLimit] = useState(0);
+  const [totalRowCount, setTotalRowCount] = useState(47);
+
+  const contactsTableProps = {
+    contacts,
+    setPageSize: setFilterLimit,
+    pageSize: filterLimit,
+    setSkipLimit,
+    totalRowCount,
+    setSortColumn: setFilterOrderColumn,
+    setSortOrder: setFilterOrderDirection,
+  };
+
+  const params = {
+    headers: { "x-total-count": "true" },
+    responseType: "json",
+    observe: "response",
+  };
+
+  const basicFilters: FilterParams = {
+    "filter[limit]": filterLimit,
+    "filter[order]": `${filterOrderColumn} ${filterOrderDirection}`,
+    "filter[skip]": skipLimit,
+  };
+
+  const whereFilterQuery: string =
+    whereField != "" ? `&filter[where][${whereField}]=${whereFieldValue}` : "";
+
+  const basicFilterQuery = Object.keys(basicFilters)
+    .filter((key) => `${basicFilters[key].toString().trim()}` != "")
+    .map((key) => `${key}=${basicFilters[key]}`)
+    .join("&");
 
   useEffect(() => {
     (async () => {
       try {
-        const { data } = await client.api.contactsList({
-          query: searchTerm,
+        const { data, headers } = await client.api.contactsList({
+          query: `${searchTerm}&${basicFilterQuery}${whereFilterQuery}`,
         });
-
-        //const { data } = await client.api.contactsListSearch(searchTerm);
+        console.log(headers);
+        console.log(headers.get("x-total-count"));
+        headers.forEach((value, name) => {
+          console.log(value);
+          console.log(name);
+        });
         setContacts(data);
       } catch (e) {
         console.log(e);
       }
     })();
-  }, [client, searchTerm]);
+  }, [searchTerm, filterLimit, skipLimit, filterOrderColumn, filterOrderDirection]);
 
   return (
     <ModuleContainer>
@@ -66,7 +111,7 @@ export const Contacts = () => {
         <Button startIcon={<Download />}>Export</Button>
       </ExtraActionsContainer>
       <SearchBar setSearchTermOnChange={setSearchTerm}></SearchBar>
-      <ContactsTable contacts={contacts} />
+      <ContactsTable {...contactsTableProps} />
     </ModuleContainer>
   );
 };
