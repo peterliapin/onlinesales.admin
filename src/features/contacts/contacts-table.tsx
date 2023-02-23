@@ -1,14 +1,15 @@
-import { Button } from "@mui/material";
 import {
   DataGrid,
-  getGridNumericOperators,
   getGridStringOperators,
   GridColDef,
   GridFilterModel,
   GridSortModel,
 } from "@mui/x-data-grid";
+import EditIcon from "@mui/icons-material/Edit";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { ContactDetailsDto } from "lib/network/swagger-client";
 import {
+  ActionButtonContainer,
   AvatarContainer as ContactProfileContainer,
   AvatarImg,
   AvatarImgContainer,
@@ -16,10 +17,12 @@ import {
   ContactName,
   ContactNameEmailContainer,
   ContactsTableContainer,
+  EditIconContainer,
+  ForwardIconContainer,
 } from "./index.styled";
 import { CoreModule, getEditModuleRoute } from "lib/router";
-import { GhostLink } from "components/ghost-link";
 import { useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 type ContactsTableProps = {
   contacts?: ContactDetailsDto[];
@@ -46,7 +49,17 @@ export const ContactsTable = ({
 }: ContactsTableProps) => {
   const [page, setPage] = useState(0);
 
+  const navigate = useNavigate();
+
   const empty = [] as const;
+
+  const handleEditClick = (id: number) => {
+    navigate(getEditModuleRoute(CoreModule.contacts, id));
+  };
+
+  const handleForwardClick = () => {
+    //TODO
+  };
 
   const columns: GridColDef<ContactDetailsDto>[] = [
     {
@@ -86,18 +99,19 @@ export const ContactsTable = ({
       flex: 1,
       align: "right",
       headerAlign: "right",
+      filterable: false,
       sortable: false,
       disableColumnMenu: true,
       renderCell: (params) => {
         return (
-          <div>
-            <Button
-              to={getEditModuleRoute(CoreModule.contacts, params.id as number)}
-              component={GhostLink}
-            >
-              edit
-            </Button>
-          </div>
+          <ActionButtonContainer>
+            <EditIconContainer onClick={() => handleEditClick(params.id as number)}>
+              <EditIcon fontSize="small" />
+            </EditIconContainer>
+            <ForwardIconContainer onClick={handleForwardClick}>
+              <ArrowForwardIcon fontSize="small" />
+            </ForwardIconContainer>
+          </ActionButtonContainer>
         );
       },
     },

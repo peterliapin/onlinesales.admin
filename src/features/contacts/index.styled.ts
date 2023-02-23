@@ -39,4 +39,21 @@ export const ContactName = styled("div")`
 export const ContactEmail = styled("div")`
   color: rgba(66, 82, 110, 0.86)'; 
   font-weight: 400;
+  font-size: 13px;
+`;
+
+export const ActionButtonContainer = styled("div")`
+  display: flex;
+  justify-content: flex-end;
+`;
+
+export const EditIconContainer = styled("div")`
+  padding: 0;
+  cursor: pointer;
+  margin-right: 10px;
+`;
+
+export const ForwardIconContainer = styled("div")`
+  padding: 0;
+  cursor: pointer;
 `;

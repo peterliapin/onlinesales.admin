@@ -32,7 +32,7 @@ export const Contacts = () => {
   const [whereFieldValue, setWhereFieldValue] = useState("");
   const [skipLimit, setSkipLimit] = useState(0);
   //need to read this from API response header
-  const [totalRowCount, setTotalRowCount] = useState(47); 
+  const [totalRowCount, setTotalRowCount] = useState(47);
 
   const contactsTableProps = {
     contacts,
