@@ -14,8 +14,7 @@ export const ContactForm = ({ contact, handleInputChange, handleSave }: ContactF
   const [isInvalidNumber, setIsInvalidNumber] = useState(false);
 
   const isValidEmail = (email: string) => {
-    const regex =
-    /^[a-zA-Z0-9]+@(?:[a-zA-Z0-9]+\.)+[A-Za-z]+$/;
+    const regex = /^[a-zA-Z0-9]+@(?:[a-zA-Z0-9]+\.)+[A-Za-z]+$/;
     return email && regex.test(email);
   };
 

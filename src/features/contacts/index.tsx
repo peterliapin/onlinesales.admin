@@ -31,7 +31,8 @@ export const Contacts = () => {
   const [whereField, setWhereField] = useState("");
   const [whereFieldValue, setWhereFieldValue] = useState("");
   const [skipLimit, setSkipLimit] = useState(0);
-  const [totalRowCount, setTotalRowCount] = useState(47);
+  //need to read this from API response header
+  const [totalRowCount, setTotalRowCount] = useState(47); 
 
   const contactsTableProps = {
     contacts,
@@ -41,12 +42,8 @@ export const Contacts = () => {
     totalRowCount,
     setSortColumn: setFilterOrderColumn,
     setSortOrder: setFilterOrderDirection,
-  };
-
-  const params = {
-    headers: { "x-total-count": "true" },
-    responseType: "json",
-    observe: "response",
+    setFileterField: setWhereField,
+    setFilterFieldValue: setWhereFieldValue,
   };
 
   const basicFilters: FilterParams = {
@@ -55,8 +52,9 @@ export const Contacts = () => {
     "filter[skip]": skipLimit,
   };
 
-  const whereFilterQuery: string =
-    whereField != "" ? `&filter[where][${whereField}]=${whereFieldValue}` : "";
+  const whereFilterQuery: string = whereFieldValue
+    ? `&filter[where][${whereField}]=${whereFieldValue}`
+    : "";
 
   const basicFilterQuery = Object.keys(basicFilters)
     .filter((key) => `${basicFilters[key].toString().trim()}` != "")
@@ -66,21 +64,22 @@ export const Contacts = () => {
   useEffect(() => {
     (async () => {
       try {
-        const { data, headers } = await client.api.contactsList({
+        const { data } = await client.api.contactsList({
           query: `${searchTerm}&${basicFilterQuery}${whereFilterQuery}`,
-        });
-        console.log(headers);
-        console.log(headers.get("x-total-count"));
-        headers.forEach((value, name) => {
-          console.log(value);
-          console.log(name);
         });
         setContacts(data);
       } catch (e) {
         console.log(e);
       }
     })();
-  }, [searchTerm, filterLimit, skipLimit, filterOrderColumn, filterOrderDirection]);
+  }, [
+    searchTerm,
+    filterLimit,
+    skipLimit,
+    filterOrderColumn,
+    filterOrderDirection,
+    whereFieldValue,
+  ]);
 
   return (
     <ModuleContainer>

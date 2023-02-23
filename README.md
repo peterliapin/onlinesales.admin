@@ -41,7 +41,7 @@ Fix any code formatting errors/warnings before do git commit.
 
 - Fix any remaining errors/warnings manually before commit.
 
-    Note: `git commit` will not work without fixing all formatting issues due to husky pre-commit hook.
+    Note: If all formatting issues are not fixed, then `git commit` will fail due to husky pre-commit hook.
 
 Start development server:
 

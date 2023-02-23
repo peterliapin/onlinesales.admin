@@ -1,10 +1,25 @@
 import { Button } from "@mui/material";
-import { DataGrid, GridColDef, GridSortModel } from "@mui/x-data-grid";
+import {
+  DataGrid,
+  getGridNumericOperators,
+  getGridStringOperators,
+  GridColDef,
+  GridFilterModel,
+  GridSortModel,
+} from "@mui/x-data-grid";
 import { ContactDetailsDto } from "lib/network/swagger-client";
-import { ContactsTableContainer } from "./index.styled";
+import {
+  AvatarContainer as ContactProfileContainer,
+  AvatarImg,
+  AvatarImgContainer,
+  ContactEmail,
+  ContactName,
+  ContactNameEmailContainer,
+  ContactsTableContainer,
+} from "./index.styled";
 import { CoreModule, getEditModuleRoute } from "lib/router";
 import { GhostLink } from "components/ghost-link";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 type ContactsTableProps = {
   contacts?: ContactDetailsDto[];
@@ -14,16 +29,20 @@ type ContactsTableProps = {
   setSortOrder: (sortOrder: string) => void;
   setPageSize: (pageSize: number) => void;
   setSkipLimit: (skipLimit: number) => void;
+  setFileterField: (filterField: string) => void;
+  setFilterFieldValue: (fieldValue: string) => void;
 };
 
 export const ContactsTable = ({
   contacts,
-  setPageSize,
+  setPageSize: handlePageSizeChange,
   pageSize,
   setSkipLimit,
   totalRowCount,
   setSortColumn,
   setSortOrder,
+  setFileterField: setFilterField,
+  setFilterFieldValue,
 }: ContactsTableProps) => {
   const [page, setPage] = useState(0);
 
@@ -33,29 +52,38 @@ export const ContactsTable = ({
     {
       field: "firstName",
       headerName: "Name",
-      flex: 1,
+      flex: 4,
       renderCell: ({ row }) => (
-        <div>
-          <div>{`${row.firstName} ${row.lastName}`}</div>
-          <div>{row.email}</div>
-        </div>
+        <ContactProfileContainer>
+          <AvatarImgContainer>
+            <AvatarImg src={row.avatarUrl!} />
+          </AvatarImgContainer>
+          <ContactNameEmailContainer>
+            <ContactName>{`${row.firstName} ${row.lastName}`}</ContactName>
+            <ContactEmail>{row.email}</ContactEmail>
+          </ContactNameEmailContainer>
+        </ContactProfileContainer>
       ),
     },
     {
       field: "address1",
       headerName: "Address",
+      flex: 4,
     },
     {
       field: "phone",
       headerName: "Phone",
+      flex: 3,
     },
     {
       field: "location",
       headerName: "Location",
+      flex: 2,
     },
     {
       field: "actions",
       headerName: "Actions",
+      flex: 1,
       align: "right",
       headerAlign: "right",
       sortable: false,
@@ -75,20 +103,47 @@ export const ContactsTable = ({
     },
   ];
 
-  const setNewPage = (page: number) => {
+  const filterAdjustedColumns = useMemo(
+    () =>
+      columns.map((col) => {
+        return {
+          ...col,
+          filterOperators: getGridStringOperators().filter(
+            (operator) => operator.value === "contains"
+          ),
+        };
+      }),
+    [columns]
+  );
+
+  const handlePageChange = (page: number) => {
     setPage(page);
     setSkipLimit(page * pageSize!);
   };
 
   const handleSortChange = (sortModel: GridSortModel) => {
-    setSortColumn(sortModel[sortModel.length - 1].field);
-    setSortOrder(sortModel[sortModel.length - 1].sort || "asc");
+    if (sortModel.length > 0) {
+      setSortColumn(sortModel[sortModel.length - 1].field);
+      setSortOrder(sortModel[sortModel.length - 1].sort || "asc");
+    } else setSortOrder("asc");
+  };
+
+  const handleFilterChange = (filterModel: GridFilterModel) => {
+    if (filterModel.items.length === 0) return;
+
+    const column = filterModel.items[0].columnField;
+    const columnValue = filterModel.items[0].value;
+
+    if (column) {
+      setFilterFieldValue(columnValue ? columnValue : "");
+      setFilterField(column);
+    }
   };
 
   return (
     <ContactsTableContainer>
       <DataGrid
-        columns={columns}
+        columns={filterAdjustedColumns}
         rows={contacts ?? empty}
         loading={!contacts}
         checkboxSelection
@@ -98,10 +153,12 @@ export const ContactsTable = ({
         page={page}
         pageSize={pageSize}
         paginationMode="server"
-        onPageChange={(newPage) => setNewPage(newPage)}
-        onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+        onPageChange={(newPage) => handlePageChange(newPage)}
+        onPageSizeChange={(newPageSize) => handlePageSizeChange(newPageSize)}
         sortingMode="server"
         onSortModelChange={(newSortModel) => handleSortChange(newSortModel)}
+        filterMode="server"
+        onFilterModelChange={(newFilterModel) => handleFilterChange(newFilterModel)}
       />
     </ContactsTableContainer>
   );
