@@ -31,8 +31,7 @@ export const Contacts = () => {
   const [whereField, setWhereField] = useState("");
   const [whereFieldValue, setWhereFieldValue] = useState("");
   const [skipLimit, setSkipLimit] = useState(0);
-  //need to read this from API response header
-  const [totalRowCount, setTotalRowCount] = useState(47);
+  const [totalRowCount, setTotalRowCount] = useState(0);
 
   const contactsTableProps = {
     contacts,
@@ -42,7 +41,7 @@ export const Contacts = () => {
     totalRowCount,
     setSortColumn: setFilterOrderColumn,
     setSortOrder: setFilterOrderDirection,
-    setFileterField: setWhereField,
+    setFilterField: setWhereField,
     setFilterFieldValue: setWhereFieldValue,
   };
 
@@ -61,16 +60,18 @@ export const Contacts = () => {
     .map((key) => `${key}=${basicFilters[key]}`)
     .join("&");
 
+  const setTotalResultsCount = (headerCount: string | null) => {
+    if (headerCount) setTotalRowCount(parseInt(headerCount, 10));
+    else setTotalRowCount(-1);
+  };
+
   useEffect(() => {
     (async () => {
-      try {
-        const { data } = await client.api.contactsList({
-          query: `${searchTerm}&${basicFilterQuery}${whereFilterQuery}`,
-        });
-        setContacts(data);
-      } catch (e) {
-        console.log(e);
-      }
+      const { data, headers } = await client.api.contactsList({
+        query: `${searchTerm}&${basicFilterQuery}${whereFilterQuery}`,
+      });
+      setTotalResultsCount(headers.get("x-total-count"));
+      setContacts(data);
     })();
   }, [
     searchTerm,
@@ -81,36 +82,38 @@ export const Contacts = () => {
     whereFieldValue,
   ]);
 
-  return (
-    <ModuleContainer>
-      <ModuleHeaderContainer>
-        <ModuleHeaderTitleContainer>
-          <Typography variant="h3">Contacts</Typography>
-        </ModuleHeaderTitleContainer>
-        <ModuleHeaderSubtitleContainer>
-          <Breadcrumbs separator={<NavigateNext fontSize="small" />}>
-            <Link to={rootRoute} component={GhostLink} underline="hover">
-              Dashboard
-            </Link>
-            <Typography variant="body1">Contacts</Typography>
-          </Breadcrumbs>
-        </ModuleHeaderSubtitleContainer>
-        <ModuleHeaderActionContainer>
-          <Button
-            to={getAddModuleRoute(CoreModule.contacts)}
-            component={GhostLink}
-            variant="contained"
-          >
-            Add contact
-          </Button>
-        </ModuleHeaderActionContainer>
-      </ModuleHeaderContainer>
-      <ExtraActionsContainer>
-        <Button startIcon={<Upload />}>Import</Button>
-        <Button startIcon={<Download />}>Export</Button>
-      </ExtraActionsContainer>
-      <SearchBar setSearchTermOnChange={setSearchTerm}></SearchBar>
-      <ContactsTable {...contactsTableProps} />
-    </ModuleContainer>
-  );
+  if (totalRowCount === -1) throw new Error("Server error: x-total-count header is not provided.");
+  else
+    return (
+      <ModuleContainer>
+        <ModuleHeaderContainer>
+          <ModuleHeaderTitleContainer>
+            <Typography variant="h3">Contacts</Typography>
+          </ModuleHeaderTitleContainer>
+          <ModuleHeaderSubtitleContainer>
+            <Breadcrumbs separator={<NavigateNext fontSize="small" />}>
+              <Link to={rootRoute} component={GhostLink} underline="hover">
+                Dashboard
+              </Link>
+              <Typography variant="body1">Contacts</Typography>
+            </Breadcrumbs>
+          </ModuleHeaderSubtitleContainer>
+          <ModuleHeaderActionContainer>
+            <Button
+              to={getAddModuleRoute(CoreModule.contacts)}
+              component={GhostLink}
+              variant="contained"
+            >
+              Add contact
+            </Button>
+          </ModuleHeaderActionContainer>
+        </ModuleHeaderContainer>
+        <ExtraActionsContainer>
+          <Button startIcon={<Upload />}>Import</Button>
+          <Button startIcon={<Download />}>Export</Button>
+        </ExtraActionsContainer>
+        <SearchBar setSearchTermOnChange={setSearchTerm}></SearchBar>
+        <ContactsTable {...contactsTableProps} />
+      </ModuleContainer>
+    );
 };

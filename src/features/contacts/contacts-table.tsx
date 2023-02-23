@@ -32,19 +32,19 @@ type ContactsTableProps = {
   setSortOrder: (sortOrder: string) => void;
   setPageSize: (pageSize: number) => void;
   setSkipLimit: (skipLimit: number) => void;
-  setFileterField: (filterField: string) => void;
+  setFilterField: (filterField: string) => void;
   setFilterFieldValue: (fieldValue: string) => void;
 };
 
 export const ContactsTable = ({
   contacts,
-  setPageSize: handlePageSizeChange,
+  setPageSize,
   pageSize,
   setSkipLimit,
   totalRowCount,
   setSortColumn,
   setSortOrder,
-  setFileterField: setFilterField,
+  setFilterField,
   setFilterFieldValue,
 }: ContactsTableProps) => {
   const [page, setPage] = useState(0);
@@ -63,7 +63,7 @@ export const ContactsTable = ({
 
   const columns: GridColDef<ContactDetailsDto>[] = [
     {
-      field: "firstName",
+      field: "lastName",
       headerName: "Name",
       flex: 4,
       renderCell: ({ row }) => (
@@ -77,6 +77,14 @@ export const ContactsTable = ({
           </ContactNameEmailContainer>
         </ContactProfileContainer>
       ),
+    },
+    {
+      field: "firstName",
+      headerName: "First Name",
+    },
+    {
+      field: "email",
+      headerName: "Email",
     },
     {
       field: "address1",
@@ -168,11 +176,12 @@ export const ContactsTable = ({
         pageSize={pageSize}
         paginationMode="server"
         onPageChange={(newPage) => handlePageChange(newPage)}
-        onPageSizeChange={(newPageSize) => handlePageSizeChange(newPageSize)}
+        onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
         sortingMode="server"
         onSortModelChange={(newSortModel) => handleSortChange(newSortModel)}
         filterMode="server"
         onFilterModelChange={(newFilterModel) => handleFilterChange(newFilterModel)}
+        initialState={{ columns: { columnVisibilityModel: { firstName: false, email: false } } }}
       />
     </ContactsTableContainer>
   );
