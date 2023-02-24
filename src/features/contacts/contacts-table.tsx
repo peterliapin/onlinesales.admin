@@ -10,12 +10,6 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { ContactDetailsDto } from "lib/network/swagger-client";
 import {
   ActionButtonContainer,
-  AvatarContainer as ContactProfileContainer,
-  AvatarImg,
-  AvatarImgContainer,
-  ContactEmail,
-  ContactName,
-  ContactNameEmailContainer,
   ContactsTableContainer,
   EditIconContainer,
   ForwardIconContainer,
@@ -23,6 +17,7 @@ import {
 import { CoreModule, getEditModuleRoute } from "lib/router";
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Avatar, ListItem, ListItemAvatar, ListItemText } from "@mui/material";
 
 type ContactsTableProps = {
   contacts?: ContactDetailsDto[];
@@ -67,15 +62,17 @@ export const ContactsTable = ({
       headerName: "Name",
       flex: 4,
       renderCell: ({ row }) => (
-        <ContactProfileContainer>
-          <AvatarImgContainer>
-            <AvatarImg src={row.avatarUrl!} />
-          </AvatarImgContainer>
-          <ContactNameEmailContainer>
-            <ContactName>{`${row.firstName} ${row.lastName}`}</ContactName>
-            <ContactEmail>{row.email}</ContactEmail>
-          </ContactNameEmailContainer>
-        </ContactProfileContainer>
+        <ListItem alignItems="flex-start" disablePadding>
+          <ListItemAvatar>
+            <Avatar src={row.avatarUrl!} sx={{ width: 46, height: 46 }}></Avatar>
+          </ListItemAvatar>
+          <ListItemText
+            primaryTypographyProps={{ fontSize: "14px", fontWeight: 500 }}
+            primary={`${row.firstName} ${row.lastName}`}
+            secondaryTypographyProps={{ fontSize: "13px" }}
+            secondary={row.email}
+          />
+        </ListItem>
       ),
     },
     {
