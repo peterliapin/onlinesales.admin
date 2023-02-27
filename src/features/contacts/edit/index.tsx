@@ -15,7 +15,7 @@ import {
   ModuleHeaderSubtitleContainer,
   ModuleHeaderTitleContainer,
 } from "components/module";
-import { rootRoute, CoreModule, getCoreModuleRoute, editRoute } from "lib/router";
+import { rootRoute, CoreModule, getCoreModuleRoute, idRoute } from "lib/router";
 import { GhostLink } from "components/ghost-link";
 import { useRequestContext } from "providers/request-provider";
 import { useRouteParams } from "typesafe-routes";
@@ -25,7 +25,7 @@ import { CustomizedSnackbar } from "components/snackbar";
 export const ContactEdit = () => {
   const { client } = useRequestContext();
 
-  const { id } = useRouteParams(editRoute);
+  const { id } = useRouteParams(idRoute);
 
   const [contact, setContact] = useState<ContactDetailsDto>({
     firstName: "",

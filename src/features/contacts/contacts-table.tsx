@@ -49,7 +49,7 @@ export const ContactsTable = ({
   const empty = [] as const;
 
   const handleEditClick = (id: number) => {
-    navigate(getEditModuleRoute(CoreModule.contacts, id));
+    navigate(getEditModuleRoute(id));
   };
 
   const handleForwardClick = () => {

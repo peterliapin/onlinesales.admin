@@ -1,4 +1,4 @@
-import { Parser, route, intParser } from "typesafe-routes";
+import { Parser, route, intParser, stringParser } from "typesafe-routes";
 
 export const enum CoreModule {
   contacts = "contacts",
@@ -17,38 +17,27 @@ export const coreModuleRoute = route(
   {}
 );
 
-export const editRoute = route(
-  "/:id/edit",
+export const subModuleRoute = route(
+  ":subModuleName",
   {
-    id: intParser,
+    subModuleName: stringParser,
   },
   {}
 );
 
-export const addRoute = route("/add", {}, {});
-
-export const editModuleRoute = route(
-  "/:editModuleName",
+export const idRoute = route(
+  ":id/",
   {
-    editModuleName: coreModuleParser,
+    id: intParser,
   },
-  { editRoute }
-);
-
-export const addModuleRoute = route(
-  "/:addModuleName",
-  {
-    addModuleName: coreModuleParser,
-  },
-  { addRoute }
+  { subModuleRoute }
 );
 
 export const getCoreModuleRoute = (moduleName: CoreModule) => coreModuleRoute({ moduleName }).$;
 
-export const getEditModuleRoute = (editModuleName: CoreModule, id: number) =>
-  editModuleRoute({ editModuleName: editModuleName }).editRoute({ id: id }).$;
+export const getEditModuleRoute = (id: number) =>
+  idRoute({ id: id }).subModuleRoute({ subModuleName: "edit" }).$;
 
-export const getAddModuleRoute = (addModuleName: CoreModule) =>
-  addModuleRoute({ addModuleName: addModuleName }).addRoute({}).$;
+export const getAddModuleRoute = () => subModuleRoute({ subModuleName: "add" }).$;
 
 export const rootRoute = "/";

@@ -99,11 +99,7 @@ export const Contacts = () => {
             </Breadcrumbs>
           </ModuleHeaderSubtitleContainer>
           <ModuleHeaderActionContainer>
-            <Button
-              to={getAddModuleRoute(CoreModule.contacts)}
-              component={GhostLink}
-              variant="contained"
-            >
+            <Button to={getAddModuleRoute()} component={GhostLink} variant="contained">
               Add contact
             </Button>
           </ModuleHeaderActionContainer>
