@@ -83,9 +83,9 @@ export interface CommentCreateDto {
   /** @format email */
   authorEmail?: string | null;
   /** @minLength 1 */
-  content: string;
+  body: string;
   /** @format int32 */
-  postId: number;
+  contentId: number;
   /** @format int32 */
   parentId?: number | null;
 }
@@ -95,9 +95,9 @@ export interface CommentDetailsDto {
   /** @format email */
   authorEmail?: string | null;
   /** @minLength 1 */
-  content: string;
+  body: string;
   /** @format int32 */
-  postId: number;
+  contentId: number;
   /** @format int32 */
   parentId?: number | null;
   /** @format int32 */
@@ -115,10 +115,10 @@ export interface CommentImportDto {
   /** @format email */
   authorEmail?: string | null;
   /** @minLength 1 */
-  content: string;
+  body: string;
   /** @format int32 */
-  postId?: number | null;
-  postSlug?: string | null;
+  contentId?: number | null;
+  contentSlug?: string | null;
   /** @format int32 */
   parentId?: number | null;
   /** @minLength 1 */
@@ -136,7 +136,7 @@ export interface CommentImportDto {
 
 export interface CommentUpdateDto {
   /** @minLength 1 */
-  content: string;
+  body: string;
 }
 
 export interface ContactCreateDto {
@@ -235,6 +235,103 @@ export interface ContactUpdateDto {
   language?: string | null;
   /** @format email */
   email?: string | null;
+}
+
+export interface ContentCreateDto {
+  /** @minLength 1 */
+  title: string;
+  /** @minLength 1 */
+  description: string;
+  /** @minLength 1 */
+  body: string;
+  coverImageUrl?: string | null;
+  coverImageAlt?: string | null;
+  /** @minLength 1 */
+  slug: string;
+  /** @minLength 1 */
+  type: string;
+  /** @minLength 1 */
+  author: string;
+  /** @minLength 1 */
+  language: string;
+  categories?: string | null;
+  tags?: string | null;
+  allowComments?: boolean;
+}
+
+export interface ContentDetailsDto {
+  /** @minLength 1 */
+  title: string;
+  /** @minLength 1 */
+  description: string;
+  /** @minLength 1 */
+  body: string;
+  coverImageUrl?: string | null;
+  coverImageAlt?: string | null;
+  /** @minLength 1 */
+  slug: string;
+  /** @minLength 1 */
+  type: string;
+  /** @minLength 1 */
+  author: string;
+  /** @minLength 1 */
+  language: string;
+  categories?: string | null;
+  tags?: string | null;
+  allowComments?: boolean;
+  /** @format int32 */
+  id?: number;
+  /** @format date-time */
+  createdAt?: string;
+  /** @format date-time */
+  updatedAt?: string | null;
+}
+
+export interface ContentImportDto {
+  /** @minLength 1 */
+  title: string;
+  /** @minLength 1 */
+  description: string;
+  /** @minLength 1 */
+  body: string;
+  coverImageUrl?: string | null;
+  coverImageAlt?: string | null;
+  /** @minLength 1 */
+  slug: string;
+  /** @minLength 1 */
+  type: string;
+  /** @minLength 1 */
+  author: string;
+  /** @minLength 1 */
+  language: string;
+  categories?: string | null;
+  tags?: string | null;
+  allowComments?: boolean;
+  /** @format int32 */
+  id?: number | null;
+  /** @format date-time */
+  createdAt?: string | null;
+  /** @format date-time */
+  updatedAt?: string | null;
+  createdByIp?: string | null;
+  createdByUserAgent?: string | null;
+  updatedByIp?: string | null;
+  updatedByUserAgent?: string | null;
+}
+
+export interface ContentUpdateDto {
+  title?: string | null;
+  description?: string | null;
+  body?: string | null;
+  coverImageUrl?: string | null;
+  coverImageAlt?: string | null;
+  slug?: string | null;
+  type?: string | null;
+  author?: string | null;
+  language?: string | null;
+  categories?: string | null;
+  tags?: string | null;
+  allowComments?: boolean | null;
 }
 
 export interface DnsRecord {
@@ -601,103 +698,6 @@ export interface OrderUpdateDto {
   data?: string | null;
 }
 
-export interface PostCreateDto {
-  /** @minLength 1 */
-  title: string;
-  /** @minLength 1 */
-  description: string;
-  /** @minLength 1 */
-  content: string;
-  coverImageUrl?: string | null;
-  coverImageAlt?: string | null;
-  /** @minLength 1 */
-  slug: string;
-  /** @minLength 1 */
-  template: string;
-  /** @minLength 1 */
-  author: string;
-  /** @minLength 1 */
-  language: string;
-  categories?: string | null;
-  tags?: string | null;
-  allowComments?: boolean;
-}
-
-export interface PostDetailsDto {
-  /** @minLength 1 */
-  title: string;
-  /** @minLength 1 */
-  description: string;
-  /** @minLength 1 */
-  content: string;
-  coverImageUrl?: string | null;
-  coverImageAlt?: string | null;
-  /** @minLength 1 */
-  slug: string;
-  /** @minLength 1 */
-  template: string;
-  /** @minLength 1 */
-  author: string;
-  /** @minLength 1 */
-  language: string;
-  categories?: string | null;
-  tags?: string | null;
-  allowComments?: boolean;
-  /** @format int32 */
-  id?: number;
-  /** @format date-time */
-  createdAt?: string;
-  /** @format date-time */
-  updatedAt?: string | null;
-}
-
-export interface PostImportDto {
-  /** @minLength 1 */
-  title: string;
-  /** @minLength 1 */
-  description: string;
-  /** @minLength 1 */
-  content: string;
-  coverImageUrl?: string | null;
-  coverImageAlt?: string | null;
-  /** @minLength 1 */
-  slug: string;
-  /** @minLength 1 */
-  template: string;
-  /** @minLength 1 */
-  author: string;
-  /** @minLength 1 */
-  language: string;
-  categories?: string | null;
-  tags?: string | null;
-  allowComments?: boolean;
-  /** @format int32 */
-  id?: number | null;
-  /** @format date-time */
-  createdAt?: string | null;
-  /** @format date-time */
-  updatedAt?: string | null;
-  createdByIp?: string | null;
-  createdByUserAgent?: string | null;
-  updatedByIp?: string | null;
-  updatedByUserAgent?: string | null;
-}
-
-export interface PostUpdateDto {
-  title?: string | null;
-  description?: string | null;
-  content?: string | null;
-  coverImageUrl?: string | null;
-  coverImageAlt?: string | null;
-  slug?: string | null;
-  template?: string | null;
-  author?: string | null;
-  language?: string | null;
-  categories?: string | null;
-  tags?: string | null;
-  allowComments?: boolean | null;
-}
-
 export interface ProblemDetails {
   type?: string | null;
   title?: string | null;
@@ -1059,7 +1059,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       query?: {
         query?: string;
       },
-      params: RequestParams = {}
+      params: RequestParams = {},
     ) =>
       this.request<AccountDetailsDto[], void | ProblemDetails>({
         path: `/api/account`,
@@ -1246,7 +1246,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       query?: {
         query?: string;
       },
-      params: RequestParams = {}
+      params: RequestParams = {},
     ) =>
       this.request<ContactDetailsDto[], void | ProblemDetails>({
         path: `/api/contacts`,
@@ -1287,6 +1287,117 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     contactsImportCreate: (data: ContactImportDto[], params: RequestParams = {}) =>
       this.request<void, void | ProblemDetails>({
         path: `/api/contacts/import`,
+        method: "POST",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Content
+     * @name ContentList
+     * @request GET:/api/content
+     * @secure
+     */
+    contentList: (
+      query?: {
+        query?: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<ContentDetailsDto[], void | ProblemDetails>({
+        path: `/api/content`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Content
+     * @name ContentCreate
+     * @request POST:/api/content
+     * @secure
+     */
+    contentCreate: (data: ContentCreateDto, params: RequestParams = {}) =>
+      this.request<ContentDetailsDto, void | ProblemDetails>({
+        path: `/api/content`,
+        method: "POST",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Content
+     * @name ContentDetail
+     * @request GET:/api/content/{id}
+     * @secure
+     */
+    contentDetail: (id: number, params: RequestParams = {}) =>
+      this.request<ContentDetailsDto, void | ProblemDetails>({
+        path: `/api/content/${id}`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Content
+     * @name ContentPartialUpdate
+     * @request PATCH:/api/content/{id}
+     * @secure
+     */
+    contentPartialUpdate: (id: number, data: ContentUpdateDto, params: RequestParams = {}) =>
+      this.request<ContentDetailsDto, void | ProblemDetails>({
+        path: `/api/content/${id}`,
+        method: "PATCH",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Content
+     * @name ContentDelete
+     * @request DELETE:/api/content/{id}
+     * @secure
+     */
+    contentDelete: (id: number, params: RequestParams = {}) =>
+      this.request<void, void | ProblemDetails>({
+        path: `/api/content/${id}`,
+        method: "DELETE",
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Content
+     * @name ContentImportCreate
+     * @request POST:/api/content/import
+     * @secure
+     */
+    contentImportCreate: (data: ContentImportDto[], params: RequestParams = {}) =>
+      this.request<void, void | ProblemDetails>({
+        path: `/api/content/import`,
         method: "POST",
         body: data,
         secure: true,
@@ -2054,118 +2165,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         query: query,
         secure: true,
         format: "json",
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @tags Posts
-     * @name PostsList
-     * @request GET:/api/posts
-     * @secure
-     */
-    postsList: (
-      query?: {
-        query?: string;
-      },
-      params: RequestParams = {}
-    ) =>
-      this.request<PostDetailsDto[], void | ProblemDetails>({
-        path: `/api/posts`,
-        method: "GET",
-        query: query,
-        secure: true,
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @tags Posts
-     * @name PostsCreate
-     * @request POST:/api/posts
-     * @secure
-     */
-    postsCreate: (data: PostCreateDto, params: RequestParams = {}) =>
-      this.request<PostDetailsDto, void | ProblemDetails>({
-        path: `/api/posts`,
-        method: "POST",
-        body: data,
-        secure: true,
-        type: ContentType.Json,
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @tags Posts
-     * @name PostsDetail
-     * @request GET:/api/posts/{id}
-     * @secure
-     */
-    postsDetail: (id: number, params: RequestParams = {}) =>
-      this.request<PostDetailsDto, void | ProblemDetails>({
-        path: `/api/posts/${id}`,
-        method: "GET",
-        secure: true,
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @tags Posts
-     * @name PostsPartialUpdate
-     * @request PATCH:/api/posts/{id}
-     * @secure
-     */
-    postsPartialUpdate: (id: number, data: PostUpdateDto, params: RequestParams = {}) =>
-      this.request<PostDetailsDto, void | ProblemDetails>({
-        path: `/api/posts/${id}`,
-        method: "PATCH",
-        body: data,
-        secure: true,
-        type: ContentType.Json,
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @tags Posts
-     * @name PostsDelete
-     * @request DELETE:/api/posts/{id}
-     * @secure
-     */
-    postsDelete: (id: number, params: RequestParams = {}) =>
-      this.request<void, void | ProblemDetails>({
-        path: `/api/posts/${id}`,
-        method: "DELETE",
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @tags Posts
-     * @name PostsImportCreate
-     * @request POST:/api/posts/import
-     * @secure
-     */
-    postsImportCreate: (data: PostImportDto[], params: RequestParams = {}) =>
-      this.request<void, void | ProblemDetails>({
-        path: `/api/posts/import`,
-        method: "POST",
-        body: data,
-        secure: true,
-        type: ContentType.Json,
         ...params,
       }),
 
