@@ -249,7 +249,7 @@ export interface ContentCreateDto {
   /** @minLength 1 */
   slug: string;
   /** @minLength 1 */
-  template: string;
+  type: string;
   /** @minLength 1 */
   author: string;
   /** @minLength 1 */
@@ -271,7 +271,7 @@ export interface ContentDetailsDto {
   /** @minLength 1 */
   slug: string;
   /** @minLength 1 */
-  template: string;
+  type: string;
   /** @minLength 1 */
   author: string;
   /** @minLength 1 */
@@ -299,7 +299,7 @@ export interface ContentImportDto {
   /** @minLength 1 */
   slug: string;
   /** @minLength 1 */
-  template: string;
+  type: string;
   /** @minLength 1 */
   author: string;
   /** @minLength 1 */
@@ -326,7 +326,7 @@ export interface ContentUpdateDto {
   coverImageUrl?: string | null;
   coverImageAlt?: string | null;
   slug?: string | null;
-  template?: string | null;
+  type?: string | null;
   author?: string | null;
   language?: string | null;
   categories?: string | null;
