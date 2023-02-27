@@ -5,6 +5,7 @@ import { ContactsLazy } from "features/contacts/lazy";
 import { ErrorBoundary } from "components/error-boundary";
 import { ContactEdit } from "features/contacts/edit";
 import { ContactAdd } from "features/contacts/add";
+import { ContactView } from "features/contacts/view";
 
 export const ModuleLoader = () => {
   const { moduleName } = useRouteParams(coreModuleRoute);
@@ -18,6 +19,7 @@ export const ModuleLoader = () => {
       <Suspense fallback="Loading...">
         {(moduleName === CoreModule.contacts && subModuleName === "edit" && <ContactEdit />) ||
           (moduleName === CoreModule.contacts && subModuleName === "add" && <ContactAdd />) ||
+          (moduleName === CoreModule.contacts && subModuleName === "view" && <ContactView />) ||
           (moduleName === CoreModule.contacts && <ContactsLazy />)}
       </Suspense>
     </ErrorBoundary>

@@ -14,7 +14,7 @@ import {
   EditIconContainer,
   ForwardIconContainer,
 } from "./index.styled";
-import { CoreModule, getEditModuleRoute } from "lib/router";
+import { CoreModule, getEditModuleRoute, getViewModuleRoute } from "lib/router";
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Avatar, ListItem, ListItemAvatar, ListItemText } from "@mui/material";
@@ -52,8 +52,8 @@ export const ContactsTable = ({
     navigate(getEditModuleRoute(id));
   };
 
-  const handleForwardClick = () => {
-    //TODO
+  const handleForwardClick = (id: number) => {
+    navigate(getViewModuleRoute(id));
   };
 
   const columns: GridColDef<ContactDetailsDto>[] = [
@@ -113,7 +113,7 @@ export const ContactsTable = ({
             <EditIconContainer onClick={() => handleEditClick(params.id as number)}>
               <EditIcon fontSize="small" />
             </EditIconContainer>
-            <ForwardIconContainer onClick={handleForwardClick}>
+            <ForwardIconContainer onClick={() => handleForwardClick(params.id as number)}>
               <ArrowForwardIcon fontSize="small" />
             </ForwardIconContainer>
           </ActionButtonContainer>

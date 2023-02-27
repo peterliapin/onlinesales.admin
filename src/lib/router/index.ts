@@ -38,6 +38,9 @@ export const getCoreModuleRoute = (moduleName: CoreModule) => coreModuleRoute({ 
 export const getEditModuleRoute = (id: number) =>
   idRoute({ id: id }).subModuleRoute({ subModuleName: "edit" }).$;
 
+export const getViewModuleRoute = (id: number) =>
+  idRoute({ id: id }).subModuleRoute({ subModuleName: "view" }).$;
+
 export const getAddModuleRoute = () => subModuleRoute({ subModuleName: "add" }).$;
 
 export const rootRoute = "/";
