@@ -9,7 +9,7 @@ import {
   ModuleHeaderSubtitleContainer,
   ModuleHeaderTitleContainer,
 } from "components/module";
-import { CoreModule, getAddModuleRoute, rootRoute } from "lib/router";
+import { getAddFormRoute, rootRoute } from "lib/router";
 import { GhostLink } from "components/ghost-link";
 import { useRequestContext } from "providers/request-provider";
 import { ContactsTable } from "./contacts-table";
@@ -82,8 +82,9 @@ export const Contacts = () => {
     whereFieldValue,
   ]);
 
-  if (totalRowCount === -1) throw new Error("Server error: x-total-count header is not provided.");
-  else
+  if (totalRowCount === -1) {
+    throw new Error("Server error: x-total-count header is not provided.");
+  } else
     return (
       <ModuleContainer>
         <ModuleHeaderContainer>
@@ -99,7 +100,7 @@ export const Contacts = () => {
             </Breadcrumbs>
           </ModuleHeaderSubtitleContainer>
           <ModuleHeaderActionContainer>
-            <Button to={getAddModuleRoute()} component={GhostLink} variant="contained">
+            <Button to={getAddFormRoute()} component={GhostLink} variant="contained">
               Add contact
             </Button>
           </ModuleHeaderActionContainer>

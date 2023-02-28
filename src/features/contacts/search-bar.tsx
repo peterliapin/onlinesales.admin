@@ -1,6 +1,6 @@
+import { useState } from "react";
 import { TextField, Box, InputAdornment, IconButton } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
-import { useState } from "react";
 
 interface Props {
   setSearchTermOnChange: (searchTerm: string) => void;

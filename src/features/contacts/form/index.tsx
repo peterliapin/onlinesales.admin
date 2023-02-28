@@ -1,6 +1,6 @@
+import { useState } from "react";
 import { Button, Card, CardContent, Grid, TextField } from "@mui/material";
 import { ContactDetailsDto } from "lib/network/swagger-client";
-import { useState } from "react";
 
 interface ContactFormProps {
   contact: ContactDetailsDto;

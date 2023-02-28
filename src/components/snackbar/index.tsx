@@ -6,16 +6,16 @@ import { CoreModule, getCoreModuleRoute } from "lib/router";
 import { useNavigate } from "react-router-dom";
 import { Backdrop } from "@mui/material";
 
-const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(props, ref) {
-  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
-});
-
 interface SnackbarProps {
   message: string;
   severerity: AlertColor;
   isOpen: boolean;
   navigateTo: CoreModule;
 }
+
+const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 export const CustomizedSnackbar = ({ message, severerity, isOpen, navigateTo }: SnackbarProps) => {
   const [open, setOpen] = useState(isOpen);

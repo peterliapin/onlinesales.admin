@@ -28,7 +28,7 @@ export const ContactAdd = () => {
 
   const [isSaving, setIsSaving] = useState(false);
 
-  const [snackBarParams, setParams] = useState({
+  const [snackBarParams, setSnackBarParams] = useState({
     message: "",
     isOpen: false,
     severerity: "success" as AlertColor,
@@ -48,10 +48,14 @@ export const ContactAdd = () => {
       try {
         setIsSaving(true);
         await client.api.contactsCreate(createDto);
-        setParams({ message: "Saved Successfully", isOpen: true, severerity: "success" });
+        setSnackBarParams({ message: "Saved Successfully", isOpen: true, severerity: "success" });
       } catch (e) {
         console.log(e);
-        setParams({ message: "Server Error Occurred. ", isOpen: true, severerity: "error" });
+        setSnackBarParams({
+          message: "Server Error Occurred. ",
+          isOpen: true,
+          severerity: "error",
+        });
       } finally {
         setIsSaving(false);
       }

@@ -1,23 +1,12 @@
-import {
-  DataGrid,
-  getGridStringOperators,
-  GridColDef,
-  GridFilterModel,
-  GridSortModel,
-} from "@mui/x-data-grid";
+import { GridColDef } from "@mui/x-data-grid";
 import EditIcon from "@mui/icons-material/Edit";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { ContactDetailsDto } from "lib/network/swagger-client";
-import {
-  ActionButtonContainer,
-  ContactsTableContainer,
-  EditIconContainer,
-  ForwardIconContainer,
-} from "./index.styled";
-import { CoreModule, getEditModuleRoute, getViewModuleRoute } from "lib/router";
-import { useMemo, useState } from "react";
+import { ActionButtonContainer, EditIconContainer, ForwardIconContainer } from "./index.styled";
+import { getEditFormRoute, getViewFormRoute } from "lib/router";
 import { useNavigate } from "react-router-dom";
 import { Avatar, ListItem, ListItemAvatar, ListItemText } from "@mui/material";
+import { DataTableGrid } from "components/data-table";
 
 type ContactsTableProps = {
   contacts?: ContactDetailsDto[];
@@ -33,27 +22,23 @@ type ContactsTableProps = {
 
 export const ContactsTable = ({
   contacts,
-  setPageSize,
   pageSize,
-  setSkipLimit,
   totalRowCount,
+  setPageSize,
+  setSkipLimit,
   setSortColumn,
   setSortOrder,
   setFilterField,
   setFilterFieldValue,
 }: ContactsTableProps) => {
-  const [page, setPage] = useState(0);
-
   const navigate = useNavigate();
 
-  const empty = [] as const;
-
   const handleEditClick = (id: number) => {
-    navigate(getEditModuleRoute(id));
+    navigate(getEditFormRoute(id));
   };
 
   const handleForwardClick = (id: number) => {
-    navigate(getViewModuleRoute(id));
+    navigate(getViewFormRoute(id));
   };
 
   const columns: GridColDef<ContactDetailsDto>[] = [
@@ -122,64 +107,19 @@ export const ContactsTable = ({
     },
   ];
 
-  const filterAdjustedColumns = useMemo(
-    () =>
-      columns.map((col) => {
-        return {
-          ...col,
-          filterOperators: getGridStringOperators().filter(
-            (operator) => operator.value === "contains"
-          ),
-        };
-      }),
-    [columns]
-  );
-
-  const handlePageChange = (page: number) => {
-    setPage(page);
-    setSkipLimit(page * pageSize!);
-  };
-
-  const handleSortChange = (sortModel: GridSortModel) => {
-    if (sortModel.length > 0) {
-      setSortColumn(sortModel[sortModel.length - 1].field);
-      setSortOrder(sortModel[sortModel.length - 1].sort || "asc");
-    } else setSortOrder("asc");
-  };
-
-  const handleFilterChange = (filterModel: GridFilterModel) => {
-    if (filterModel.items.length === 0) return;
-
-    const column = filterModel.items[0].columnField;
-    const columnValue = filterModel.items[0].value;
-
-    if (column) {
-      setFilterFieldValue(columnValue ? columnValue : "");
-      setFilterField(column);
-    }
-  };
-
   return (
-    <ContactsTableContainer>
-      <DataGrid
-        columns={filterAdjustedColumns}
-        rows={contacts ?? empty}
-        loading={!contacts}
-        checkboxSelection
-        rowCount={totalRowCount}
-        rowsPerPageOptions={[10, 20, 50, 100]}
-        pagination
-        page={page}
-        pageSize={pageSize}
-        paginationMode="server"
-        onPageChange={(newPage) => handlePageChange(newPage)}
-        onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
-        sortingMode="server"
-        onSortModelChange={(newSortModel) => handleSortChange(newSortModel)}
-        filterMode="server"
-        onFilterModelChange={(newFilterModel) => handleFilterChange(newFilterModel)}
-        initialState={{ columns: { columnVisibilityModel: { firstName: false, email: false } } }}
-      />
-    </ContactsTableContainer>
+    <DataTableGrid
+      columns={columns}
+      data={contacts}
+      pageSize={pageSize}
+      totalRowCount={totalRowCount}
+      rowsPerPageOptions={[10, 20, 50, 100]}
+      setSortColumn={setSortColumn}
+      setSortOrder={setSortOrder}
+      setPageSize={setPageSize}
+      setSkipLimit={setSkipLimit}
+      setFilterField={setFilterField}
+      setFilterFieldValue={setFilterFieldValue}
+    />
   );
 };

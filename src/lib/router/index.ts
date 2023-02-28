@@ -1,4 +1,4 @@
-import { Parser, route, intParser, stringParser } from "typesafe-routes";
+import { Parser, route, intParser } from "typesafe-routes";
 
 export const enum CoreModule {
   contacts = "contacts",
@@ -17,30 +17,30 @@ export const coreModuleRoute = route(
   {}
 );
 
-export const subModuleRoute = route(
-  ":subModuleName",
+export const editFormRoute = route(
+  ":id/edit",
   {
-    subModuleName: stringParser,
+    id: intParser,
   },
   {}
 );
 
-export const idRoute = route(
-  ":id/",
+export const viewFormRoute = route(
+  ":id/view",
   {
     id: intParser,
   },
-  { subModuleRoute }
+  {}
 );
+
+export const addFormRoute = route("add", {}, {});
 
 export const getCoreModuleRoute = (moduleName: CoreModule) => coreModuleRoute({ moduleName }).$;
 
-export const getEditModuleRoute = (id: number) =>
-  idRoute({ id: id }).subModuleRoute({ subModuleName: "edit" }).$;
+export const getEditFormRoute = (id: number) => editFormRoute({ id: id }).$;
 
-export const getViewModuleRoute = (id: number) =>
-  idRoute({ id: id }).subModuleRoute({ subModuleName: "view" }).$;
+export const getViewFormRoute = (id: number) => viewFormRoute({ id: id }).$;
 
-export const getAddModuleRoute = () => subModuleRoute({ subModuleName: "add" }).$;
+export const getAddFormRoute = () => addFormRoute({}).$;
 
 export const rootRoute = "/";

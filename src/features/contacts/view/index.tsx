@@ -1,14 +1,12 @@
+import { useEffect, useState } from "react";
 import { NavigateNext } from "@mui/icons-material";
 import {
   Breadcrumbs,
-  Button,
   Card,
   CardContent,
-  CardHeader,
   Divider,
   Grid,
   Link,
-  TextField,
   Typography,
 } from "@mui/material";
 import { GhostLink } from "components/ghost-link";
@@ -19,15 +17,14 @@ import {
   ModuleHeaderTitleContainer,
 } from "components/module";
 import { ContactDetailsDto } from "lib/network/swagger-client";
-import { CoreModule, getCoreModuleRoute, idRoute, rootRoute } from "lib/router";
+import { CoreModule, getCoreModuleRoute, rootRoute, viewFormRoute } from "lib/router";
 import { useRequestContext } from "providers/request-provider";
-import { useEffect, useState } from "react";
 import { useRouteParams } from "typesafe-routes";
 import { ContactCardHeader, ContactRowGrid } from "../index.styled";
 
 export const ContactView = () => {
   const { client } = useRequestContext();
-  const { id } = useRouteParams(idRoute);
+  const { id } = useRouteParams(viewFormRoute);
   const [contact, setContact] = useState<ContactDetailsDto>({
     firstName: "",
     email: "",

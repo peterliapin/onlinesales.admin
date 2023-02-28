@@ -3,14 +3,10 @@ import { ThemeProvider } from "providers/theme-provider";
 import { AppHeader } from "components/app-header";
 import { Sidebar } from "components/sidebar";
 import { AppLayoutContainer, MainContentContainer } from "components/layout";
-import { coreModuleRoute, idRoute, rootRoute, subModuleRoute } from "./lib/router";
+import { coreModuleRoute, rootRoute } from "./lib/router";
 import { ModuleLoader } from "./features/module-loader";
 import { RequestProvider } from "./providers/request-provider";
 import { AuthProvider } from "./providers/auth-provider";
-import { Contacts } from "features/contacts";
-import { ContactEdit } from "features/contacts/edit";
-import { ContactAdd } from "features/contacts/add";
-import { ContactsLazy } from "features/contacts/lazy";
 
 export const App = () => {
   return (
@@ -32,14 +28,7 @@ export const App = () => {
                 }
               >
                 <Route index element="Index page" />
-                <Route path={coreModuleRoute.template} element={<Outlet />}>
-                  <Route index element={<ModuleLoader />} />
-                  <Route path={subModuleRoute.template} element={<ModuleLoader />} />
-                  <Route
-                    path={idRoute.template + subModuleRoute.template}
-                    element={<ModuleLoader />}
-                  />
-                </Route>
+                <Route path={`${coreModuleRoute.template}/*`} element={<ModuleLoader />} />
               </Route>
             </Routes>
           </BrowserRouter>
