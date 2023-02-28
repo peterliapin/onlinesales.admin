@@ -1,14 +1,6 @@
 import { useEffect, useState } from "react";
 import { NavigateNext } from "@mui/icons-material";
-import {
-  Breadcrumbs,
-  Card,
-  CardContent,
-  Divider,
-  Grid,
-  Link,
-  Typography,
-} from "@mui/material";
+import { Breadcrumbs, Card, CardContent, Divider, Grid, Link, Typography } from "@mui/material";
 import { GhostLink } from "components/ghost-link";
 import {
   ModuleContainer,
@@ -45,7 +37,7 @@ export const ContactView = () => {
     <ModuleContainer>
       <ModuleHeaderContainer>
         <ModuleHeaderTitleContainer>
-          <Typography variant="h3">CONTACT NAME</Typography>
+          <Typography variant="h3">{`${contact.firstName} ${contact.lastName}`}</Typography>
         </ModuleHeaderTitleContainer>
         <ModuleHeaderSubtitleContainer>
           <Breadcrumbs separator={<NavigateNext fontSize="small" />}>
