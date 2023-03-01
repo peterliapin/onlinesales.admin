@@ -11,7 +11,7 @@ import {
 } from "./index.styled";
 import { getEditFormRoute, getViewFormRoute } from "lib/router";
 import { useNavigate } from "react-router-dom";
-import { Avatar, ListItem, ListItemAvatar, ListItemText } from "@mui/material";
+import { Avatar, ListItemAvatar } from "@mui/material";
 import { DataTableGrid } from "components/data-table";
 
 type ContactsTableProps = {
@@ -80,12 +80,26 @@ export const ContactsTable = ({
     {
       field: "phone",
       headerName: "Phone",
-      flex: 3,
     },
     {
       field: "location",
       headerName: "Location",
       flex: 2,
+    },
+    {
+      field: "createdAt",
+      headerName: "Created At",
+      flex: 2,
+      valueGetter: (params) => {
+        const createdAt = params.value as string;
+        const formattedDate = new Date(createdAt).toLocaleDateString();
+        return formattedDate;
+      },
+    },
+    {
+      field: "language",
+      headerName: "Language",
+      flex: 1,
     },
     {
       field: "actions",
@@ -121,13 +135,16 @@ export const ContactsTable = ({
       data={contacts}
       pageSize={pageSize}
       totalRowCount={totalRowCount}
-      rowsPerPageOptions={[10, 20, 50, 100]}
+      rowsPerPageOptions={[10, 30, 50, 100, 1000]}
       setSortColumn={setSortColumn}
       setSortOrder={setSortOrder}
       setPageSize={setPageSize}
       setSkipLimit={setSkipLimit}
       setFilterField={setFilterField}
       setFilterFieldValue={setFilterFieldValue}
+      initialState={{
+        columns: { columnVisibilityModel: { firstName: false, email: false, phone: false } },
+      }}
     />
   );
 };

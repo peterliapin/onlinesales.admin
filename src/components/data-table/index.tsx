@@ -7,6 +7,7 @@ import {
   GridSortModel,
 } from "@mui/x-data-grid";
 import { DataTableContainer } from "./index.styled";
+import { GridInitialStateCommunity } from "@mui/x-data-grid/models/gridStateCommunity";
 
 type DataTableProps = {
   columns: GridColDef[];
@@ -20,6 +21,7 @@ type DataTableProps = {
   setSkipLimit: (skipLimit: number) => void;
   setFilterField: (filterField: string) => void;
   setFilterFieldValue: (fieldValue: string) => void;
+  initialState: GridInitialStateCommunity | undefined;
 };
 
 export const DataTableGrid = ({
@@ -34,6 +36,7 @@ export const DataTableGrid = ({
   setSkipLimit,
   setFilterField,
   setFilterFieldValue,
+  initialState,
 }: DataTableProps) => {
   const empty = [] as const;
 
@@ -95,7 +98,7 @@ export const DataTableGrid = ({
         onSortModelChange={(newSortModel) => handleSortChange(newSortModel)}
         filterMode="server"
         onFilterModelChange={(newFilterModel) => handleFilterChange(newFilterModel)}
-        initialState={{ columns: { columnVisibilityModel: { firstName: false, email: false } } }}
+        initialState={initialState}
       />
     </DataTableContainer>
   );
