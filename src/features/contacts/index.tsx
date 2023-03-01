@@ -26,8 +26,8 @@ export const Contacts = () => {
   const [contacts, setContacts] = useState<ContactDetailsDto[]>();
   const [searchTerm, setSearchTerm] = useState("");
   const [filterLimit, setFilterLimit] = useState(10);
-  const [filterOrderColumn, setFilterOrderColumn] = useState("");
-  const [filterOrderDirection, setFilterOrderDirection] = useState("");
+  const [filterOrderColumn, setFilterOrderColumn] = useState("firstName");
+  const [filterOrderDirection, setFilterOrderDirection] = useState("desc");
   const [whereField, setWhereField] = useState("");
   const [whereFieldValue, setWhereFieldValue] = useState("");
   const [skipLimit, setSkipLimit] = useState(0);

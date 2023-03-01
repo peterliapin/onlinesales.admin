@@ -1,4 +1,4 @@
-import { CardHeader, Grid, Paper, styled } from "@mui/material";
+import { CardHeader, Grid, ListItem, ListItemText, Paper, styled } from "@mui/material";
 
 export const ExtraActionsContainer = styled("div")`
   display: flex;
@@ -9,6 +9,21 @@ export const ExtraActionsContainer = styled("div")`
 export const ContactsTableContainer = styled(Paper)`
   flex-grow: 1;
 `;
+
+export const ContactNameListItem = styled(ListItem)({
+  alignItems: "center",
+  disablePadding: true,
+});
+
+export const ContactNameListItemText = styled(ListItemText)({
+  ".MuiListItemText-primary": {
+    fontSize: "14px",
+    fontWeight: 500,
+  },
+  ".MuiListItemText-secondary": {
+    fontSize: "13px",
+  },
+});
 
 export const ContactRowGrid = styled(Grid)({
   height: 60,

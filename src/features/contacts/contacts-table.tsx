@@ -2,7 +2,13 @@ import { GridColDef } from "@mui/x-data-grid";
 import EditIcon from "@mui/icons-material/Edit";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { ContactDetailsDto } from "lib/network/swagger-client";
-import { ActionButtonContainer, EditIconContainer, ForwardIconContainer } from "./index.styled";
+import {
+  ActionButtonContainer,
+  ContactNameListItem,
+  ContactNameListItemText,
+  EditIconContainer,
+  ForwardIconContainer,
+} from "./index.styled";
 import { getEditFormRoute, getViewFormRoute } from "lib/router";
 import { useNavigate } from "react-router-dom";
 import { Avatar, ListItem, ListItemAvatar, ListItemText } from "@mui/material";
@@ -47,17 +53,15 @@ export const ContactsTable = ({
       headerName: "Name",
       flex: 4,
       renderCell: ({ row }) => (
-        <ListItem alignItems="flex-start" disablePadding>
+        <ContactNameListItem>
           <ListItemAvatar>
-            <Avatar src={row.avatarUrl!} sx={{ width: 46, height: 46 }}></Avatar>
+            <Avatar src={row.avatarUrl!}></Avatar>
           </ListItemAvatar>
-          <ListItemText
-            primaryTypographyProps={{ fontSize: "14px", fontWeight: 500 }}
+          <ContactNameListItemText
             primary={`${row.firstName} ${row.lastName}`}
-            secondaryTypographyProps={{ fontSize: "13px" }}
             secondary={row.email}
           />
-        </ListItem>
+        </ContactNameListItem>
       ),
     },
     {
