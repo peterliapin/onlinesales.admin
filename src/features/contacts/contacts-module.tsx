@@ -1,9 +1,19 @@
-import { addFormRoute, editFormRoute, viewFormRoute } from "lib/router";
+import {
+  addFormRoute,
+  contactDetailsRoute,
+  contactInvoicesRoute,
+  contactLogsRoute,
+  editFormRoute,
+  viewFormRoute,
+} from "lib/router";
 import { Outlet, Route, Routes } from "react-router-dom";
 import { ContactAdd } from "./add";
 import { ContactEdit } from "./edit";
 import { ContactsLazy } from "./lazy";
-import { ContactView } from "./view";
+import { ContactView } from "./view/details";
+import { ContactBase } from "./view";
+import { ContactInvoices } from "./view/invoices";
+import { ContactLogs } from "./view/logs";
 
 export const ContactsModule = () => {
   return (
@@ -11,7 +21,12 @@ export const ContactsModule = () => {
       <Routes>
         <Route index element={<ContactsLazy />} />
         <Route path={editFormRoute.template} element={<ContactEdit />} />
-        <Route path={viewFormRoute.template} element={<ContactView />} />
+        <Route path={viewFormRoute.template} element={<ContactBase />}>
+          <Route index element={<ContactView />} />
+          <Route path={contactDetailsRoute.template} element={<ContactView />} />
+          <Route path={contactInvoicesRoute.template} element={<ContactInvoices />} />
+          <Route path={contactLogsRoute.template} element={<ContactLogs />} />
+        </Route>
         <Route path={addFormRoute.template} element={<ContactAdd />} />
       </Routes>
       <Outlet />

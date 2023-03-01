@@ -37,8 +37,8 @@ export const ContactsTable = ({
     navigate(getEditFormRoute(id));
   };
 
-  const handleForwardClick = (id: number) => {
-    navigate(getViewFormRoute(id));
+  const handleForwardClick = (id: number, name: string) => {
+    navigate(getViewFormRoute(id), { state: name });
   };
 
   const columns: GridColDef<ContactDetailsDto>[] = [
@@ -92,13 +92,17 @@ export const ContactsTable = ({
       filterable: false,
       sortable: false,
       disableColumnMenu: true,
-      renderCell: (params) => {
+      renderCell: ({ row }) => {
         return (
           <ActionButtonContainer>
-            <EditIconContainer onClick={() => handleEditClick(params.id as number)}>
+            <EditIconContainer onClick={() => handleEditClick(row.id as number)}>
               <EditIcon fontSize="small" />
             </EditIconContainer>
-            <ForwardIconContainer onClick={() => handleForwardClick(params.id as number)}>
+            <ForwardIconContainer
+              onClick={() =>
+                handleForwardClick(row.id as number, `${row.firstName} ${row.lastName}`)
+              }
+            >
               <ArrowForwardIcon fontSize="small" />
             </ForwardIconContainer>
           </ActionButtonContainer>

@@ -35,6 +35,12 @@ export const viewFormRoute = route(
 
 export const addFormRoute = route("add", {}, {});
 
+export const contactDetailsRoute = route("details", {}, {});
+
+export const contactInvoicesRoute = route("invoices", {}, {});
+
+export const contactLogsRoute = route("logs", {}, {});
+
 export const getCoreModuleRoute = (moduleName: CoreModule) => coreModuleRoute({ moduleName }).$;
 
 export const getEditFormRoute = (id: number) => editFormRoute({ id: id }).$;

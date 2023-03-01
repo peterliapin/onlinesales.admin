@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { NavigateNext } from "@mui/icons-material";
-import { Breadcrumbs, Card, CardContent, Divider, Grid, Link, Typography } from "@mui/material";
+import { Breadcrumbs, Link, Tab, Tabs, Typography } from "@mui/material";
 import { GhostLink } from "components/ghost-link";
 import {
   ModuleContainer,
@@ -8,36 +8,24 @@ import {
   ModuleHeaderSubtitleContainer,
   ModuleHeaderTitleContainer,
 } from "components/module";
-import { ContactDetailsDto } from "lib/network/swagger-client";
-import { CoreModule, getCoreModuleRoute, rootRoute, viewFormRoute } from "lib/router";
-import { useRequestContext } from "providers/request-provider";
-import { useRouteParams } from "typesafe-routes";
-import { ContactCardHeader, ContactRowGrid } from "../index.styled";
+import { CoreModule, getCoreModuleRoute, rootRoute } from "lib/router";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 
-export const ContactView = () => {
-  const { client } = useRequestContext();
-  const { id } = useRouteParams(viewFormRoute);
-  const [contact, setContact] = useState<ContactDetailsDto>({
-    firstName: "",
-    email: "",
-  });
+export const ContactBase = () => {
+  const { state } = useLocation();
+  const navigate = useNavigate();
+  const [tabValue, setTabValue] = useState("details");
 
-  useEffect(() => {
-    (async () => {
-      try {
-        const { data } = await client.api.contactsDetail(id);
-        setContact(data);
-      } catch (e) {
-        console.log(e);
-      }
-    })();
-  }, [client]);
+  const handleChange = (event: React.ChangeEvent<any>, newValue: string) => {
+    setTabValue(newValue);
+    navigate(newValue, { state: state });
+  };
 
   return (
     <ModuleContainer>
       <ModuleHeaderContainer>
         <ModuleHeaderTitleContainer>
-          <Typography variant="h3">{`${contact.firstName} ${contact.lastName}`}</Typography>
+          <Typography variant="h3">{state}</Typography>
         </ModuleHeaderTitleContainer>
         <ModuleHeaderSubtitleContainer>
           <Breadcrumbs separator={<NavigateNext fontSize="small" />}>
@@ -51,94 +39,16 @@ export const ContactView = () => {
             >
               Contacts
             </Link>
-            <Typography variant="body1">Contacts</Typography>
+            <Typography variant="body1">Contact View</Typography>
           </Breadcrumbs>
         </ModuleHeaderSubtitleContainer>
       </ModuleHeaderContainer>
-      <Grid container spacing={3}>
-        <Grid xs={12} sm={6} item>
-          <Card>
-            <CardContent>
-              <ContactCardHeader title="Contact Details"></ContactCardHeader>
-              <Divider variant="fullWidth" />
-              <ContactRowGrid container>
-                <Grid item xs={2}>
-                  <Typography fontWeight="bold">Email</Typography>
-                </Grid>
-                <Grid item xs={10}>
-                  {contact.email}
-                </Grid>
-              </ContactRowGrid>
-              <Divider variant="fullWidth" />
-              <ContactRowGrid container>
-                <Grid item xs={2}>
-                  <Typography fontWeight="bold">Phone</Typography>
-                </Grid>
-                <Grid item xs={10}>
-                  {contact.phone}
-                </Grid>
-              </ContactRowGrid>
-              <Divider variant="fullWidth" />
-              <ContactRowGrid container>
-                <Grid item xs={2}>
-                  <Typography fontWeight="bold">Country</Typography>
-                </Grid>
-                <Grid item xs={10}>
-                  {contact.location}
-                </Grid>
-              </ContactRowGrid>
-              <Divider variant="fullWidth" />
-              <ContactRowGrid container>
-                <Grid item xs={2}>
-                  <Typography fontWeight="bold">State/Region</Typography>
-                </Grid>
-                <Grid item xs={10}>
-                  {contact.state}
-                </Grid>
-              </ContactRowGrid>
-              <Divider variant="fullWidth" />
-              <ContactRowGrid container>
-                <Grid item xs={2}>
-                  <Typography fontWeight="bold">Address 1</Typography>
-                </Grid>
-                <Grid item xs={10}>
-                  {contact.address1}
-                </Grid>
-              </ContactRowGrid>
-              <Divider variant="fullWidth" />
-              <ContactRowGrid container>
-                <Grid item xs={2}>
-                  <Typography fontWeight="bold">Address 2</Typography>
-                </Grid>
-                <Grid item xs={10}>
-                  {contact.address2}
-                </Grid>
-              </ContactRowGrid>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid xs={12} sm={6} item>
-          <Card>
-            <CardContent>
-              <ContactCardHeader title="Invoices/Billing"></ContactCardHeader>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid xs={12} sm={6} item>
-          <Card>
-            <CardContent>
-              <ContactCardHeader title="Emails"></ContactCardHeader>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid xs={12} sm={6} item>
-          <Card>
-            <CardContent>
-              <ContactCardHeader title="Other actions"></ContactCardHeader>
-            </CardContent>
-          </Card>
-        </Grid>
-      </Grid>
+      <Tabs value={tabValue} onChange={handleChange} aria-label="simple tabs example">
+        <Tab value="details" label="Details" />
+        <Tab value="invoices" label="Invoices" />
+        <Tab value="logs" label="Logs" />
+      </Tabs>
+      <Outlet />
     </ModuleContainer>
   );
 };
