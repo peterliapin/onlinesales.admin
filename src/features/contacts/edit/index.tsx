@@ -1,26 +1,9 @@
 import { useEffect, useState } from "react";
-import {
-  Breadcrumbs,
-  Link,
-  Typography,
-  AlertColor,
-  Backdrop,
-  CircularProgress,
-} from "@mui/material";
-import { NavigateNext } from "@mui/icons-material";
 import { ContactDetailsDto, ContactUpdateDto } from "lib/network/swagger-client";
-import {
-  ModuleContainer,
-  ModuleHeaderContainer,
-  ModuleHeaderSubtitleContainer,
-  ModuleHeaderTitleContainer,
-} from "components/module";
-import { rootRoute, CoreModule, getCoreModuleRoute, editFormRoute } from "lib/router";
-import { GhostLink } from "components/ghost-link";
+import { editFormRoute } from "lib/router";
 import { useRequestContext } from "providers/request-provider";
 import { useRouteParams } from "typesafe-routes";
 import { ContactForm } from "../form";
-import { CustomizedSnackbar } from "components/snackbar";
 
 export const ContactEdit = () => {
   const { client } = useRequestContext();
@@ -30,14 +13,6 @@ export const ContactEdit = () => {
   const [contact, setContact] = useState<ContactDetailsDto>({
     firstName: "",
     email: "",
-  });
-
-  const [isSaving, setIsSaving] = useState(false);
-
-  const [snackBarParams, setParams] = useState({
-    message: "",
-    isOpen: false,
-    severerity: "success" as AlertColor,
   });
 
   useEffect(() => {
@@ -51,66 +26,22 @@ export const ContactEdit = () => {
     })();
   }, [client]);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setContact((currentContact) => ({ ...currentContact, [name]: value }));
-  };
-
   const handleSave = () => {
     const updateDto: ContactUpdateDto = {
       ...contact,
     };
 
     (async () => {
-      try {
-        setIsSaving(true);
-        await client.api.contactsPartialUpdate(id, updateDto);
-        setParams({ message: "Updated Successfully", isOpen: true, severerity: "success" });
-      } catch (e) {
-        console.log(e);
-        setParams({ message: "Server error occurred. ", isOpen: true, severerity: "error" });
-      } finally {
-        setIsSaving(false);
-      }
+      await client.api.contactsPartialUpdate(id, updateDto);
     })();
   };
 
   return (
-    <ModuleContainer>
-      <ModuleHeaderContainer>
-        <ModuleHeaderTitleContainer>
-          <Typography variant="h3">Contact Edit</Typography>
-        </ModuleHeaderTitleContainer>
-        <ModuleHeaderSubtitleContainer>
-          <Breadcrumbs separator={<NavigateNext fontSize="small" />}>
-            <Link to={rootRoute} component={GhostLink} underline="hover">
-              Dashboard
-            </Link>
-            <Link
-              to={getCoreModuleRoute(CoreModule.contacts)}
-              component={GhostLink}
-              underline="hover"
-            >
-              Contacts
-            </Link>
-            <Typography variant="body1">Contact Edit</Typography>
-          </Breadcrumbs>
-        </ModuleHeaderSubtitleContainer>
-      </ModuleHeaderContainer>
-      <ContactForm
-        contact={contact}
-        handleInputChange={handleInputChange}
-        handleSave={handleSave}
-      />
-      <Backdrop open={isSaving} style={{ zIndex: 999 }}>
-        <CircularProgress color="inherit" />
-      </Backdrop>
-      <CustomizedSnackbar
-        isOpen={snackBarParams.isOpen}
-        severerity={snackBarParams.severerity}
-        message={snackBarParams.message}
-        navigateTo={CoreModule.contacts}
-      ></CustomizedSnackbar>
-    </ModuleContainer>
+    <ContactForm
+      contact={contact}
+      updateContact={setContact}
+      handleSave={handleSave}
+      isEdit={true}
+    />
   );
 };

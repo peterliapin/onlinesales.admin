@@ -1,43 +1,12 @@
 import { useState } from "react";
-import {
-  Breadcrumbs,
-  Link,
-  Typography,
-  AlertColor,
-  Backdrop,
-  CircularProgress,
-} from "@mui/material";
-import { NavigateNext } from "@mui/icons-material";
 import { ContactCreateDto, ContactDetailsDto } from "lib/network/swagger-client";
-import {
-  ModuleContainer,
-  ModuleHeaderContainer,
-  ModuleHeaderSubtitleContainer,
-  ModuleHeaderTitleContainer,
-} from "components/module";
-import { rootRoute, CoreModule, getCoreModuleRoute } from "lib/router";
-import { GhostLink } from "components/ghost-link";
 import { useRequestContext } from "providers/request-provider";
 import { ContactForm } from "../form";
-import { CustomizedSnackbar } from "components/snackbar";
 
 export const ContactAdd = () => {
   const { client } = useRequestContext();
 
   const [contact, setContact] = useState<ContactDetailsDto>({ email: "" });
-
-  const [isSaving, setIsSaving] = useState(false);
-
-  const [snackBarParams, setSnackBarParams] = useState({
-    message: "",
-    isOpen: false,
-    severerity: "success" as AlertColor,
-  });
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setContact((currentContact) => ({ ...currentContact, [name]: value }));
-  };
 
   const handleSave = () => {
     const createDto: ContactCreateDto = {
@@ -45,59 +14,16 @@ export const ContactAdd = () => {
     };
 
     (async () => {
-      try {
-        setIsSaving(true);
-        await client.api.contactsCreate(createDto);
-        setSnackBarParams({ message: "Saved Successfully", isOpen: true, severerity: "success" });
-      } catch (e) {
-        console.log(e);
-        setSnackBarParams({
-          message: "Server Error Occurred. ",
-          isOpen: true,
-          severerity: "error",
-        });
-      } finally {
-        setIsSaving(false);
-      }
+      await client.api.contactsCreate(createDto);
     })();
   };
 
   return (
-    <ModuleContainer>
-      <ModuleHeaderContainer>
-        <ModuleHeaderTitleContainer>
-          <Typography variant="h3">Contact Add</Typography>
-        </ModuleHeaderTitleContainer>
-        <ModuleHeaderSubtitleContainer>
-          <Breadcrumbs separator={<NavigateNext fontSize="small" />}>
-            <Link to={rootRoute} component={GhostLink} underline="hover">
-              Dashboard
-            </Link>
-            <Link
-              to={getCoreModuleRoute(CoreModule.contacts)}
-              component={GhostLink}
-              underline="hover"
-            >
-              Contacts
-            </Link>
-            <Typography variant="body1">Contact Add</Typography>
-          </Breadcrumbs>
-        </ModuleHeaderSubtitleContainer>
-      </ModuleHeaderContainer>
-      <ContactForm
-        contact={contact}
-        handleInputChange={handleInputChange}
-        handleSave={handleSave}
-      />
-      <Backdrop open={isSaving} style={{ zIndex: 999 }}>
-        <CircularProgress color="inherit" />
-      </Backdrop>
-      <CustomizedSnackbar
-        isOpen={snackBarParams.isOpen}
-        severerity={snackBarParams.severerity}
-        message={snackBarParams.message}
-        navigateTo={CoreModule.contacts}
-      ></CustomizedSnackbar>
-    </ModuleContainer>
+    <ContactForm
+      contact={contact}
+      updateContact={setContact}
+      handleSave={handleSave}
+      isEdit={false}
+    />
   );
 };
