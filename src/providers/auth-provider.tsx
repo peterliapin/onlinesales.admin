@@ -1,5 +1,5 @@
-import { memo, PropsWithChildren, useCallback } from "react";
-import { PublicClientApplication, Configuration, InteractionType } from "@azure/msal-browser";
+import {memo, PropsWithChildren, useCallback} from "react";
+import {PublicClientApplication, Configuration, InteractionType} from "@azure/msal-browser";
 import {
   AuthenticatedTemplate,
   MsalProvider,
@@ -17,10 +17,10 @@ const msalConfig: Configuration = {
 
 const msalInstance = new PublicClientApplication(msalConfig);
 
-export const AuthProvider = memo(function AuthProvider({ children }: PropsWithChildren) {
+export const AuthProvider = memo(function AuthProvider({children}: PropsWithChildren) {
   return (
     <MsalProvider instance={msalInstance}>
-      <RedirectLogin />
+      <RedirectLogin/>
       <AuthenticatedTemplate>{children}</AuthenticatedTemplate>
     </MsalProvider>
   );
@@ -33,18 +33,28 @@ const RedirectLogin = () => {
 };
 
 export const useAuthState = () => {
-  const { instance, accounts } = useMsal();
+  const {instance, accounts} = useMsal();
 
   const account = accounts.at(0);
 
   const getToken = useCallback(async () => {
     try {
-      const { idToken } = await instance.acquireTokenSilent({ scopes: ["User.Read"], account });
+      const {idToken} = await instance.acquireTokenSilent({
+        scopes: ["User.Read"],
+        account
+      });
+
       return idToken;
     } catch {
-      instance.loginRedirect();
+      await instance.loginRedirect();
     }
   }, [instance, account]);
 
-  return { account, getToken };
+  const logout = useCallback(async () => {
+    if (instance && account) {
+      await instance.logout();
+    }
+  }, [instance, account])
+
+  return {account, getToken, logout};
 };
