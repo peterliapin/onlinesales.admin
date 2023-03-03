@@ -757,9 +757,7 @@ export type RequestParams = Omit<FullRequestParams, "body" | "method" | "query" 
 export interface ApiConfig<SecurityDataType = unknown> {
   baseUrl?: string;
   baseApiParams?: Omit<RequestParams, "baseUrl" | "cancelToken" | "signal">;
-  securityWorker?: (
-    securityData: SecurityDataType | null
-  ) => Promise<RequestParams | void> | RequestParams | void;
+  securityWorker?: (securityData: SecurityDataType | null) => Promise<RequestParams | void> | RequestParams | void;
   customFetch?: typeof fetch;
 }
 
@@ -817,11 +815,7 @@ export class HttpClient<SecurityDataType = unknown> {
     const query = rawQuery || {};
     const keys = Object.keys(query).filter((key) => "undefined" !== typeof query[key]);
     return keys
-      .map((key) =>
-        Array.isArray(query[key])
-          ? this.addArrayQueryParam(query, key)
-          : this.addQueryParam(query, key)
-      )
+      .map((key) => (Array.isArray(query[key]) ? this.addArrayQueryParam(query, key) : this.addQueryParam(query, key)))
       .join("&");
   }
 
@@ -832,11 +826,8 @@ export class HttpClient<SecurityDataType = unknown> {
 
   private contentFormatters: Record<ContentType, (input: any) => any> = {
     [ContentType.Json]: (input: any) =>
-      input !== null && (typeof input === "object" || typeof input === "string")
-        ? JSON.stringify(input)
-        : input,
-    [ContentType.Text]: (input: any) =>
-      input !== null && typeof input !== "string" ? JSON.stringify(input) : input,
+      input !== null && (typeof input === "object" || typeof input === "string") ? JSON.stringify(input) : input,
+    [ContentType.Text]: (input: any) => (input !== null && typeof input !== "string" ? JSON.stringify(input) : input),
     [ContentType.FormData]: (input: any) =>
       Object.keys(input || {}).reduce((formData, key) => {
         const property = input[key];
@@ -846,7 +837,7 @@ export class HttpClient<SecurityDataType = unknown> {
             ? property
             : typeof property === "object" && property !== null
             ? JSON.stringify(property)
-            : `${property}`
+            : `${property}`,
         );
         return formData;
       }, new FormData()),
@@ -910,18 +901,15 @@ export class HttpClient<SecurityDataType = unknown> {
     const payloadFormatter = this.contentFormatters[type || ContentType.Json];
     const responseFormat = format || requestParams.format;
 
-    return this.customFetch(
-      `${baseUrl || this.baseUrl || ""}${path}${queryString ? `?${queryString}` : ""}`,
-      {
-        ...requestParams,
-        headers: {
-          ...(requestParams.headers || {}),
-          ...(type && type !== ContentType.FormData ? { "Content-Type": type } : {}),
-        },
-        signal: cancelToken ? this.createAbortSignal(cancelToken) : requestParams.signal,
-        body: typeof body === "undefined" || body === null ? null : payloadFormatter(body),
-      }
-    ).then(async (response) => {
+    return this.customFetch(`${baseUrl || this.baseUrl || ""}${path}${queryString ? `?${queryString}` : ""}`, {
+      ...requestParams,
+      headers: {
+        ...(requestParams.headers || {}),
+        ...(type && type !== ContentType.FormData ? { "Content-Type": type } : {}),
+      },
+      signal: cancelToken ? this.createAbortSignal(cancelToken) : requestParams.signal,
+      body: typeof body === "undefined" || body === null ? null : payloadFormatter(body),
+    }).then(async (response) => {
       const r = response as HttpResponse<T, E>;
       r.data = null as unknown as T;
       r.error = null as unknown as E;
@@ -1058,6 +1046,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     accountList: (
       query?: {
         query?: string;
+        /** @default false */
+        downloadCsv?: boolean;
       },
       params: RequestParams = {},
     ) =>
@@ -1081,8 +1071,10 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     commentsList: (
       query?: {
         query?: string;
+        /** @default false */
+        downloadCsv?: boolean;
       },
-      params: RequestParams = {}
+      params: RequestParams = {},
     ) =>
       this.request<CommentDetailsDto[], void | ProblemDetails>({
         path: `/api/comments`,
@@ -1245,6 +1237,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     contactsList: (
       query?: {
         query?: string;
+        /** @default false */
+        downloadCsv?: boolean;
       },
       params: RequestParams = {},
     ) =>
@@ -1305,12 +1299,15 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     contentList: (
       query?: {
         query?: string;
+        /** @default false */
+        downloadCsv?: boolean;
       },
       params: RequestParams = {},
     ) =>
       this.request<ContentDetailsDto[], void | ProblemDetails>({
         path: `/api/content`,
         method: "GET",
+        query: query,
         secure: true,
         format: "json",
         ...params,
@@ -1522,8 +1519,10 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     domainsList: (
       query?: {
         query?: string;
+        /** @default false */
+        downloadCsv?: boolean;
       },
-      params: RequestParams = {}
+      params: RequestParams = {},
     ) =>
       this.request<DomainDetailsDto[], void | ProblemDetails>({
         path: `/api/domains`,
@@ -1632,8 +1631,10 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     emailGroupsList: (
       query?: {
         query?: string;
+        /** @default false */
+        downloadCsv?: boolean;
       },
-      params: RequestParams = {}
+      params: RequestParams = {},
     ) =>
       this.request<EmailGroupDetailsDto[], void | ProblemDetails>({
         path: `/api/email-groups`,
@@ -1669,11 +1670,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request PATCH:/api/email-templates/{id}
      * @secure
      */
-    emailTemplatesPartialUpdate: (
-      id: number,
-      data: EmailTemplateUpdateDto,
-      params: RequestParams = {}
-    ) =>
+    emailTemplatesPartialUpdate: (id: number, data: EmailTemplateUpdateDto, params: RequestParams = {}) =>
       this.request<EmailTemplateDetailsDto, void | ProblemDetails>({
         path: `/api/email-templates/${id}`,
         method: "PATCH",
@@ -1730,8 +1727,10 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     emailTemplatesList: (
       query?: {
         query?: string;
+        /** @default false */
+        downloadCsv?: boolean;
       },
-      params: RequestParams = {}
+      params: RequestParams = {},
     ) =>
       this.request<EmailTemplateDetailsDto[], void | ProblemDetails>({
         path: `/api/email-templates`,
@@ -1739,47 +1738,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         query: query,
         secure: true,
         format: "json",
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @tags Images
-     * @name ImagesCreate
-     * @request POST:/api/images
-     * @secure
-     */
-    imagesCreate: (
-      data: {
-        /** @format binary */
-        Image: File;
-        ScopeUid: string;
-      },
-      params: RequestParams = {}
-    ) =>
-      this.request<void, void | ProblemDetails>({
-        path: `/api/images`,
-        method: "POST",
-        body: data,
-        secure: true,
-        type: ContentType.FormData,
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @tags Images
-     * @name ImagesDetail
-     * @request GET:/api/images/{scopeUid}/{fileName}
-     * @secure
-     */
-    imagesDetail: (scopeUid: string, fileName: string, params: RequestParams = {}) =>
-      this.request<void, ProblemDetails>({
-        path: `/api/images/${scopeUid}/${fileName}`,
-        method: "GET",
-        secure: true,
         ...params,
       }),
 
@@ -1813,8 +1771,10 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     linksList: (
       query?: {
         query?: string;
+        /** @default false */
+        downloadCsv?: boolean;
       },
-      params: RequestParams = {}
+      params: RequestParams = {},
     ) =>
       this.request<LinkDetailsDto[], void | ProblemDetails>({
         path: `/api/links`,
@@ -1929,6 +1889,47 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
+     * @tags Media
+     * @name MediaCreate
+     * @request POST:/api/media
+     * @secure
+     */
+    mediaCreate: (
+      data: {
+        /** @format binary */
+        Image: File;
+        ScopeUid: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<void, void | ProblemDetails>({
+        path: `/api/media`,
+        method: "POST",
+        body: data,
+        secure: true,
+        type: ContentType.FormData,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Media
+     * @name MediaDetail
+     * @request GET:/api/media/{scopeUid}/{fileName}
+     * @secure
+     */
+    mediaDetail: (scopeUid: string, fileName: string, params: RequestParams = {}) =>
+      this.request<void, ProblemDetails>({
+        path: `/api/media/${scopeUid}/${fileName}`,
+        method: "GET",
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
      * @tags Messages
      * @name MessagesSmsCreate
      * @request POST:/api/messages/sms
@@ -1974,8 +1975,10 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     orderItemsList: (
       query?: {
         query?: string;
+        /** @default false */
+        downloadCsv?: boolean;
       },
-      params: RequestParams = {}
+      params: RequestParams = {},
     ) =>
       this.request<OrderItemDetailsDto[], void | ProblemDetails>({
         path: `/api/order-items`,
@@ -2156,8 +2159,10 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     ordersList: (
       query?: {
         query?: string;
+        /** @default false */
+        downloadCsv?: boolean;
       },
-      params: RequestParams = {}
+      params: RequestParams = {},
     ) =>
       this.request<OrderDetailsDto[], void | ProblemDetails>({
         path: `/api/orders`,

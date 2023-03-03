@@ -34,12 +34,6 @@ export const getWhereFilterQuery = (whereField: string, whereFieldValue: string)
   return whereFilterQuery;
 };
 
-export const getDownloadCsvQuery = (downloadCsv: boolean) => {
-  const downloadCsvQuery: string = downloadCsv ? "&downloadCsv=true" : "";
-
-  return downloadCsvQuery;
-};
-
 export const defaultFilterLimit = 10;
 
 export const totalCountHeaderName = "x-total-count";

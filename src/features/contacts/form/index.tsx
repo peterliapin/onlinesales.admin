@@ -56,7 +56,7 @@ export const ContactForm = ({ contact, updateContact, handleSave, isEdit }: Cont
     return email && regex.test(email);
   };
 
-  const validateAndSave = () => {
+  const validateAndSave = async () => {
     setIsInvalidEmail(false);
     setIsInvalidNumber(false);
 
@@ -67,7 +67,7 @@ export const ContactForm = ({ contact, updateContact, handleSave, isEdit }: Cont
     } else {
       try {
         setIsSaving(true);
-        handleSave();
+        await handleSave();
         setSnackBarParams({
           message: isEdit ? "Updated Successfully" : "Saved Successfully",
           isOpen: true,

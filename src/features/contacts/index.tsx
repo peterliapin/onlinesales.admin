@@ -18,7 +18,6 @@ import { SearchBar } from "./search-bar";
 import {
   defaultFilterLimit,
   getBasicFilterQuery,
-  getDownloadCsvQuery,
   getWhereFilterQuery,
   totalCountHeaderName,
 } from "lib/query";
@@ -55,8 +54,6 @@ export const Contacts = () => {
 
   const whereFilterQuery = getWhereFilterQuery(whereField, whereFieldValue);
 
-  const downloadCsvQuery = getDownloadCsvQuery(downloadCsv);
-
   const basicFilterQuery = getBasicFilterQuery(
     filterLimit,
     sortColumn,
@@ -78,7 +75,8 @@ export const Contacts = () => {
   useEffect(() => {
     (async () => {
       const { data, headers, url } = await client.api.contactsList({
-        query: `${searchTerm}&${basicFilterQuery}${whereFilterQuery}${downloadCsvQuery}`,
+        query: `${searchTerm}&${basicFilterQuery}${whereFilterQuery}`,
+        downloadCsv: downloadCsv,
       });
       setTotalResultsCount(headers.get(totalCountHeaderName));
       if (!downloadCsv) {
@@ -90,37 +88,40 @@ export const Contacts = () => {
     })();
   }, [searchTerm, filterLimit, skipLimit, sortColumn, sortOrder, whereFieldValue, downloadCsv]);
 
-  if (totalRowCount === -1) {
-    throw new Error("Server error: x-total-count header is not provided.");
-  } else
-    return (
-      <ModuleContainer>
-        <ModuleHeaderContainer>
-          <ModuleHeaderTitleContainer>
-            <Typography variant="h3">Contacts</Typography>
-          </ModuleHeaderTitleContainer>
-          <ModuleHeaderSubtitleContainer>
-            <Breadcrumbs separator={<NavigateNext fontSize="small" />}>
-              <Link to={rootRoute} component={GhostLink} underline="hover">
-                Dashboard
-              </Link>
-              <Typography variant="body1">Contacts</Typography>
-            </Breadcrumbs>
-          </ModuleHeaderSubtitleContainer>
-          <ModuleHeaderActionContainer>
-            <Button to={getAddFormRoute()} component={GhostLink} variant="contained">
-              Add contact
-            </Button>
-          </ModuleHeaderActionContainer>
-        </ModuleHeaderContainer>
-        <ExtraActionsContainer>
-          <Button startIcon={<Upload />}>Import</Button>
-          <Button startIcon={<Download />} onClick={handleExport}>
-            Export
+  useEffect(() => {
+    if (totalRowCount === -1) {
+      throw new Error("Server error: x-total-count header is not provided.");
+    }
+  }, [totalRowCount]);
+
+  return (
+    <ModuleContainer>
+      <ModuleHeaderContainer>
+        <ModuleHeaderTitleContainer>
+          <Typography variant="h3">Contacts</Typography>
+        </ModuleHeaderTitleContainer>
+        <ModuleHeaderSubtitleContainer>
+          <Breadcrumbs separator={<NavigateNext fontSize="small" />}>
+            <Link to={rootRoute} component={GhostLink} underline="hover">
+              Dashboard
+            </Link>
+            <Typography variant="body1">Contacts</Typography>
+          </Breadcrumbs>
+        </ModuleHeaderSubtitleContainer>
+        <ModuleHeaderActionContainer>
+          <Button to={getAddFormRoute()} component={GhostLink} variant="contained">
+            Add contact
           </Button>
-        </ExtraActionsContainer>
-        <SearchBar setSearchTermOnChange={setSearchTerm}></SearchBar>
-        <ContactsTable {...contactsTableProps} />
-      </ModuleContainer>
-    );
+        </ModuleHeaderActionContainer>
+      </ModuleHeaderContainer>
+      <ExtraActionsContainer>
+        <Button startIcon={<Upload />}>Import</Button>
+        <Button startIcon={<Download />} onClick={handleExport}>
+          Export
+        </Button>
+      </ExtraActionsContainer>
+      <SearchBar setSearchTermOnChange={setSearchTerm}></SearchBar>
+      <ContactsTable {...contactsTableProps} />
+    </ModuleContainer>
+  );
 };

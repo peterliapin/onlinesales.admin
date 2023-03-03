@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { NavigateNext } from "@mui/icons-material";
 import { Breadcrumbs, Link, Tab, Tabs, Typography } from "@mui/material";
 import { GhostLink } from "components/ghost-link";

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Card, CardContent, Divider, Grid, Link, Typography } from "@mui/material";
+import { Card, CardContent, Divider, Grid, Typography } from "@mui/material";
 import { ContactDetailsDto } from "lib/network/swagger-client";
 import { viewFormRoute } from "lib/router";
 import { useRequestContext } from "providers/request-provider";

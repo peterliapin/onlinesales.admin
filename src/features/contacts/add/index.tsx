@@ -8,14 +8,11 @@ export const ContactAdd = () => {
 
   const [contact, setContact] = useState<ContactDetailsDto>({ email: "" });
 
-  const handleSave = () => {
+  const handleSave = async () => {
     const createDto: ContactCreateDto = {
       ...contact,
     };
-
-    (async () => {
-      await client.api.contactsCreate(createDto);
-    })();
+    await client.api.contactsCreate(createDto);
   };
 
   return (

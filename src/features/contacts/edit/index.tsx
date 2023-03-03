@@ -26,14 +26,11 @@ export const ContactEdit = () => {
     })();
   }, [client]);
 
-  const handleSave = () => {
+  const handleSave = async () => {
     const updateDto: ContactUpdateDto = {
       ...contact,
     };
-
-    (async () => {
-      await client.api.contactsPartialUpdate(id, updateDto);
-    })();
+    await client.api.contactsPartialUpdate(id, updateDto);
   };
 
   return (
