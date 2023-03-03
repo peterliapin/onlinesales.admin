@@ -15,23 +15,31 @@ import { useRequestContext } from "providers/request-provider";
 import { ContactsTable } from "./contacts-table";
 import { ExtraActionsContainer } from "./index.styled";
 import { SearchBar } from "./search-bar";
-
-type FilterParams = {
-  [key: string]: number | string | boolean;
-};
+import {
+  defaultFilterLimit,
+  getBasicFilterQuery,
+  getDownloadCsvQuery,
+  getWhereFilterQuery,
+  totalCountHeaderName,
+} from "lib/query";
+import { downloadFile } from "components/download";
 
 export const Contacts = () => {
+  const defaultFilterOrderColumn = "firstName";
+  const defaultFilterOrderDirection = "desc";
+
   const { client } = useRequestContext();
 
   const [contacts, setContacts] = useState<ContactDetailsDto[]>();
   const [searchTerm, setSearchTerm] = useState("");
-  const [filterLimit, setFilterLimit] = useState(10);
-  const [filterOrderColumn, setFilterOrderColumn] = useState("firstName");
-  const [filterOrderDirection, setFilterOrderDirection] = useState("desc");
+  const [filterLimit, setFilterLimit] = useState(defaultFilterLimit);
+  const [sortColumn, setSortColumn] = useState(defaultFilterOrderColumn);
+  const [sortOrder, setSortOrder] = useState(defaultFilterOrderDirection);
   const [whereField, setWhereField] = useState("");
   const [whereFieldValue, setWhereFieldValue] = useState("");
   const [skipLimit, setSkipLimit] = useState(0);
   const [totalRowCount, setTotalRowCount] = useState(0);
+  const [downloadCsv, setDownloadCsv] = useState(false);
 
   const contactsTableProps = {
     contacts,
@@ -39,48 +47,48 @@ export const Contacts = () => {
     pageSize: filterLimit,
     setSkipLimit,
     totalRowCount,
-    setSortColumn: setFilterOrderColumn,
-    setSortOrder: setFilterOrderDirection,
+    setSortColumn,
+    setSortOrder,
     setFilterField: setWhereField,
     setFilterFieldValue: setWhereFieldValue,
   };
 
-  const basicFilters: FilterParams = {
-    "filter[limit]": filterLimit,
-    "filter[order]": `${filterOrderColumn} ${filterOrderDirection}`,
-    "filter[skip]": skipLimit,
-  };
+  const whereFilterQuery = getWhereFilterQuery(whereField, whereFieldValue);
 
-  const whereFilterQuery: string = whereFieldValue
-    ? `&filter[where][${whereField}]=${whereFieldValue}`
-    : "";
+  const downloadCsvQuery = getDownloadCsvQuery(downloadCsv);
 
-  const basicFilterQuery = Object.keys(basicFilters)
-    .filter((key) => `${basicFilters[key].toString().trim()}` != "")
-    .map((key) => `${key}=${basicFilters[key]}`)
-    .join("&");
+  const basicFilterQuery = getBasicFilterQuery(
+    filterLimit,
+    sortColumn,
+    sortOrder,
+    skipLimit,
+    downloadCsv
+  );
 
   const setTotalResultsCount = (headerCount: string | null) => {
     if (headerCount) setTotalRowCount(parseInt(headerCount, 10));
     else setTotalRowCount(-1);
   };
 
+  const handleExport = () => {
+    setSkipLimit(0);
+    setDownloadCsv(true);
+  };
+
   useEffect(() => {
     (async () => {
-      const { data, headers } = await client.api.contactsList({
-        query: `${searchTerm}&${basicFilterQuery}${whereFilterQuery}`,
+      const { data, headers, url } = await client.api.contactsList({
+        query: `${searchTerm}&${basicFilterQuery}${whereFilterQuery}${downloadCsvQuery}`,
       });
-      setTotalResultsCount(headers.get("x-total-count"));
-      setContacts(data);
+      setTotalResultsCount(headers.get(totalCountHeaderName));
+      if (!downloadCsv) {
+        setContacts(data);
+      } else {
+        downloadFile(url);
+        setDownloadCsv(false);
+      }
     })();
-  }, [
-    searchTerm,
-    filterLimit,
-    skipLimit,
-    filterOrderColumn,
-    filterOrderDirection,
-    whereFieldValue,
-  ]);
+  }, [searchTerm, filterLimit, skipLimit, sortColumn, sortOrder, whereFieldValue, downloadCsv]);
 
   if (totalRowCount === -1) {
     throw new Error("Server error: x-total-count header is not provided.");
@@ -107,7 +115,9 @@ export const Contacts = () => {
         </ModuleHeaderContainer>
         <ExtraActionsContainer>
           <Button startIcon={<Upload />}>Import</Button>
-          <Button startIcon={<Download />}>Export</Button>
+          <Button startIcon={<Download />} onClick={handleExport}>
+            Export
+          </Button>
         </ExtraActionsContainer>
         <SearchBar setSearchTermOnChange={setSearchTerm}></SearchBar>
         <ContactsTable {...contactsTableProps} />
