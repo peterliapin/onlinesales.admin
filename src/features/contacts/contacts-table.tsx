@@ -1,16 +1,9 @@
 import { GridColDef } from "@mui/x-data-grid";
-import EditIcon from "@mui/icons-material/Edit";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { ContactDetailsDto } from "lib/network/swagger-client";
 import {
-  ActionButtonContainer,
   ContactNameListItem,
   ContactNameListItemText,
-  EditIconContainer,
-  ForwardIconContainer,
 } from "./index.styled";
-import { getEditFormRoute, getViewFormRoute } from "lib/router";
-import { useNavigate } from "react-router-dom";
 import { Avatar, ListItemAvatar } from "@mui/material";
 import { DataTableGrid } from "components/data-table";
 
@@ -37,15 +30,6 @@ export const ContactsTable = ({
   setFilterField,
   setFilterFieldValue,
 }: ContactsTableProps) => {
-  const navigate = useNavigate();
-
-  const handleEditClick = (id: number) => {
-    navigate(getEditFormRoute(id));
-  };
-
-  const handleForwardClick = (id: number, name: string) => {
-    navigate(getViewFormRoute(id), { state: name });
-  };
 
   const columns: GridColDef<ContactDetailsDto>[] = [
     {
@@ -101,32 +85,6 @@ export const ContactsTable = ({
       headerName: "Language",
       flex: 1,
     },
-    {
-      field: "actions",
-      headerName: "Actions",
-      flex: 1,
-      align: "right",
-      headerAlign: "right",
-      filterable: false,
-      sortable: false,
-      disableColumnMenu: true,
-      renderCell: ({ row }) => {
-        return (
-          <ActionButtonContainer>
-            <EditIconContainer onClick={() => handleEditClick(row.id as number)}>
-              <EditIcon fontSize="small" />
-            </EditIconContainer>
-            <ForwardIconContainer
-              onClick={() =>
-                handleForwardClick(row.id as number, `${row.firstName} ${row.lastName}`)
-              }
-            >
-              <ArrowForwardIcon fontSize="small" />
-            </ForwardIconContainer>
-          </ActionButtonContainer>
-        );
-      },
-    },
   ];
 
   return (
@@ -145,6 +103,9 @@ export const ContactsTable = ({
       initialState={{
         columns: { columnVisibilityModel: { firstName: false, email: false, phone: false } },
       }}
+      showActionsColumn={true}
+      disableEditRoute={false}
+      disableViewRoute={true}
     />
   );
 };

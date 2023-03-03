@@ -33,19 +33,3 @@ export const ContactRowGrid = styled(Grid)({
 export const ContactCardHeader = styled(CardHeader)({
   paddingLeft: 0,
 });
-
-export const ActionButtonContainer = styled("div")`
-  display: flex;
-  justify-content: flex-end;
-`;
-
-export const EditIconContainer = styled("div")`
-  padding: 0;
-  cursor: pointer;
-  margin-right: 10px;
-`;
-
-export const ForwardIconContainer = styled("div")`
-  padding: 0;
-  cursor: pointer;
-`;

@@ -10,9 +10,13 @@ import {
 } from "components/module";
 import { CoreModule, getCoreModuleRoute, rootRoute } from "lib/router";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { ContactDetailsDto } from "lib/network/swagger-client";
 
 export const ContactBase = () => {
   const { state } = useLocation();
+  const contact = state as ContactDetailsDto;
+  const contactFullName = `${contact.firstName} ${contact.lastName}`;
+
   const navigate = useNavigate();
   const [tabValue, setTabValue] = useState("details");
 
@@ -25,7 +29,7 @@ export const ContactBase = () => {
     <ModuleContainer>
       <ModuleHeaderContainer>
         <ModuleHeaderTitleContainer>
-          <Typography variant="h3">{state}</Typography>
+          <Typography variant="h3">{contactFullName}</Typography>
         </ModuleHeaderTitleContainer>
         <ModuleHeaderSubtitleContainer>
           <Breadcrumbs separator={<NavigateNext fontSize="small" />}>

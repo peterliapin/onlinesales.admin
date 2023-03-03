@@ -6,8 +6,13 @@ import {
   GridFilterModel,
   GridSortModel,
 } from "@mui/x-data-grid";
-import { DataTableContainer } from "./index.styled";
+import { ActionButtonContainer, DataTableContainer } from "./index.styled";
 import { GridInitialStateCommunity } from "@mui/x-data-grid/models/gridStateCommunity";
+import EditIcon from "@mui/icons-material/Edit";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import { useNavigate } from "react-router-dom";
+import { getEditFormRoute, getViewFormRoute } from "lib/router";
+import { IconButton } from "@mui/material";
 
 type DataTableProps = {
   columns: GridColDef[];
@@ -22,6 +27,9 @@ type DataTableProps = {
   setFilterField: (filterField: string) => void;
   setFilterFieldValue: (fieldValue: string) => void;
   initialState: GridInitialStateCommunity | undefined;
+  showActionsColumn: boolean;
+  disableEditRoute: boolean;
+  disableViewRoute: boolean;
 };
 
 export const DataTableGrid = ({
@@ -37,8 +45,44 @@ export const DataTableGrid = ({
   setFilterField,
   setFilterFieldValue,
   initialState,
+  showActionsColumn,
+  disableEditRoute,
+  disableViewRoute,
 }: DataTableProps) => {
   const empty = [] as const;
+
+  const actionsColumn: GridColDef | any = {
+    field: "actions",
+    headerName: "Actions",
+    flex: 1,
+    align: "right",
+    headerAlign: "right",
+    filterable: false,
+    sortable: false,
+    disableColumnMenu: true,
+    renderCell: ({ row }: any) => {
+      return (
+        <ActionButtonContainer>
+          <IconButton disabled={disableEditRoute} onClick={() => handleEditClick(row)}>
+            <EditIcon fontSize="small" />
+          </IconButton>
+          <IconButton disabled={disableViewRoute} onClick={() => handleForwardClick(row)}>
+            <ArrowForwardIcon fontSize="small" />
+          </IconButton>
+        </ActionButtonContainer>
+      );
+    },
+  };
+
+  const navigate = useNavigate();
+
+  const handleEditClick = (row: any) => {
+    navigate(getEditFormRoute(row.id!), { state: row });
+  };
+
+  const handleForwardClick = (row: any) => {
+    navigate(getViewFormRoute(row.id!), { state: row });
+  };
 
   const [page, setPage] = useState(0);
 
@@ -79,10 +123,14 @@ export const DataTableGrid = ({
     }
   };
 
+  const gridFinalizedColumns = showActionsColumn
+    ? filterAdjustedColumns.concat(actionsColumn)
+    : filterAdjustedColumns;
+
   return (
     <DataTableContainer>
       <DataGrid
-        columns={filterAdjustedColumns}
+        columns={gridFinalizedColumns}
         rows={data ?? empty}
         loading={!data}
         checkboxSelection
