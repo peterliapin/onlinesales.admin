@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Breadcrumbs, Button, Link, Typography } from "@mui/material";
 import { Download, NavigateNext, Upload } from "@mui/icons-material";
-import { ContactDetailsDto, ContactImportDto } from "lib/network/swagger-client";
+import { ContactDetailsDto } from "lib/network/swagger-client";
 import {
   ModuleContainer,
   ModuleHeaderActionContainer,
@@ -9,7 +9,7 @@ import {
   ModuleHeaderSubtitleContainer,
   ModuleHeaderTitleContainer,
 } from "components/module";
-import { getAddFormRoute, rootRoute } from "lib/router";
+import { getAddFormRoute, getImportFormRoute, rootRoute } from "lib/router";
 import { GhostLink } from "components/ghost-link";
 import { useRequestContext } from "providers/request-provider";
 import { ContactsTable } from "./contacts-table";
@@ -22,7 +22,6 @@ import {
   totalCountHeaderName,
 } from "lib/query";
 import { downloadFile } from "components/download";
-import { ImportFile } from "components/import-file";
 
 export const Contacts = () => {
   const defaultFilterOrderColumn = "firstName";
@@ -40,7 +39,6 @@ export const Contacts = () => {
   const [skipLimit, setSkipLimit] = useState(0);
   const [totalRowCount, setTotalRowCount] = useState(0);
   const [downloadCsv, setDownloadCsv] = useState(false);
-  const [openImportPopup, setOpenImportPopup] = useState(false);
 
   const contactsTableProps = {
     contacts,
@@ -72,14 +70,6 @@ export const Contacts = () => {
   const handleExport = () => {
     setSkipLimit(0);
     setDownloadCsv(true);
-  };
-
-  const handleImportFilePopup = () => {
-    setOpenImportPopup(true);
-  };
-
-  const handleFileUpload = async (fileData: ContactImportDto[]) => {
-    await client.api.contactsImportCreate(fileData);
   };
 
   useEffect(() => {
@@ -125,18 +115,13 @@ export const Contacts = () => {
         </ModuleHeaderActionContainer>
       </ModuleHeaderContainer>
       <ExtraActionsContainer>
-        <Button startIcon={<Upload />} onClick={handleImportFilePopup}>
+        <Button startIcon={<Upload />} to={getImportFormRoute()} component={GhostLink}>
           Import
         </Button>
         <Button startIcon={<Download />} onClick={handleExport}>
           Export
         </Button>
       </ExtraActionsContainer>
-      <ImportFile
-        isOpen={openImportPopup}
-        setOpen={setOpenImportPopup}
-        handleFileUpload={handleFileUpload}
-      />
       <SearchBar setSearchTermOnChange={setSearchTerm}></SearchBar>
       <ContactsTable {...contactsTableProps} />
     </ModuleContainer>

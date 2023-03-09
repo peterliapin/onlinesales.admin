@@ -1,84 +1,95 @@
-import {
-  AlertColor,
-  Backdrop,
-  Box,
-  Button,
-  CircularProgress,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-} from "@mui/material";
+import { AlertColor, Backdrop, Button, CircularProgress, Grid, TextField } from "@mui/material";
+import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { CustomizedSnackbar } from "components/snackbar";
 import { CoreModule } from "lib/router";
 import { useState } from "react";
 
 interface ImportFileProps {
-  isOpen: boolean;
-  setOpen: (open: boolean) => void;
   handleFileUpload: (fileData: any) => void;
 }
 
-export const ImportFile = ({ isOpen, setOpen, handleFileUpload }: ImportFileProps) => {
+export const ImportFile = ({ handleFileUpload }: ImportFileProps) => {
   const initialSnackBarParams = {
     message: "",
     isOpen: false,
     severity: "success" as AlertColor,
   };
 
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-
+  const [data, setData] = useState<any[]>([]);
   const [filePath, setFilePath] = useState("");
   const [isUploading, setIsUploading] = useState(false);
   const [snackBarParams, setSnackBarParams] = useState(initialSnackBarParams);
-
-  const handleClose = () => {
-    setOpen(false);
-    setSnackBarParams(initialSnackBarParams);
-  };
+  const [columns, setColumns] = useState<GridColDef[]>([]);
+  const [rows, setRows] = useState<any[]>([]);
 
   const handleBrowse = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (files && files.length > 0) {
       const file = files[0];
-      setSelectedFile(file);
       setFilePath(file.name);
+
+      const reader = new FileReader();
+      reader.readAsText(file);
+      reader.onload = async (event) => {
+        const fileData = event.target?.result as string;
+        setData(JSON.parse(fileData));
+        generateGridColumnsRows(JSON.parse(fileData));
+      };
     }
   };
 
-  const handleUpload = () => {
-    const reader = new FileReader();
-    reader.readAsText(selectedFile!);
-    reader.onload = async (event) => {
-      const fileData = event.target?.result as string;
-      try {
-        setIsUploading(true);
-        await handleFileUpload(JSON.parse(fileData));
-        setSnackBarParams({
-          message: "Uploaded Successfully",
-          isOpen: true,
-          severity: "success",
-        });
-      } catch (error) {
-        console.log(error);
-        setSnackBarParams({
-          message: "Upload Failed",
-          isOpen: true,
-          severity: "error",
-        });
-      } finally {
-        setIsUploading(false);
-      }
-    };
+  const handleUpload = async () => {
+    try {
+      setIsUploading(true);
+      await handleFileUpload(data);
+      setSnackBarParams({
+        message: "Uploaded Successfully",
+        isOpen: true,
+        severity: "success",
+      });
+    } catch (error) {
+      console.log(error);
+      setSnackBarParams({
+        message: "Upload Failed",
+        isOpen: true,
+        severity: "error",
+      });
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  const generateGridColumnsRows = (data: any[]) => {
+    if (data.length > 0) {
+      const entityKeys = Object.keys(data[0]);
+      const newColumns = entityKeys.map((key) => ({
+        field: key,
+        headerName: key.charAt(0).toUpperCase() + key.slice(1),
+        width: 150,
+      }));
+      setColumns(newColumns);
+      const rows = data.map((item, index) => ({ ...item, id: index }));
+      setRows(rows);
+    } else {
+      setColumns([]);
+      setRows([]);
+    }
   };
 
   return (
-    <Dialog open={isOpen} onClose={handleClose}>
-      <DialogTitle>Import Data</DialogTitle>
-      <DialogContent>
-        <DialogContentText>File selected : {filePath}</DialogContentText>
-        <Box>
+    <>
+      <Grid container spacing={3}>
+        <Grid item xs={12}>
+          <TextField
+            label="File name"
+            variant="outlined"
+            fullWidth
+            InputProps={{
+              startAdornment: <span style={{ marginRight: "5px" }}>{filePath}</span>,
+            }}
+          />
+        </Grid>
+        <Grid item xs={12} spacing={4}>
           <label htmlFor="btn-upload">
             <input
               id="btn-upload"
@@ -87,16 +98,27 @@ export const ImportFile = ({ isOpen, setOpen, handleFileUpload }: ImportFileProp
               type="file"
               onChange={handleBrowse}
             />
-            <Button component="span">Choose File</Button>
+            <Button component="span" variant="contained">
+              Choose File
+            </Button>
           </label>
-          <Button autoFocus onClick={handleUpload}>
+          <Button onClick={handleUpload} variant="contained" style={{ marginLeft: "10px" }}>
             Upload file
           </Button>
-        </Box>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={handleClose}>Cancel</Button>
-      </DialogActions>
+        </Grid>
+        <Grid item xs={12}>
+          <div style={{ height: 400, width: "100%" }}>
+            <DataGrid
+              columns={columns}
+              rows={rows}
+              autoHeight
+              pagination
+              pageSize={10}
+              rowsPerPageOptions={[5, 10, 20]}
+            />
+          </div>
+        </Grid>
+      </Grid>
       <Backdrop open={isUploading} style={{ zIndex: 999 }}>
         <CircularProgress color="inherit" />
       </Backdrop>
@@ -106,6 +128,6 @@ export const ImportFile = ({ isOpen, setOpen, handleFileUpload }: ImportFileProp
         message={snackBarParams.message}
         navigateTo={CoreModule.contacts}
       />
-    </Dialog>
+    </>
   );
 };

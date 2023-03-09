@@ -4,6 +4,7 @@ import {
   contactInvoicesRoute,
   contactLogsRoute,
   editFormRoute,
+  importFormRoute,
   viewFormRoute,
 } from "lib/router";
 import { Outlet, Route, Routes } from "react-router-dom";
@@ -14,6 +15,7 @@ import { ContactView } from "./view/details";
 import { ContactBase } from "./view";
 import { ContactInvoices } from "./view/invoices";
 import { ContactLogs } from "./view/logs";
+import { ContactImport } from "./import";
 
 export const ContactsModule = () => {
   return (
@@ -28,6 +30,7 @@ export const ContactsModule = () => {
           <Route path={contactLogsRoute.template} element={<ContactLogs />} />
         </Route>
         <Route path={addFormRoute.template} element={<ContactAdd />} />
+        <Route path={importFormRoute.template} element={<ContactImport />} />
       </Routes>
       <Outlet />
     </>

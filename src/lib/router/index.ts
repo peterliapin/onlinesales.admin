@@ -35,6 +35,8 @@ export const viewFormRoute = route(
 
 export const addFormRoute = route("add", {}, {});
 
+export const importFormRoute = route("import", {}, {});
+
 export const contactDetailsRoute = route("details", {}, {});
 
 export const contactInvoicesRoute = route("invoices", {}, {});
@@ -48,5 +50,7 @@ export const getEditFormRoute = (id: number) => editFormRoute({ id: id }).$;
 export const getViewFormRoute = (id: number) => viewFormRoute({ id: id }).$;
 
 export const getAddFormRoute = () => addFormRoute({}).$;
+
+export const getImportFormRoute = () => importFormRoute({}).$;
 
 export const rootRoute = "/";
