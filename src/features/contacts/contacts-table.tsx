@@ -1,9 +1,6 @@
 import { GridColDef } from "@mui/x-data-grid";
 import { ContactDetailsDto } from "lib/network/swagger-client";
-import {
-  ContactNameListItem,
-  ContactNameListItemText,
-} from "./index.styled";
+import { ContactNameListItem, ContactNameListItemText } from "./index.styled";
 import { Avatar, ListItemAvatar } from "@mui/material";
 import { DataTableGrid } from "components/data-table";
 
@@ -30,7 +27,6 @@ export const ContactsTable = ({
   setFilterField,
   setFilterFieldValue,
 }: ContactsTableProps) => {
-
   const columns: GridColDef<ContactDetailsDto>[] = [
     {
       field: "lastName",
@@ -105,7 +101,7 @@ export const ContactsTable = ({
       }}
       showActionsColumn={true}
       disableEditRoute={false}
-      disableViewRoute={true}
+      disableViewRoute={false}
     />
   );
 };
