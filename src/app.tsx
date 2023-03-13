@@ -11,8 +11,8 @@ import { AuthProvider } from "./providers/auth-provider";
 export const App = () => {
   return (
     <ThemeProvider>
-      <AuthProvider>
-        <RequestProvider>
+      <RequestProvider>
+        <AuthProvider>
           <BrowserRouter>
             <Routes>
               <Route
@@ -32,8 +32,8 @@ export const App = () => {
               </Route>
             </Routes>
           </BrowserRouter>
-        </RequestProvider>
-      </AuthProvider>
+        </AuthProvider>
+      </RequestProvider>
     </ThemeProvider>
   );
 };

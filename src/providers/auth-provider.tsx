@@ -1,50 +1,47 @@
-import { memo, PropsWithChildren, useCallback } from "react";
-import { PublicClientApplication, Configuration, InteractionType } from "@azure/msal-browser";
-import {
-  AuthenticatedTemplate,
-  MsalProvider,
-  useMsal,
-  useMsalAuthentication,
-} from "@azure/msal-react";
+import { memo, PropsWithChildren, useEffect, useState } from "react";
+import { useCookies } from "react-cookie";
+import { User } from "lib/network/swagger-client";
+import { useRequestContext } from "./request-provider";
 
-const msalConfig: Configuration = {
-  auth: {
-    clientId: process.env.MSAL_CLIENT_ID ?? "",
-    redirectUri: location.origin,
-    authority: process.env.MSAL_AUTHORITY,
-  },
+const apiLink = process.env.CORE_API;
+export const useAuthState = () => {
+  const [ cookies ] = useCookies([".Authorized"]);
+  const [ profile, setProfile ] = useState<User>();
+  const [ error , setError] = useState<unknown>(null);
+  const { client } = useRequestContext();
+  useEffect(() => {
+    const loadProfileInfo = async () => {
+      try {
+        const { data } = await client.api.authProfileList();
+        setProfile(data);
+      } catch (error) {
+        setError(error);
+      }
+    };
+
+    loadProfileInfo();
+  }, []);
+
+  return { isAuthorized: (cookies[".Authorized"] === "true" && error === null), profile };
 };
-
-const msalInstance = new PublicClientApplication(msalConfig);
 
 export const AuthProvider = memo(function AuthProvider({ children }: PropsWithChildren) {
+  const origin = window.location.origin;
+  const [ cookies, setCookies ] = useCookies([".Authorized"]);
+  useEffect(() => {
+    const queryParams = new URLSearchParams(window.location.search);
+    if (cookies[".Authorized"]){
+      return;
+    }
+    if (queryParams.get("loggedIn") === "true"){
+      setCookies(".Authorized", "true");
+      window.location.replace(window.location.origin + window.location.pathname);
+    }
+    window.location.replace(`${apiLink}/api/auth/login?redirectUrl=${origin}?loggedIn=true`);
+  }, []);
   return (
-    <MsalProvider instance={msalInstance}>
-      <RedirectLogin />
-      <AuthenticatedTemplate>{children}</AuthenticatedTemplate>
-    </MsalProvider>
+    <div>
+      {children}
+    </div>
   );
 });
-
-const RedirectLogin = () => {
-  useMsalAuthentication(InteractionType.Redirect);
-
-  return null;
-};
-
-export const useAuthState = () => {
-  const { instance, accounts } = useMsal();
-
-  const account = accounts.at(0);
-
-  const getToken = useCallback(async () => {
-    try {
-      const { idToken } = await instance.acquireTokenSilent({ scopes: ["User.Read"], account });
-      return idToken;
-    } catch {
-      instance.loginRedirect();
-    }
-  }, [instance, account]);
-
-  return { account, getToken };
-};
