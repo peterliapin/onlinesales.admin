@@ -23,6 +23,7 @@ import { CustomizedSnackbar } from "components/snackbar";
 import { CoreModule, getCoreModuleRoute, rootRoute } from "lib/router";
 import { GhostLink } from "components/ghost-link";
 import { NavigateNext } from "@mui/icons-material";
+import { EMAIL_REGEX } from "utils/constants";
 
 interface ContactFormProps {
   contact: ContactDetailsDto;
@@ -52,8 +53,7 @@ export const ContactForm = ({ contact, updateContact, handleSave, isEdit }: Cont
   };
 
   const isValidEmail = (email: string) => {
-    const regex = /^[a-zA-Z0-9]+@(?:[a-zA-Z0-9]+\.)+[A-Za-z]+$/;
-    return email && regex.test(email);
+    return email && EMAIL_REGEX.test(email);
   };
 
   const validateAndSave = async () => {
