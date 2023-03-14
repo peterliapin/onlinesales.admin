@@ -730,6 +730,10 @@ export interface TaskExecutionDto {
   completed?: boolean;
 }
 
+export interface User {
+  name?: string | null;
+}
+
 export type QueryParamsType = Record<string | number, any>;
 export type ResponseFormat = keyof Omit<Body, "body" | "bodyUsed">;
 
@@ -1053,6 +1057,67 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/api/account`,
         method: "GET",
         query: query,
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Auth
+     * @name AuthLoginList
+     * @request GET:/api/auth/login
+     * @secure
+     */
+    authLoginList: (
+      query?: {
+        redirectUrl?: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<void, void | ProblemDetails>({
+        path: `/api/auth/login`,
+        method: "GET",
+        query: query,
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Auth
+     * @name AuthLogoutList
+     * @request GET:/api/auth/logout
+     * @secure
+     */
+    authLogoutList: (
+      query?: {
+        redirectUrl?: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<any, void | ProblemDetails>({
+        path: `/api/auth/logout`,
+        method: "GET",
+        query: query,
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Auth
+     * @name AuthProfileList
+     * @request GET:/api/auth/profile
+     * @secure
+     */
+    authProfileList: (params: RequestParams = {}) =>
+      this.request<User, void | ProblemDetails>({
+        path: `/api/auth/profile`,
+        method: "GET",
         secure: true,
         format: "json",
         ...params,
@@ -1730,47 +1795,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
-     * @tags Images
-     * @name ImagesCreate
-     * @request POST:/api/images
-     * @secure
-     */
-    imagesCreate: (
-      data: {
-        /** @format binary */
-        Image: File;
-        ScopeUid: string;
-      },
-      params: RequestParams = {},
-    ) =>
-      this.request<void, void | ProblemDetails>({
-        path: `/api/images`,
-        method: "POST",
-        body: data,
-        secure: true,
-        type: ContentType.FormData,
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @tags Images
-     * @name ImagesDetail
-     * @request GET:/api/images/{scopeUid}/{fileName}
-     * @secure
-     */
-    imagesDetail: (scopeUid: string, fileName: string, params: RequestParams = {}) =>
-      this.request<void, ProblemDetails>({
-        path: `/api/images/${scopeUid}/${fileName}`,
-        method: "GET",
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
      * @tags Links
      * @name LinksCreate
      * @request POST:/api/links
@@ -1908,6 +1932,47 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         method: "GET",
         secure: true,
         format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Media
+     * @name MediaCreate
+     * @request POST:/api/media
+     * @secure
+     */
+    mediaCreate: (
+      data: {
+        /** @format binary */
+        Image: File;
+        ScopeUid: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<void, void | ProblemDetails>({
+        path: `/api/media`,
+        method: "POST",
+        body: data,
+        secure: true,
+        type: ContentType.FormData,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Media
+     * @name MediaDetail
+     * @request GET:/api/media/{scopeUid}/{fileName}
+     * @secure
+     */
+    mediaDetail: (scopeUid: string, fileName: string, params: RequestParams = {}) =>
+      this.request<void, ProblemDetails>({
+        path: `/api/media/${scopeUid}/${fileName}`,
+        method: "GET",
+        secure: true,
         ...params,
       }),
 
@@ -2264,6 +2329,106 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     versionList: (params: RequestParams = {}) =>
       this.request<void, void>({
         path: `/api/version`,
+        method: "GET",
+        secure: true,
+        ...params,
+      }),
+  };
+  microsoftIdentity = {
+    /**
+     * No description
+     *
+     * @tags Account
+     * @name AccountSignInDetail
+     * @request GET:/microsoft-identity/account/sign-in/{scheme}
+     * @secure
+     */
+    accountSignInDetail: (
+      scheme: string,
+      query?: {
+        redirectUri?: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<void, any>({
+        path: `/microsoft-identity/account/sign-in/${scheme}`,
+        method: "GET",
+        query: query,
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Account
+     * @name AccountChallengeDetail
+     * @request GET:/microsoft-identity/account/challenge/{scheme}
+     * @secure
+     */
+    accountChallengeDetail: (
+      scheme: string,
+      query?: {
+        redirectUri?: string;
+        scope?: string;
+        loginHint?: string;
+        domainHint?: string;
+        claims?: string;
+        policy?: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<void, any>({
+        path: `/microsoft-identity/account/challenge/${scheme}`,
+        method: "GET",
+        query: query,
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Account
+     * @name AccountSignOutDetail
+     * @request GET:/microsoft-identity/account/sign-out/{scheme}
+     * @secure
+     */
+    accountSignOutDetail: (scheme: string, params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/microsoft-identity/account/sign-out/${scheme}`,
+        method: "GET",
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Account
+     * @name AccountResetPasswordDetail
+     * @request GET:/microsoft-identity/account/reset-password/{scheme}
+     * @secure
+     */
+    accountResetPasswordDetail: (scheme: string, params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/microsoft-identity/account/reset-password/${scheme}`,
+        method: "GET",
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Account
+     * @name AccountEditProfileDetail
+     * @request GET:/microsoft-identity/account/edit-profile/{scheme}
+     * @secure
+     */
+    accountEditProfileDetail: (scheme: string, params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/microsoft-identity/account/edit-profile/${scheme}`,
         method: "GET",
         secure: true,
         ...params,
