@@ -1,15 +1,17 @@
+import { useState } from "react";
 import { Backdrop, Button, CircularProgress, Grid, TextField } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { CustomizedSnackbar } from "components/snackbar";
 import { CoreModule } from "lib/router";
-import { useState } from "react";
 import csv from "csvtojson";
 import {
   fileUnsupportedSnackBarParams,
   initialSnackBarParams,
+  noDataErrorSnackBarParams,
   uploadFailedSnackBarParams,
   uploadSuccessSnackBarParams,
 } from "components/snackbar/constants";
+import { DataGridDiv, FileNameTextSpan, StyledBackdrop, UploadButton } from "./index.styled";
 
 interface ImportFileProps {
   handleFileUpload: (fileData: any) => void;
@@ -51,6 +53,11 @@ export const ImportFile = ({ handleFileUpload }: ImportFileProps) => {
 
   const handleUpload = async () => {
     try {
+      setSnackBarParams(initialSnackBarParams);
+      if (data.length === 0) {
+        setSnackBarParams(noDataErrorSnackBarParams);
+        return;
+      }
       setIsUploading(true);
       await handleFileUpload(data);
       setSnackBarParams(uploadSuccessSnackBarParams);
@@ -71,8 +78,7 @@ export const ImportFile = ({ handleFileUpload }: ImportFileProps) => {
         width: 150,
       }));
       setColumns(newColumns);
-      const rows = data.map((item, index) => ({ ...item, id: index }));
-      setRows(rows);
+      setRows(data);
     } else {
       setColumns([]);
       setRows([]);
@@ -88,7 +94,7 @@ export const ImportFile = ({ handleFileUpload }: ImportFileProps) => {
             variant="outlined"
             fullWidth
             InputProps={{
-              startAdornment: <span style={{ marginRight: "5px" }}>{filePath}</span>,
+              startAdornment: <FileNameTextSpan>{filePath}</FileNameTextSpan>,
             }}
           />
         </Grid>
@@ -105,12 +111,12 @@ export const ImportFile = ({ handleFileUpload }: ImportFileProps) => {
               Choose File
             </Button>
           </label>
-          <Button onClick={handleUpload} variant="contained" style={{ marginLeft: "10px" }}>
+          <UploadButton onClick={handleUpload} variant="contained">
             Upload file
-          </Button>
+          </UploadButton>
         </Grid>
         <Grid item xs={12}>
-          <div style={{ height: 400, width: "100%" }}>
+          <DataGridDiv>
             <DataGrid
               columns={columns}
               rows={rows}
@@ -118,13 +124,14 @@ export const ImportFile = ({ handleFileUpload }: ImportFileProps) => {
               pagination
               pageSize={10}
               rowsPerPageOptions={[5, 10, 20]}
+              getRowId={(row) => row.email}
             />
-          </div>
+          </DataGridDiv>
         </Grid>
       </Grid>
-      <Backdrop open={isUploading} style={{ zIndex: 999 }}>
+      <StyledBackdrop open={isUploading}>
         <CircularProgress color="inherit" />
-      </Backdrop>
+      </StyledBackdrop>
       <CustomizedSnackbar
         isOpen={snackBarParams.isOpen}
         severerity={snackBarParams.severity}

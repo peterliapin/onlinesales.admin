@@ -13,13 +13,25 @@ export const fileUnsupportedSnackBarParams = {
 };
 
 export const uploadFailedSnackBarParams = {
-  message: "Upload Failed",
+  message: "Upload Failed.",
   isOpen: true,
   severity: "error" as AlertColor,
 };
 
 export const uploadSuccessSnackBarParams = {
-  message: "Uploaded Successfully",
+  message: "Uploaded Successfully.",
   isOpen: true,
   severity: "success" as AlertColor,
+};
+
+export const serverErrorSnackBarParams = {
+  message: "Server error occurred.",
+  isOpen: true,
+  severity: "error" as AlertColor,
+};
+
+export const noDataErrorSnackBarParams = {
+  message: "No data available to upload.",
+  isOpen: true,
+  severity: "error" as AlertColor,
 };

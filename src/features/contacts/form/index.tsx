@@ -24,6 +24,7 @@ import { CoreModule, getCoreModuleRoute, rootRoute } from "lib/router";
 import { GhostLink } from "components/ghost-link";
 import { NavigateNext } from "@mui/icons-material";
 import { EMAIL_REGEX } from "utils/constants";
+import { initialSnackBarParams, serverErrorSnackBarParams } from "components/snackbar/constants";
 
 interface ContactFormProps {
   contact: ContactDetailsDto;
@@ -39,11 +40,7 @@ export const ContactForm = ({ contact, updateContact, handleSave, isEdit }: Cont
 
   const [isSaving, setIsSaving] = useState(false);
 
-  const [snackBarParams, setSnackBarParams] = useState({
-    message: "",
-    isOpen: false,
-    severerity: "success" as AlertColor,
-  });
+  const [snackBarParams, setSnackBarParams] = useState(initialSnackBarParams);
 
   const header = isEdit ? "Contact edit" : "Contact add";
 
@@ -71,15 +68,11 @@ export const ContactForm = ({ contact, updateContact, handleSave, isEdit }: Cont
         setSnackBarParams({
           message: isEdit ? "Updated Successfully" : "Saved Successfully",
           isOpen: true,
-          severerity: "success",
+          severity: "success" as AlertColor,
         });
       } catch (e) {
         console.log(e);
-        setSnackBarParams({
-          message: "Server error occurred. ",
-          isOpen: true,
-          severerity: "error",
-        });
+        setSnackBarParams(serverErrorSnackBarParams);
       } finally {
         setIsSaving(false);
       }
@@ -257,7 +250,7 @@ export const ContactForm = ({ contact, updateContact, handleSave, isEdit }: Cont
       </Backdrop>
       <CustomizedSnackbar
         isOpen={snackBarParams.isOpen}
-        severerity={snackBarParams.severerity}
+        severerity={snackBarParams.severity}
         message={snackBarParams.message}
         navigateTo={CoreModule.contacts}
       ></CustomizedSnackbar>
