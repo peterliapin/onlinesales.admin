@@ -1,20 +1,21 @@
-import { AlertColor, Backdrop, Button, CircularProgress, Grid, TextField } from "@mui/material";
+import { Backdrop, Button, CircularProgress, Grid, TextField } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { CustomizedSnackbar } from "components/snackbar";
 import { CoreModule } from "lib/router";
 import { useState } from "react";
+import csv from "csvtojson";
+import {
+  fileUnsupportedSnackBarParams,
+  initialSnackBarParams,
+  uploadFailedSnackBarParams,
+  uploadSuccessSnackBarParams,
+} from "components/snackbar/constants";
 
 interface ImportFileProps {
   handleFileUpload: (fileData: any) => void;
 }
 
 export const ImportFile = ({ handleFileUpload }: ImportFileProps) => {
-  const initialSnackBarParams = {
-    message: "",
-    isOpen: false,
-    severity: "success" as AlertColor,
-  };
-
   const [data, setData] = useState<any[]>([]);
   const [filePath, setFilePath] = useState("");
   const [isUploading, setIsUploading] = useState(false);
@@ -23,6 +24,7 @@ export const ImportFile = ({ handleFileUpload }: ImportFileProps) => {
   const [rows, setRows] = useState<any[]>([]);
 
   const handleBrowse = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSnackBarParams(initialSnackBarParams);
     const files = e.target.files;
     if (files && files.length > 0) {
       const file = files[0];
@@ -32,8 +34,17 @@ export const ImportFile = ({ handleFileUpload }: ImportFileProps) => {
       reader.readAsText(file);
       reader.onload = async (event) => {
         const fileData = event.target?.result as string;
-        setData(JSON.parse(fileData));
-        generateGridColumnsRows(JSON.parse(fileData));
+        let jsonData: any = [];
+        if (file.name.endsWith(".json")) {
+          jsonData = JSON.parse(fileData);
+        } else if (file.name.endsWith(".csv")) {
+          jsonData = await csv().fromString(fileData);
+        } else {
+          setSnackBarParams(fileUnsupportedSnackBarParams);
+          return;
+        }
+        setData(jsonData);
+        generateGridColumnsRows(jsonData);
       };
     }
   };
@@ -42,18 +53,10 @@ export const ImportFile = ({ handleFileUpload }: ImportFileProps) => {
     try {
       setIsUploading(true);
       await handleFileUpload(data);
-      setSnackBarParams({
-        message: "Uploaded Successfully",
-        isOpen: true,
-        severity: "success",
-      });
+      setSnackBarParams(uploadSuccessSnackBarParams);
     } catch (error) {
       console.log(error);
-      setSnackBarParams({
-        message: "Upload Failed",
-        isOpen: true,
-        severity: "error",
-      });
+      setSnackBarParams(uploadFailedSnackBarParams);
     } finally {
       setIsUploading(false);
     }
