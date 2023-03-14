@@ -53,7 +53,6 @@ export const ImportFile = ({ handleFileUpload }: ImportFileProps) => {
 
   const handleUpload = async () => {
     try {
-      setSnackBarParams(initialSnackBarParams);
       if (data.length === 0) {
         setSnackBarParams(noDataErrorSnackBarParams);
         return;

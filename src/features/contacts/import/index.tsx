@@ -1,6 +1,5 @@
-import { NavigateNext } from "@mui/icons-material";
-import { Breadcrumbs, Link, Typography } from "@mui/material";
-import { GhostLink } from "components/ghost-link";
+import { Typography } from "@mui/material";
+import { BreadCrumbNavigation } from "components/breadcrumbs";
 import { ImportFile } from "components/import-file";
 import {
   ModuleContainer,
@@ -21,6 +20,11 @@ export const ContactImport = () => {
     await client.api.contactsImportCreate(fileData);
   };
 
+  const links = [
+    { linkText: "Dashboard", toRoute: rootRoute },
+    { linkText: "Contacts", toRoute: getCoreModuleRoute(CoreModule.contacts) },
+  ];
+
   return (
     <ModuleContainer>
       <ModuleHeaderContainer>
@@ -28,19 +32,7 @@ export const ContactImport = () => {
           <Typography variant="h3">{header}</Typography>
         </ModuleHeaderTitleContainer>
         <ModuleHeaderSubtitleContainer>
-          <Breadcrumbs separator={<NavigateNext fontSize="small" />}>
-            <Link to={rootRoute} component={GhostLink} underline="hover">
-              Dashboard
-            </Link>
-            <Link
-              to={getCoreModuleRoute(CoreModule.contacts)}
-              component={GhostLink}
-              underline="hover"
-            >
-              Contacts
-            </Link>
-            <Typography variant="body1">{header}</Typography>
-          </Breadcrumbs>
+          <BreadCrumbNavigation links={links} current={header}></BreadCrumbNavigation>
         </ModuleHeaderSubtitleContainer>
       </ModuleHeaderContainer>
       <ImportFile handleFileUpload={handleFileUpload} />

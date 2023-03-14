@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { Breadcrumbs, Button, Link, Typography } from "@mui/material";
-import { Download, NavigateNext, Upload } from "@mui/icons-material";
+import { Button, Typography } from "@mui/material";
+import { Download, Upload } from "@mui/icons-material";
 import { ContactDetailsDto } from "lib/network/swagger-client";
 import {
   ModuleContainer,
@@ -22,6 +22,7 @@ import {
   totalCountHeaderName,
 } from "lib/query";
 import { downloadFile } from "components/download";
+import { BreadCrumbNavigation } from "components/breadcrumbs";
 
 export const Contacts = () => {
   const defaultFilterOrderColumn = "firstName";
@@ -94,6 +95,8 @@ export const Contacts = () => {
     }
   }, [totalRowCount]);
 
+  const links = [{ linkText: "Dashboard", toRoute: rootRoute }];
+
   return (
     <ModuleContainer>
       <ModuleHeaderContainer>
@@ -101,12 +104,7 @@ export const Contacts = () => {
           <Typography variant="h3">Contacts</Typography>
         </ModuleHeaderTitleContainer>
         <ModuleHeaderSubtitleContainer>
-          <Breadcrumbs separator={<NavigateNext fontSize="small" />}>
-            <Link to={rootRoute} component={GhostLink} underline="hover">
-              Dashboard
-            </Link>
-            <Typography variant="body1">Contacts</Typography>
-          </Breadcrumbs>
+          <BreadCrumbNavigation links={links} current="Contacts"></BreadCrumbNavigation>
         </ModuleHeaderSubtitleContainer>
         <ModuleHeaderActionContainer>
           <Button to={getAddFormRoute()} component={GhostLink} variant="contained">

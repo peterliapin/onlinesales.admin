@@ -2,13 +2,11 @@ import { useState } from "react";
 import {
   AlertColor,
   Backdrop,
-  Breadcrumbs,
   Button,
   Card,
   CardContent,
   CircularProgress,
   Grid,
-  Link,
   TextField,
   Typography,
 } from "@mui/material";
@@ -21,10 +19,9 @@ import {
 } from "components/module";
 import { CustomizedSnackbar } from "components/snackbar";
 import { CoreModule, getCoreModuleRoute, rootRoute } from "lib/router";
-import { GhostLink } from "components/ghost-link";
-import { NavigateNext } from "@mui/icons-material";
 import { EMAIL_REGEX } from "utils/constants";
 import { initialSnackBarParams, serverErrorSnackBarParams } from "components/snackbar/constants";
+import { BreadCrumbNavigation } from "components/breadcrumbs";
 
 interface ContactFormProps {
   contact: ContactDetailsDto;
@@ -79,6 +76,11 @@ export const ContactForm = ({ contact, updateContact, handleSave, isEdit }: Cont
     }
   };
 
+  const links = [
+    { linkText: "Dashboard", toRoute: rootRoute },
+    { linkText: "Contacts", toRoute: getCoreModuleRoute(CoreModule.contacts) },
+  ];
+
   return (
     <ModuleContainer>
       <ModuleHeaderContainer>
@@ -86,19 +88,7 @@ export const ContactForm = ({ contact, updateContact, handleSave, isEdit }: Cont
           <Typography variant="h3">{header}</Typography>
         </ModuleHeaderTitleContainer>
         <ModuleHeaderSubtitleContainer>
-          <Breadcrumbs separator={<NavigateNext fontSize="small" />}>
-            <Link to={rootRoute} component={GhostLink} underline="hover">
-              Dashboard
-            </Link>
-            <Link
-              to={getCoreModuleRoute(CoreModule.contacts)}
-              component={GhostLink}
-              underline="hover"
-            >
-              Contacts
-            </Link>
-            <Typography variant="body1">{header}</Typography>
-          </Breadcrumbs>
+          <BreadCrumbNavigation links={links} current={header}></BreadCrumbNavigation>
         </ModuleHeaderSubtitleContainer>
       </ModuleHeaderContainer>
       <Card>
