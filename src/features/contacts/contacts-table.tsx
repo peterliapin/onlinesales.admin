@@ -1,60 +1,107 @@
-import { Button } from "@mui/material";
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { GridColDef } from "@mui/x-data-grid";
 import { ContactDetailsDto } from "lib/network/swagger-client";
-import { ContactsTableContainer } from "./index.styled";
+import { ContactNameListItem, ContactNameListItemText } from "./index.styled";
+import { Avatar, ListItemAvatar } from "@mui/material";
+import { DataTableGrid } from "components/data-table";
 
 type ContactsTableProps = {
   contacts?: ContactDetailsDto[];
+  pageSize?: number;
+  totalRowCount: number;
+  setSortColumn: (sortColumn: string) => void;
+  setSortOrder: (sortOrder: string) => void;
+  setPageSize: (pageSize: number) => void;
+  setSkipLimit: (skipLimit: number) => void;
+  setFilterField: (filterField: string) => void;
+  setFilterFieldValue: (fieldValue: string) => void;
 };
 
-const empty = [] as const;
-
-const columns: GridColDef<ContactDetailsDto>[] = [
-  {
-    field: "name",
-    headerName: "Name",
-    minWidth: 150,
-    flex: 1,
-    renderCell: ({ row }) => (
-      <div>
-        <div>{`${row.firstName} ${row.lastName}`}</div>
-        <div>{row.email}</div>
-      </div>
-    ),
-  },
-  {
-    field: "location",
-    headerName: "Location",
-  },
-  {
-    field: "orders",
-    headerName: "Orders",
-  },
-  {
-    field: "spent",
-    headerName: "Spent",
-  },
-  {
-    field: "actions",
-    headerName: "Actions",
-    align: "right",
-    headerAlign: "right",
-    sortable: false,
-    disableColumnMenu: true,
-    renderCell: () => {
-      return (
-        <div>
-          <Button>edit</Button>
-        </div>
-      );
+export const ContactsTable = ({
+  contacts,
+  pageSize,
+  totalRowCount,
+  setPageSize,
+  setSkipLimit,
+  setSortColumn,
+  setSortOrder,
+  setFilterField,
+  setFilterFieldValue,
+}: ContactsTableProps) => {
+  const columns: GridColDef<ContactDetailsDto>[] = [
+    {
+      field: "lastName",
+      headerName: "Name",
+      flex: 4,
+      renderCell: ({ row }) => (
+        <ContactNameListItem>
+          <ListItemAvatar>
+            <Avatar src={row.avatarUrl!}></Avatar>
+          </ListItemAvatar>
+          <ContactNameListItemText
+            primary={`${row.firstName} ${row.lastName}`}
+            secondary={row.email}
+          />
+        </ContactNameListItem>
+      ),
     },
-  },
-];
+    {
+      field: "firstName",
+      headerName: "First Name",
+    },
+    {
+      field: "email",
+      headerName: "Email",
+    },
+    {
+      field: "address1",
+      headerName: "Address",
+      flex: 4,
+    },
+    {
+      field: "phone",
+      headerName: "Phone",
+    },
+    {
+      field: "location",
+      headerName: "Location",
+      flex: 2,
+    },
+    {
+      field: "createdAt",
+      headerName: "Created At",
+      flex: 2,
+      valueGetter: (params) => {
+        const createdAt = params.value as string;
+        const formattedDate = new Date(createdAt).toLocaleDateString();
+        return formattedDate;
+      },
+    },
+    {
+      field: "language",
+      headerName: "Language",
+      flex: 1,
+    },
+  ];
 
-export const ContactsTable = ({ contacts }: ContactsTableProps) => {
   return (
-    <ContactsTableContainer>
-      <DataGrid columns={columns} rows={contacts ?? empty} loading={!contacts} checkboxSelection />
-    </ContactsTableContainer>
+    <DataTableGrid
+      columns={columns}
+      data={contacts}
+      pageSize={pageSize}
+      totalRowCount={totalRowCount}
+      rowsPerPageOptions={[10, 30, 50, 100, 1000]}
+      setSortColumn={setSortColumn}
+      setSortOrder={setSortOrder}
+      setPageSize={setPageSize}
+      setSkipLimit={setSkipLimit}
+      setFilterField={setFilterField}
+      setFilterFieldValue={setFilterFieldValue}
+      initialState={{
+        columns: { columnVisibilityModel: { firstName: false, email: false, phone: false } },
+      }}
+      showActionsColumn={true}
+      disableEditRoute={false}
+      disableViewRoute={false}
+    />
   );
 };

@@ -1046,6 +1046,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     accountList: (
       query?: {
         query?: string;
+        /** @default false */
+        downloadCsv?: boolean;
       },
       params: RequestParams = {},
     ) =>
@@ -1069,6 +1071,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     commentsList: (
       query?: {
         query?: string;
+        /** @default false */
+        downloadCsv?: boolean;
       },
       params: RequestParams = {},
     ) =>
@@ -1233,6 +1237,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     contactsList: (
       query?: {
         query?: string;
+        /** @default false */
+        downloadCsv?: boolean;
       },
       params: RequestParams = {},
     ) =>
@@ -1293,6 +1299,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     contentList: (
       query?: {
         query?: string;
+        /** @default false */
+        downloadCsv?: boolean;
       },
       params: RequestParams = {},
     ) =>
@@ -1511,6 +1519,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     domainsList: (
       query?: {
         query?: string;
+        /** @default false */
+        downloadCsv?: boolean;
       },
       params: RequestParams = {},
     ) =>
@@ -1621,6 +1631,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     emailGroupsList: (
       query?: {
         query?: string;
+        /** @default false */
+        downloadCsv?: boolean;
       },
       params: RequestParams = {},
     ) =>
@@ -1715,6 +1727,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     emailTemplatesList: (
       query?: {
         query?: string;
+        /** @default false */
+        downloadCsv?: boolean;
       },
       params: RequestParams = {},
     ) =>
@@ -1724,47 +1738,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         query: query,
         secure: true,
         format: "json",
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @tags Images
-     * @name ImagesCreate
-     * @request POST:/api/images
-     * @secure
-     */
-    imagesCreate: (
-      data: {
-        /** @format binary */
-        Image: File;
-        ScopeUid: string;
-      },
-      params: RequestParams = {},
-    ) =>
-      this.request<void, void | ProblemDetails>({
-        path: `/api/images`,
-        method: "POST",
-        body: data,
-        secure: true,
-        type: ContentType.FormData,
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @tags Images
-     * @name ImagesDetail
-     * @request GET:/api/images/{scopeUid}/{fileName}
-     * @secure
-     */
-    imagesDetail: (scopeUid: string, fileName: string, params: RequestParams = {}) =>
-      this.request<void, ProblemDetails>({
-        path: `/api/images/${scopeUid}/${fileName}`,
-        method: "GET",
-        secure: true,
         ...params,
       }),
 
@@ -1798,6 +1771,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     linksList: (
       query?: {
         query?: string;
+        /** @default false */
+        downloadCsv?: boolean;
       },
       params: RequestParams = {},
     ) =>
@@ -1914,6 +1889,47 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
+     * @tags Media
+     * @name MediaCreate
+     * @request POST:/api/media
+     * @secure
+     */
+    mediaCreate: (
+      data: {
+        /** @format binary */
+        Image: File;
+        ScopeUid: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<void, void | ProblemDetails>({
+        path: `/api/media`,
+        method: "POST",
+        body: data,
+        secure: true,
+        type: ContentType.FormData,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Media
+     * @name MediaDetail
+     * @request GET:/api/media/{scopeUid}/{fileName}
+     * @secure
+     */
+    mediaDetail: (scopeUid: string, fileName: string, params: RequestParams = {}) =>
+      this.request<void, ProblemDetails>({
+        path: `/api/media/${scopeUid}/${fileName}`,
+        method: "GET",
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
      * @tags Messages
      * @name MessagesSmsCreate
      * @request POST:/api/messages/sms
@@ -1959,6 +1975,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     orderItemsList: (
       query?: {
         query?: string;
+        /** @default false */
+        downloadCsv?: boolean;
       },
       params: RequestParams = {},
     ) =>
@@ -2141,6 +2159,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     ordersList: (
       query?: {
         query?: string;
+        /** @default false */
+        downloadCsv?: boolean;
       },
       params: RequestParams = {},
     ) =>
