@@ -302,7 +302,20 @@ export const ContentEdit = (props: ContentEditProps) => {
                     )}
                   />
                 </Grid>
-
+                <Grid xs={6} sm={6} item>
+                  <Autocomplete
+                    multiple
+                    limitTags={3}
+                    options={["category 1", "category 2", "category 3", "category 4"]}
+                    value={(getValue("categories") + "").split(";").filter((i) => i)}
+                    onChange={(e, newValue) => {
+                      updateValue("categories", (newValue || []).join(";"));
+                    }}
+                    renderInput={(params) => (
+                      <TextField {...params} label="Categories" placeholder="Select Categories"/>
+                    )}
+                  />
+                </Grid>
                 <Grid item xs={12}>
                   {!props.readonly && (
                     <Button

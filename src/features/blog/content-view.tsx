@@ -82,7 +82,19 @@ export const ContentView = () => {
                 <TagsContainer>
                   Tags:{" "}
                   <>
-                    {`${contentItem.tags || ""};${contentItem.categories || ""}`
+                    {`${contentItem.tags || ""}`
+                      .split(";")
+                      .filter((i) => i)
+                      .filter((v, index, items) => items.indexOf(v) === index)
+                      .map((s, index) => (
+                        <Chip size={"small"} key={index} label={s} variant="outlined" />
+                      ))}
+                  </>
+                </TagsContainer>
+                <TagsContainer>
+                  Categories:{" "}
+                  <>
+                    {`${contentItem.categories || ""}`
                       .split(";")
                       .filter((i) => i)
                       .filter((v, index, items) => items.indexOf(v) === index)
