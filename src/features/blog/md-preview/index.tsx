@@ -1,6 +1,8 @@
 import React from "react";
 import Markdown from 'markdown-to-jsx';
 
+const coreApi = process.env.CORE_API;
+
 interface MdPreviewProps {
   source: string | undefined;
 }
@@ -29,9 +31,29 @@ export const MdPreview = ({source}: MdPreviewProps) => {
     }
   }
 
+  console.log(["coreApi", coreApi]);
+
+  const customImageMatches = findMatches(/\s*!\[.*\](.*?)\(.*\)/ig, filteredSource);
+
+  console.log(["customImageMatches", customImageMatches]);
+
+  if (customImageMatches) {
+    for (let i = 0; i < customImageMatches.length; i++) {
+      const customImageMatch = customImageMatches[i];
+      const altMatch = (/\[.*\]/).exec(customImageMatch);
+      const urlMatch = (/\(.*\)/).exec(customImageMatch);
+      const alt = altMatch && altMatch[0] && altMatch[0].replace('[', '').replace(']', '');
+      const url = urlMatch && urlMatch[0] && urlMatch[0].replace('(', '').replace(')', '');
+      filteredSource = filteredSource.replace(customImageMatch, `<customImg src="${(coreApi || '') + url}" alt="${alt || ''}" />`)
+    }
+  }
+
   return <Markdown options={{
     overrides: {
-      customLink: (a) => <a href={a.href} target={a.target}> {a.text || "WavePoint"} </a>
+      customLink: (a) => <a href={a.href} target={a.target}> {a.text || "WavePoint"} </a>,
+      customImg: (a) => <div>
+        <img style={{maxWidth: "80%", margin: 10}} src={a.src} alt={a.alt}/>
+      </div>,
     }
   }}>{filteredSource}</Markdown>;
 };
