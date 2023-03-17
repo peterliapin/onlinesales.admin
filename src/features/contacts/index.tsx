@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Button, Typography } from "@mui/material";
 import { Download, Upload } from "@mui/icons-material";
-import { ContactDetailsDto } from "lib/network/swagger-client";
+import { ContactDetailsDto, ContactImportDto } from "lib/network/swagger-client";
 import {
   ModuleContainer,
   ModuleHeaderActionContainer,
@@ -9,7 +9,7 @@ import {
   ModuleHeaderSubtitleContainer,
   ModuleHeaderTitleContainer,
 } from "components/module";
-import { getAddFormRoute, getImportFormRoute, rootRoute } from "lib/router";
+import { getAddFormRoute } from "lib/router";
 import { GhostLink } from "components/ghost-link";
 import { useRequestContext } from "providers/request-provider";
 import { ContactsTable } from "./contacts-table";
@@ -23,6 +23,9 @@ import {
 } from "lib/query";
 import { downloadFile } from "components/download";
 import { BreadCrumbNavigation } from "components/breadcrumbs";
+import { CsvImport } from "components/spreadsheet-import";
+import { Result } from "@wavepoint/react-spreadsheet-import/types/types";
+import { breadcrumbLinks, importFields } from "./constants";
 
 export const Contacts = () => {
   const defaultFilterOrderColumn = "firstName";
@@ -40,6 +43,29 @@ export const Contacts = () => {
   const [skipLimit, setSkipLimit] = useState(0);
   const [totalRowCount, setTotalRowCount] = useState(0);
   const [downloadCsv, setDownloadCsv] = useState(false);
+  const [isImportWindowOpen, setIsImportWindowOpen] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      const { data, headers, url } = await client.api.contactsList({
+        query: `${searchTerm}&${basicFilterQuery}${whereFilterQuery}`,
+        downloadCsv: downloadCsv,
+      });
+      setTotalResultsCount(headers.get(totalCountHeaderName));
+      if (!downloadCsv) {
+        setContacts(data);
+      } else {
+        downloadFile(url);
+        setDownloadCsv(false);
+      }
+    })();
+  }, [searchTerm, filterLimit, skipLimit, sortColumn, sortOrder, whereFieldValue, downloadCsv]);
+
+  useEffect(() => {
+    if (totalRowCount === -1) {
+      throw new Error("Server error: x-total-count header is not provided.");
+    }
+  }, [totalRowCount]);
 
   const contactsTableProps = {
     contacts,
@@ -73,29 +99,24 @@ export const Contacts = () => {
     setDownloadCsv(true);
   };
 
-  useEffect(() => {
-    (async () => {
-      const { data, headers, url } = await client.api.contactsList({
-        query: `${searchTerm}&${basicFilterQuery}${whereFilterQuery}`,
-        downloadCsv: downloadCsv,
-      });
-      setTotalResultsCount(headers.get(totalCountHeaderName));
-      if (!downloadCsv) {
-        setContacts(data);
-      } else {
-        downloadFile(url);
-        setDownloadCsv(false);
-      }
-    })();
-  }, [searchTerm, filterLimit, skipLimit, sortColumn, sortOrder, whereFieldValue, downloadCsv]);
+  const onImportWindowClose = () => {
+    setIsImportWindowOpen(false);
+  };
 
-  useEffect(() => {
-    if (totalRowCount === -1) {
-      throw new Error("Server error: x-total-count header is not provided.");
-    }
-  }, [totalRowCount]);
+  const handleFileUpload = async (data: Result<string>) => {
+    const importDtoCollection: ContactImportDto[] = data.validData.map((data) => {
+      const contactImportDto: ContactImportDto = {
+        ...data,
+        email: data.email as string,
+      };
+      return contactImportDto;
+    });
+    await client.api.contactsImportCreate(importDtoCollection);
+  };
 
-  const links = [{ linkText: "Dashboard", toRoute: rootRoute }];
+  const openImportPage = () => {
+    setIsImportWindowOpen(true);
+  };
 
   return (
     <ModuleContainer>
@@ -104,7 +125,7 @@ export const Contacts = () => {
           <Typography variant="h3">Contacts</Typography>
         </ModuleHeaderTitleContainer>
         <ModuleHeaderSubtitleContainer>
-          <BreadCrumbNavigation links={links} current="Contacts"></BreadCrumbNavigation>
+          <BreadCrumbNavigation links={breadcrumbLinks} current="Contacts"></BreadCrumbNavigation>
         </ModuleHeaderSubtitleContainer>
         <ModuleHeaderActionContainer>
           <Button to={getAddFormRoute()} component={GhostLink} variant="contained">
@@ -113,7 +134,7 @@ export const Contacts = () => {
         </ModuleHeaderActionContainer>
       </ModuleHeaderContainer>
       <ExtraActionsContainer>
-        <Button startIcon={<Upload />} to={getImportFormRoute()} component={GhostLink}>
+        <Button startIcon={<Upload />} onClick={openImportPage}>
           Import
         </Button>
         <Button startIcon={<Download />} onClick={handleExport}>
@@ -122,6 +143,12 @@ export const Contacts = () => {
       </ExtraActionsContainer>
       <SearchBar setSearchTermOnChange={setSearchTerm}></SearchBar>
       <ContactsTable {...contactsTableProps} />
+      <CsvImport
+        isOpen={isImportWindowOpen}
+        onClose={onImportWindowClose}
+        onUpload={handleFileUpload}
+        fields={importFields}
+      ></CsvImport>
     </ModuleContainer>
   );
 };
