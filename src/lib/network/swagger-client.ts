@@ -142,12 +142,10 @@ export interface CommentUpdateDto {
 export interface ContactCreateDto {
   lastName?: string | null;
   firstName?: string | null;
-  companyName?: string | null;
   address1?: string | null;
   address2?: string | null;
   state?: string | null;
   zip?: string | null;
-  location?: string | null;
   phone?: string | null;
   /** @format int32 */
   timezone?: number | null;
@@ -162,12 +160,10 @@ export interface ContactCreateDto {
 export interface ContactDetailsDto {
   lastName?: string | null;
   firstName?: string | null;
-  companyName?: string | null;
   address1?: string | null;
   address2?: string | null;
   state?: string | null;
   zip?: string | null;
-  location?: string | null;
   phone?: string | null;
   /** @format int32 */
   timezone?: number | null;
@@ -184,17 +180,17 @@ export interface ContactDetailsDto {
   createdAt?: string;
   /** @format date-time */
   updatedAt?: string | null;
+  /** @format int32 */
+  domainId?: number;
 }
 
 export interface ContactImportDto {
   lastName?: string | null;
   firstName?: string | null;
-  companyName?: string | null;
   address1?: string | null;
   address2?: string | null;
   state?: string | null;
   zip?: string | null;
-  location?: string | null;
   phone?: string | null;
   /** @format int32 */
   timezone?: number | null;
@@ -217,18 +213,18 @@ export interface ContactImportDto {
   source?: string | null;
   /** @format int32 */
   accountId?: number | null;
+  /** @format int32 */
+  domainId?: number;
   accountName?: string | null;
 }
 
 export interface ContactUpdateDto {
   lastName?: string | null;
   firstName?: string | null;
-  companyName?: string | null;
   address1?: string | null;
   address2?: string | null;
   state?: string | null;
   zip?: string | null;
-  location?: string | null;
   phone?: string | null;
   /** @format int32 */
   timezone?: number | null;
@@ -730,6 +726,10 @@ export interface TaskExecutionDto {
   completed?: boolean;
 }
 
+export interface User {
+  name?: string | null;
+}
+
 export type QueryParamsType = Record<string | number, any>;
 export type ResponseFormat = keyof Omit<Body, "body" | "bodyUsed">;
 
@@ -757,7 +757,9 @@ export type RequestParams = Omit<FullRequestParams, "body" | "method" | "query" 
 export interface ApiConfig<SecurityDataType = unknown> {
   baseUrl?: string;
   baseApiParams?: Omit<RequestParams, "baseUrl" | "cancelToken" | "signal">;
-  securityWorker?: (securityData: SecurityDataType | null) => Promise<RequestParams | void> | RequestParams | void;
+  securityWorker?: (
+    securityData: SecurityDataType | null
+  ) => Promise<RequestParams | void> | RequestParams | void;
   customFetch?: typeof fetch;
 }
 
@@ -815,7 +817,11 @@ export class HttpClient<SecurityDataType = unknown> {
     const query = rawQuery || {};
     const keys = Object.keys(query).filter((key) => "undefined" !== typeof query[key]);
     return keys
-      .map((key) => (Array.isArray(query[key]) ? this.addArrayQueryParam(query, key) : this.addQueryParam(query, key)))
+      .map((key) =>
+        Array.isArray(query[key])
+          ? this.addArrayQueryParam(query, key)
+          : this.addQueryParam(query, key)
+      )
       .join("&");
   }
 
@@ -826,8 +832,11 @@ export class HttpClient<SecurityDataType = unknown> {
 
   private contentFormatters: Record<ContentType, (input: any) => any> = {
     [ContentType.Json]: (input: any) =>
-      input !== null && (typeof input === "object" || typeof input === "string") ? JSON.stringify(input) : input,
-    [ContentType.Text]: (input: any) => (input !== null && typeof input !== "string" ? JSON.stringify(input) : input),
+      input !== null && (typeof input === "object" || typeof input === "string")
+        ? JSON.stringify(input)
+        : input,
+    [ContentType.Text]: (input: any) =>
+      input !== null && typeof input !== "string" ? JSON.stringify(input) : input,
     [ContentType.FormData]: (input: any) =>
       Object.keys(input || {}).reduce((formData, key) => {
         const property = input[key];
@@ -837,7 +846,7 @@ export class HttpClient<SecurityDataType = unknown> {
             ? property
             : typeof property === "object" && property !== null
             ? JSON.stringify(property)
-            : `${property}`,
+            : `${property}`
         );
         return formData;
       }, new FormData()),
@@ -901,15 +910,18 @@ export class HttpClient<SecurityDataType = unknown> {
     const payloadFormatter = this.contentFormatters[type || ContentType.Json];
     const responseFormat = format || requestParams.format;
 
-    return this.customFetch(`${baseUrl || this.baseUrl || ""}${path}${queryString ? `?${queryString}` : ""}`, {
-      ...requestParams,
-      headers: {
-        ...(requestParams.headers || {}),
-        ...(type && type !== ContentType.FormData ? { "Content-Type": type } : {}),
-      },
-      signal: cancelToken ? this.createAbortSignal(cancelToken) : requestParams.signal,
-      body: typeof body === "undefined" || body === null ? null : payloadFormatter(body),
-    }).then(async (response) => {
+    return this.customFetch(
+      `${baseUrl || this.baseUrl || ""}${path}${queryString ? `?${queryString}` : ""}`,
+      {
+        ...requestParams,
+        headers: {
+          ...(requestParams.headers || {}),
+          ...(type && type !== ContentType.FormData ? { "Content-Type": type } : {}),
+        },
+        signal: cancelToken ? this.createAbortSignal(cancelToken) : requestParams.signal,
+        body: typeof body === "undefined" || body === null ? null : payloadFormatter(body),
+      }
+    ).then(async (response) => {
       const r = response as HttpResponse<T, E>;
       r.data = null as unknown as T;
       r.error = null as unknown as E;
@@ -945,18 +957,118 @@ export class HttpClient<SecurityDataType = unknown> {
  * @version 1.1.0.0
  */
 export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
-  api = {
+  microsoftIdentity = {
     /**
      * No description
      *
      * @tags Account
-     * @name AccountImportCreate
-     * @request POST:/api/account/import
+     * @name AccountSignInDetail
+     * @request GET:/microsoft-identity/account/sign-in/{scheme}
      * @secure
      */
-    accountImportCreate: (data: AccountImportDto[], params: RequestParams = {}) =>
+    accountSignInDetail: (
+      scheme: string,
+      query?: {
+        redirectUri?: string;
+      },
+      params: RequestParams = {}
+    ) =>
+      this.request<void, any>({
+        path: `/microsoft-identity/account/sign-in/${scheme}`,
+        method: "GET",
+        query: query,
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Account
+     * @name AccountChallengeDetail
+     * @request GET:/microsoft-identity/account/challenge/{scheme}
+     * @secure
+     */
+    accountChallengeDetail: (
+      scheme: string,
+      query?: {
+        redirectUri?: string;
+        scope?: string;
+        loginHint?: string;
+        domainHint?: string;
+        claims?: string;
+        policy?: string;
+      },
+      params: RequestParams = {}
+    ) =>
+      this.request<void, any>({
+        path: `/microsoft-identity/account/challenge/${scheme}`,
+        method: "GET",
+        query: query,
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Account
+     * @name AccountSignOutDetail
+     * @request GET:/microsoft-identity/account/sign-out/{scheme}
+     * @secure
+     */
+    accountSignOutDetail: (scheme: string, params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/microsoft-identity/account/sign-out/${scheme}`,
+        method: "GET",
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Account
+     * @name AccountResetPasswordDetail
+     * @request GET:/microsoft-identity/account/reset-password/{scheme}
+     * @secure
+     */
+    accountResetPasswordDetail: (scheme: string, params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/microsoft-identity/account/reset-password/${scheme}`,
+        method: "GET",
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Account
+     * @name AccountEditProfileDetail
+     * @request GET:/microsoft-identity/account/edit-profile/{scheme}
+     * @secure
+     */
+    accountEditProfileDetail: (scheme: string, params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/microsoft-identity/account/edit-profile/${scheme}`,
+        method: "GET",
+        secure: true,
+        ...params,
+      }),
+  };
+  api = {
+    /**
+     * No description
+     *
+     * @tags Accounts
+     * @name AccountsImportCreate
+     * @request POST:/api/accounts/import
+     * @secure
+     */
+    accountsImportCreate: (data: AccountImportDto[], params: RequestParams = {}) =>
       this.request<void, void | ProblemDetails>({
-        path: `/api/account/import`,
+        path: `/api/accounts/import`,
         method: "POST",
         body: data,
         secure: true,
@@ -967,14 +1079,14 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
-     * @tags Account
-     * @name AccountDetail
-     * @request GET:/api/account/{id}
+     * @tags Accounts
+     * @name AccountsDetail
+     * @request GET:/api/accounts/{id}
      * @secure
      */
-    accountDetail: (id: number, params: RequestParams = {}) =>
+    accountsDetail: (id: number, params: RequestParams = {}) =>
       this.request<AccountDetailsDto, void | ProblemDetails>({
-        path: `/api/account/${id}`,
+        path: `/api/accounts/${id}`,
         method: "GET",
         secure: true,
         format: "json",
@@ -984,14 +1096,14 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
-     * @tags Account
-     * @name AccountPartialUpdate
-     * @request PATCH:/api/account/{id}
+     * @tags Accounts
+     * @name AccountsPartialUpdate
+     * @request PATCH:/api/accounts/{id}
      * @secure
      */
-    accountPartialUpdate: (id: number, data: AccountUpdateDto, params: RequestParams = {}) =>
+    accountsPartialUpdate: (id: number, data: AccountUpdateDto, params: RequestParams = {}) =>
       this.request<AccountDetailsDto, void | ProblemDetails>({
-        path: `/api/account/${id}`,
+        path: `/api/accounts/${id}`,
         method: "PATCH",
         body: data,
         secure: true,
@@ -1003,14 +1115,14 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
-     * @tags Account
-     * @name AccountDelete
-     * @request DELETE:/api/account/{id}
+     * @tags Accounts
+     * @name AccountsDelete
+     * @request DELETE:/api/accounts/{id}
      * @secure
      */
-    accountDelete: (id: number, params: RequestParams = {}) =>
+    accountsDelete: (id: number, params: RequestParams = {}) =>
       this.request<void, void | ProblemDetails>({
-        path: `/api/account/${id}`,
+        path: `/api/accounts/${id}`,
         method: "DELETE",
         secure: true,
         ...params,
@@ -1019,14 +1131,14 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
-     * @tags Account
-     * @name AccountCreate
-     * @request POST:/api/account
+     * @tags Accounts
+     * @name AccountsCreate
+     * @request POST:/api/accounts
      * @secure
      */
-    accountCreate: (data: AccountCreateDto, params: RequestParams = {}) =>
+    accountsCreate: (data: AccountCreateDto, params: RequestParams = {}) =>
       this.request<AccountDetailsDto, void | ProblemDetails>({
-        path: `/api/account`,
+        path: `/api/accounts`,
         method: "POST",
         body: data,
         secure: true,
@@ -1038,21 +1150,104 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
-     * @tags Account
-     * @name AccountList
-     * @request GET:/api/account
+     * @tags Accounts
+     * @name AccountsList
+     * @request GET:/api/accounts
      * @secure
      */
-    accountList: (
+    accountsList: (
       query?: {
         query?: string;
       },
-      params: RequestParams = {},
+      params: RequestParams = {}
     ) =>
       this.request<AccountDetailsDto[], void | ProblemDetails>({
-        path: `/api/account`,
+        path: `/api/accounts`,
         method: "GET",
         query: query,
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Accounts
+     * @name AccountsExportList
+     * @request GET:/api/accounts/export
+     * @secure
+     */
+    accountsExportList: (
+      query?: {
+        query?: string;
+      },
+      params: RequestParams = {}
+    ) =>
+      this.request<any, void | ProblemDetails>({
+        path: `/api/accounts/export`,
+        method: "GET",
+        query: query,
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Auth
+     * @name AuthLoginList
+     * @request GET:/api/auth/login
+     * @secure
+     */
+    authLoginList: (
+      query?: {
+        redirectUrl?: string;
+      },
+      params: RequestParams = {}
+    ) =>
+      this.request<void, void | ProblemDetails>({
+        path: `/api/auth/login`,
+        method: "GET",
+        query: query,
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Auth
+     * @name AuthLogoutList
+     * @request GET:/api/auth/logout
+     * @secure
+     */
+    authLogoutList: (
+      query?: {
+        redirectUrl?: string;
+      },
+      params: RequestParams = {}
+    ) =>
+      this.request<any, void | ProblemDetails>({
+        path: `/api/auth/logout`,
+        method: "GET",
+        query: query,
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Auth
+     * @name AuthProfileList
+     * @request GET:/api/auth/profile
+     * @secure
+     */
+    authProfileList: (params: RequestParams = {}) =>
+      this.request<User, void | ProblemDetails>({
+        path: `/api/auth/profile`,
+        method: "GET",
         secure: true,
         format: "json",
         ...params,
@@ -1070,7 +1265,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       query?: {
         query?: string;
       },
-      params: RequestParams = {},
+      params: RequestParams = {}
     ) =>
       this.request<CommentDetailsDto[], void | ProblemDetails>({
         path: `/api/comments`,
@@ -1173,6 +1368,28 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
+     * @tags Comments
+     * @name CommentsExportList
+     * @request GET:/api/comments/export
+     * @secure
+     */
+    commentsExportList: (
+      query?: {
+        query?: string;
+      },
+      params: RequestParams = {}
+    ) =>
+      this.request<any, void | ProblemDetails>({
+        path: `/api/comments/export`,
+        method: "GET",
+        query: query,
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
      * @tags Contacts
      * @name ContactsDetail
      * @request GET:/api/contacts/{id}
@@ -1234,7 +1451,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       query?: {
         query?: string;
       },
-      params: RequestParams = {},
+      params: RequestParams = {}
     ) =>
       this.request<ContactDetailsDto[], void | ProblemDetails>({
         path: `/api/contacts`,
@@ -1285,6 +1502,28 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
+     * @tags Contacts
+     * @name ContactsExportList
+     * @request GET:/api/contacts/export
+     * @secure
+     */
+    contactsExportList: (
+      query?: {
+        query?: string;
+      },
+      params: RequestParams = {}
+    ) =>
+      this.request<any, void | ProblemDetails>({
+        path: `/api/contacts/export`,
+        method: "GET",
+        query: query,
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
      * @tags Content
      * @name ContentList
      * @request GET:/api/content
@@ -1294,7 +1533,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       query?: {
         query?: string;
       },
-      params: RequestParams = {},
+      params: RequestParams = {}
     ) =>
       this.request<ContentDetailsDto[], void | ProblemDetails>({
         path: `/api/content`,
@@ -1391,6 +1630,28 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         body: data,
         secure: true,
         type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Content
+     * @name ContentExportList
+     * @request GET:/api/content/export
+     * @secure
+     */
+    contentExportList: (
+      query?: {
+        query?: string;
+      },
+      params: RequestParams = {}
+    ) =>
+      this.request<any, void | ProblemDetails>({
+        path: `/api/content/export`,
+        method: "GET",
+        query: query,
+        secure: true,
         ...params,
       }),
 
@@ -1512,7 +1773,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       query?: {
         query?: string;
       },
-      params: RequestParams = {},
+      params: RequestParams = {}
     ) =>
       this.request<DomainDetailsDto[], void | ProblemDetails>({
         path: `/api/domains`,
@@ -1520,6 +1781,28 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         query: query,
         secure: true,
         format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Domains
+     * @name DomainsExportList
+     * @request GET:/api/domains/export
+     * @secure
+     */
+    domainsExportList: (
+      query?: {
+        query?: string;
+      },
+      params: RequestParams = {}
+    ) =>
+      this.request<any, void | ProblemDetails>({
+        path: `/api/domains/export`,
+        method: "GET",
+        query: query,
+        secure: true,
         ...params,
       }),
 
@@ -1622,7 +1905,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       query?: {
         query?: string;
       },
-      params: RequestParams = {},
+      params: RequestParams = {}
     ) =>
       this.request<EmailGroupDetailsDto[], void | ProblemDetails>({
         path: `/api/email-groups`,
@@ -1630,6 +1913,28 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         query: query,
         secure: true,
         format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags EmailGroups
+     * @name EmailGroupsExportList
+     * @request GET:/api/email-groups/export
+     * @secure
+     */
+    emailGroupsExportList: (
+      query?: {
+        query?: string;
+      },
+      params: RequestParams = {}
+    ) =>
+      this.request<any, void | ProblemDetails>({
+        path: `/api/email-groups/export`,
+        method: "GET",
+        query: query,
+        secure: true,
         ...params,
       }),
 
@@ -1658,7 +1963,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request PATCH:/api/email-templates/{id}
      * @secure
      */
-    emailTemplatesPartialUpdate: (id: number, data: EmailTemplateUpdateDto, params: RequestParams = {}) =>
+    emailTemplatesPartialUpdate: (
+      id: number,
+      data: EmailTemplateUpdateDto,
+      params: RequestParams = {}
+    ) =>
       this.request<EmailTemplateDetailsDto, void | ProblemDetails>({
         path: `/api/email-templates/${id}`,
         method: "PATCH",
@@ -1716,7 +2025,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       query?: {
         query?: string;
       },
-      params: RequestParams = {},
+      params: RequestParams = {}
     ) =>
       this.request<EmailTemplateDetailsDto[], void | ProblemDetails>({
         path: `/api/email-templates`,
@@ -1730,40 +2039,21 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
-     * @tags Images
-     * @name ImagesCreate
-     * @request POST:/api/images
+     * @tags EmailTemplates
+     * @name EmailTemplatesExportList
+     * @request GET:/api/email-templates/export
      * @secure
      */
-    imagesCreate: (
-      data: {
-        /** @format binary */
-        Image: File;
-        ScopeUid: string;
+    emailTemplatesExportList: (
+      query?: {
+        query?: string;
       },
-      params: RequestParams = {},
+      params: RequestParams = {}
     ) =>
-      this.request<void, void | ProblemDetails>({
-        path: `/api/images`,
-        method: "POST",
-        body: data,
-        secure: true,
-        type: ContentType.FormData,
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @tags Images
-     * @name ImagesDetail
-     * @request GET:/api/images/{scopeUid}/{fileName}
-     * @secure
-     */
-    imagesDetail: (scopeUid: string, fileName: string, params: RequestParams = {}) =>
-      this.request<void, ProblemDetails>({
-        path: `/api/images/${scopeUid}/${fileName}`,
+      this.request<any, void | ProblemDetails>({
+        path: `/api/email-templates/export`,
         method: "GET",
+        query: query,
         secure: true,
         ...params,
       }),
@@ -1799,7 +2089,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       query?: {
         query?: string;
       },
-      params: RequestParams = {},
+      params: RequestParams = {}
     ) =>
       this.request<LinkDetailsDto[], void | ProblemDetails>({
         path: `/api/links`,
@@ -1865,6 +2155,28 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
+     * @tags Links
+     * @name LinksExportList
+     * @request GET:/api/links/export
+     * @secure
+     */
+    linksExportList: (
+      query?: {
+        query?: string;
+      },
+      params: RequestParams = {}
+    ) =>
+      this.request<any, void | ProblemDetails>({
+        path: `/api/links/export`,
+        method: "GET",
+        query: query,
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
      * @tags Locks
      * @name LocksDetail
      * @request GET:/api/locks/{key}
@@ -1908,6 +2220,47 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         method: "GET",
         secure: true,
         format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Media
+     * @name MediaCreate
+     * @request POST:/api/media
+     * @secure
+     */
+    mediaCreate: (
+      data: {
+        /** @format binary */
+        Image: File;
+        ScopeUid: string;
+      },
+      params: RequestParams = {}
+    ) =>
+      this.request<void, void | ProblemDetails>({
+        path: `/api/media`,
+        method: "POST",
+        body: data,
+        secure: true,
+        type: ContentType.FormData,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Media
+     * @name MediaDetail
+     * @request GET:/api/media/{scopeUid}/{fileName}
+     * @secure
+     */
+    mediaDetail: (scopeUid: string, fileName: string, params: RequestParams = {}) =>
+      this.request<void, ProblemDetails>({
+        path: `/api/media/${scopeUid}/${fileName}`,
+        method: "GET",
+        secure: true,
         ...params,
       }),
 
@@ -1960,7 +2313,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       query?: {
         query?: string;
       },
-      params: RequestParams = {},
+      params: RequestParams = {}
     ) =>
       this.request<OrderItemDetailsDto[], void | ProblemDetails>({
         path: `/api/order-items`,
@@ -2038,6 +2391,28 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         body: data,
         secure: true,
         type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags OrderItems
+     * @name OrderItemsExportList
+     * @request GET:/api/order-items/export
+     * @secure
+     */
+    orderItemsExportList: (
+      query?: {
+        query?: string;
+      },
+      params: RequestParams = {}
+    ) =>
+      this.request<any, void | ProblemDetails>({
+        path: `/api/order-items/export`,
+        method: "GET",
+        query: query,
+        secure: true,
         ...params,
       }),
 
@@ -2142,7 +2517,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       query?: {
         query?: string;
       },
-      params: RequestParams = {},
+      params: RequestParams = {}
     ) =>
       this.request<OrderDetailsDto[], void | ProblemDetails>({
         path: `/api/orders`,
@@ -2150,6 +2525,28 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         query: query,
         secure: true,
         format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Orders
+     * @name OrdersExportList
+     * @request GET:/api/orders/export
+     * @secure
+     */
+    ordersExportList: (
+      query?: {
+        query?: string;
+      },
+      params: RequestParams = {}
+    ) =>
+      this.request<any, void | ProblemDetails>({
+        path: `/api/orders/export`,
+        method: "GET",
+        query: query,
+        secure: true,
         ...params,
       }),
 

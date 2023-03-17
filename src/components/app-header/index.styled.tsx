@@ -1,5 +1,5 @@
-import {AppBar, styled, Toolbar} from "@mui/material";
-import {Logout} from "@mui/icons-material";
+import { AppBar, styled, Toolbar } from "@mui/material";
+import { Logout } from "@mui/icons-material";
 
 export const AppBarStyled = styled(AppBar)`
   grid-area: header;
