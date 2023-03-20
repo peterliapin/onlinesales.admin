@@ -55,7 +55,7 @@ export const ContactView = () => {
                 <Typography fontWeight="bold">Country</Typography>
               </Grid>
               <Grid item xs={10}>
-                {contact.location}
+                {""}
               </Grid>
             </ContactRowGrid>
             <Divider variant="fullWidth" />

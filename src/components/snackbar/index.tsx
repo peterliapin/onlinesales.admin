@@ -3,7 +3,7 @@ import Stack from "@mui/material/Stack";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert, { AlertColor, AlertProps } from "@mui/material/Alert";
 import { CoreModule, getCoreModuleRoute } from "lib/router";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Backdrop } from "@mui/material";
 
 interface SnackbarProps {
@@ -21,6 +21,7 @@ export const CustomizedSnackbar = ({ message, severerity, isOpen, navigateTo }: 
   const [open, setOpen] = useState(isOpen);
 
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     setOpen(isOpen);
@@ -33,7 +34,12 @@ export const CustomizedSnackbar = ({ message, severerity, isOpen, navigateTo }: 
 
     setOpen(false);
     if (severerity === "success") {
-      navigate(getCoreModuleRoute(navigateTo));
+      const toRoute = getCoreModuleRoute(navigateTo);
+      if (location.pathname === toRoute) {
+        window.location.reload();
+      } else {
+        navigate(toRoute);
+      }
     }
   };
 

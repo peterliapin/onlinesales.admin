@@ -25,7 +25,7 @@ import { downloadFile } from "components/download";
 import { BreadCrumbNavigation } from "components/breadcrumbs";
 import { CsvImport } from "components/spreadsheet-import";
 import { Result } from "@wavepoint/react-spreadsheet-import/types/types";
-import { breadcrumbLinks, importFields } from "./constants";
+import { breadcrumbLinks, ImportContactFields } from "./constants";
 
 export const Contacts = () => {
   const defaultFilterOrderColumn = "firstName";
@@ -147,7 +147,7 @@ export const Contacts = () => {
         isOpen={isImportWindowOpen}
         onClose={onImportWindowClose}
         onUpload={handleFileUpload}
-        fields={importFields}
+        fields={ImportContactFields}
       ></CsvImport>
     </ModuleContainer>
   );

@@ -187,17 +187,6 @@ export const ContactForm = ({ contact, updateContact, handleSave, isEdit }: Cont
             </Grid>
             <Grid xs={12} sm={6} item>
               <TextField
-                label="Location"
-                name="location"
-                value={contact.location || ""}
-                placeholder="Enter location"
-                variant="outlined"
-                onChange={handleInputChange}
-                fullWidth
-              ></TextField>
-            </Grid>
-            <Grid xs={12} sm={6} item>
-              <TextField
                 label="Timezone"
                 name="timezone"
                 value={contact.timezone || ""}
