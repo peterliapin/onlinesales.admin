@@ -1,8 +1,8 @@
-import React, {useEffect, useState} from "react";
-import {useParams} from "react-router-dom";
-import {ContentDetailsDto, ContentUpdateDto} from "../../lib/network/swagger-client";
-import {useRequestContext} from "../../providers/request-provider";
-import {ContentEditContainer} from "./index.styled";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { ContentDetailsDto, ContentUpdateDto } from "../../lib/network/swagger-client";
+import { useRequestContext } from "../../providers/request-provider";
+import { ContentEditContainer } from "./index.styled";
 import {
   ModuleHeaderActionContainer,
   ModuleHeaderContainer,
@@ -22,19 +22,19 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import {NavigateNext, Report, Save} from "@mui/icons-material";
-import {CoreModule, rootRoute} from "../../lib/router";
-import {GhostLink} from "../../components/ghost-link";
+import { NavigateNext, Report, Save } from "@mui/icons-material";
+import { CoreModule, rootRoute } from "../../lib/router";
+import { GhostLink } from "../../components/ghost-link";
 import MDEditor from "@uiw/react-md-editor";
-import {mdPreviewFn} from "./md-preview";
+import { mdPreviewFn } from "./md-preview";
 
 interface ContentEditProps {
   readonly?: boolean;
 }
 
 export const ContentEdit = (props: ContentEditProps) => {
-  const {client} = useRequestContext();
-  const {id} = useParams();
+  const { client } = useRequestContext();
+  const { id } = useParams();
   const [contentItem, setContentItem] = useState<ContentDetailsDto>();
   const [updatedContentItem, setUpdatedContentItem] = useState<ContentUpdateDto>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -45,7 +45,7 @@ export const ContentEdit = (props: ContentEditProps) => {
       try {
         setIsLoading(true);
         if (client && id) {
-          const {data} = await client.api.contentDetail(Number(id));
+          const { data } = await client.api.contentDetail(Number(id));
           setContentItem(data);
         }
       } catch (e) {
@@ -60,7 +60,7 @@ export const ContentEdit = (props: ContentEditProps) => {
     fieldName: keyof ContentUpdateDto,
     value?: string | boolean | null | undefined
   ) => {
-    setUpdatedContentItem((prev) => ({...(prev || contentItem), [fieldName]: value}));
+    setUpdatedContentItem((prev) => ({ ...(prev || contentItem), [fieldName]: value }));
   };
 
   const getValue = (fieldName: keyof ContentUpdateDto): string | boolean | null | undefined => {
@@ -88,35 +88,35 @@ export const ContentEdit = (props: ContentEditProps) => {
 
       if (contentItem?.id) {
         updatedContentItem &&
-        client.api.contentPartialUpdate(contentItem.id, updatedContentItem).then((res) => {
-          const {data} = res;
-          setContentItem(data);
-          setUpdatedContentItem(undefined);
-        });
+          client.api.contentPartialUpdate(contentItem.id, updatedContentItem).then((res) => {
+            const { data } = res;
+            setContentItem(data);
+            setUpdatedContentItem(undefined);
+          });
       } else {
         updatedContentItem &&
-        client.api
-          .contentCreate({
-            title: updatedContentItem.title || "",
-            body: updatedContentItem.body || "",
-            author: updatedContentItem.author || "",
-            allowComments: updatedContentItem.allowComments || false,
-            categories: updatedContentItem.categories || "",
-            tags: updatedContentItem.tags || "",
-            slug: updatedContentItem.slug || "",
-            type: updatedContentItem.type || "",
-            description: updatedContentItem.description || "",
-            language: updatedContentItem.language || "",
-            coverImageAlt: updatedContentItem.coverImageAlt || "",
-            coverImageUrl: updatedContentItem.coverImageUrl || "",
-          })
-          .then((res) => {
-            const {data} = res;
-            if (data) {
-              setContentItem(data);
-              setUpdatedContentItem(undefined);
-            }
-          });
+          client.api
+            .contentCreate({
+              title: updatedContentItem.title || "",
+              body: updatedContentItem.body || "",
+              author: updatedContentItem.author || "",
+              allowComments: updatedContentItem.allowComments || false,
+              categories: updatedContentItem.categories || "",
+              tags: updatedContentItem.tags || "",
+              slug: updatedContentItem.slug || "",
+              type: updatedContentItem.type || "",
+              description: updatedContentItem.description || "",
+              language: updatedContentItem.language || "",
+              coverImageAlt: updatedContentItem.coverImageAlt || "",
+              coverImageUrl: updatedContentItem.coverImageUrl || "",
+            })
+            .then((res) => {
+              const { data } = res;
+              if (data) {
+                setContentItem(data);
+                setUpdatedContentItem(undefined);
+              }
+            });
       }
     } catch (e) {
       console.log(e);
@@ -132,7 +132,7 @@ export const ContentEdit = (props: ContentEditProps) => {
           <Typography variant="h3">Blog</Typography>
         </ModuleHeaderTitleContainer>
         <ModuleHeaderSubtitleContainer>
-          <Breadcrumbs separator={<NavigateNext fontSize="small"/>}>
+          <Breadcrumbs separator={<NavigateNext fontSize="small" />}>
             <Link to={rootRoute} component={GhostLink} underline="hover">
               Dashboard
             </Link>
@@ -171,7 +171,7 @@ export const ContentEdit = (props: ContentEditProps) => {
                     )}
                   />
                 </Grid>
-                <Grid xs={6} sm={6} item/>
+                <Grid xs={6} sm={6} item />
                 <Grid xs={12} sm={6} item>
                   <TextField
                     disabled={props.readonly}
@@ -202,7 +202,7 @@ export const ContentEdit = (props: ContentEditProps) => {
                     hideToolbar={props.readonly}
                     height={600}
                     preview={"live"}
-                    components={{preview: mdPreviewFn}}
+                    components={{ preview: mdPreviewFn }}
                     value={getValue("body") + ""}
                     onChange={(e) => {
                       !props.readonly && updateValue("body", e);
@@ -298,7 +298,7 @@ export const ContentEdit = (props: ContentEditProps) => {
                       updateValue("tags", (newValue || []).join(";"));
                     }}
                     renderInput={(params) => (
-                      <TextField {...params} label="Tags" placeholder="Select Tags"/>
+                      <TextField {...params} label="Tags" placeholder="Select Tags" />
                     )}
                   />
                 </Grid>
@@ -312,14 +312,14 @@ export const ContentEdit = (props: ContentEditProps) => {
                       updateValue("categories", (newValue || []).join(";"));
                     }}
                     renderInput={(params) => (
-                      <TextField {...params} label="Categories" placeholder="Select Categories"/>
+                      <TextField {...params} label="Categories" placeholder="Select Categories" />
                     )}
                   />
                 </Grid>
                 <Grid item xs={12}>
                   {!props.readonly && (
                     <Button
-                      startIcon={<Save/>}
+                      startIcon={<Save />}
                       disabled={!updatedContentItem}
                       onClick={() => save()}
                     >
@@ -327,7 +327,7 @@ export const ContentEdit = (props: ContentEditProps) => {
                     </Button>
                   )}
                   <Button
-                    startIcon={<Report/>}
+                    startIcon={<Report />}
                     onClick={() => console.log(["updatedContentItem", updatedContentItem])}
                   >
                     Log

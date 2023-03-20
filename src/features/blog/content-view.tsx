@@ -24,6 +24,7 @@ import { NavigateNext } from "@mui/icons-material";
 import { CoreModule, rootRoute } from "../../lib/router";
 import { GhostLink } from "../../components/ghost-link";
 import { MdPreview } from "./md-preview";
+import { CommentList } from "./comment/comment-list";
 
 const coreApi = process.env.CORE_API;
 
@@ -112,6 +113,13 @@ export const ContentView = () => {
               </div>
             </HeaderContainer>
             <MdPreview source={contentItem.body} />
+
+            {contentItem.allowComments && (
+              <>
+                <hr />
+                <CommentList contentId={contentItem.id} />
+              </>
+            )}
           </ContentItemContainer>
         )}
       </ContentEditContainer>

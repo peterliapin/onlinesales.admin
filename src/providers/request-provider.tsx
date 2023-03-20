@@ -1,10 +1,10 @@
 import { createContext, memo, PropsWithChildren, useContext, useEffect, useMemo } from "react";
-import { Api } from "lib/network/swagger-client";
+import { ApiExtended } from "lib/network/swagger-client";
 import { useAuthState } from "./auth-provider";
 
 type getTokenFn = () => Promise<string | undefined>;
 
-const client = new Api<getTokenFn>({
+const client = new ApiExtended<getTokenFn>({
   baseUrl: process.env.CORE_API,
   securityWorker: async (getToken) => {
     const token = await getToken?.();
@@ -22,7 +22,7 @@ const client = new Api<getTokenFn>({
 });
 
 type RequestContextType = {
-  client: Api<getTokenFn>;
+  client: ApiExtended<getTokenFn>;
 };
 
 const requestContext = createContext<RequestContextType>({ client });

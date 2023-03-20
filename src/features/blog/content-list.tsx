@@ -34,8 +34,9 @@ export const ContentList = () => {
   const [searchText, setSearchText] = useState<string>("");
 
   useEffect(() => {
+    const controller = new AbortController();
+
     (async () => {
-      const controller = new AbortController();
       try {
         setIsLoading(true);
         setContentItems([]);
@@ -54,11 +55,11 @@ export const ContentList = () => {
       } finally {
         setIsLoading(false);
       }
-
-      return () => {
-        controller.abort();
-      };
     })();
+
+    return () => {
+      controller.abort();
+    };
   }, [client, searchText]);
 
   return (

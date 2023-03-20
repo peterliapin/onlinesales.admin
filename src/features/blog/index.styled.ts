@@ -56,3 +56,19 @@ export const HeaderContainer = styled("div")`
   flex-flow: row;
   gap: ${({ theme }) => theme.spacing(2)};
 `;
+
+export const CommentsContainer = styled("div")`
+  margin: 10px 0;
+`;
+
+export const CommentsTitle = styled("div")`
+  font-weight: 500;
+`;
+
+export const CommentContainer = styled("div")`
+  margin: 10px;
+`;
+
+export const CommentDateContainer = styled("span")`
+  font-size: 80%;
+`;
