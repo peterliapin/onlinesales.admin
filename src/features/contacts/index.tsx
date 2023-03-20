@@ -17,6 +17,7 @@ import { ExtraActionsContainer } from "./index.styled";
 import { SearchBar } from "./search-bar";
 import {
   defaultFilterLimit,
+  getBasicExportFilterQuery,
   getBasicFilterQuery,
   getWhereFilterQuery,
   totalCountHeaderName,
@@ -25,6 +26,7 @@ import { BreadCrumbNavigation } from "components/breadcrumbs";
 import { CsvImport } from "components/spreadsheet-import";
 import { Result } from "@wavepoint/react-spreadsheet-import/types/types";
 import { breadcrumbLinks, ImportContactFields } from "./constants";
+import { downloadFile } from "components/download";
 
 export const Contacts = () => {
   const defaultFilterOrderColumn = "firstName";
@@ -73,20 +75,20 @@ export const Contacts = () => {
 
   const whereFilterQuery = getWhereFilterQuery(whereField, whereFieldValue);
 
-  const basicFilterQuery = getBasicFilterQuery(
-    filterLimit,
-    sortColumn,
-    sortOrder,
-    skipLimit
-  );
+  const basicFilterQuery = getBasicFilterQuery(filterLimit, sortColumn, sortOrder, skipLimit);
+
+  const basicExportFilterQuery = getBasicExportFilterQuery(sortColumn, sortOrder);
 
   const setTotalResultsCount = (headerCount: string | null) => {
     if (headerCount) setTotalRowCount(parseInt(headerCount, 10));
     else setTotalRowCount(-1);
   };
 
-  const handleExport = () => {
-    // TODO: Implementation of export functionality
+  const handleExport = async () => {
+    const { url } = await client.api.contactsExportList({
+      query: `${searchTerm}&${basicExportFilterQuery}${whereFilterQuery}`,
+    });
+    downloadFile(url);
   };
 
   const onImportWindowClose = () => {

@@ -15,14 +15,15 @@ export const getBasicFilterQuery = (
   };
 
   const basicFilterQuery = Object.keys(basicFilters)
-    .filter(
-      (key) =>
-        `${basicFilters[key].toString().trim()}` != ""
-    )
+    .filter((key) => `${basicFilters[key].toString().trim()}` != "")
     .map((key) => `${key}=${basicFilters[key]}`)
     .join("&");
 
   return basicFilterQuery;
+};
+
+export const getBasicExportFilterQuery = (sortColumn: string, sortOrder: string) => {
+  return `filter[order]=${sortColumn} ${sortOrder}`;
 };
 
 export const getWhereFilterQuery = (whereField: string, whereFieldValue: string) => {
