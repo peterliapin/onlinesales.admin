@@ -6,8 +6,7 @@ export const getBasicFilterQuery = (
   filterLimit: number,
   sortColumn: string,
   sortOrder: string,
-  skipLimit: number,
-  downloadCsv: boolean
+  skipLimit: number
 ) => {
   const basicFilters: FilterParams = {
     "filter[limit]": filterLimit,
@@ -18,7 +17,7 @@ export const getBasicFilterQuery = (
   const basicFilterQuery = Object.keys(basicFilters)
     .filter(
       (key) =>
-        `${basicFilters[key].toString().trim()}` != "" && !(key == "filter[limit]" && downloadCsv)
+        `${basicFilters[key].toString().trim()}` != ""
     )
     .map((key) => `${key}=${basicFilters[key]}`)
     .join("&");

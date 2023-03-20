@@ -21,7 +21,6 @@ import {
   getWhereFilterQuery,
   totalCountHeaderName,
 } from "lib/query";
-import { downloadFile } from "components/download";
 import { BreadCrumbNavigation } from "components/breadcrumbs";
 import { CsvImport } from "components/spreadsheet-import";
 import { Result } from "@wavepoint/react-spreadsheet-import/types/types";
@@ -42,24 +41,17 @@ export const Contacts = () => {
   const [whereFieldValue, setWhereFieldValue] = useState("");
   const [skipLimit, setSkipLimit] = useState(0);
   const [totalRowCount, setTotalRowCount] = useState(0);
-  const [downloadCsv, setDownloadCsv] = useState(false);
   const [isImportWindowOpen, setIsImportWindowOpen] = useState(false);
 
   useEffect(() => {
     (async () => {
-      const { data, headers, url } = await client.api.contactsList({
+      const { data, headers } = await client.api.contactsList({
         query: `${searchTerm}&${basicFilterQuery}${whereFilterQuery}`,
-        downloadCsv: downloadCsv,
       });
       setTotalResultsCount(headers.get(totalCountHeaderName));
-      if (!downloadCsv) {
-        setContacts(data);
-      } else {
-        downloadFile(url);
-        setDownloadCsv(false);
-      }
+      setContacts(data);
     })();
-  }, [searchTerm, filterLimit, skipLimit, sortColumn, sortOrder, whereFieldValue, downloadCsv]);
+  }, [searchTerm, filterLimit, skipLimit, sortColumn, sortOrder, whereFieldValue]);
 
   useEffect(() => {
     if (totalRowCount === -1) {
@@ -85,8 +77,7 @@ export const Contacts = () => {
     filterLimit,
     sortColumn,
     sortOrder,
-    skipLimit,
-    downloadCsv
+    skipLimit
   );
 
   const setTotalResultsCount = (headerCount: string | null) => {
@@ -95,8 +86,7 @@ export const Contacts = () => {
   };
 
   const handleExport = () => {
-    setSkipLimit(0);
-    setDownloadCsv(true);
+    // TODO: Implementation of export functionality
   };
 
   const onImportWindowClose = () => {
