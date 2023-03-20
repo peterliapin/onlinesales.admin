@@ -16,7 +16,7 @@ const findMatches = (regex: RegExp, str: string, matches: Array<string> = []): A
   return matches;
 };
 
-export const MdPreview = ({ source }: MdPreviewProps) => {
+export const MdPreview = ({source}: MdPreviewProps) => {
   // todo: place for customization markdown preview
   let filteredSource = (source || "").replace(/(---)(.|[\r\n])*?(---)/, "");
 
@@ -60,9 +60,7 @@ export const MdPreview = ({ source }: MdPreviewProps) => {
             </a>
           ),
           customImg: (a) => (
-            <div>
-              <img style={{ maxWidth: "80%", margin: 10 }} src={a.src} alt={a.alt} />
-            </div>
+            <img style={{maxWidth: "80%", margin: 10}} src={a.src} alt={a.alt}/>
           ),
         },
       }}
@@ -72,4 +70,4 @@ export const MdPreview = ({ source }: MdPreviewProps) => {
   );
 };
 
-export const mdPreviewFn = (source: string) => <MdPreview source={source} />;
+export const mdPreviewFn = (source: string) => <MdPreview source={source}/>;
