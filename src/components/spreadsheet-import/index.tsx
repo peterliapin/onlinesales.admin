@@ -1,5 +1,4 @@
 import { CircularProgress } from "@mui/material";
-import { StyledBackdrop } from "components/import-file/index.styled";
 import { CustomizedSnackbar } from "components/snackbar";
 import {
   initialSnackBarParams,
@@ -10,6 +9,7 @@ import { CoreModule } from "lib/router";
 import { useState } from "react";
 import { ReactSpreadsheetImport } from "@wavepoint/react-spreadsheet-import";
 import { Result } from "@wavepoint/react-spreadsheet-import/types/types";
+import { StyledBackdrop } from "./index.styled";
 
 interface csvImportPorps {
   isOpen: boolean;

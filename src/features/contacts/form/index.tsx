@@ -18,7 +18,7 @@ import {
   ModuleHeaderTitleContainer,
 } from "components/module";
 import { CustomizedSnackbar } from "components/snackbar";
-import { CoreModule, getCoreModuleRoute, rootRoute } from "lib/router";
+import { CoreModule } from "lib/router";
 import { EMAIL_REGEX } from "utils/constants";
 import { initialSnackBarParams, serverErrorSnackBarParams } from "components/snackbar/constants";
 import { BreadCrumbNavigation } from "components/breadcrumbs";
