@@ -9,7 +9,7 @@ import {
   ModuleHeaderSubtitleContainer,
   ModuleHeaderTitleContainer,
 } from "components/module";
-import { getAddFormRoute } from "lib/router";
+import { CoreModule, getAddFormRoute } from "lib/router";
 import { GhostLink } from "components/ghost-link";
 import { useRequestContext } from "providers/request-provider";
 import { ContactsTable } from "./contacts-table";
@@ -31,7 +31,7 @@ import {
   defaultFilterOrderDirection,
   importContactFields,
 } from "./constants";
-import { downloadFile } from "components/download";
+import { CsvExport } from "components/export";
 
 export const Contacts = () => {
   const { client } = useRequestContext();
@@ -45,6 +45,7 @@ export const Contacts = () => {
   const [skipLimit, setSkipLimit] = useState(0);
   const [totalRowCount, setTotalRowCount] = useState(0);
   const [isImportWindowOpen, setIsImportWindowOpen] = useState(false);
+  const [openExport, setOpenExport] = useState(false);
 
   const whereFilterQuery = getWhereFilterQuery(whereField, whereFieldValue);
 
@@ -77,7 +78,15 @@ export const Contacts = () => {
     const { url } = await client.api.contactsExportList({
       query: `${searchTerm}&${basicExportFilterQuery}${whereFilterQuery}`,
     });
-    downloadFile(url);
+    return url;
+  };
+
+  const onExportClick = () => {
+    setOpenExport(true);
+  };
+
+  const closeExport = () => {
+    setOpenExport(false);
   };
 
   const onImportWindowClose = () => {
@@ -133,7 +142,7 @@ export const Contacts = () => {
         <Button startIcon={<Upload />} onClick={openImportPage}>
           Import
         </Button>
-        <Button startIcon={<Download />} onClick={handleExport}>
+        <Button startIcon={<Download />} onClick={onExportClick}>
           Export
         </Button>
       </ExtraActionsContainer>
@@ -145,6 +154,7 @@ export const Contacts = () => {
         onUpload={handleFileUpload}
         fields={importContactFields}
       ></CsvImport>
+      {openExport && <CsvExport handleExport={handleExport} closeExport={closeExport}></CsvExport>}
     </ModuleContainer>
   );
 };
