@@ -10,15 +10,16 @@ import { useState } from "react";
 import { ReactSpreadsheetImport } from "@wavepoint/react-spreadsheet-import";
 import { Result } from "@wavepoint/react-spreadsheet-import/types/types";
 import { StyledBackdrop } from "./index.styled";
+import { getImportFields } from "utils/importKeyMappings";
 
 interface csvImportPorps {
   isOpen: boolean;
   onClose: () => void;
   onUpload: (fileData: any) => void;
-  fields: any;
+  object: any;
 }
 
-export const CsvImport = ({ isOpen, onClose, onUpload, fields }: csvImportPorps) => {
+export const CsvImport = ({ isOpen, onClose, onUpload, object }: csvImportPorps) => {
   const [isUploading, setIsUploading] = useState(false);
   const [snackBarParams, setSnackBarParams] = useState(initialSnackBarParams);
 
@@ -44,7 +45,7 @@ export const CsvImport = ({ isOpen, onClose, onUpload, fields }: csvImportPorps)
         isOpen={isOpen}
         onClose={onClose}
         onSubmit={onSubmit}
-        fields={fields}
+        fields={getImportFields(object)}
       />
       <StyledBackdrop open={isUploading}>
         <CircularProgress color="inherit" />

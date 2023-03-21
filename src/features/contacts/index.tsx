@@ -9,7 +9,7 @@ import {
   ModuleHeaderSubtitleContainer,
   ModuleHeaderTitleContainer,
 } from "components/module";
-import { CoreModule, getAddFormRoute } from "lib/router";
+import { getAddFormRoute } from "lib/router";
 import { GhostLink } from "components/ghost-link";
 import { useRequestContext } from "providers/request-provider";
 import { ContactsTable } from "./contacts-table";
@@ -29,7 +29,6 @@ import {
   contactListBreadcrumbLinks,
   defaultFilterOrderColumn,
   defaultFilterOrderDirection,
-  importContactFields,
 } from "./constants";
 import { CsvExport } from "components/export";
 
@@ -148,12 +147,14 @@ export const Contacts = () => {
       </ExtraActionsContainer>
       <SearchBar setSearchTermOnChange={setSearchTerm}></SearchBar>
       <ContactsTable {...contactsTableProps} />
-      <CsvImport
-        isOpen={isImportWindowOpen}
-        onClose={onImportWindowClose}
-        onUpload={handleFileUpload}
-        fields={importContactFields}
-      ></CsvImport>
+      {contacts && (
+        <CsvImport
+          isOpen={isImportWindowOpen}
+          onClose={onImportWindowClose}
+          onUpload={handleFileUpload}
+          object={contacts[0]}
+        ></CsvImport>
+      )}
       {openExport && (
         <CsvExport getExportUrlAsync={getExportUrlAsync} closeExport={closeExport}></CsvExport>
       )}

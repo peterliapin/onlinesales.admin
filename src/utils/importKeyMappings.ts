@@ -1,4 +1,4 @@
-export const mappings = [
+const mappings = [
   {
     label: "First Name",
     key: "firstName",
@@ -232,10 +232,30 @@ export const mappings = [
   },
 ];
 
-export const getMappings = (key: string) => {
+const getMappings = (key: string) => {
   const fieldsSet = mappings.find((fieldsSet) => fieldsSet.key === key);
   if (fieldsSet) {
     return fieldsSet;
   }
   return null;
+};
+
+export const getImportFields = (importModel: any) => {
+  const importContactFields = Object.keys(importModel).map((key) => {
+    const mappings = getMappings(key);
+    if (mappings) {
+      return mappings;
+    }
+    return {
+      key,
+      label: key,
+      alternateMatches: [],
+      fieldType: {
+        type: "input",
+      },
+      example: "",
+      validations: [],
+    };
+  });
+  return importContactFields;
 };
