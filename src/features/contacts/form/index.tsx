@@ -22,6 +22,7 @@ import { CoreModule, getCoreModuleRoute, rootRoute } from "lib/router";
 import { EMAIL_REGEX } from "utils/constants";
 import { initialSnackBarParams, serverErrorSnackBarParams } from "components/snackbar/constants";
 import { BreadCrumbNavigation } from "components/breadcrumbs";
+import { contactFormBreadcrumbLinks } from "../constants";
 
 interface ContactFormProps {
   contact: ContactDetailsDto;
@@ -76,11 +77,6 @@ export const ContactForm = ({ contact, updateContact, handleSave, isEdit }: Cont
     }
   };
 
-  const links = [
-    { linkText: "Dashboard", toRoute: rootRoute },
-    { linkText: "Contacts", toRoute: getCoreModuleRoute(CoreModule.contacts) },
-  ];
-
   return (
     <ModuleContainer>
       <ModuleHeaderContainer>
@@ -88,7 +84,10 @@ export const ContactForm = ({ contact, updateContact, handleSave, isEdit }: Cont
           <Typography variant="h3">{header}</Typography>
         </ModuleHeaderTitleContainer>
         <ModuleHeaderSubtitleContainer>
-          <BreadCrumbNavigation links={links} current={header}></BreadCrumbNavigation>
+          <BreadCrumbNavigation
+            links={contactFormBreadcrumbLinks}
+            current={header}
+          ></BreadCrumbNavigation>
         </ModuleHeaderSubtitleContainer>
       </ModuleHeaderContainer>
       <Card>

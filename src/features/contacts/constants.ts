@@ -1,6 +1,10 @@
-import { rootRoute } from "lib/router";
+import { CoreModule, getCoreModuleRoute, rootRoute } from "lib/router";
 import { ContactImportDto } from "lib/network/swagger-client";
 import { getMappings } from "utils/importKeyMappings";
+
+export const defaultFilterOrderColumn = "firstName";
+
+export const defaultFilterOrderDirection = "desc";
 
 const importContact: ContactImportDto = {
   lastName: null,
@@ -25,7 +29,7 @@ const importContact: ContactImportDto = {
   accountName: null,
 };
 
-export const ImportContactFields = Object.keys(importContact).map((key) => {
+export const importContactFields = Object.keys(importContact).map((key) => {
   const mappings = getMappings(key);
   if (mappings) {
     return mappings;
@@ -42,4 +46,9 @@ export const ImportContactFields = Object.keys(importContact).map((key) => {
   };
 });
 
-export const breadcrumbLinks = [{ linkText: "Dashboard", toRoute: rootRoute }];
+export const contactListBreadcrumbLinks = [{ linkText: "Dashboard", toRoute: rootRoute }];
+
+export const contactFormBreadcrumbLinks = [
+  { linkText: "Dashboard", toRoute: rootRoute },
+  { linkText: "Contacts", toRoute: getCoreModuleRoute(CoreModule.contacts) },
+];

@@ -25,15 +25,16 @@ import {
 import { BreadCrumbNavigation } from "components/breadcrumbs";
 import { CsvImport } from "components/spreadsheet-import";
 import { Result } from "@wavepoint/react-spreadsheet-import/types/types";
-import { breadcrumbLinks, ImportContactFields } from "./constants";
+import {
+  contactListBreadcrumbLinks,
+  defaultFilterOrderColumn,
+  defaultFilterOrderDirection,
+  importContactFields,
+} from "./constants";
 import { downloadFile } from "components/download";
 
 export const Contacts = () => {
-  const defaultFilterOrderColumn = "firstName";
-  const defaultFilterOrderDirection = "desc";
-
   const { client } = useRequestContext();
-
   const [contacts, setContacts] = useState<ContactDetailsDto[]>();
   const [searchTerm, setSearchTerm] = useState("");
   const [filterLimit, setFilterLimit] = useState(defaultFilterLimit);
@@ -44,6 +45,12 @@ export const Contacts = () => {
   const [skipLimit, setSkipLimit] = useState(0);
   const [totalRowCount, setTotalRowCount] = useState(0);
   const [isImportWindowOpen, setIsImportWindowOpen] = useState(false);
+
+  const whereFilterQuery = getWhereFilterQuery(whereField, whereFieldValue);
+
+  const basicFilterQuery = getBasicFilterQuery(filterLimit, sortColumn, sortOrder, skipLimit);
+
+  const basicExportFilterQuery = getBasicExportFilterQuery(sortColumn, sortOrder);
 
   useEffect(() => {
     (async () => {
@@ -60,24 +67,6 @@ export const Contacts = () => {
       throw new Error("Server error: x-total-count header is not provided.");
     }
   }, [totalRowCount]);
-
-  const contactsTableProps = {
-    contacts,
-    setPageSize: setFilterLimit,
-    pageSize: filterLimit,
-    setSkipLimit,
-    totalRowCount,
-    setSortColumn,
-    setSortOrder,
-    setFilterField: setWhereField,
-    setFilterFieldValue: setWhereFieldValue,
-  };
-
-  const whereFilterQuery = getWhereFilterQuery(whereField, whereFieldValue);
-
-  const basicFilterQuery = getBasicFilterQuery(filterLimit, sortColumn, sortOrder, skipLimit);
-
-  const basicExportFilterQuery = getBasicExportFilterQuery(sortColumn, sortOrder);
 
   const setTotalResultsCount = (headerCount: string | null) => {
     if (headerCount) setTotalRowCount(parseInt(headerCount, 10));
@@ -110,6 +99,18 @@ export const Contacts = () => {
     setIsImportWindowOpen(true);
   };
 
+  const contactsTableProps = {
+    contacts,
+    setPageSize: setFilterLimit,
+    pageSize: filterLimit,
+    setSkipLimit,
+    totalRowCount,
+    setSortColumn,
+    setSortOrder,
+    setFilterField: setWhereField,
+    setFilterFieldValue: setWhereFieldValue,
+  };
+
   return (
     <ModuleContainer>
       <ModuleHeaderContainer>
@@ -117,7 +118,10 @@ export const Contacts = () => {
           <Typography variant="h3">Contacts</Typography>
         </ModuleHeaderTitleContainer>
         <ModuleHeaderSubtitleContainer>
-          <BreadCrumbNavigation links={breadcrumbLinks} current="Contacts"></BreadCrumbNavigation>
+          <BreadCrumbNavigation
+            links={contactListBreadcrumbLinks}
+            current="Contacts"
+          ></BreadCrumbNavigation>
         </ModuleHeaderSubtitleContainer>
         <ModuleHeaderActionContainer>
           <Button to={getAddFormRoute()} component={GhostLink} variant="contained">
@@ -139,7 +143,7 @@ export const Contacts = () => {
         isOpen={isImportWindowOpen}
         onClose={onImportWindowClose}
         onUpload={handleFileUpload}
-        fields={ImportContactFields}
+        fields={importContactFields}
       ></CsvImport>
     </ModuleContainer>
   );
