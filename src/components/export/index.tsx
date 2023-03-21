@@ -5,11 +5,11 @@ import { CoreModule } from "lib/router";
 import { useEffect, useRef, useState } from "react";
 
 interface csvExportPorps {
-  handleExport: () => Promise<string>;
+  getExportUrlAsync: () => Promise<string>;
   closeExport: () => void;
 }
 
-export const CsvExport = ({ handleExport, closeExport }: csvExportPorps) => {
+export const CsvExport = ({ getExportUrlAsync, closeExport }: csvExportPorps) => {
   const [snackBarParams, setSnackBarParams] = useState(initialSnackBarParams);
   const didExportRef = useRef(false);
 
@@ -17,14 +17,13 @@ export const CsvExport = ({ handleExport, closeExport }: csvExportPorps) => {
     if (!didExportRef.current) {
       const exportFile = async () => {
         try {
-          const url = await handleExport();
+          const url = await getExportUrlAsync();
           downloadFile(url);
           closeExport();
         } catch (error) {
           setSnackBarParams(serverErrorSnackBarParams);
         }
       };
-      setSnackBarParams(initialSnackBarParams);
       exportFile();
       didExportRef.current = true;
     }

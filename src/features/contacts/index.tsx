@@ -74,7 +74,7 @@ export const Contacts = () => {
     else setTotalRowCount(-1);
   };
 
-  const handleExport = async () => {
+  const getExportUrlAsync = async () => {
     const { url } = await client.api.contactsExportList({
       query: `${searchTerm}&${basicExportFilterQuery}${whereFilterQuery}`,
     });
@@ -154,7 +154,9 @@ export const Contacts = () => {
         onUpload={handleFileUpload}
         fields={importContactFields}
       ></CsvImport>
-      {openExport && <CsvExport handleExport={handleExport} closeExport={closeExport}></CsvExport>}
+      {openExport && (
+        <CsvExport getExportUrlAsync={getExportUrlAsync} closeExport={closeExport}></CsvExport>
+      )}
     </ModuleContainer>
   );
 };
