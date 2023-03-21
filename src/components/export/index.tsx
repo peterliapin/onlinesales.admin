@@ -1,15 +1,16 @@
+import { useEffect, useRef, useState } from "react";
 import { downloadFile } from "components/download";
 import { CustomizedSnackbar } from "components/snackbar";
 import { initialSnackBarParams, serverErrorSnackBarParams } from "components/snackbar/constants";
 import { CoreModule } from "lib/router";
-import { useEffect, useRef, useState } from "react";
 
 interface csvExportPorps {
   getExportUrlAsync: () => Promise<string>;
   closeExport: () => void;
+  endRoute: string;
 }
 
-export const CsvExport = ({ getExportUrlAsync, closeExport }: csvExportPorps) => {
+export const CsvExport = ({ getExportUrlAsync, closeExport, endRoute }: csvExportPorps) => {
   const [snackBarParams, setSnackBarParams] = useState(initialSnackBarParams);
   const didExportRef = useRef(false);
 
@@ -35,7 +36,7 @@ export const CsvExport = ({ getExportUrlAsync, closeExport }: csvExportPorps) =>
         isOpen={snackBarParams.isOpen}
         severerity={snackBarParams.severity}
         message={snackBarParams.message}
-        navigateTo={CoreModule.contacts}
+        navigateTo={endRoute as CoreModule}
       />
     </>
   );

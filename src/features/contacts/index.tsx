@@ -9,7 +9,7 @@ import {
   ModuleHeaderSubtitleContainer,
   ModuleHeaderTitleContainer,
 } from "components/module";
-import { getAddFormRoute } from "lib/router";
+import { CoreModule, getAddFormRoute } from "lib/router";
 import { GhostLink } from "components/ghost-link";
 import { useRequestContext } from "providers/request-provider";
 import { ContactsTable } from "./contacts-table";
@@ -147,7 +147,7 @@ export const Contacts = () => {
       </ExtraActionsContainer>
       <SearchBar setSearchTermOnChange={setSearchTerm}></SearchBar>
       <ContactsTable {...contactsTableProps} />
-      {contacts && (
+      {contacts && contacts.length > 0 && (
         <CsvImport
           isOpen={isImportWindowOpen}
           onClose={onImportWindowClose}
@@ -156,7 +156,11 @@ export const Contacts = () => {
         ></CsvImport>
       )}
       {openExport && (
-        <CsvExport getExportUrlAsync={getExportUrlAsync} closeExport={closeExport}></CsvExport>
+        <CsvExport
+          getExportUrlAsync={getExportUrlAsync}
+          closeExport={closeExport}
+          endRoute={CoreModule.contacts}
+        ></CsvExport>
       )}
     </ModuleContainer>
   );
