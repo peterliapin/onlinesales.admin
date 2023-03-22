@@ -4,7 +4,6 @@ import { Download, Upload } from "@mui/icons-material";
 import { ContactDetailsDto, ContactImportDto } from "lib/network/swagger-client";
 import {
   ModuleContainer,
-  ModuleHeaderActionContainer,
   ModuleHeaderContainer,
   ModuleHeaderSubtitleContainer,
   ModuleHeaderTitleContainer,
@@ -13,8 +12,13 @@ import { CoreModule, getAddFormRoute } from "lib/router";
 import { GhostLink } from "components/ghost-link";
 import { useRequestContext } from "providers/request-provider";
 import { ContactsTable } from "./contacts-table";
-import { ExtraActionsContainer } from "./index.styled";
-import { SearchBar } from "./search-bar";
+import {
+  ActionsContainer,
+  AddButtonContainer,
+  ExtraActionsContainer,
+  LeftContainer,
+  RightContainer,
+} from "./index.styled";
 import {
   defaultFilterLimit,
   getBasicExportFilterQuery,
@@ -31,6 +35,7 @@ import {
   defaultFilterOrderDirection,
 } from "./constants";
 import { CsvExport } from "components/export";
+import { SearchBar } from "components/search-bar";
 
 export const Contacts = () => {
   const { client } = useRequestContext();
@@ -131,21 +136,30 @@ export const Contacts = () => {
             current="Contacts"
           ></BreadCrumbNavigation>
         </ModuleHeaderSubtitleContainer>
-        <ModuleHeaderActionContainer>
-          <Button to={getAddFormRoute()} component={GhostLink} variant="contained">
-            Add contact
-          </Button>
-        </ModuleHeaderActionContainer>
       </ModuleHeaderContainer>
-      <ExtraActionsContainer>
-        <Button startIcon={<Upload />} onClick={openImportPage}>
-          Import
-        </Button>
-        <Button startIcon={<Download />} onClick={onExportClick}>
-          Export
-        </Button>
-      </ExtraActionsContainer>
-      <SearchBar setSearchTermOnChange={setSearchTerm}></SearchBar>
+      <ActionsContainer>
+        <LeftContainer>
+          <SearchBar
+            setSearchTermOnChange={setSearchTerm}
+            searchBoxLabel="Search Customers"
+          ></SearchBar>
+        </LeftContainer>
+        <RightContainer>
+          <ExtraActionsContainer>
+            <Button startIcon={<Upload />} onClick={openImportPage}>
+              Import
+            </Button>
+            <Button startIcon={<Download />} onClick={onExportClick}>
+              Export
+            </Button>
+          </ExtraActionsContainer>
+          <AddButtonContainer>
+            <Button to={getAddFormRoute()} component={GhostLink} variant="contained">
+              Add contact
+            </Button>
+          </AddButtonContainer>
+        </RightContainer>
+      </ActionsContainer>
       <ContactsTable {...contactsTableProps} />
       {contacts && contacts.length > 0 && (
         <CsvImport
