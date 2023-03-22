@@ -1,9 +1,29 @@
 import { CardHeader, Grid, ListItem, ListItemText, Paper, styled } from "@mui/material";
 
+export const ActionsContainer = styled("div")`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+export const LeftContainer = styled("div")`
+  display: flex;
+  align-items: center;
+`;
+
+export const RightContainer = styled("div")`
+  display: flex;
+  align-items: center;
+`;
+
 export const ExtraActionsContainer = styled("div")`
   display: flex;
   flex-flow: row;
   gap: ${({ theme }) => theme.spacing(2)};
+`;
+
+export const AddButtonContainer = styled("div")`
+  margin-left: ${({ theme }) => theme.spacing(10)};
 `;
 
 export const ContactsTableContainer = styled(Paper)`
