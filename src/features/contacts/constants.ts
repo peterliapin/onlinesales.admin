@@ -1,4 +1,8 @@
+import { Avatar, ListItemAvatar } from "@mui/material";
+import { GridColDef } from "@mui/x-data-grid";
+import { ContactDetailsDto } from "lib/network/swagger-client";
 import { CoreModule, getCoreModuleRoute, rootRoute } from "lib/router";
+import { ContactNameListItem, ContactNameListItemText } from "./index.styled";
 
 export const defaultFilterOrderColumn = "firstName";
 
