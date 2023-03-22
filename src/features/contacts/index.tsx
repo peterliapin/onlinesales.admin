@@ -14,7 +14,6 @@ import { GhostLink } from "components/ghost-link";
 import { useRequestContext } from "providers/request-provider";
 import { ContactsTable } from "./contacts-table";
 import { ExtraActionsContainer } from "./index.styled";
-import { SearchBar } from "./search-bar";
 import {
   defaultFilterLimit,
   getBasicExportFilterQuery,
@@ -31,6 +30,7 @@ import {
   defaultFilterOrderDirection,
 } from "./constants";
 import { CsvExport } from "components/export";
+import { SearchBar } from "components/search-bar";
 
 export const Contacts = () => {
   const { client } = useRequestContext();
@@ -145,7 +145,10 @@ export const Contacts = () => {
           Export
         </Button>
       </ExtraActionsContainer>
-      <SearchBar setSearchTermOnChange={setSearchTerm}></SearchBar>
+      <SearchBar
+        setSearchTermOnChange={setSearchTerm}
+        searchBoxLabel="Search Customers"
+      ></SearchBar>
       <ContactsTable {...contactsTableProps} />
       {contacts && contacts.length > 0 && (
         <CsvImport

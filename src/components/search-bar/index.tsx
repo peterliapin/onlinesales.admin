@@ -2,11 +2,12 @@ import { useState } from "react";
 import { TextField, Box, InputAdornment, IconButton } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 
-interface Props {
+interface SearchBoxProps {
   setSearchTermOnChange: (searchTerm: string) => void;
+  searchBoxLabel: string;
 }
 
-export const SearchBar = ({ setSearchTermOnChange }: Props) => {
+export const SearchBar = ({ setSearchTermOnChange, searchBoxLabel }: SearchBoxProps) => {
   const [timer, setTimer] = useState<NodeJS.Timeout | null>(null);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -32,7 +33,7 @@ export const SearchBar = ({ setSearchTermOnChange }: Props) => {
             </InputAdornment>
           ),
         }}
-        label="Search customers"
+        label={searchBoxLabel}
         onChange={handleChange}
       ></TextField>
     </Box>
