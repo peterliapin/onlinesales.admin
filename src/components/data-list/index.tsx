@@ -40,6 +40,7 @@ type dataListProps = {
   defaultFilterOrderColumn: string;
   defaultFilterOrderDirection: string;
   initialGridState: GridInitialStateCommunity | undefined;
+  endRoute: string;
   getModelDataList: (query: string) => any;
   getExportUrl: (query: string) => Promise<string>;
   dataImportCreate: (data: any) => void;
@@ -53,6 +54,7 @@ export const DataList = ({
   defaultFilterOrderColumn,
   defaultFilterOrderDirection,
   initialGridState,
+  endRoute,
   getModelDataList,
   getExportUrl,
   dataImportCreate,
@@ -190,7 +192,7 @@ export const DataList = ({
         <CsvExport
           getExportUrlAsync={getExportUrlAsync}
           closeExport={closeExport}
-          endRoute={CoreModule.contacts}
+          endRoute={endRoute as CoreModule}
         ></CsvExport>
       )}
     </ModuleContainer>

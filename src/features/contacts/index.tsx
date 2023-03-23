@@ -5,6 +5,7 @@ import { ContactNameListItem, ContactNameListItemText } from "./index.styled";
 import { contactListBreadcrumbLinks } from "./constants";
 import { DataList } from "components/data-list";
 import { GridColDef } from "@mui/x-data-grid";
+import { CoreModule } from "lib/router";
 
 export const Contacts = () => {
   const { client } = useRequestContext();
@@ -87,6 +88,7 @@ export const Contacts = () => {
       defaultFilterOrderColumn="firstName"
       defaultFilterOrderDirection="desc"
       searchBarLabel="Search Customers"
+      endRoute={CoreModule.contacts}
       getModelDataList={getContactList}
       getExportUrl={getContactExportUrlAsync}
       dataImportCreate={handleContactImport}
