@@ -2,7 +2,7 @@ import { List, ListItem, ListSubheader } from "@mui/material";
 import { People } from "@mui/icons-material";
 import { CoreModule, coreModuleRoute, getCoreModuleRoute } from "lib/router";
 import { SidebarLinkButton } from "./sidebar-link-button";
-import { SidebarStyled } from "./index.styled";
+import { ListSubheaderStyled, SidebarStyled } from "./index.styled";
 import { useRouteParams } from "typesafe-routes";
 
 export const Sidebar = () => {
@@ -10,7 +10,7 @@ export const Sidebar = () => {
 
   return (
     <SidebarStyled>
-      <List component="nav" subheader={<ListSubheader>General</ListSubheader>}>
+      <List component="nav" subheader={<ListSubheaderStyled>General</ListSubheaderStyled>}>
         <ListItem>
           <SidebarLinkButton
             title="Contacts"
