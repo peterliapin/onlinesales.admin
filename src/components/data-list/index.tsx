@@ -9,7 +9,6 @@ import {
 } from "components/module";
 import { CoreModule, getAddFormRoute } from "lib/router";
 import { GhostLink } from "components/ghost-link";
-import { useRequestContext } from "providers/request-provider";
 import {
   ActionsContainer,
   AddButtonContainer,
@@ -31,6 +30,7 @@ import { CsvExport } from "components/export";
 import { SearchBar } from "components/search-bar";
 import { DataTableGrid } from "components/data-table";
 import { GridColDef } from "@mui/x-data-grid";
+import { GridInitialStateCommunity } from "@mui/x-data-grid/models/gridStateCommunity";
 
 type dataListProps = {
   columns: GridColDef<ContactDetailsDto>[];
@@ -39,6 +39,7 @@ type dataListProps = {
   searchBarLabel: string;
   defaultFilterOrderColumn: string;
   defaultFilterOrderDirection: string;
+  initialGridState: GridInitialStateCommunity | undefined;
   getModelDataList: (query: string) => any;
   getExportUrl: (query: string) => Promise<string>;
   dataImportCreate: (data: any) => void;
@@ -51,6 +52,7 @@ export const DataList = ({
   searchBarLabel,
   defaultFilterOrderColumn,
   defaultFilterOrderDirection,
+  initialGridState,
   getModelDataList,
   getExportUrl,
   dataImportCreate,
@@ -171,9 +173,7 @@ export const DataList = ({
         setSkipLimit={setSkipLimit}
         setFilterField={setWhereField}
         setFilterFieldValue={setWhereFieldValue}
-        initialState={{
-          columns: { columnVisibilityModel: { firstName: false, email: false, phone: false } },
-        }}
+        initialState={initialGridState}
         showActionsColumn={true}
         disableEditRoute={false}
         disableViewRoute={false}

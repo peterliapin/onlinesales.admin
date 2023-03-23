@@ -16,14 +16,14 @@ export const Contacts = () => {
     return result;
   };
 
-  const getExportUrlAsync = async (query: string) => {
+  const getContactExportUrlAsync = async (query: string) => {
     const { url } = await client.api.contactsExportList({
       query: query,
     });
     return url;
   };
 
-  const handleFileUpload = async (data: any) => {
+  const handleContactImport = async (data: any) => {
     await client.api.contactsImportCreate(data);
   };
 
@@ -60,11 +60,7 @@ export const Contacts = () => {
     {
       field: "phone",
       headerName: "Phone",
-    },
-    {
-      field: "location",
-      headerName: "Location",
-      flex: 2,
+      flex: 3,
     },
     {
       field: "createdAt",
@@ -92,8 +88,11 @@ export const Contacts = () => {
       defaultFilterOrderDirection="desc"
       searchBarLabel="Search Customers"
       getModelDataList={getContactList}
-      getExportUrl={getExportUrlAsync}
-      dataImportCreate={handleFileUpload}
+      getExportUrl={getContactExportUrlAsync}
+      dataImportCreate={handleContactImport}
+      initialGridState={{
+        columns: { columnVisibilityModel: { firstName: false, email: false } },
+      }}
     ></DataList>
   );
 };
