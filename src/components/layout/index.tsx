@@ -13,7 +13,7 @@ export const AppLayoutContainer = styled(Box)`
 export const MainContentContainer = styled(Box)`
   grid-area: main;
   background-color: ${({ theme: { palette } }) => palette.background.default};
-  padding: ${({ theme }) => theme.spacing(12, 6, 16, 6)};
+  padding: ${({ theme }) => theme.spacing(1, 6, 16, 6)};
   overflow: auto;
 `;
 MainContentContainer.defaultProps = {

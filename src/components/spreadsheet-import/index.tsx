@@ -10,7 +10,7 @@ import { useState } from "react";
 import { ReactSpreadsheetImport } from "@wavepoint/react-spreadsheet-import";
 import { Result } from "@wavepoint/react-spreadsheet-import/types/types";
 import { StyledBackdrop } from "./index.styled";
-import { getImportFields } from "utils/importKeyMappings";
+import { getImportFields } from "utils/import-key-mappings";
 
 interface csvImportPorps {
   isOpen: boolean;

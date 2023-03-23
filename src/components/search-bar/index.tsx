@@ -24,6 +24,7 @@ export const SearchBar = ({ setSearchTermOnChange, searchBoxLabel }: SearchBoxPr
   return (
     <Box>
       <TextField
+        size="small"
         InputProps={{
           endAdornment: (
             <InputAdornment position="end">

@@ -133,7 +133,8 @@ export const DataTableGrid = ({
         columns={gridFinalizedColumns}
         rows={data ?? empty}
         loading={!data}
-        checkboxSelection
+        checkboxSelection={false}
+        autoHeight={false}
         rowCount={totalRowCount}
         rowsPerPageOptions={rowsPerPageOptions}
         pagination
