@@ -32,6 +32,12 @@ const configuration: Configuration = {
   resolve: {
     extensions: [".ts", ".tsx", ".js", ".json"],
     plugins: [new TsconfigPathsPlugin({configFile: resolve(__dirname, "../tsconfig.json")})],
+    alias:{
+      "@providers" : resolve(__dirname, "../src/providers"),
+      "@lib": resolve(__dirname, "../src/lib"),
+      "@features": resolve(__dirname, "../src/features"),
+      "@components": resolve(__dirname, "../src/components"),
+    }
   },
   module: {
     rules: [

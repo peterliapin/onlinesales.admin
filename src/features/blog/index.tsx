@@ -1,7 +1,7 @@
 import { ModuleContainer } from "components/module";
 import { ContentList } from "./content-list";
 import { Route, Routes } from "react-router-dom";
-import { ContentEdit } from "./content-edit";
+import { ContentEdit } from "./ContentEdit/content-edit";
 import { ContentView } from "./content-view";
 
 export const Blog = () => {

@@ -23,7 +23,7 @@ import { Breadcrumbs, Chip, Link, Typography } from "@mui/material";
 import { NavigateNext } from "@mui/icons-material";
 import { CoreModule, rootRoute } from "../../lib/router";
 import { GhostLink } from "../../components/ghost-link";
-import { MdPreview } from "./md-preview";
+import MarkdownViewer from "@components/MarkdownViewer";
 import { CommentList } from "./comment/comment-list";
 
 const coreApi = process.env.CORE_API;
@@ -112,7 +112,7 @@ export const ContentView = () => {
                 <DescriptionContainer>Description: {contentItem.description}</DescriptionContainer>
               </div>
             </HeaderContainer>
-            <MdPreview source={contentItem.body} />
+            <MarkdownViewer/>
 
             {contentItem.allowComments && (
               <>

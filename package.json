@@ -60,6 +60,9 @@
     "webpack-dev-server": "^4.11.1"
   },
   "dependencies": {
+    "@automapper/core": "^8.7.7",
+    "@automapper/pojos": "^8.7.7",
+    "@azure/msal-browser": "^2.34.0",
     "@azure/msal-react": "^1.5.2",
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
@@ -67,11 +70,15 @@
     "@mui/material": "^5.11.6",
     "@mui/x-data-grid": "^5.17.20",
     "@uiw/react-md-editor": "^3.20.5",
+    "formik": "^2.2.9",
     "markdown-to-jsx": "^7.1.9",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-markdown": "^8.0.5",
     "react-router-dom": "^6.7.0",
-    "typesafe-routes": "^9.0.1"
+    "react-toastify": "^9.1.2",
+    "typesafe-routes": "^9.0.1",
+    "zod": "^3.21.4",
+    "zod-formik-adapter": "^1.2.0"
   }
 }
