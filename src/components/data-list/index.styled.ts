@@ -32,19 +32,18 @@ export const ContactsTableContainer = styled(Paper)`
 
 export const ContactNameListItem = styled(ListItem)({
   alignItems: "center",
-  paddingLeft: "0",
   disablePadding: true,
 });
 
-export const ContactNameListItemText = styled(ListItemText)`
-  .MuiListItemText-primary {
-    font-size: ${({ theme }) => theme.typography.body2.fontSize};
-    font-weight: 500;
-  }
-  .MuiListItemText-secondary {
-    font-size: ${({ theme }) => theme.typography.body2.fontSize};
-  }
-`;
+export const ContactNameListItemText = styled(ListItemText)({
+  ".MuiListItemText-primary": {
+    fontSize: "14px",
+    fontWeight: 500,
+  },
+  ".MuiListItemText-secondary": {
+    fontSize: "13px",
+  },
+});
 
 export const ContactRowGrid = styled(Grid)({
   height: 60,

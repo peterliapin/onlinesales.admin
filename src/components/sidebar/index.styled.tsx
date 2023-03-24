@@ -1,4 +1,4 @@
-import { Drawer, ListItemButton, ListItemText, styled } from "@mui/material";
+import { Drawer, ListItemButton, ListItemText, ListSubheader, styled } from "@mui/material";
 
 export const SidebarStyled = styled(Drawer)`
   grid-area: sidebar;
@@ -12,8 +12,14 @@ SidebarStyled.defaultProps = {
   variant: "permanent",
 };
 
+export const ListSubheaderStyled = styled(ListSubheader)`
+  font-size: ${({ theme }) => theme.typography.subtitle1.fontSize};
+`;
+
 export const SidebarLink = styled(ListItemButton)`
   border-radius: ${({ theme }) => theme.spacing(16)};
+  height: ${({ theme }) => theme.spacing(10)};
+  margin-top: ${({ theme }) => theme.spacing(1)};
   color: ${({ theme: { palette } }) => palette.text.secondary};
   :hover {
     background-color: ${({ theme: { palette } }) => palette.background.primaryHover};

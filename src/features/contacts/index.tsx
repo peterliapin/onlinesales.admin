@@ -1,59 +1,100 @@
-import { useEffect, useState } from "react";
-import { Breadcrumbs, Button, Link, Typography } from "@mui/material";
-import { Download, NavigateNext, Upload } from "@mui/icons-material";
+import { Avatar, ListItemAvatar } from "@mui/material";
 import { ContactDetailsDto } from "lib/network/swagger-client";
-import {
-  ModuleContainer,
-  ModuleHeaderActionContainer,
-  ModuleHeaderContainer,
-  ModuleHeaderSubtitleContainer,
-  ModuleHeaderTitleContainer,
-} from "components/module";
-import { rootRoute } from "lib/router";
-import { GhostLink } from "components/ghost-link";
 import { useRequestContext } from "providers/request-provider";
-import { ContactsTable } from "./contacts-table";
-import { ExtraActionsContainer } from "./index.styled";
+import { ContactNameListItem, ContactNameListItemText } from "./index.styled";
+import { contactListBreadcrumbLinks } from "./constants";
+import { DataList } from "components/data-list";
+import { GridColDef } from "@mui/x-data-grid";
+import { CoreModule } from "lib/router";
 
 export const Contacts = () => {
   const { client } = useRequestContext();
 
-  const [contacts, setContacts] = useState<ContactDetailsDto[]>();
+  const getContactList = async (query: string) => {
+    const result = await client.api.contactsList({
+      query: query,
+    });
+    return result;
+  };
 
-  useEffect(() => {
-    (async () => {
-      try {
-        const { data } = await client.api.contactsList();
-        setContacts(data);
-      } catch (e) {
-        console.log(e);
-      }
-    })();
-  }, [client]);
+  const getContactExportUrlAsync = async (query: string) => {
+    const { url } = await client.api.contactsExportList({
+      query: query,
+    });
+    return url;
+  };
+
+  const handleContactImport = async (data: any) => {
+    await client.api.contactsImportCreate(data);
+  };
+
+  const columns: GridColDef<ContactDetailsDto>[] = [
+    {
+      field: "lastName",
+      headerName: "Name",
+      flex: 4,
+      renderCell: ({ row }) => (
+        <ContactNameListItem>
+          <ListItemAvatar>
+            <Avatar src={row.avatarUrl!}></Avatar>
+          </ListItemAvatar>
+          <ContactNameListItemText
+            primary={`${row.firstName} ${row.lastName}`}
+            secondary={row.email}
+          />
+        </ContactNameListItem>
+      ),
+    },
+    {
+      field: "firstName",
+      headerName: "First Name",
+    },
+    {
+      field: "email",
+      headerName: "Email",
+    },
+    {
+      field: "address1",
+      headerName: "Address",
+      flex: 4,
+    },
+    {
+      field: "phone",
+      headerName: "Phone",
+      flex: 3,
+    },
+    {
+      field: "createdAt",
+      headerName: "Created At",
+      flex: 2,
+      valueGetter: (params) => {
+        const createdAt = params.value as string;
+        const formattedDate = new Date(createdAt).toLocaleDateString();
+        return formattedDate;
+      },
+    },
+    {
+      field: "language",
+      headerName: "Language",
+      flex: 1,
+    },
+  ];
 
   return (
-    <ModuleContainer>
-      <ModuleHeaderContainer>
-        <ModuleHeaderTitleContainer>
-          <Typography variant="h3">Contacts</Typography>
-        </ModuleHeaderTitleContainer>
-        <ModuleHeaderSubtitleContainer>
-          <Breadcrumbs separator={<NavigateNext fontSize="small" />}>
-            <Link to={rootRoute} component={GhostLink} underline="hover">
-              Dashboard
-            </Link>
-            <Typography variant="body1">Contacts</Typography>
-          </Breadcrumbs>
-        </ModuleHeaderSubtitleContainer>
-        <ModuleHeaderActionContainer>
-          <Button variant="contained">Add contact</Button>
-        </ModuleHeaderActionContainer>
-      </ModuleHeaderContainer>
-      <ExtraActionsContainer>
-        <Button startIcon={<Upload />}>Import</Button>
-        <Button startIcon={<Download />}>Export</Button>
-      </ExtraActionsContainer>
-      <ContactsTable contacts={contacts} />
-    </ModuleContainer>
+    <DataList
+      columns={columns}
+      dataListBreadcrumbLinks={contactListBreadcrumbLinks}
+      currentBreadcrumb="Contacts"
+      defaultFilterOrderColumn="firstName"
+      defaultFilterOrderDirection="desc"
+      searchBarLabel="Search Customers"
+      endRoute={CoreModule.contacts}
+      getModelDataList={getContactList}
+      getExportUrl={getContactExportUrlAsync}
+      dataImportCreate={handleContactImport}
+      initialGridState={{
+        columns: { columnVisibilityModel: { firstName: false, email: false } },
+      }}
+    ></DataList>
   );
 };
