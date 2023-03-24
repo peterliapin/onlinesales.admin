@@ -12,9 +12,10 @@
 export interface AccountCreateDto {
   /** @minLength 1 */
   name: string;
-  city?: string | null;
-  stateCode?: string | null;
+  state?: string | null;
+  continentCode?: string | null;
   countryCode?: string | null;
+  cityName?: string | null;
   siteUrl?: string | null;
   employeesRange?: string | null;
   /** @format double */
@@ -27,9 +28,10 @@ export interface AccountCreateDto {
 export interface AccountDetailsDto {
   /** @minLength 1 */
   name: string;
-  city?: string | null;
-  stateCode?: string | null;
+  state?: string | null;
+  continentCode?: string | null;
   countryCode?: string | null;
+  cityName?: string | null;
   siteUrl?: string | null;
   employeesRange?: string | null;
   /** @format double */
@@ -142,6 +144,9 @@ export interface CommentUpdateDto {
 export interface ContactCreateDto {
   lastName?: string | null;
   firstName?: string | null;
+  continentCode?: string | null;
+  countryCode?: string | null;
+  cityName?: string | null;
   address1?: string | null;
   address2?: string | null;
   state?: string | null;
@@ -162,6 +167,9 @@ export interface ContactCreateDto {
 export interface ContactDetailsDto {
   lastName?: string | null;
   firstName?: string | null;
+  continentCode?: string | null;
+  countryCode?: string | null;
+  cityName?: string | null;
   address1?: string | null;
   address2?: string | null;
   state?: string | null;
@@ -191,6 +199,9 @@ export interface ContactDetailsDto {
 export interface ContactImportDto {
   lastName?: string | null;
   firstName?: string | null;
+  continentCode?: string | null;
+  countryCode?: string | null;
+  cityName?: string | null;
   address1?: string | null;
   address2?: string | null;
   state?: string | null;
@@ -227,6 +238,9 @@ export interface ContactImportDto {
 export interface ContactUpdateDto {
   lastName?: string | null;
   firstName?: string | null;
+  continentCode?: string | null;
+  countryCode?: string | null;
+  cityName?: string | null;
   address1?: string | null;
   address2?: string | null;
   state?: string | null;
@@ -734,6 +748,19 @@ export interface TaskExecutionDto {
   completed?: boolean;
 }
 
+export interface Unsubscribe {
+  /** @format int32 */
+  id?: number;
+  /** @format date-time */
+  createdAt: string;
+  createdByIp?: string | null;
+  createdByUserAgent?: string | null;
+  source?: string | null;
+  reason?: string | null;
+  /** @format int32 */
+  contactId?: number | null;
+}
+
 export type QueryParamsType = Record<string | number, any>;
 export type ResponseFormat = keyof Omit<Body, "body" | "bodyUsed">;
 
@@ -946,7 +973,7 @@ export class HttpClient<SecurityDataType = unknown> {
 
 /**
  * @title OnlineSales API
- * @version 1.1.0.0
+ * @version 1.2.0.0
  */
 export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
   api = {
@@ -1491,6 +1518,40 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         method: "GET",
         query: query,
         secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Continents
+     * @name ContinentsList
+     * @request GET:/api/continents
+     * @secure
+     */
+    continentsList: (params: RequestParams = {}) =>
+      this.request<Record<string, string>, ProblemDetails>({
+        path: `/api/continents`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Countries
+     * @name CountriesList
+     * @request GET:/api/countries
+     * @secure
+     */
+    countriesList: (params: RequestParams = {}) =>
+      this.request<Record<string, string>, ProblemDetails>({
+        path: `/api/countries`,
+        method: "GET",
+        secure: true,
+        format: "json",
         ...params,
       }),
 
@@ -2491,6 +2552,23 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     tasksExecuteDetail: (name: string, params: RequestParams = {}) =>
       this.request<TaskExecutionDto, void | ProblemDetails>({
         path: `/api/tasks/execute/${name}`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Unsubscribes
+     * @name UnsubscribesList
+     * @request GET:/api/unsubscribes
+     * @secure
+     */
+    unsubscribesList: (params: RequestParams = {}) =>
+      this.request<Unsubscribe[], void | ProblemDetails>({
+        path: `/api/unsubscribes`,
         method: "GET",
         secure: true,
         format: "json",
