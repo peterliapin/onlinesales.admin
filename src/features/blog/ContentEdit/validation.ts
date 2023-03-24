@@ -16,6 +16,7 @@ export interface ContentDetails {
   categories: string[];
   createdAt: string | null;
   updatedAt: string | null;
+  files: File[] | null;
 }
 
 export interface TypeDefaultValues {
@@ -26,6 +27,14 @@ export interface TypeDefaultValues {
 export const ContentEditAvailableLanguages = ["English", "Russian"] as const;
 
 export const ContentEditAvailableTypes = ["Product", "Case", "Other"] as const;
+
+/// TODO: Runtime
+export const ContentEditAvailableTags = ["Tag 1", "Tag 2", "Tag 3"] as const;
+
+/// TODO: Runtime
+export const ContentEditAvailableCategories = ["Cat 1", "Cat 2", "Cat 3"] as const;
+
+export const ContentEditMaximumImageSize = 3 * 1000 * 1000; // 3 megabytes
 
 export const ContentEditDefaultValues: TypeDefaultValues[] = [
   {
@@ -46,6 +55,7 @@ export const ContentEditDefaultValues: TypeDefaultValues[] = [
       categories: [],
       createdAt: "",
       updatedAt: "",
+      files: null,
     },
   },
   {
@@ -66,6 +76,7 @@ export const ContentEditDefaultValues: TypeDefaultValues[] = [
       categories: [],
       createdAt: "",
       updatedAt: "",
+      files: null,
     },
   },
   {
@@ -86,15 +97,10 @@ export const ContentEditDefaultValues: TypeDefaultValues[] = [
       categories: [],
       createdAt: "",
       updatedAt: "",
+      files: null,
     },
   },
 ];
-
-/// TODO: Runtime
-export const ContentEditAvailableTags = ["Tag 1", "Tag 2", "Tag 3"] as const;
-
-/// TODO: Runtime
-export const ContentEditAvailableCategories = ["Cat 1", "Cat 2", "Cat 3"] as const;
 
 export const ContentEditValidationScheme = zod.object({
   type: zod.enum(ContentEditAvailableTypes),

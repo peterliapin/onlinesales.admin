@@ -27,6 +27,7 @@ import {
   Link,
   TextField,
   Typography,
+  Divider,
 } from "@mui/material";
 import { NavigateNext, Report, Save } from "@mui/icons-material";
 import { CoreModule, rootRoute } from "@lib/router";
@@ -41,12 +42,14 @@ import {
   ContentEditAvailableTags,
   ContentEditAvailableCategories,
   ContentEditDefaultValues,
+  ContentEditMaximumImageSize,
   ContentDetails,
 } from "./validation";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 import { Automapper } from "@lib/automapper";
 import MarkdownEditor from "@components/MarkdownEditor";
 import { Id, toast } from "react-toastify";
+import FileDropdown from "@components/FileDropdown";
 
 interface ContentEditProps {
   readonly?: boolean;
@@ -120,14 +123,11 @@ export const ContentEdit = (props: ContentEditProps) => {
     setWasModified(true);
     formik.handleChange(event);
   };
-  const autoCompleteValueUpdate = (field: string, value: string | null) => {
+
+  function autoCompleteValueUpdate<UpdateType>(field: string, value: UpdateType) : void {
     setWasModified(true);
     formik.setFieldValue(field, value);
-  };
-  const autoCompleteMultipleValueUpdate = (field: string, value: string[]) => {
-    setWasModified(true);
-    formik.setFieldValue(field, value);
-  };
+  }
 
   const typeFieldUpdate = (event: React.SyntheticEvent<Element, Event>, value: string | null) => {
     let template: TypeDefaultValues;
@@ -194,55 +194,65 @@ export const ContentEdit = (props: ContentEditProps) => {
           <form onSubmit={formik.handleSubmit}>
             <Card>
               <CardContent>
-                <Grid container spacing={3}>
-                  <Grid xs={6} sm={6} item>
-                    <Autocomplete
-                      disabled={props.readonly}
-                      value={formik.values.type}
-                      onChange={typeFieldUpdate}
-                      autoSelect={true}
-                      options={ContentEditAvailableTypes}
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          label="Type"
-                          name="type"
-                          placeholder="Select Type"
-                          variant="outlined"
-                          error={formik.touched.type && Boolean(formik.errors.type)}
-                        />
-                      )}
+                <Grid container spacing={3} xs={12} sm={12}>
+                  <Grid container spacing={3} xs={6} sm={6}>
+                    <Grid xs={12} sm={12} item>
+                      <Autocomplete
+                        disabled={props.readonly}
+                        value={formik.values.type}
+                        onChange={typeFieldUpdate}
+                        autoSelect={true}
+                        options={ContentEditAvailableTypes}
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            label="Type"
+                            name="type"
+                            placeholder="Select Type"
+                            variant="outlined"
+                            error={formik.touched.type && Boolean(formik.errors.type)}
+                          />
+                        )}
+                      />
+                    </Grid>         
+                    <Grid xs={12} sm={12} item>
+                      <TextField
+                        disabled={props.readonly}
+                        label="Title"
+                        name="title"
+                        value={formik.values.title}
+                        placeholder="Enter title"
+                        variant="outlined"
+                        onChange={valueUpdate}
+                        error={formik.touched.title && Boolean(formik.errors.title)}
+                        fullWidth
+                      ></TextField>
+                    </Grid>
+                    <Grid xs={12} sm={12} item>
+                      <TextField
+                        disabled={props.readonly}
+                        label="Description"
+                        name="description"
+                        value={formik.values.description}
+                        error={formik.touched.description && Boolean(formik.errors.description)}
+                        multiline={true}
+                        minRows={3}
+                        placeholder="Enter description"
+                        variant="outlined"
+                        onChange={valueUpdate}
+                        fullWidth
+                      ></TextField>
+                    </Grid>
+                  </Grid>
+                  <Grid item xs={6} sm={6}>
+                    <FileDropdown
+                      onChange={(file) => console.log(file)}
+                      acceptMIME="image/*"
+                      maxFileSize={ContentEditMaximumImageSize}
                     />
                   </Grid>
-                  <Grid xs={6} sm={6} item />
-                  <Grid xs={12} sm={6} item>
-                    <TextField
-                      disabled={props.readonly}
-                      label="Title"
-                      name="title"
-                      value={formik.values.title}
-                      placeholder="Enter title"
-                      variant="outlined"
-                      onChange={valueUpdate}
-                      error={formik.touched.title && Boolean(formik.errors.title)}
-                      fullWidth
-                    ></TextField>
-                  </Grid>
-                  <Grid xs={12} sm={12} item>
-                    <TextField
-                      disabled={props.readonly}
-                      label="Description"
-                      name="description"
-                      value={formik.values.description}
-                      error={formik.touched.description && Boolean(formik.errors.description)}
-                      multiline={true}
-                      minRows={3}
-                      placeholder="Enter description"
-                      variant="outlined"
-                      onChange={valueUpdate}
-                      fullWidth
-                    ></TextField>
-                  </Grid>
+                </Grid>
+                <Grid container spacing={3} xs={12} sm={12}>
                   <Grid xs={12} sm={12} item data-color-mode="light">
                     <MarkdownEditor
                       onChange={(value) => {
@@ -296,7 +306,7 @@ export const ContentEdit = (props: ContentEditProps) => {
                     <Autocomplete
                       disabled={props.readonly}
                       value={formik.values.author}
-                      onChange={(ev, val) => autoCompleteValueUpdate("author", val)}
+                      onChange={(ev, val) => autoCompleteValueUpdate<string | null>("author", val)}
                       options={["Author 1", "Author 2"]}
                       renderInput={(params) => (
                         <TextField
@@ -314,7 +324,9 @@ export const ContentEdit = (props: ContentEditProps) => {
                     <Autocomplete
                       disabled={props.readonly}
                       value={formik.values.language}
-                      onChange={(ev, val) => autoCompleteValueUpdate("language", val)}
+                      onChange={
+                        (ev, val) => autoCompleteValueUpdate<string | null>("language", val)
+                      }
                       options={ContentEditAvailableLanguages}
                       renderInput={(params) => (
                         <TextField
@@ -347,7 +359,7 @@ export const ContentEdit = (props: ContentEditProps) => {
                       limitTags={3}
                       options={ContentEditAvailableTags as unknown as string[]}
                       value={formik.values.tags}
-                      onChange={(ev, val) => autoCompleteMultipleValueUpdate("tags", val)}
+                      onChange={(ev, val) => autoCompleteValueUpdate<string[]>("tags", val)}
                       renderInput={(params) => (
                         <TextField
                           {...params}
@@ -365,7 +377,7 @@ export const ContentEdit = (props: ContentEditProps) => {
                       limitTags={3}
                       options={ContentEditAvailableCategories as unknown as string[]}
                       value={formik.values.categories}
-                      onChange={(ev, val) => autoCompleteMultipleValueUpdate("categories", val)}
+                      onChange={(ev, val) => autoCompleteValueUpdate<string[]>("categories", val)}
                       renderInput={(params) => (
                         <TextField
                           {...params}

@@ -19,14 +19,20 @@ export const CommentList = ({ contentId }: CommentListProps) => {
         setIsLoading(true);
         setComments([]);
         if (contentId) {
-          const filter = {
-            "filter[where][contentId]": contentId,
-            "filter[where][approved]": "Approved",
-          };
+          const filter = [
+            `filter[where][contentId]=${contentId}`,
+            "filter[where][approved]=Approved",
+          ].join("&");
 
-          const { data } = await client.extendedApi.commentsList(filter, {
-            signal: controller.signal,
-          });
+          const { data } = await client.api.commentsList(
+            {
+              query: filter,
+              downloadCsv: false,
+            },
+            {
+              signal: controller.signal,
+            }
+          );
           const getReplays = (parentId: number): CommentExtendedDto[] => {
             return data
               .filter((i) => i.parentId == parentId)
