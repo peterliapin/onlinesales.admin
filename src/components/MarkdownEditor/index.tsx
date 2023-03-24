@@ -2,12 +2,12 @@ import MDEditor from "@uiw/react-md-editor";
 
 type textChangeFunc = (value: string | undefined) => void;
 interface MarkdownEditorProps {
-    value: string;
-    onChange: textChangeFunc;
-    isReadOnly: boolean | undefined;
+  value: string;
+  onChange: textChangeFunc;
+  isReadOnly: boolean | undefined;
 }
 
-const MarkdownEditor = ({value, onChange, isReadOnly}: MarkdownEditorProps) => {
+const MarkdownEditor = ({ value, onChange, isReadOnly }: MarkdownEditorProps) => {
   return (
     <>
       <MDEditor
@@ -21,6 +21,5 @@ const MarkdownEditor = ({value, onChange, isReadOnly}: MarkdownEditorProps) => {
     </>
   );
 };
-
 
 export default MarkdownEditor;

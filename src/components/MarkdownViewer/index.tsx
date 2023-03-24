@@ -1,10 +1,5 @@
-const MarkdownViewer = () =>{
-
-  return (
-    <>
-        test
-    </>
-  );
+const MarkdownViewer = () => {
+  return <>test</>;
 };
 
 export default MarkdownViewer;

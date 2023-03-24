@@ -1,9 +1,9 @@
 import { createMap, forMember, mapFrom, createMapper } from "@automapper/core";
 import { pojos, PojosMetadataMap } from "@automapper/pojos";
-import { 
-  ContentDetailsDto, 
-  ContentUpdateDto, 
-  ContentCreateDto
+import {
+  ContentDetailsDto,
+  ContentUpdateDto,
+  ContentCreateDto,
 } from "@lib/network/swagger-client.generated";
 import { ContentDetails } from "@features/blog/ContentEdit/validation";
 
@@ -80,12 +80,12 @@ createMap<ContentDetailsDto, ContentDetails>(
   "ContentDetailsDto",
   "ContentDetails",
   forMember(
-    d => d.tags,
-    mapFrom(s => s.tags?.split(";") ?? [])
+    (d) => d.tags,
+    mapFrom((s) => s.tags?.split(";") ?? [])
   ),
   forMember(
-    d => d.categories,
-    mapFrom(s => s.categories?.split(";") ?? [])
+    (d) => d.categories,
+    mapFrom((s) => s.categories?.split(";") ?? [])
   )
 );
 createMap<ContentDetails, ContentUpdateDto>(
@@ -93,12 +93,12 @@ createMap<ContentDetails, ContentUpdateDto>(
   "ContentDetails",
   "ContentUpdateDto",
   forMember(
-    d => d.tags,
-    mapFrom(s => s.tags.join(";"))
+    (d) => d.tags,
+    mapFrom((s) => s.tags.join(";"))
   ),
   forMember(
-    d => d.categories,
-    mapFrom(s => s.categories.join(";"))
+    (d) => d.categories,
+    mapFrom((s) => s.categories.join(";"))
   )
 );
 createMap<ContentDetails, ContentCreateDto>(
@@ -106,11 +106,11 @@ createMap<ContentDetails, ContentCreateDto>(
   "ContentDetails",
   "ContentCreateDto",
   forMember(
-    d => d.tags,
-    mapFrom(s => s.tags.join(";"))
+    (d) => d.tags,
+    mapFrom((s) => s.tags.join(";"))
   ),
   forMember(
-    d => d.categories,
-    mapFrom(s => s.categories.join(";"))
+    (d) => d.categories,
+    mapFrom((s) => s.categories.join(";"))
   )
 );

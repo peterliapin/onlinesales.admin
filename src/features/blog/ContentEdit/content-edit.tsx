@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { 
-  ContentDetailsDto, 
-  ContentUpdateDto, 
-  ContentCreateDto, 
-  HttpResponse, 
-  ProblemDetails
+import {
+  ContentDetailsDto,
+  ContentUpdateDto,
+  ContentCreateDto,
+  HttpResponse,
+  ProblemDetails,
 } from "@lib/network/swagger-client";
 import { useRequestContext } from "@providers/request-provider";
 import { ContentEditContainer } from "../index.styled";
@@ -33,15 +33,15 @@ import { CoreModule, rootRoute } from "@lib/router";
 import { GhostLink } from "@components/ghost-link";
 import MarkdownViewer from "@components/MarkdownViewer";
 import { useFormik, FormikHelpers } from "formik";
-import { 
-  TypeDefaultValues, 
-  ContentEditValidationScheme, 
-  ContentEditAvailableLanguages, 
+import {
+  TypeDefaultValues,
+  ContentEditValidationScheme,
+  ContentEditAvailableLanguages,
   ContentEditAvailableTypes,
   ContentEditAvailableTags,
   ContentEditAvailableCategories,
   ContentEditDefaultValues,
-  ContentDetails
+  ContentDetails,
 } from "./validation";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 import { Automapper } from "@lib/automapper";
@@ -59,54 +59,51 @@ export const ContentEdit = (props: ContentEditProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isSaving, setIsSaving] = useState<boolean>(false);
 
-
-  const submit = async (values: ContentDetails, helpers : FormikHelpers<ContentDetails>) => {
-    let response : HttpResponse<ContentDetailsDto, void | ProblemDetails>;
+  const submit = async (values: ContentDetails, helpers: FormikHelpers<ContentDetails>) => {
+    let response: HttpResponse<ContentDetailsDto, void | ProblemDetails>;
     const loadingToastId = toast.loading(`${values?.id ? "Updating" : "Creating"} a post...`);
     try {
       setIsSaving(true);
       if (values?.id) {
         const content = Automapper.map<ContentDetails, ContentUpdateDto>(
           values,
-          "ContentDetails", 
+          "ContentDetails",
           "ContentUpdateDto"
         );
         response = await client.api.contentPartialUpdate(Number(values.id), content);
-      } else{
+      } else {
         const content = Automapper.map<ContentDetails, ContentCreateDto>(
           values,
-          "ContentDetails", 
+          "ContentDetails",
           "ContentCreateDto"
         );
         response = await client.api.contentCreate(content);
       }
       helpers.setValues(
         Automapper.map<ContentDetailsDto, ContentDetails>(
-          response.data, 
-          "ContentDetailsDto", 
+          response.data,
+          "ContentDetailsDto",
           "ContentDetails"
         )
       );
-      toast.update(loadingToastId, 
-        { 
-          render: `Successfully ${values?.id ? "update" : "create"} post`,
-          type: "success", 
-          isLoading: false,
-          autoClose: 5000,
-          closeOnClick: true,
-          hideProgressBar: false,
-        });
+      toast.update(loadingToastId, {
+        render: `Successfully ${values?.id ? "update" : "create"} post`,
+        type: "success",
+        isLoading: false,
+        autoClose: 5000,
+        closeOnClick: true,
+        hideProgressBar: false,
+      });
     } catch (data: any) {
       const errMessage = data.error && data.error.title;
-      toast.update(loadingToastId, 
-        { 
-          render: `Failed to ${values?.id ? "update" : "create"} post (${errMessage})`,
-          type: "error", 
-          isLoading: false,
-          autoClose: 5000,
-          closeOnClick: true,
-          hideProgressBar: false,
-        });
+      toast.update(loadingToastId, {
+        render: `Failed to ${values?.id ? "update" : "create"} post (${errMessage})`,
+        type: "error",
+        isLoading: false,
+        autoClose: 5000,
+        closeOnClick: true,
+        hideProgressBar: false,
+      });
     } finally {
       setIsSaving(false);
       helpers.setSubmitting(false);
@@ -119,39 +116,33 @@ export const ContentEdit = (props: ContentEditProps) => {
     onSubmit: submit,
   });
 
-  
-  const valueUpdate = (event : React.SyntheticEvent<Element, Event>) => {
+  const valueUpdate = (event: React.SyntheticEvent<Element, Event>) => {
     setWasModified(true);
     formik.handleChange(event);
   };
-  const autoCompleteValueUpdate = (
-    field : string,
-    value : string | null
-  ) => {
+  const autoCompleteValueUpdate = (field: string, value: string | null) => {
     setWasModified(true);
     formik.setFieldValue(field, value);
   };
-  const autoCompleteMultipleValueUpdate = (
-    field: string,
-    value : string[],
-  ) => {
+  const autoCompleteMultipleValueUpdate = (field: string, value: string[]) => {
     setWasModified(true);
     formik.setFieldValue(field, value);
   };
 
-  const typeFieldUpdate = (event : React.SyntheticEvent<Element, Event>, value : string | null) => {
-    let template : TypeDefaultValues;
-    let typeName : string;
-    if (value === null){
+  const typeFieldUpdate = (event: React.SyntheticEvent<Element, Event>, value: string | null) => {
+    let template: TypeDefaultValues;
+    let typeName: string;
+    if (value === null) {
       template = ContentEditDefaultValues.filter((v) => v.type == "Other")[0];
       typeName = template.defaultValues.type;
-    }else{
-      template = ContentEditDefaultValues.filter((v) => v.type == value)[0] ||
-      ContentEditDefaultValues.filter((v) => v.type == "Other")[0];
+    } else {
+      template =
+        ContentEditDefaultValues.filter((v) => v.type == value)[0] ||
+        ContentEditDefaultValues.filter((v) => v.type == "Other")[0];
       typeName = value;
     }
     // Override 'type' because otherwise it always would be 'Other' in case of failure type set
-    formik.setValues({ ... template.defaultValues, type: typeName });
+    formik.setValues({ ...template.defaultValues, type: typeName });
     setWasModified(true);
   };
 
@@ -163,8 +154,8 @@ export const ContentEdit = (props: ContentEditProps) => {
           const { data } = await client.api.contentDetail(Number(id));
           formik.setValues(
             Automapper.map<ContentDetailsDto, ContentDetails>(
-              data, 
-              "ContentDetailsDto", 
+              data,
+              "ContentDetailsDto",
               "ContentDetails"
             )
           );
@@ -191,9 +182,7 @@ export const ContentEdit = (props: ContentEditProps) => {
             <Link to={`${rootRoute}${CoreModule.blog}`} component={GhostLink} underline="hover">
               Blog
             </Link>
-            <Typography variant="body1">
-              {formik.values.title}
-            </Typography>
+            <Typography variant="body1">{formik.values.title}</Typography>
           </Breadcrumbs>
         </ModuleHeaderSubtitleContainer>
         <ModuleHeaderActionContainer></ModuleHeaderActionContainer>
@@ -256,7 +245,9 @@ export const ContentEdit = (props: ContentEditProps) => {
                   </Grid>
                   <Grid xs={12} sm={12} item data-color-mode="light">
                     <MarkdownEditor
-                      onChange={(value) => {formik.setFieldValue("body", value);}}
+                      onChange={(value) => {
+                        formik.setFieldValue("body", value);
+                      }}
                       value={formik.values.body}
                       isReadOnly={props.readonly}
                     />
@@ -358,9 +349,9 @@ export const ContentEdit = (props: ContentEditProps) => {
                       value={formik.values.tags}
                       onChange={(ev, val) => autoCompleteMultipleValueUpdate("tags", val)}
                       renderInput={(params) => (
-                        <TextField 
-                          {...params} 
-                          label="Tags" 
+                        <TextField
+                          {...params}
+                          label="Tags"
                           placeholder="Select Tags"
                           name="tags"
                           error={formik.touched.tags && Boolean(formik.errors.tags)}
@@ -376,9 +367,9 @@ export const ContentEdit = (props: ContentEditProps) => {
                       value={formik.values.categories}
                       onChange={(ev, val) => autoCompleteMultipleValueUpdate("categories", val)}
                       renderInput={(params) => (
-                        <TextField 
-                          {...params} 
-                          label="Categories" 
+                        <TextField
+                          {...params}
+                          label="Categories"
                           placeholder="Select Categories"
                           name="categories"
                           error={formik.touched.categories && Boolean(formik.errors.categories)}
@@ -388,11 +379,7 @@ export const ContentEdit = (props: ContentEditProps) => {
                   </Grid>
                   <Grid item xs={12}>
                     {!props.readonly && (
-                      <Button
-                        startIcon={<Save />}
-                        disabled={!wasModified}
-                        type="submit"
-                      >
+                      <Button startIcon={<Save />} disabled={!wasModified} type="submit">
                         Save
                       </Button>
                     )}

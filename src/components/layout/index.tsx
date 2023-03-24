@@ -13,11 +13,11 @@ export const AppLayoutContainerStyled = styled(Box)`
     "sidebar main";
 `;
 
-export const AppLayoutContainer = ({children}: PropsWithChildren) => {
+export const AppLayoutContainer = ({ children }: PropsWithChildren) => {
   return (
     <AppLayoutContainerStyled>
       {children}
-      <ToastContainer/>
+      <ToastContainer />
     </AppLayoutContainerStyled>
   );
 };

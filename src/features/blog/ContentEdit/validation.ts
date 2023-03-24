@@ -1,40 +1,33 @@
 import zod from "zod";
 
 export interface ContentDetails {
-    id: string | null;
-    type: string;
-    title: string,
-    description: string,
-    body: string,
-    coverImageUrl: string,
-    coverImageAlt: string,
-    slug: string,
-    author: string,
-    language: string,
-    allowComments: boolean,
-    tags: string[],
-    categories: string[],
-    createdAt: string | null,
-    updatedAt: string | null,
+  id: string | null;
+  type: string;
+  title: string;
+  description: string;
+  body: string;
+  coverImageUrl: string;
+  coverImageAlt: string;
+  slug: string;
+  author: string;
+  language: string;
+  allowComments: boolean;
+  tags: string[];
+  categories: string[];
+  createdAt: string | null;
+  updatedAt: string | null;
 }
 
 export interface TypeDefaultValues {
-    type: string;
-    defaultValues: ContentDetails;
+  type: string;
+  defaultValues: ContentDetails;
 }
 
-export const ContentEditAvailableLanguages = [
-  "English",
-  "Russian",
-] as const;
+export const ContentEditAvailableLanguages = ["English", "Russian"] as const;
 
-export const ContentEditAvailableTypes = [
-  "Product",
-  "Case",
-  "Other"
-] as const;
+export const ContentEditAvailableTypes = ["Product", "Case", "Other"] as const;
 
-export const ContentEditDefaultValues : TypeDefaultValues[] = [
+export const ContentEditDefaultValues: TypeDefaultValues[] = [
   {
     type: "Product",
     defaultValues: {
@@ -53,7 +46,7 @@ export const ContentEditDefaultValues : TypeDefaultValues[] = [
       categories: [],
       createdAt: "",
       updatedAt: "",
-    }
+    },
   },
   {
     type: "Case",
@@ -73,7 +66,7 @@ export const ContentEditDefaultValues : TypeDefaultValues[] = [
       categories: [],
       createdAt: "",
       updatedAt: "",
-    }
+    },
   },
   {
     type: "Other",
@@ -93,23 +86,15 @@ export const ContentEditDefaultValues : TypeDefaultValues[] = [
       categories: [],
       createdAt: "",
       updatedAt: "",
-    }
-  }
+    },
+  },
 ];
 
-/// TODO: Runtime 
-export const ContentEditAvailableTags = [
-  "Tag 1",
-  "Tag 2",
-  "Tag 3"
-] as const;
+/// TODO: Runtime
+export const ContentEditAvailableTags = ["Tag 1", "Tag 2", "Tag 3"] as const;
 
-/// TODO: Runtime 
-export const ContentEditAvailableCategories = [
-  "Cat 1",
-  "Cat 2",
-  "Cat 3"
-] as const;
+/// TODO: Runtime
+export const ContentEditAvailableCategories = ["Cat 1", "Cat 2", "Cat 3"] as const;
 
 export const ContentEditValidationScheme = zod.object({
   type: zod.enum(ContentEditAvailableTypes),
