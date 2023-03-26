@@ -66,7 +66,6 @@ export const ContentEdit = (props: ContentEditProps) => {
   const { id } = useParams();
   const [wasModified, setWasModified] = useState<boolean>(false);
   const [coverWasModified, setCoverWasModified] = useState<boolean>(false);
-  const [frontmatterWasModified, setFrontmatterWasModified] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isSaving, setIsSaving] = useState<boolean>(false);
   const [isFrontmatterEditorOpened, setFrontmatterEditorOpened] = useState<boolean>(false);
@@ -155,7 +154,6 @@ export const ContentEdit = (props: ContentEditProps) => {
         hideProgressBar: false,
       });
       setWasModified(false);
-      setFrontmatterWasModified(false);
       setCoverWasModified(false);
     } catch (data: any) {
       const errMessage = data.error && data.error.title;
@@ -253,7 +251,7 @@ export const ContentEdit = (props: ContentEditProps) => {
           (items)=> {
             formik.setFieldValue("frontmatter", items);
             setFrontmatterEditorOpened(false);
-            setFrontmatterWasModified(true);
+            setWasModified(true);
           }
         }
         initialValues={formik.values.frontmatter}
@@ -484,7 +482,7 @@ export const ContentEdit = (props: ContentEditProps) => {
                     {!props.readonly && (
                       <Button 
                         startIcon={<Save />} 
-                        disabled={!(wasModified || coverWasModified || frontmatterWasModified)} 
+                        disabled={!(wasModified || coverWasModified)} 
                         type="submit"
                       >
                         Save
