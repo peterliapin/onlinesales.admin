@@ -1,4 +1,5 @@
 import zod from "zod";
+import { FrontmatterEditorInitialValue } from "@components/FrontmatterEditor";
 
 export interface ContentDetails {
   id: string | null;
@@ -7,6 +8,7 @@ export interface ContentDetails {
   description: string;
   body: string;
   coverImageUrl: string;
+  coverImageFile: File | null;
   coverImageAlt: string;
   slug: string;
   author: string;
@@ -17,6 +19,7 @@ export interface ContentDetails {
   createdAt: string | null;
   updatedAt: string | null;
   files: File[] | null;
+  frontmatter: FrontmatterEditorInitialValue[];
 }
 
 export interface TypeDefaultValues {
@@ -46,6 +49,7 @@ export const ContentEditDefaultValues: TypeDefaultValues[] = [
       description: "",
       body: "",
       coverImageUrl: "",
+      coverImageFile: null,
       coverImageAlt: "",
       slug: "",
       author: "",
@@ -56,6 +60,7 @@ export const ContentEditDefaultValues: TypeDefaultValues[] = [
       createdAt: "",
       updatedAt: "",
       files: null,
+      frontmatter: [],
     },
   },
   {
@@ -67,6 +72,7 @@ export const ContentEditDefaultValues: TypeDefaultValues[] = [
       description: "",
       body: "",
       coverImageUrl: "",
+      coverImageFile: null,
       coverImageAlt: "",
       slug: "",
       author: "",
@@ -77,6 +83,7 @@ export const ContentEditDefaultValues: TypeDefaultValues[] = [
       createdAt: "",
       updatedAt: "",
       files: null,
+      frontmatter: [],
     },
   },
   {
@@ -88,6 +95,7 @@ export const ContentEditDefaultValues: TypeDefaultValues[] = [
       description: "",
       body: "",
       coverImageUrl: "",
+      coverImageFile: null,
       coverImageAlt: "",
       slug: "",
       author: "",
@@ -98,6 +106,7 @@ export const ContentEditDefaultValues: TypeDefaultValues[] = [
       createdAt: "",
       updatedAt: "",
       files: null,
+      frontmatter: [],
     },
   },
 ];
@@ -107,7 +116,7 @@ export const ContentEditValidationScheme = zod.object({
   title: zod.string(),
   description: zod.string(),
   body: zod.string(),
-  coverImageUrl: zod.string().url(),
+  coverImageFile: zod.instanceof(File),
   coverImageAlt: zod.string(),
   slug: zod.string(),
   author: zod.string(),

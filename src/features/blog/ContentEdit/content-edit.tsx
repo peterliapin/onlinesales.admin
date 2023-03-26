@@ -27,9 +27,8 @@ import {
   Link,
   TextField,
   Typography,
-  Divider,
 } from "@mui/material";
-import { NavigateNext, Report, Save } from "@mui/icons-material";
+import { CurrencyBitcoin, NavigateNext, Report, Save } from "@mui/icons-material";
 import { CoreModule, rootRoute } from "@lib/router";
 import { GhostLink } from "@components/ghost-link";
 import MarkdownViewer from "@components/MarkdownViewer";
@@ -50,6 +49,13 @@ import { Automapper } from "@lib/automapper";
 import MarkdownEditor from "@components/MarkdownEditor";
 import { Id, toast } from "react-toastify";
 import FileDropdown from "@components/FileDropdown";
+import
+FrontmatterEditorModal,
+{ 
+  FrontmatterEditorInitialValue
+} from "@components/FrontmatterEditor";
+import { buildAbsoluteUrl } from "@lib/network/utils";
+import graymatter from "gray-matter";
 
 interface ContentEditProps {
   readonly?: boolean;
@@ -59,28 +65,69 @@ export const ContentEdit = (props: ContentEditProps) => {
   const { client } = useRequestContext();
   const { id } = useParams();
   const [wasModified, setWasModified] = useState<boolean>(false);
+  const [coverWasModified, setCoverWasModified] = useState<boolean>(false);
+  const [frontmatterWasModified, setFrontmatterWasModified] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isSaving, setIsSaving] = useState<boolean>(false);
+  const [isFrontmatterEditorOpened, setFrontmatterEditorOpened] = useState<boolean>(false);
 
   const submit = async (values: ContentDetails, helpers: FormikHelpers<ContentDetails>) => {
     let response: HttpResponse<ContentDetailsDto, void | ProblemDetails>;
+    let coverUrl = values.coverImageUrl;
     const loadingToastId = toast.loading(`${values?.id ? "Updating" : "Creating"} a post...`);
+    const graymatteredFrontmatter = values.frontmatter.reduce(
+      (previousValue: { [key: string]: string }, currentValue) => {
+        const copy = {... previousValue};
+        const key = currentValue.key;
+        const value = currentValue.value;
+        copy[key] = value;
+        return copy;
+      }, {} as { [key: string]: string });
+    const matteredBody = graymatter.stringify(values.body, graymatteredFrontmatter);
     try {
       setIsSaving(true);
+      if (coverWasModified){
+        const { data } = await client.api.mediaCreate(
+          {
+            Image: values.coverImageFile!,
+            ScopeUid: values.slug,
+          }
+        );
+        if (data.location === null){
+          const errMessage = "imageupload.data.location is null";
+          toast.update(loadingToastId, {
+            render: `Failed to ${values?.id ? "update" : "create"} post (${errMessage})`,
+            type: "error",
+            isLoading: false,
+            autoClose: 5000,
+            closeOnClick: true,
+            hideProgressBar: false,
+          });
+        }
+        coverUrl = data.location as string;
+      }
       if (values?.id) {
         const content = Automapper.map<ContentDetails, ContentUpdateDto>(
           values,
           "ContentDetails",
           "ContentUpdateDto"
         );
-        response = await client.api.contentPartialUpdate(Number(values.id), content);
+        response = await client.api.contentPartialUpdate(
+          Number(values.id), 
+          {...content, coverImageUrl: coverUrl, body: matteredBody}
+        );
       } else {
         const content = Automapper.map<ContentDetails, ContentCreateDto>(
           values,
           "ContentDetails",
           "ContentCreateDto"
         );
-        response = await client.api.contentCreate(content);
+        response = await client.api.contentCreate(
+          {
+            ...content, 
+            coverImageUrl: coverUrl, 
+            body: matteredBody
+          });
       }
       helpers.setValues(
         Automapper.map<ContentDetailsDto, ContentDetails>(
@@ -89,14 +136,27 @@ export const ContentEdit = (props: ContentEditProps) => {
           "ContentDetails"
         )
       );
+      const mattered = graymatter(response.data.body);
+
+      const normalizedFrontmatter = Object.keys(mattered.data).map((key) =>{
+        return {
+          key: key,
+          value: mattered.data[key]
+        } as FrontmatterEditorInitialValue;
+      });
+      helpers.setFieldValue("frontmatter", normalizedFrontmatter);
+      helpers.setFieldValue("body", mattered.content);
       toast.update(loadingToastId, {
-        render: `Successfully ${values?.id ? "update" : "create"} post`,
+        render: `Successfully ${values?.id ? "updated" : "created"} post`,
         type: "success",
         isLoading: false,
         autoClose: 5000,
         closeOnClick: true,
         hideProgressBar: false,
       });
+      setWasModified(false);
+      setFrontmatterWasModified(false);
+      setCoverWasModified(false);
     } catch (data: any) {
       const errMessage = data.error && data.error.title;
       toast.update(loadingToastId, {
@@ -146,6 +206,12 @@ export const ContentEdit = (props: ContentEditProps) => {
     setWasModified(true);
   };
 
+  const onCoverImageChange = (file: File | null) => {
+    console.log(file);
+    formik.setFieldValue("coverImageFile", file);
+    setCoverWasModified(true);
+  };
+
   useEffect(() => {
     (async () => {
       try {
@@ -159,6 +225,17 @@ export const ContentEdit = (props: ContentEditProps) => {
               "ContentDetails"
             )
           );
+          formik.setFieldValue("coverImageFile", new File([], "dummy"));
+          const mattered = graymatter(data.body);
+
+          const normalizedFrontmatter = Object.keys(mattered.data).map((key) =>{
+            return {
+              key: key,
+              value: mattered.data[key]
+            } as FrontmatterEditorInitialValue;
+          });
+          formik.setFieldValue("frontmatter", normalizedFrontmatter);
+          formik.setFieldValue("body", mattered.content);
         }
       } catch (e) {
         console.log(e);
@@ -170,6 +247,17 @@ export const ContentEdit = (props: ContentEditProps) => {
 
   return (
     <>
+      <FrontmatterEditorModal
+        isOpen={isFrontmatterEditorOpened}
+        handleClose={
+          (items)=> {
+            formik.setFieldValue("frontmatter", items);
+            setFrontmatterEditorOpened(false);
+            setFrontmatterWasModified(true);
+          }
+        }
+        initialValues={formik.values.frontmatter}
+      />
       <ModuleHeaderContainer>
         <ModuleHeaderTitleContainer>
           <Typography variant="h3">Blog</Typography>
@@ -211,6 +299,7 @@ export const ContentEdit = (props: ContentEditProps) => {
                             placeholder="Select Type"
                             variant="outlined"
                             error={formik.touched.type && Boolean(formik.errors.type)}
+                            helperText={formik.touched.type && formik.errors.type}
                           />
                         )}
                       />
@@ -225,6 +314,7 @@ export const ContentEdit = (props: ContentEditProps) => {
                         variant="outlined"
                         onChange={valueUpdate}
                         error={formik.touched.title && Boolean(formik.errors.title)}
+                        helperText={formik.touched.title && formik.errors.title}
                         fullWidth
                       ></TextField>
                     </Grid>
@@ -235,6 +325,7 @@ export const ContentEdit = (props: ContentEditProps) => {
                         name="description"
                         value={formik.values.description}
                         error={formik.touched.description && Boolean(formik.errors.description)}
+                        helperText={formik.touched.description && formik.errors.description}
                         multiline={true}
                         minRows={3}
                         placeholder="Enter description"
@@ -246,10 +337,18 @@ export const ContentEdit = (props: ContentEditProps) => {
                   </Grid>
                   <Grid item xs={6} sm={6}>
                     <FileDropdown
-                      onChange={(file) => console.log(file)}
+                      onChange={onCoverImageChange}
                       acceptMIME="image/*"
                       maxFileSize={ContentEditMaximumImageSize}
+                      initialUrl={buildAbsoluteUrl(formik.values.coverImageUrl)}
+                      error={formik.touched.coverImageFile && Boolean(formik.errors.coverImageFile)}
+                      helperText={formik.touched.coverImageFile && formik.errors.coverImageFile}
                     />
+                  </Grid>
+                  <Grid item xs={6} sm={6}>
+                    <Button onClick={() => setFrontmatterEditorOpened(true)}>
+                      Frontmatter
+                    </Button>
                   </Grid>
                 </Grid>
                 <Grid container spacing={3} xs={12} sm={12}>
@@ -265,24 +364,11 @@ export const ContentEdit = (props: ContentEditProps) => {
                   <Grid xs={6} sm={6} item>
                     <TextField
                       disabled={props.readonly}
-                      label="Cover Image Url"
-                      name="coverImageUrl"
-                      value={formik.values.coverImageUrl}
-                      error={formik.touched.coverImageUrl && Boolean(formik.errors.coverImageAlt)}
-                      helperText={formik.touched.coverImageUrl && formik.errors.coverImageUrl}
-                      placeholder="Enter Cover Image Url"
-                      variant="outlined"
-                      onChange={valueUpdate}
-                      fullWidth
-                    ></TextField>
-                  </Grid>
-                  <Grid xs={6} sm={6} item>
-                    <TextField
-                      disabled={props.readonly}
                       label="Cover Image Alt Text"
                       name="coverImageAlt"
                       value={formik.values.coverImageAlt}
                       error={formik.touched.coverImageAlt && Boolean(formik.errors.coverImageAlt)}
+                      helperText={formik.touched.coverImageAlt && formik.errors.coverImageAlt}
                       placeholder="Enter Cover Image Alt Text"
                       variant="outlined"
                       onChange={valueUpdate}
@@ -296,6 +382,7 @@ export const ContentEdit = (props: ContentEditProps) => {
                       name="slug"
                       value={formik.values.slug}
                       error={formik.touched.slug && Boolean(formik.errors.slug)}
+                      helperText={formik.touched.slug && formik.errors.slug}
                       placeholder="Enter slug"
                       variant="outlined"
                       onChange={valueUpdate}
@@ -316,6 +403,7 @@ export const ContentEdit = (props: ContentEditProps) => {
                           placeholder="Select Author"
                           variant="outlined"
                           error={formik.touched.author && Boolean(formik.errors.author)}
+                          helperText={formik.touched.author && formik.errors.author}
                         />
                       )}
                     />
@@ -336,6 +424,7 @@ export const ContentEdit = (props: ContentEditProps) => {
                           variant="outlined"
                           name="language"
                           error={formik.touched.language && Boolean(formik.errors.language)}
+                          helperText={formik.touched.language && formik.errors.language}
                         />
                       )}
                     />
@@ -367,6 +456,7 @@ export const ContentEdit = (props: ContentEditProps) => {
                           placeholder="Select Tags"
                           name="tags"
                           error={formik.touched.tags && Boolean(formik.errors.tags)}
+                          helperText={formik.touched.tags && formik.errors.tags}
                         />
                       )}
                     />
@@ -385,13 +475,18 @@ export const ContentEdit = (props: ContentEditProps) => {
                           placeholder="Select Categories"
                           name="categories"
                           error={formik.touched.categories && Boolean(formik.errors.categories)}
+                          helperText={formik.touched.categories && formik.errors.categories}
                         />
                       )}
                     />
                   </Grid>
                   <Grid item xs={12}>
                     {!props.readonly && (
-                      <Button startIcon={<Save />} disabled={!wasModified} type="submit">
+                      <Button 
+                        startIcon={<Save />} 
+                        disabled={!(wasModified || coverWasModified || frontmatterWasModified)} 
+                        type="submit"
+                      >
                         Save
                       </Button>
                     )}

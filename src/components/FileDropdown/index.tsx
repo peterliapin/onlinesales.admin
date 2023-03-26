@@ -10,11 +10,20 @@ interface FileDropdownProps {
     acceptMIME: string;
     maxFileSize: number;
     onChange: onChangeFunc;
+    initialUrl: string;
+    error?: boolean | null;
+    helperText?: string | boolean | undefined;
 };
 
-const FileDropdown = ({acceptMIME, maxFileSize, onChange}:FileDropdownProps) =>{
-  const [currentImage, setCurrentImage] = useState<File | null>(null);
-  const [currentImageUrl, setCurrentImageUrl] = useState<string>("");
+const FileDropdown = ({
+  acceptMIME, 
+  maxFileSize, 
+  onChange, 
+  initialUrl, 
+  error, 
+  helperText
+}:FileDropdownProps) =>{
+  const [currentImageUrl, setCurrentImageUrl] = useState<string>(initialUrl);
 
   const onDrop = (acceptedFiles: File[], rejections: FileRejection[] ) => {
     if (rejections.length > 0){
@@ -26,7 +35,6 @@ const FileDropdown = ({acceptMIME, maxFileSize, onChange}:FileDropdownProps) =>{
     }
     if (acceptedFiles.length !== 0) {
       const file = acceptedFiles[0];
-      setCurrentImage(file);
       const fileReader = new FileReader();
       fileReader.onload = (e) => {
         if (e.target === null) {
@@ -44,11 +52,17 @@ const FileDropdown = ({acceptMIME, maxFileSize, onChange}:FileDropdownProps) =>{
       onChange(acceptedFiles[0]);
     }
   };
+
+  const onReset = () => {
+    setCurrentImageUrl("");
+    onChange(null);
+  };
+
   return (
     <>
       <BoxStyled>
         {
-          currentImage === null ?
+          currentImageUrl.length === 0 ?
             <Dropzone 
               onDrop={onDrop} 
               maxSize={maxFileSize} 
@@ -85,8 +99,8 @@ const FileDropdown = ({acceptMIME, maxFileSize, onChange}:FileDropdownProps) =>{
                 <Box
                   component="img"
                   sx={{
-                    height: 233,
-                    width: 350,
+                    height: 1,
+                    width: 1,
                     maxHeight: { xs: 233, md: 167 },
                     maxWidth: { xs: 350, md: 250 },
                     "object-fit": "contain"
@@ -98,7 +112,7 @@ const FileDropdown = ({acceptMIME, maxFileSize, onChange}:FileDropdownProps) =>{
               <Grid item xs={12} style={{textAlign: "center"}}>
                 <Button 
                   variant="outlined" 
-                  onClick={() => {setCurrentImage(null); onChange(null); }}
+                  onClick={onReset}
                 >
                   Reset
                 </Button>

@@ -21,5 +21,8 @@
     },
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
+    "types": [
+      "node"
+    ],
   }
 }

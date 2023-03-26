@@ -27,7 +27,6 @@ export const CommentList = ({ contentId }: CommentListProps) => {
           const { data } = await client.api.commentsList(
             {
               query: filter,
-              downloadCsv: false,
             },
             {
               signal: controller.signal,

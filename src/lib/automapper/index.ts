@@ -44,6 +44,7 @@ PojosMetadataMap.create<ContentDetails>("ContentDetails", {
   type: String,
   author: String,
   language: String,
+  title: String,
 });
 
 PojosMetadataMap.create<ContentUpdateDto>("ContentUpdateDto", {

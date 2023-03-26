@@ -2,7 +2,7 @@
 delete process.env.TS_NODE_PROJECT;
 
 import {resolve} from "path";
-import {container} from "webpack";
+import {container, ProvidePlugin} from "webpack";
 import HtmlWebpackPlugin from "html-webpack-plugin";
 import {CleanWebpackPlugin} from "clean-webpack-plugin";
 import TsconfigPathsPlugin from "tsconfig-paths-webpack-plugin";
@@ -37,7 +37,10 @@ const configuration: Configuration = {
       "@lib": resolve(__dirname, "../src/lib"),
       "@features": resolve(__dirname, "../src/features"),
       "@components": resolve(__dirname, "../src/components"),
-    }
+    },
+    fallback: {
+      "buffer": require.resolve("buffer/")
+    },
   },
   module: {
     rules: [
@@ -84,6 +87,9 @@ const configuration: Configuration = {
           singleton: true,
         },
       },
+    }),
+    new ProvidePlugin({
+      Buffer: ["buffer", "Buffer"],
     }),
   ],
 };
