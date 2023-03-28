@@ -1,8 +1,15 @@
 import { Avatar, ListItemAvatar } from "@mui/material";
-import { ContactDetailsDto } from "lib/network/swagger-client";
+import { ContactDetailsDto, ContactImportDto } from "lib/network/swagger-client";
 import { useRequestContext } from "providers/request-provider";
 import { ContactNameListItem, ContactNameListItemText } from "./index.styled";
-import { contactImportBaseObject, contactListBreadcrumbLinks } from "./constants";
+import {
+  contactListBreadcrumbLinks,
+  contactListCurrentBreadcrumb,
+  defaultFilterOrderColumn,
+  defaultFilterOrderDirection,
+  modelName,
+  searchLabel,
+} from "./constants";
 import { DataList } from "components/data-list";
 import { GridColDef } from "@mui/x-data-grid";
 import { CoreModule } from "lib/router";
@@ -11,10 +18,15 @@ export const Contacts = () => {
   const { client } = useRequestContext();
 
   const getContactList = async (query: string) => {
-    const result = await client.api.contactsList({
-      query: query,
-    });
-    return result;
+    try {
+      const result = await client.api.contactsList({
+        query: query,
+      });
+      return result;
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
   };
 
   const getContactExportUrlAsync = async (query: string) => {
@@ -24,7 +36,7 @@ export const Contacts = () => {
     return url;
   };
 
-  const handleContactImport = async (data: any) => {
+  const handleContactImport = async (data: ContactImportDto[]) => {
     await client.api.contactsImportCreate(data);
   };
 
@@ -82,20 +94,22 @@ export const Contacts = () => {
 
   return (
     <DataList
-      modelName="contact"
+      modelName={modelName}
       columns={columns}
       dataListBreadcrumbLinks={contactListBreadcrumbLinks}
-      currentBreadcrumb="Contacts"
-      defaultFilterOrderColumn="firstName"
-      defaultFilterOrderDirection="asc"
-      searchBarLabel="Search Contacts"
+      currentBreadcrumb={contactListCurrentBreadcrumb}
+      defaultFilterOrderColumn={defaultFilterOrderColumn}
+      defaultFilterOrderDirection={defaultFilterOrderDirection}
+      searchBarLabel={searchLabel}
       endRoute={CoreModule.contacts}
-      importFieldsObject={contactImportBaseObject}
       getModelDataList={getContactList}
       getExportUrl={getContactExportUrlAsync}
       dataImportCreate={handleContactImport}
       initialGridState={{
         columns: { columnVisibilityModel: { lastName: false, email: false } },
+        sorting: {
+          sortModel: [{ field: defaultFilterOrderColumn, sort: defaultFilterOrderDirection }],
+        },
       }}
     ></DataList>
   );

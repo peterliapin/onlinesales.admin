@@ -1,13 +1,13 @@
 import { CircularProgress } from "@mui/material";
 import { CustomizedSnackbar } from "components/snackbar";
 import { initialSnackBarParams, uploadFailedSnackBarParams } from "components/snackbar/constants";
-import { CoreModule, getCoreModuleRoute } from "lib/router";
+import { CoreModule } from "lib/router";
 import { useState } from "react";
 import { ReactSpreadsheetImport } from "@wavepoint/react-spreadsheet-import";
 import { Result } from "@wavepoint/react-spreadsheet-import/types/types";
 import { StyledBackdrop } from "./index.styled";
 import { getImportFields } from "utils/import-key-mappings";
-import { useNavigate } from "react-router-dom";
+import { useCoreModuleNavigation } from "utils/helper";
 
 interface csvImportPorps {
   isOpen: boolean;
@@ -18,7 +18,7 @@ interface csvImportPorps {
 }
 
 export const CsvImport = ({ isOpen, onClose, onUpload, object, endRoute }: csvImportPorps) => {
-  const navigate = useNavigate();
+  const handleNavigation = useCoreModuleNavigation();
   const [isUploading, setIsUploading] = useState(false);
   const [snackBarParams, setSnackBarParams] = useState(initialSnackBarParams);
 
@@ -39,12 +39,7 @@ export const CsvImport = ({ isOpen, onClose, onUpload, object, endRoute }: csvIm
   };
 
   const handleSuccess = () => {
-    const toRoute = getCoreModuleRoute(endRoute as CoreModule);
-    if (location.pathname === toRoute) {
-      window.location.reload();
-    } else {
-      navigate(toRoute);
-    }
+    handleNavigation(endRoute);
   };
 
   return (

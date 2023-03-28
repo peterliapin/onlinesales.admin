@@ -15,12 +15,12 @@ import {
   ModuleHeaderSubtitleContainer,
 } from "components/module";
 import { CustomizedSnackbar } from "components/snackbar";
-import { CoreModule, getCoreModuleRoute } from "lib/router";
+import { CoreModule } from "lib/router";
 import { EMAIL_REGEX } from "utils/constants";
 import { initialSnackBarParams, serverErrorSnackBarParams } from "components/snackbar/constants";
 import { BreadCrumbNavigation } from "components/breadcrumbs";
 import { contactFormBreadcrumbLinks } from "../constants";
-import { useNavigate } from "react-router-dom";
+import { useCoreModuleNavigation } from "utils/helper";
 
 interface ContactFormProps {
   contact: ContactDetailsDto;
@@ -30,7 +30,7 @@ interface ContactFormProps {
 }
 
 export const ContactForm = ({ contact, updateContact, handleSave, isEdit }: ContactFormProps) => {
-  const navigate = useNavigate();
+  const handleNavigation = useCoreModuleNavigation();
 
   const [isInvalidEmail, setIsInvalidEmail] = useState(false);
 
@@ -74,16 +74,11 @@ export const ContactForm = ({ contact, updateContact, handleSave, isEdit }: Cont
   };
 
   const handleSuccess = () => {
-    const toRoute = getCoreModuleRoute(CoreModule.contacts);
-    if (location.pathname === toRoute) {
-      window.location.reload();
-    } else {
-      navigate(toRoute);
-    }
+    handleNavigation(CoreModule.contacts);
   };
 
   const handleCancel = () => {
-    navigate(getCoreModuleRoute(CoreModule.contacts));
+    handleNavigation(CoreModule.contacts);
   };
 
   return (

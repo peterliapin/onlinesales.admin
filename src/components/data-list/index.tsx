@@ -6,7 +6,7 @@ import {
   ModuleHeaderContainer,
   ModuleHeaderSubtitleContainer,
 } from "components/module";
-import { CoreModule, getAddFormRoute, getCoreModuleRoute } from "lib/router";
+import { CoreModule, getAddFormRoute } from "lib/router";
 import { GhostLink } from "components/ghost-link";
 import {
   ActionsContainer,
@@ -30,18 +30,19 @@ import { SearchBar } from "components/search-bar";
 import { DataTableGrid } from "components/data-table";
 import { GridColDef, GridSortDirection } from "@mui/x-data-grid";
 import { GridInitialStateCommunity } from "@mui/x-data-grid/models/gridStateCommunity";
+import { getModelByName } from "lib/network/swagger-models";
+import { BreadcrumbLink } from "utils/types";
 
 type dataListProps = {
   modelName: string;
   columns: GridColDef<any>[];
-  dataListBreadcrumbLinks: any[];
+  dataListBreadcrumbLinks: BreadcrumbLink[];
   currentBreadcrumb: string;
   searchBarLabel: string;
   defaultFilterOrderColumn: string;
   defaultFilterOrderDirection: string;
   initialGridState: GridInitialStateCommunity | undefined;
   endRoute: string;
-  importFieldsObject: any;
   getModelDataList: (query: string) => any;
   getExportUrl: (query: string) => Promise<string>;
   dataImportCreate: (data: any) => void;
@@ -68,12 +69,11 @@ export const DataList = ({
   defaultFilterOrderDirection,
   initialGridState,
   endRoute,
-  importFieldsObject,
   getModelDataList,
   getExportUrl,
   dataImportCreate,
 }: dataListProps) => {
-  const [modelData, setModelData] = useState<any[]>();
+  const [modelData, setModelData] = useState<any[] | undefined>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterLimit, setFilterLimit] = useState(defaultFilterLimit);
   const [sortColumn, setSortColumn] = useState(defaultFilterOrderColumn);
@@ -93,28 +93,32 @@ export const DataList = ({
 
   const basicExportFilterQuery = getBasicExportFilterQuery(sortColumn, sortOrder);
 
+  const gridSettingsStorageName = `${modelName}DataListSettings`;
+
   useEffect(() => {
     (async () => {
-      const { data, headers } = await getModelDataList(
-        `${searchTerm}&${basicFilterQuery}${whereFilterQuery}`
-      );
-      setTotalResultsCount(headers.get(totalCountHeaderName));
-      setModelData(data);
-      localStorage.setItem(
-        "dataListSettings",
-        JSON.stringify({
-          searchTerm,
-          filterLimit,
-          skipLimit,
-          sortColumn,
-          sortOrder,
-          whereField,
-          whereFieldValue,
-          pageNumber,
-        } as dataListSettings)
-      );
-      setInitialSorting();
-      setGridSettingsUpdated(true);
+      const result = await getModelDataList(`${searchTerm}&${basicFilterQuery}${whereFilterQuery}`);
+      if (result) {
+        const { data, headers } = result;
+        setTotalResultsCount(headers.get(totalCountHeaderName));
+        setModelData(data);
+        localStorage.setItem(
+          gridSettingsStorageName,
+          JSON.stringify({
+            searchTerm,
+            filterLimit,
+            skipLimit,
+            sortColumn,
+            sortOrder,
+            whereField,
+            whereFieldValue,
+            pageNumber,
+          } as dataListSettings)
+        );
+        setGridSettingsUpdated(true);
+      } else {
+        setModelData(undefined);
+      }
     })();
   }, [searchTerm, filterLimit, skipLimit, sortColumn, sortOrder, whereFieldValue]);
 
@@ -125,7 +129,13 @@ export const DataList = ({
   }, [totalRowCount]);
 
   useEffect(() => {
-    const settingsState = localStorage.getItem("dataListSettings");
+    if (!modelData) {
+      throw new Error("Server error: Data cannot be retrieved from server.");
+    }
+  }, [modelData]);
+
+  useEffect(() => {
+    const settingsState = localStorage.getItem(gridSettingsStorageName);
     if (settingsState) {
       const settings = JSON.parse(settingsState) as dataListSettings;
       const {
@@ -148,12 +158,6 @@ export const DataList = ({
       setPageNumber(pageNumber);
       updateGridSettings(settings);
     }
-    return () => {
-      const mainRoutePath = getCoreModuleRoute(endRoute as CoreModule);
-      if (!window.location.pathname.startsWith(mainRoutePath)) {
-        localStorage.removeItem("dataListSettings");
-      }
-    };
   }, []);
 
   const updateGridSettings = (gridSettings: dataListSettings) => {
@@ -180,14 +184,6 @@ export const DataList = ({
     setGridSettingsUpdated(true);
   };
 
-  const setInitialSorting = () => {
-    initialGridState!.sorting = {
-      sortModel: [
-        { field: defaultFilterOrderColumn, sort: defaultFilterOrderDirection as GridSortDirection },
-      ],
-    };
-  };
-
   const setTotalResultsCount = (headerCount: string | null) => {
     if (headerCount) setTotalRowCount(parseInt(headerCount, 10));
     else setTotalRowCount(-1);
@@ -211,19 +207,15 @@ export const DataList = ({
   };
 
   const handleFileUpload = async (data: Result<string>) => {
-    const importDtoCollection: any[] = data.validData.map((data) => {
-      const importDto: any = {
-        ...data,
-        email: data.email as string,
-      };
-      return importDto;
-    });
+    const importDtoCollection: any[] = data.validData;
     await dataImportCreate(importDtoCollection);
   };
 
   const openImportPage = () => {
     setIsImportWindowOpen(true);
   };
+
+  const importFieldsObject = getModelByName(modelName);
 
   return gridSettingsUpdated ? (
     <ModuleContainer>
@@ -240,11 +232,7 @@ export const DataList = ({
           <SearchBar
             setSearchTermOnChange={setSearchTerm}
             searchBoxLabel={searchBarLabel}
-            initialValue={
-              localStorage.getItem("dataListSettings")
-                ? JSON.parse(localStorage.getItem("dataListSettings")!).searchTerm
-                : ""
-            }
+            initialValue={searchTerm}
           ></SearchBar>
         </LeftContainer>
         <RightContainer>
