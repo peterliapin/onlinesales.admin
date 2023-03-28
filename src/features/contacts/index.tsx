@@ -2,7 +2,7 @@ import { Avatar, ListItemAvatar } from "@mui/material";
 import { ContactDetailsDto } from "lib/network/swagger-client";
 import { useRequestContext } from "providers/request-provider";
 import { ContactNameListItem, ContactNameListItemText } from "./index.styled";
-import { contactListBreadcrumbLinks } from "./constants";
+import { contactImportBaseObject, contactListBreadcrumbLinks } from "./constants";
 import { DataList } from "components/data-list";
 import { GridColDef } from "@mui/x-data-grid";
 import { CoreModule } from "lib/router";
@@ -30,7 +30,7 @@ export const Contacts = () => {
 
   const columns: GridColDef<ContactDetailsDto>[] = [
     {
-      field: "lastName",
+      field: "firstName",
       headerName: "Name",
       flex: 4,
       renderCell: ({ row }) => (
@@ -46,8 +46,8 @@ export const Contacts = () => {
       ),
     },
     {
-      field: "firstName",
-      headerName: "First Name",
+      field: "lastName",
+      headerName: "Last Name",
     },
     {
       field: "email",
@@ -82,18 +82,20 @@ export const Contacts = () => {
 
   return (
     <DataList
+      modelName="contact"
       columns={columns}
       dataListBreadcrumbLinks={contactListBreadcrumbLinks}
       currentBreadcrumb="Contacts"
       defaultFilterOrderColumn="firstName"
-      defaultFilterOrderDirection="desc"
-      searchBarLabel="Search Customers"
+      defaultFilterOrderDirection="asc"
+      searchBarLabel="Search Contacts"
       endRoute={CoreModule.contacts}
+      importFieldsObject={contactImportBaseObject}
       getModelDataList={getContactList}
       getExportUrl={getContactExportUrlAsync}
       dataImportCreate={handleContactImport}
       initialGridState={{
-        columns: { columnVisibilityModel: { firstName: false, email: false } },
+        columns: { columnVisibilityModel: { lastName: false, email: false } },
       }}
     ></DataList>
   );

@@ -1,6 +1,5 @@
 import { useState } from "react";
 import {
-  AlertColor,
   Backdrop,
   Button,
   Card,
@@ -8,21 +7,20 @@ import {
   CircularProgress,
   Grid,
   TextField,
-  Typography,
 } from "@mui/material";
 import { ContactDetailsDto } from "lib/network/swagger-client";
 import {
   ModuleContainer,
   ModuleHeaderContainer,
   ModuleHeaderSubtitleContainer,
-  ModuleHeaderTitleContainer,
 } from "components/module";
 import { CustomizedSnackbar } from "components/snackbar";
-import { CoreModule } from "lib/router";
+import { CoreModule, getCoreModuleRoute } from "lib/router";
 import { EMAIL_REGEX } from "utils/constants";
 import { initialSnackBarParams, serverErrorSnackBarParams } from "components/snackbar/constants";
 import { BreadCrumbNavigation } from "components/breadcrumbs";
 import { contactFormBreadcrumbLinks } from "../constants";
+import { useNavigate } from "react-router-dom";
 
 interface ContactFormProps {
   contact: ContactDetailsDto;
@@ -32,6 +30,8 @@ interface ContactFormProps {
 }
 
 export const ContactForm = ({ contact, updateContact, handleSave, isEdit }: ContactFormProps) => {
+  const navigate = useNavigate();
+
   const [isInvalidEmail, setIsInvalidEmail] = useState(false);
 
   const [isInvalidNumber, setIsInvalidNumber] = useState(false);
@@ -63,11 +63,7 @@ export const ContactForm = ({ contact, updateContact, handleSave, isEdit }: Cont
       try {
         setIsSaving(true);
         await handleSave();
-        setSnackBarParams({
-          message: isEdit ? "Updated Successfully" : "Saved Successfully",
-          isOpen: true,
-          severity: "success" as AlertColor,
-        });
+        handleSuccess();
       } catch (e) {
         console.log(e);
         setSnackBarParams(serverErrorSnackBarParams);
@@ -77,12 +73,22 @@ export const ContactForm = ({ contact, updateContact, handleSave, isEdit }: Cont
     }
   };
 
+  const handleSuccess = () => {
+    const toRoute = getCoreModuleRoute(CoreModule.contacts);
+    if (location.pathname === toRoute) {
+      window.location.reload();
+    } else {
+      navigate(toRoute);
+    }
+  };
+
+  const handleCancel = () => {
+    navigate(getCoreModuleRoute(CoreModule.contacts));
+  };
+
   return (
     <ModuleContainer>
       <ModuleHeaderContainer>
-        <ModuleHeaderTitleContainer>
-          <Typography variant="h3">{header}</Typography>
-        </ModuleHeaderTitleContainer>
         <ModuleHeaderSubtitleContainer>
           <BreadCrumbNavigation
             links={contactFormBreadcrumbLinks}
@@ -208,7 +214,17 @@ export const ContactForm = ({ contact, updateContact, handleSave, isEdit }: Cont
                 fullWidth
               ></TextField>
             </Grid>
-            <Grid item xs={6}></Grid>
+            <Grid item xs={6}>
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                onClick={handleCancel}
+                fullWidth
+              >
+                Cancel
+              </Button>
+            </Grid>
             <Grid item xs={6}>
               <Button
                 type="submit"
@@ -217,7 +233,7 @@ export const ContactForm = ({ contact, updateContact, handleSave, isEdit }: Cont
                 onClick={validateAndSave}
                 fullWidth
               >
-                Submit
+                Save
               </Button>
             </Grid>
           </Grid>
