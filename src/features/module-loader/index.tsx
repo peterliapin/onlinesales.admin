@@ -3,6 +3,7 @@ import { useRouteParams } from "typesafe-routes";
 import { CoreModule, coreModuleRoute } from "lib/router";
 import { ErrorBoundary } from "components/error-boundary";
 import { ContactsModule } from "features/contacts/contacts-module";
+import { AccountsModule } from "features/accounts/accounts-module";
 
 export const ModuleLoader = () => {
   const { moduleName } = useRouteParams(coreModuleRoute);
@@ -11,6 +12,7 @@ export const ModuleLoader = () => {
     <ErrorBoundary>
       <Suspense fallback="Loading...">
         {moduleName === CoreModule.contacts && <ContactsModule />}
+        {moduleName === CoreModule.accounts && <AccountsModule />}
       </Suspense>
     </ErrorBoundary>
   );
