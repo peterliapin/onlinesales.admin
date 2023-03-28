@@ -1,13 +1,30 @@
-import MDEditor from "@uiw/react-md-editor";
+import MDEditor, { commands }  from "@uiw/react-md-editor";
+import { ImageUpload } from "./commands";
+import AppsIcon from "@mui/icons-material/Apps";
+import { MarkdownEditorProps, CommandContext } from "./types";
+import { useMemo, useEffect } from "react";
 
-type textChangeFunc = (value: string | undefined) => void;
-interface MarkdownEditorProps {
-  value: string;
-  onChange: textChangeFunc;
-  isReadOnly: boolean | undefined;
-}
+const MarkdownEditor = ({ 
+  value, 
+  onChange, 
+  isReadOnly, 
+  networkContext,
+  contentDetails,
+}: MarkdownEditorProps) => {
+  const customCommands = commands.getCommands().concat([
+    commands.group(
+      [
+        ImageUpload(networkContext, contentDetails),
+      ],
+      {
+        name: "OnlineSales components",
+        groupName: "onlinesales-components",
+        buttonProps: {"aria-label": "Insert onlinesales custom components"},
+        icon: <AppsIcon sx={{ fontSize: 15 }} />,
+      }
+    )
+  ]);
 
-const MarkdownEditor = ({ value, onChange, isReadOnly }: MarkdownEditorProps) => {
   return (
     <>
       <MDEditor
@@ -17,6 +34,7 @@ const MarkdownEditor = ({ value, onChange, isReadOnly }: MarkdownEditorProps) =>
         preview={"live"}
         value={value}
         onChange={onChange}
+        commands={customCommands}
       />
     </>
   );

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import {
   ContentDetailsDto,
@@ -56,13 +56,15 @@ FrontmatterEditorModal,
 } from "@components/FrontmatterEditor";
 import { buildAbsoluteUrl } from "@lib/network/utils";
 import graymatter from "gray-matter";
+import { CommandContext } from "@components/MarkdownEditor/types";
 
 interface ContentEditProps {
   readonly?: boolean;
 }
 
 export const ContentEdit = (props: ContentEditProps) => {
-  const { client } = useRequestContext();
+  const networkContext = useRequestContext();
+  const { client } = networkContext;
   const { id } = useParams();
   const [wasModified, setWasModified] = useState<boolean>(false);
   const [coverWasModified, setCoverWasModified] = useState<boolean>(false);
@@ -171,6 +173,7 @@ export const ContentEdit = (props: ContentEditProps) => {
     }
   };
 
+
   const formik = useFormik({
     validationSchema: toFormikValidationSchema(ContentEditValidationScheme),
     initialValues: ContentEditDefaultValues[0].defaultValues,
@@ -209,6 +212,7 @@ export const ContentEdit = (props: ContentEditProps) => {
     formik.setFieldValue("coverImageFile", file);
     setCoverWasModified(true);
   };
+
 
   useEffect(() => {
     (async () => {
@@ -354,9 +358,12 @@ export const ContentEdit = (props: ContentEditProps) => {
                     <MarkdownEditor
                       onChange={(value) => {
                         formik.setFieldValue("body", value);
+                        setWasModified(true);
                       }}
                       value={formik.values.body}
                       isReadOnly={props.readonly}
+                      networkContext={networkContext}
+                      contentDetails={formik.values}
                     />
                   </Grid>
                   <Grid xs={6} sm={6} item>
