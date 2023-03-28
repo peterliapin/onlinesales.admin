@@ -2,9 +2,8 @@ import { forwardRef, SyntheticEvent, useEffect, useState } from "react";
 import Stack from "@mui/material/Stack";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert, { AlertColor, AlertProps } from "@mui/material/Alert";
-import { CoreModule, getCoreModuleRoute } from "lib/router";
-import { useLocation, useNavigate } from "react-router-dom";
-import { Backdrop } from "@mui/material";
+import { CoreModule } from "lib/router";
+import { useCoreModuleNavigation } from "utils/helper";
 
 interface SnackbarProps {
   message: string;
@@ -19,9 +18,7 @@ const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(props, ref) 
 
 export const CustomizedSnackbar = ({ message, severerity, isOpen, navigateTo }: SnackbarProps) => {
   const [open, setOpen] = useState(isOpen);
-
-  const navigate = useNavigate();
-  const location = useLocation();
+  const handleNavigation = useCoreModuleNavigation();
 
   useEffect(() => {
     setOpen(isOpen);
@@ -34,24 +31,17 @@ export const CustomizedSnackbar = ({ message, severerity, isOpen, navigateTo }: 
 
     setOpen(false);
     if (severerity === "success") {
-      const toRoute = getCoreModuleRoute(navigateTo);
-      if (location.pathname === toRoute) {
-        window.location.reload();
-      } else {
-        navigate(toRoute);
-      }
+      handleNavigation(navigateTo);
     }
   };
 
   return (
-    <Backdrop open={open}>
-      <Stack spacing={2}>
-        <Snackbar open={open} autoHideDuration={2000} onClose={handleClose}>
-          <Alert onClose={handleClose} severity={severerity}>
-            {message}
-          </Alert>
-        </Snackbar>
-      </Stack>
-    </Backdrop>
+    <Stack spacing={2}>
+      <Snackbar open={open} autoHideDuration={2000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity={severerity}>
+          {message}
+        </Alert>
+      </Snackbar>
+    </Stack>
   );
 };

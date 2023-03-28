@@ -5,9 +5,14 @@ import SearchIcon from "@mui/icons-material/Search";
 interface SearchBoxProps {
   setSearchTermOnChange: (searchTerm: string) => void;
   searchBoxLabel: string;
+  initialValue: string;
 }
 
-export const SearchBar = ({ setSearchTermOnChange, searchBoxLabel }: SearchBoxProps) => {
+export const SearchBar = ({
+  setSearchTermOnChange,
+  searchBoxLabel,
+  initialValue,
+}: SearchBoxProps) => {
   const [timer, setTimer] = useState<NodeJS.Timeout | null>(null);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -25,6 +30,7 @@ export const SearchBar = ({ setSearchTermOnChange, searchBoxLabel }: SearchBoxPr
     <Box>
       <TextField
         size="small"
+        defaultValue={initialValue}
         InputProps={{
           endAdornment: (
             <InputAdornment position="end">

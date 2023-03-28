@@ -1,25 +1,24 @@
 import { CircularProgress } from "@mui/material";
 import { CustomizedSnackbar } from "components/snackbar";
-import {
-  initialSnackBarParams,
-  uploadFailedSnackBarParams,
-  uploadSuccessSnackBarParams,
-} from "components/snackbar/constants";
+import { initialSnackBarParams, uploadFailedSnackBarParams } from "components/snackbar/constants";
 import { CoreModule } from "lib/router";
 import { useState } from "react";
 import { ReactSpreadsheetImport } from "@wavepoint/react-spreadsheet-import";
 import { Result } from "@wavepoint/react-spreadsheet-import/types/types";
 import { StyledBackdrop } from "./index.styled";
 import { getImportFields } from "utils/import-key-mappings";
+import { useCoreModuleNavigation } from "utils/helper";
 
 interface csvImportPorps {
   isOpen: boolean;
   onClose: () => void;
   onUpload: (fileData: any) => void;
   object: any;
+  endRoute: string;
 }
 
-export const CsvImport = ({ isOpen, onClose, onUpload, object }: csvImportPorps) => {
+export const CsvImport = ({ isOpen, onClose, onUpload, object, endRoute }: csvImportPorps) => {
+  const handleNavigation = useCoreModuleNavigation();
   const [isUploading, setIsUploading] = useState(false);
   const [snackBarParams, setSnackBarParams] = useState(initialSnackBarParams);
 
@@ -30,13 +29,17 @@ export const CsvImport = ({ isOpen, onClose, onUpload, object }: csvImportPorps)
       }
       setIsUploading(true);
       await onUpload(data);
-      setSnackBarParams(uploadSuccessSnackBarParams);
+      handleSuccess();
     } catch (error) {
       console.log(error);
       setSnackBarParams(uploadFailedSnackBarParams);
     } finally {
       setIsUploading(false);
     }
+  };
+
+  const handleSuccess = () => {
+    handleNavigation(endRoute);
   };
 
   return (
@@ -54,7 +57,7 @@ export const CsvImport = ({ isOpen, onClose, onUpload, object }: csvImportPorps)
         isOpen={snackBarParams.isOpen}
         severerity={snackBarParams.severity}
         message={snackBarParams.message}
-        navigateTo={CoreModule.contacts}
+        navigateTo={endRoute as CoreModule}
       />
     </>
   );
