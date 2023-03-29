@@ -1,9 +1,8 @@
-import { ICommandBase } from "@uiw/react-md-editor";
 import ImageIcon from "@mui/icons-material/Image";
 import { Button } from "@mui/material";
-import { CommandContext, ExtendedCommandBase } from "../types";
+import { ExtendedCommandBase } from "../types";
 import { RequestContextType } from "@providers/request-provider";
-import { ContentDetails } from "@features/blog/ContentEdit/validation";
+import { ContentDetails } from "@features/blog/ContentEdit/types";
 
 export const ImageUpload = (networkContext: RequestContextType, contentDetails: ContentDetails) => {
   const command = {
@@ -13,7 +12,7 @@ export const ImageUpload = (networkContext: RequestContextType, contentDetails: 
     keyCommand: "image-upload",
     buttonProps: { "aria-label": "Upload image" },
     icon: <ImageIcon sx={{ fontSize: 20 }}/>,
-    render: (command, disabled, executeCommand) => {
+    render(command, disabled, executeCommand) {
       const onClick = () => {
         executeCommand(command, command.groupName);
       };

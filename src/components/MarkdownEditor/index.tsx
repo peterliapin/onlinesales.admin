@@ -11,7 +11,7 @@ const MarkdownEditor = ({
   networkContext,
   contentDetails,
 }: MarkdownEditorProps) => {
-  const customCommands = commands.getCommands().concat([
+  const customCommands = useMemo(() => commands.getCommands().concat([
     commands.group(
       [
         ImageUpload(networkContext, contentDetails),
@@ -23,7 +23,7 @@ const MarkdownEditor = ({
         icon: <AppsIcon sx={{ fontSize: 15 }} />,
       }
     )
-  ]);
+  ]), [networkContext, contentDetails]);
 
   return (
     <>

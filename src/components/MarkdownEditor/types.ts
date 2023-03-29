@@ -1,5 +1,5 @@
 import { RequestContextType } from "@providers/request-provider";
-import { ContentDetails } from "@features/blog/ContentEdit/validation";
+import { ContentDetails } from "@features/blog/ContentEdit/types";
 import { ICommand, ICommandBase } from "@uiw/react-md-editor";
 
 type textChangeFunc = (value: string | undefined) => void;

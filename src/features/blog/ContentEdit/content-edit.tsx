@@ -33,8 +33,13 @@ import { CoreModule, rootRoute } from "@lib/router";
 import { GhostLink } from "@components/ghost-link";
 import MarkdownViewer from "@components/MarkdownViewer";
 import { useFormik, FormikHelpers } from "formik";
+import { 
+  TypeDefaultValues, 
+  ContentDetails, 
+  ContentEditData, 
+  ContentEditRestoreState
+} from "./types";
 import {
-  TypeDefaultValues,
   ContentEditValidationScheme,
   ContentEditAvailableLanguages,
   ContentEditAvailableTypes,
@@ -42,7 +47,6 @@ import {
   ContentEditAvailableCategories,
   ContentEditDefaultValues,
   ContentEditMaximumImageSize,
-  ContentDetails,
 } from "./validation";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 import { Automapper } from "@lib/automapper";
@@ -56,7 +60,8 @@ FrontmatterEditorModal,
 } from "@components/FrontmatterEditor";
 import { buildAbsoluteUrl } from "@lib/network/utils";
 import graymatter from "gray-matter";
-import { CommandContext } from "@components/MarkdownEditor/types";
+import useLocalStorage from "use-local-storage";
+import { RestoreDataModal } from "@components/RestoreData";
 
 interface ContentEditProps {
   readonly?: boolean;
@@ -64,6 +69,9 @@ interface ContentEditProps {
 
 export const ContentEdit = (props: ContentEditProps) => {
   const networkContext = useRequestContext();
+  const [editorLocalStorage, setEditorLocalStorage] = useLocalStorage<ContentEditData>(
+    "onlinesales_editor_autosave", 
+    {data: []});
   const { client } = networkContext;
   const { id } = useParams();
   const [wasModified, setWasModified] = useState<boolean>(false);
@@ -71,6 +79,10 @@ export const ContentEdit = (props: ContentEditProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isSaving, setIsSaving] = useState<boolean>(false);
   const [isFrontmatterEditorOpened, setFrontmatterEditorOpened] = useState<boolean>(false);
+  const [
+    restoreDataState, 
+    setRestoreDataState
+  ] = useState<ContentEditRestoreState>(ContentEditRestoreState.Idle);
 
   const submit = async (values: ContentDetails, helpers: FormikHelpers<ContentDetails>) => {
     let response: HttpResponse<ContentDetailsDto, void | ProblemDetails>;
@@ -218,6 +230,21 @@ export const ContentEdit = (props: ContentEditProps) => {
     (async () => {
       try {
         setIsLoading(true);
+        switch(restoreDataState){
+        case ContentEditRestoreState.Idle:
+          if (editorLocalStorage.data.filter((data) => data.id === id).length > 0){
+            setRestoreDataState(ContentEditRestoreState.Requested);
+            return;
+          }
+          break;
+        case ContentEditRestoreState.Requested:
+          return;
+        case ContentEditRestoreState.Rejected:
+          return;
+        case ContentEditRestoreState.Accepted:
+        default:
+          break;
+        }
         if (client && id) {
           const { data } = await client.api.contentDetail(Number(id));
           formik.setValues(
@@ -259,6 +286,12 @@ export const ContentEdit = (props: ContentEditProps) => {
           }
         }
         initialValues={formik.values.frontmatter}
+      />
+      <RestoreDataModal
+        isOpen={restoreDataState === ContentEditRestoreState.Requested}
+        onClose={(value) => value ? 
+          setRestoreDataState(ContentEditRestoreState.Accepted) : 
+          setRestoreDataState(ContentEditRestoreState.Rejected)}
       />
       <ModuleHeaderContainer>
         <ModuleHeaderTitleContainer>

@@ -84,6 +84,7 @@
     "react-router-dom": "^6.7.0",
     "react-toastify": "^9.1.2",
     "typesafe-routes": "^9.0.1",
+    "use-local-storage": "^2.3.6",
     "zod": "^3.21.4",
     "zod-formik-adapter": "^1.2.0"
   }

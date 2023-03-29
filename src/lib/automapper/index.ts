@@ -5,7 +5,7 @@ import {
   ContentUpdateDto,
   ContentCreateDto,
 } from "@lib/network/swagger-client.generated";
-import { ContentDetails } from "@features/blog/ContentEdit/validation";
+import { ContentDetails } from "@features/blog/ContentEdit/types";
 
 export const Automapper = createMapper({
   strategyInitializer: pojos(),
