@@ -16,11 +16,11 @@ import {
 } from "components/module";
 import { CustomizedSnackbar } from "components/snackbar";
 import { CoreModule } from "lib/router";
-import { EMAIL_REGEX } from "utils/constants";
 import { initialSnackBarParams, serverErrorSnackBarParams } from "components/snackbar/constants";
 import { BreadCrumbNavigation } from "components/breadcrumbs";
 import { contactFormBreadcrumbLinks } from "../constants";
 import { useCoreModuleNavigation } from "utils/helper";
+import { isValidEmail, isValidNumber } from "utils/validators";
 
 interface ContactFormProps {
   contact: ContactDetailsDto;
@@ -47,17 +47,13 @@ export const ContactForm = ({ contact, updateContact, handleSave, isEdit }: Cont
     updateContact((currentContact: ContactDetailsDto) => ({ ...currentContact, [name]: value }));
   };
 
-  const isValidEmail = (email: string) => {
-    return email && EMAIL_REGEX.test(email);
-  };
-
   const validateAndSave = async () => {
     setIsInvalidEmail(false);
     setIsInvalidNumber(false);
 
     if (!isValidEmail(contact.email)) {
       setIsInvalidEmail(true);
-    } else if (!contact.timezone || isNaN(contact.timezone!)) {
+    } else if (!isValidNumber(contact.timezone)) {
       setIsInvalidNumber(true);
     } else {
       try {
@@ -189,6 +185,7 @@ export const ContactForm = ({ contact, updateContact, handleSave, isEdit }: Cont
               <TextField
                 label="Timezone"
                 name="timezone"
+                type="text"
                 value={contact.timezone || ""}
                 placeholder="Enter timezone"
                 variant="outlined"

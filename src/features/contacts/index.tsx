@@ -3,7 +3,6 @@ import { ContactDetailsDto, ContactImportDto } from "lib/network/swagger-client"
 import { useRequestContext } from "providers/request-provider";
 import { ContactNameListItem, ContactNameListItemText } from "./index.styled";
 import {
-  contactListBreadcrumbLinks,
   contactListCurrentBreadcrumb,
   defaultFilterOrderColumn,
   defaultFilterOrderDirection,
@@ -13,6 +12,7 @@ import {
 import { DataList } from "components/data-list";
 import { GridColDef } from "@mui/x-data-grid";
 import { CoreModule } from "lib/router";
+import { dataListBreadcrumbLinks } from "utils/constants";
 
 export const Contacts = () => {
   const { client } = useRequestContext();
@@ -96,7 +96,7 @@ export const Contacts = () => {
     <DataList
       modelName={modelName}
       columns={columns}
-      dataListBreadcrumbLinks={contactListBreadcrumbLinks}
+      dataListBreadcrumbLinks={dataListBreadcrumbLinks}
       currentBreadcrumb={contactListCurrentBreadcrumb}
       defaultFilterOrderColumn={defaultFilterOrderColumn}
       defaultFilterOrderDirection={defaultFilterOrderDirection}
