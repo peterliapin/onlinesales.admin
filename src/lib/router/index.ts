@@ -3,6 +3,7 @@ import { Parser, route, intParser } from "typesafe-routes";
 export const enum CoreModule {
   contacts = "contacts",
   accounts = "accounts",
+  orders = "orders",
 }
 
 const coreModuleParser: Parser<CoreModule> = {
