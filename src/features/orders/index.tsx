@@ -1,10 +1,10 @@
 import { OrderDetailsDto, OrderImportDto } from "lib/network/swagger-client";
 import { useRequestContext } from "providers/request-provider";
 import {
-  accountListCurrentBreadcrumb,
   defaultFilterOrderColumn,
   defaultFilterOrderDirection,
   modelName,
+  orderListPageBreadcrumb,
   searchLabel,
 } from "./constants";
 import { DataList } from "components/data-list";
@@ -81,7 +81,7 @@ export const Orders = () => {
       modelName={modelName}
       columns={columns}
       dataListBreadcrumbLinks={dataListBreadcrumbLinks}
-      currentBreadcrumb={accountListCurrentBreadcrumb}
+      currentBreadcrumb={orderListPageBreadcrumb}
       defaultFilterOrderColumn={defaultFilterOrderColumn}
       defaultFilterOrderDirection={defaultFilterOrderDirection}
       searchBarLabel={searchLabel}

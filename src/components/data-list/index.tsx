@@ -28,7 +28,7 @@ import { Result } from "@wavepoint/react-spreadsheet-import/types/types";
 import { CsvExport } from "components/export";
 import { SearchBar } from "components/search-bar";
 import { DataTableGrid } from "components/data-table";
-import { GridColDef, GridSortDirection } from "@mui/x-data-grid";
+import { GridColDef, GridColumnVisibilityModel, GridSortDirection } from "@mui/x-data-grid";
 import { GridInitialStateCommunity } from "@mui/x-data-grid/models/gridStateCommunity";
 import { getModelByName } from "lib/network/swagger-models";
 import { BreadcrumbLink } from "utils/types";
@@ -57,6 +57,7 @@ type dataListSettings = {
   whereField: string;
   whereFieldValue: string;
   pageNumber: number;
+  columnVisibilityModel: GridColumnVisibilityModel;
 };
 
 export const DataList = ({
@@ -85,6 +86,9 @@ export const DataList = ({
   const [pageNumber, setPageNumber] = useState(0);
   const [isImportWindowOpen, setIsImportWindowOpen] = useState(false);
   const [openExport, setOpenExport] = useState(false);
+  const [columnVisibilityModel, setColumnVisibilityModel] = useState(
+    initialGridState?.columns?.columnVisibilityModel
+  );
   const [gridSettingsUpdated, setGridSettingsUpdated] = useState(false);
 
   const whereFilterQuery = getWhereFilterQuery(whereField, whereFieldValue);
@@ -102,25 +106,21 @@ export const DataList = ({
         const { data, headers } = result;
         setTotalResultsCount(headers.get(totalCountHeaderName));
         setModelData(data);
-        localStorage.setItem(
-          gridSettingsStorageName,
-          JSON.stringify({
-            searchTerm,
-            filterLimit,
-            skipLimit,
-            sortColumn,
-            sortOrder,
-            whereField,
-            whereFieldValue,
-            pageNumber,
-          } as dataListSettings)
-        );
+        saveGridState();
         setGridSettingsUpdated(true);
       } else {
         setModelData(undefined);
       }
     })();
-  }, [searchTerm, filterLimit, skipLimit, sortColumn, sortOrder, whereFieldValue]);
+  }, [
+    searchTerm,
+    filterLimit,
+    skipLimit,
+    sortColumn,
+    sortOrder,
+    whereFieldValue,
+    columnVisibilityModel,
+  ]);
 
   useEffect(() => {
     if (totalRowCount === -1) {
@@ -147,6 +147,7 @@ export const DataList = ({
         whereField: whereField,
         whereFieldValue: whereFieldValue,
         pageNumber: pageNumber,
+        columnVisibilityModel: columnVisibilityModel,
       } = settings;
       setSearchTerm(searchTerm);
       setFilterLimit(filterLimit);
@@ -156,9 +157,27 @@ export const DataList = ({
       setWhereField(whereField);
       setWhereFieldValue(whereFieldValue);
       setPageNumber(pageNumber);
+      setColumnVisibilityModel(columnVisibilityModel);
       updateGridSettings(settings);
     }
   }, []);
+
+  const saveGridState = () => {
+    localStorage.setItem(
+      gridSettingsStorageName,
+      JSON.stringify({
+        searchTerm,
+        filterLimit,
+        skipLimit,
+        sortColumn,
+        sortOrder,
+        whereField,
+        whereFieldValue,
+        pageNumber,
+        columnVisibilityModel,
+      } as dataListSettings)
+    );
+  };
 
   const updateGridSettings = (gridSettings: dataListSettings) => {
     initialGridState!.filter = {
@@ -181,6 +200,7 @@ export const DataList = ({
       page: gridSettings.pageNumber,
       pageSize: gridSettings.filterLimit,
     };
+    initialGridState!.columns = { columnVisibilityModel: gridSettings.columnVisibilityModel };
     setGridSettingsUpdated(true);
   };
 
@@ -265,6 +285,7 @@ export const DataList = ({
         setFilterField={setWhereField}
         setFilterFieldValue={setWhereFieldValue}
         setPageNumber={setPageNumber}
+        handleColumnVisibilityModel={setColumnVisibilityModel}
         initialState={initialGridState}
         showActionsColumn={true}
         disableEditRoute={false}
