@@ -26,7 +26,7 @@ export interface TypeDefaultValues {
   defaultValues: ContentDetails;
 }
 
-interface ContentEditorAutoSave {
+export interface ContentEditorAutoSave {
   id: string;
   savedData: ContentDetails;
   latestAutoSave: Date;

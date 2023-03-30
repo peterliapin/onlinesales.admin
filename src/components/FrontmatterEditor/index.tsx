@@ -44,7 +44,6 @@ const defaults: KVItemType[] = [
 ]; 
 
 export const FrontmatterEditor = ({onChange, initialValues}: FrontmatterEditorProps) => {
-  console.log(initialValues);
   let startValues = initialValues.map((item) => {
     const newItem: KVItemType = {
       key: item.key,
@@ -98,7 +97,7 @@ const FrontmatterEditorModal = ({
             </Grid>
             <Grid item xs={12}>
               <FrontmatterEditor
-                onChange={(items) => {console.log(items); setEditorItems(items);}}
+                onChange={(items) => {setEditorItems(items);}}
                 initialValues={initialValues}
               />
             </Grid>
