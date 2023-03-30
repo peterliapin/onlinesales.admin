@@ -1,8 +1,9 @@
 import MDEditor, { commands }  from "@uiw/react-md-editor";
 import { ImageUpload } from "./commands";
 import AppsIcon from "@mui/icons-material/Apps";
-import { MarkdownEditorProps, CommandContext } from "./types";
-import { useMemo, useEffect } from "react";
+import { MarkdownEditorProps } from "./types";
+import { useMemo } from "react";
+import { MarkdownViewerFunc } from "@components/MarkdownViewer";
 
 const MarkdownEditor = ({ 
   value, 
@@ -35,6 +36,11 @@ const MarkdownEditor = ({
         value={value}
         onChange={onChange}
         commands={customCommands}
+        components={
+          {
+            preview: MarkdownViewerFunc,
+          }
+        }
       />
     </>
   );

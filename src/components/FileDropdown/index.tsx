@@ -1,7 +1,7 @@
 import Dropzone, {Accept, FileRejection} from "react-dropzone";
 import { BoxStyled } from "./index.styled";
 import { Button, Grid, Box } from "@mui/material";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 
 type onChangeFunc = (files: File | null) => void;
@@ -24,6 +24,8 @@ const FileDropdown = ({
   helperText
 }:FileDropdownProps) =>{
   const [currentImageUrl, setCurrentImageUrl] = useState<string>(initialUrl);
+  // If we're restoring content with already set (uploaded ) cover we need this
+  useEffect(() => setCurrentImageUrl(initialUrl), [initialUrl]); 
 
   const onDrop = (acceptedFiles: File[], rejections: FileRejection[] ) => {
     if (rejections.length > 0){
@@ -37,16 +39,11 @@ const FileDropdown = ({
       const file = acceptedFiles[0];
       const fileReader = new FileReader();
       fileReader.onload = (e) => {
-        if (e.target === null) {
+        if (e.target === null || e.target.result === null) {
           toast.error(`Failed to select image ${file.name} (File System error).`);
           return;
         }
-        const { result } = e.target;
-        if (result === null){
-          toast.error(`Failed to select image ${file.name} (File System error).`);
-          return;
-        }
-        setCurrentImageUrl(result as string);
+        setCurrentImageUrl(e.target.result as string);
       };
       fileReader.readAsDataURL(file);
       onChange(acceptedFiles[0]);

@@ -49,7 +49,7 @@ import {
   ContentEditDefaultValues,
   ContentEditMaximumImageSize,
 } from "./validation";
-import { toFormikValidationSchema } from "zod-formik-adapter";
+import { toFormikValidate, toFormikValidationSchema } from "zod-formik-adapter";
 import { Automapper } from "@lib/automapper";
 import MarkdownEditor from "@components/MarkdownEditor";
 import { Id, toast } from "react-toastify";
@@ -197,6 +197,9 @@ export const ContentEdit = (props: ContentEditProps) => {
       });
       setWasModified(false);
       setCoverWasModified(false);
+      const localStorageSnapshot = {...editorLocalStorage};
+      localStorageSnapshot.data = localStorageSnapshot.data.filter((data) => data.id !== id);
+      setEditorLocalStorage(localStorageSnapshot);
     } catch (data: any) {
       const errMessage = data.error && data.error.title;
       toast.update(loadingToastId, {
@@ -212,12 +215,11 @@ export const ContentEdit = (props: ContentEditProps) => {
       helpers.setSubmitting(false);
     }
   };
-
-
   const formik = useFormik({
     validationSchema: toFormikValidationSchema(ContentEditValidationScheme),
     initialValues: ContentEditDefaultValues[0].defaultValues,
     onSubmit: submit,
+    validateOnChange: false,
   });
 
   const valueUpdate = (event: React.SyntheticEvent<Element, Event>) => {
@@ -274,6 +276,7 @@ export const ContentEdit = (props: ContentEditProps) => {
         case ContentEditRestoreState.Accepted:
           await formik.setValues(
             localStorageSnapshot.data.filter((data) => data.id === id)[0].savedData);
+          await formik.setFieldValue("coverImageFile", new File([], "dummy"));
           return;
         }
         if (client && id) {
@@ -424,9 +427,9 @@ export const ContentEdit = (props: ContentEditProps) => {
                 <Grid container spacing={3} xs={12} sm={12}>
                   <Grid xs={12} sm={12} item data-color-mode="light">
                     <MarkdownEditor
-                      onChange={(value) => {
-                        formik.setFieldValue("body", value);
+                      onChange={async (value) => {
                         setWasModified(true);
+                        await formik.setFieldValue("body", value);
                       }}
                       value={formik.values.body}
                       isReadOnly={props.readonly}

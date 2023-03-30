@@ -112,7 +112,7 @@ export const ContentView = () => {
                 <DescriptionContainer>Description: {contentItem.description}</DescriptionContainer>
               </div>
             </HeaderContainer>
-            <MarkdownViewer />
+            <MarkdownViewer source={contentItem.body}/>
 
             {contentItem.allowComments && (
               <>
