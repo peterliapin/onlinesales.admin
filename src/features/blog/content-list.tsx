@@ -65,9 +65,6 @@ export const ContentList = () => {
   return (
     <>
       <ModuleHeaderContainer>
-        <ModuleHeaderTitleContainer>
-          <Typography variant="h3">Blog</Typography>
-        </ModuleHeaderTitleContainer>
         <ModuleHeaderSubtitleContainer>
           <Breadcrumbs separator={<NavigateNext fontSize="small" />}>
             <Link to={rootRoute} component={GhostLink} underline="hover">
