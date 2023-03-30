@@ -37,7 +37,8 @@ import {
   TypeDefaultValues, 
   ContentDetails, 
   ContentEditData, 
-  ContentEditRestoreState
+  ContentEditRestoreState,
+  ContentEditorAutoSave
 } from "./types";
 import {
   ContentEditValidationScheme,
@@ -62,6 +63,7 @@ import { buildAbsoluteUrl } from "@lib/network/utils";
 import graymatter from "gray-matter";
 import useLocalStorage from "use-local-storage";
 import { RestoreDataModal } from "@components/RestoreData";
+import { useDebouncedCallback } from "use-debounce";
 
 interface ContentEditProps {
   readonly?: boolean;
@@ -71,7 +73,10 @@ export const ContentEdit = (props: ContentEditProps) => {
   const networkContext = useRequestContext();
   const [editorLocalStorage, setEditorLocalStorage] = useLocalStorage<ContentEditData>(
     "onlinesales_editor_autosave", 
-    {data: []});
+    {data: []},
+    {
+      logger: (error) => console.log(error),
+    });
   const { client } = networkContext;
   const { id } = useParams();
   const [wasModified, setWasModified] = useState<boolean>(false);
@@ -83,6 +88,29 @@ export const ContentEdit = (props: ContentEditProps) => {
     restoreDataState, 
     setRestoreDataState
   ] = useState<ContentEditRestoreState>(ContentEditRestoreState.Idle);
+
+  const autoSave = useDebouncedCallback((value) => {
+    if (!wasModified && !coverWasModified ){
+      return;
+    }
+    const localStorageSnapshot = {...editorLocalStorage};
+    let reference = localStorageSnapshot.data.filter((data) => data.id === id)[0];
+    if (reference === undefined){
+      reference = {
+        id,
+        savedData: value,
+        latestAutoSave: new Date(),
+      } as ContentEditorAutoSave;
+      localStorageSnapshot.data.push(reference);
+    }else{
+      reference.latestAutoSave = new Date(),
+      reference.savedData = value;
+    }
+    toast.info("Auto saved", {
+      autoClose: 3000,
+    }); /// TODO: User Settings
+    setEditorLocalStorage(localStorageSnapshot);
+  }, 3000); ///TODO: User Settings
 
   const submit = async (values: ContentDetails, helpers: FormikHelpers<ContentDetails>) => {
     let response: HttpResponse<ContentDetailsDto, void | ProblemDetails>;
@@ -220,7 +248,6 @@ export const ContentEdit = (props: ContentEditProps) => {
   };
 
   const onCoverImageChange = (file: File | null) => {
-    console.log(file);
     formik.setFieldValue("coverImageFile", file);
     setCoverWasModified(true);
   };
@@ -230,9 +257,10 @@ export const ContentEdit = (props: ContentEditProps) => {
     (async () => {
       try {
         setIsLoading(true);
+        const localStorageSnapshot = {...editorLocalStorage};
         switch(restoreDataState){
         case ContentEditRestoreState.Idle:
-          if (editorLocalStorage.data.filter((data) => data.id === id).length > 0){
+          if (localStorageSnapshot.data.filter((data) => data.id === id).length > 0){
             setRestoreDataState(ContentEditRestoreState.Requested);
             return;
           }
@@ -240,21 +268,24 @@ export const ContentEdit = (props: ContentEditProps) => {
         case ContentEditRestoreState.Requested:
           return;
         case ContentEditRestoreState.Rejected:
-          return;
-        case ContentEditRestoreState.Accepted:
-        default:
+          localStorageSnapshot.data = localStorageSnapshot.data.filter((data) => data.id !== id);
+          setEditorLocalStorage(localStorageSnapshot);
           break;
+        case ContentEditRestoreState.Accepted:
+          await formik.setValues(
+            localStorageSnapshot.data.filter((data) => data.id === id)[0].savedData);
+          return;
         }
         if (client && id) {
           const { data } = await client.api.contentDetail(Number(id));
-          formik.setValues(
+          await formik.setValues(
             Automapper.map<ContentDetailsDto, ContentDetails>(
               data,
               "ContentDetailsDto",
               "ContentDetails"
             )
           );
-          formik.setFieldValue("coverImageFile", new File([], "dummy"));
+          await formik.setFieldValue("coverImageFile", new File([], "dummy"));
           const mattered = graymatter(data.body);
 
           const normalizedFrontmatter = Object.keys(mattered.data).map((key) =>{
@@ -263,8 +294,8 @@ export const ContentEdit = (props: ContentEditProps) => {
               value: mattered.data[key]
             } as FrontmatterEditorInitialValue;
           });
-          formik.setFieldValue("frontmatter", normalizedFrontmatter);
-          formik.setFieldValue("body", mattered.content);
+          await formik.setFieldValue("frontmatter", normalizedFrontmatter);
+          await formik.setFieldValue("body", mattered.content);
         }
       } catch (e) {
         console.log(e);
@@ -272,7 +303,11 @@ export const ContentEdit = (props: ContentEditProps) => {
         setIsLoading(false);
       }
     })();
-  }, [client, id]);
+  }, [client, id, restoreDataState]);
+
+  useEffect(() => {
+    autoSave(formik.values);
+  }, [formik.values]);
 
   return (
     <>

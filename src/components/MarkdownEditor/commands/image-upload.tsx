@@ -47,13 +47,10 @@ export const ImageUpload = (networkContext: RequestContextType, contentDetails: 
             ScopeUid: this.contentDetails.slug,
           });
         api.replaceSelection(`![${selectedFile.name}](${response.data.location})`);
-        console.log(state);
-        console.log(inputElement.files);
         document.body.removeChild(inputElement);
       });
       document.body.appendChild(inputElement);
       inputElement.click();
-      console.log(state);
     }
   } as ExtendedCommandBase<string>;
   return command;
