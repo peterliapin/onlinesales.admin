@@ -60,10 +60,12 @@ export const Contacts = () => {
     {
       field: "lastName",
       headerName: "Last Name",
+      flex: 2,
     },
     {
       field: "email",
       headerName: "Email",
+      flex: 3,
     },
     {
       field: "address1",
