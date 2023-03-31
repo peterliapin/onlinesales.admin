@@ -4,6 +4,7 @@ import { CoreModule, coreModuleRoute, getCoreModuleRoute } from "lib/router";
 import { SidebarLinkButton } from "./sidebar-link-button";
 import { ListSubheaderStyled, SidebarStyled } from "./index.styled";
 import { useRouteParams } from "typesafe-routes";
+import { Newspaper } from "@mui/icons-material";
 
 export const Sidebar = () => {
   const { moduleName } = useRouteParams(coreModuleRoute);
