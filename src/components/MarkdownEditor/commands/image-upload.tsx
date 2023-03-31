@@ -3,6 +3,7 @@ import { Button } from "@mui/material";
 import { ExtendedCommandBase } from "../types";
 import { RequestContextType } from "@providers/request-provider";
 import { ContentDetails } from "@features/blog/ContentEdit/types";
+import { toast } from "react-toastify";
 
 export const ImageUpload = (networkContext: RequestContextType, contentDetails: ContentDetails) => {
   const command = {
@@ -30,6 +31,10 @@ export const ImageUpload = (networkContext: RequestContextType, contentDetails: 
       );
     },
     execute(state, api){
+      if (this.contentDetails.slug.length === 0){
+        toast.error("Specify slug first!");
+        return;
+      }
       const inputElement = document.createElement("input");
       inputElement.style.display = "none";
       inputElement.type= "file";
