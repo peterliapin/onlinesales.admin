@@ -40,12 +40,17 @@ export const ImageUpload = (networkContext: RequestContextType, contentDetails: 
         }
         const selectedFile = inputElement.files[0];
         const replaceText = `![${selectedFile.name}](Uploading...)`;
+        const textPosStart = api.replaceSelection("").selection.start;
         api.replaceSelection(replaceText);
         const response = await this.networkContext.client.api.mediaCreate(
           {
             Image: selectedFile,
             ScopeUid: this.contentDetails.slug,
           });
+        api.setSelectionRange({
+          start: textPosStart,
+          end: replaceText.length + textPosStart,
+        });
         api.replaceSelection(`![${selectedFile.name}](${response.data.location})`);
         document.body.removeChild(inputElement);
       });
