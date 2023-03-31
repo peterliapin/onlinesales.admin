@@ -22,6 +22,7 @@ export interface AccountCreateDto {
   revenue?: number | null;
   tags?: string[] | null;
   socialMedia?: Record<string, string>;
+  source?: string | null;
   data?: string | null;
 }
 
@@ -38,6 +39,7 @@ export interface AccountDetailsDto {
   revenue?: number | null;
   tags?: string[] | null;
   socialMedia?: Record<string, string>;
+  source?: string | null;
   data?: string | null;
   /** @format int32 */
   id?: number;
@@ -78,6 +80,8 @@ export interface AccountUpdateDto {
   revenue?: number | null;
   tags?: string[] | null;
   socialMedia?: Record<string, string>;
+  source?: string | null;
+  data?: string | null;
 }
 
 export interface CommentCreateDto {
@@ -90,6 +94,7 @@ export interface CommentCreateDto {
   contentId: number;
   /** @format int32 */
   parentId?: number | null;
+  source?: string | null;
 }
 
 export interface CommentDetailsDto {
@@ -102,6 +107,7 @@ export interface CommentDetailsDto {
   contentId: number;
   /** @format int32 */
   parentId?: number | null;
+  source?: string | null;
   /** @format int32 */
   id?: number;
   /** @format date-time */
@@ -134,6 +140,7 @@ export interface CommentImportDto {
   createdByUserAgent?: string | null;
   updatedByIp?: string | null;
   updatedByUserAgent?: string | null;
+  source?: string | null;
 }
 
 export interface CommentUpdateDto {
@@ -157,6 +164,7 @@ export interface ContactCreateDto {
   language?: string | null;
   /** @format int32 */
   unsubscribeId?: number | null;
+  source?: string | null;
   /**
    * @format email
    * @minLength 1
@@ -180,6 +188,7 @@ export interface ContactDetailsDto {
   language?: string | null;
   /** @format int32 */
   unsubscribeId?: number | null;
+  source?: string | null;
   /**
    * @format email
    * @minLength 1
@@ -212,6 +221,7 @@ export interface ContactImportDto {
   language?: string | null;
   /** @format int32 */
   unsubscribeId?: number | null;
+  source?: string | null;
   /**
    * @format email
    * @minLength 1
@@ -227,7 +237,6 @@ export interface ContactImportDto {
   createdByUserAgent?: string | null;
   updatedByIp?: string | null;
   updatedByUserAgent?: string | null;
-  source?: string | null;
   /** @format int32 */
   accountId?: number | null;
   /** @format int32 */
@@ -251,6 +260,7 @@ export interface ContactUpdateDto {
   language?: string | null;
   /** @format int32 */
   unsubscribeId?: number | null;
+  source?: string | null;
   /** @format email */
   email?: string | null;
 }
@@ -275,6 +285,7 @@ export interface ContentCreateDto {
   categories?: string | null;
   tags?: string | null;
   allowComments?: boolean;
+  source?: string | null;
 }
 
 export interface ContentDetailsDto {
@@ -297,6 +308,7 @@ export interface ContentDetailsDto {
   categories?: string | null;
   tags?: string | null;
   allowComments?: boolean;
+  source?: string | null;
   /** @format int32 */
   id?: number;
   /** @format date-time */
@@ -325,6 +337,7 @@ export interface ContentImportDto {
   categories?: string | null;
   tags?: string | null;
   allowComments?: boolean;
+  source?: string | null;
   /** @format int32 */
   id?: number | null;
   /** @format date-time */
@@ -350,6 +363,7 @@ export interface ContentUpdateDto {
   categories?: string | null;
   tags?: string | null;
   allowComments?: boolean | null;
+  source?: string | null;
 }
 
 export interface DnsRecord {
@@ -373,6 +387,7 @@ export interface DomainCreateDto {
   catchAll?: boolean | null;
   dnsRecords?: DnsRecord[] | null;
   dnsCheck?: boolean | null;
+  source?: string | null;
 }
 
 export interface DomainDetailsDto {
@@ -387,6 +402,7 @@ export interface DomainDetailsDto {
   catchAll?: boolean | null;
   dnsRecords?: DnsRecord[] | null;
   dnsCheck?: boolean | null;
+  source?: string | null;
   /** @format int32 */
   id?: number;
   /** @format date-time */
@@ -413,6 +429,7 @@ export interface DomainImportDto {
   createdAt?: string | null;
   /** @format date-time */
   updatedAt?: string | null;
+  source?: string | null;
 }
 
 export interface DomainUpdateDto {
@@ -511,6 +528,7 @@ export interface LinkCreateDto {
   destination: string;
   /** @minLength 1 */
   name: string;
+  source?: string | null;
 }
 
 export interface LinkDetailsDto {
@@ -519,6 +537,7 @@ export interface LinkDetailsDto {
   destination: string;
   /** @minLength 1 */
   name: string;
+  source?: string | null;
   /** @format int32 */
   id?: number;
   /** @format date-time */
@@ -531,6 +550,7 @@ export interface LinkUpdateDto {
   uid?: string | null;
   destination?: string | null;
   name?: string | null;
+  source?: string | null;
 }
 
 export enum LogLevel {
@@ -563,6 +583,7 @@ export interface OrderCreateDto {
   currency: string;
   testOrder?: boolean;
   data?: string | null;
+  source?: string | null;
 }
 
 export interface OrderDetailsDto {
@@ -578,6 +599,7 @@ export interface OrderDetailsDto {
   currency: string;
   testOrder?: boolean;
   data?: string | null;
+  source?: string | null;
   /** @format int32 */
   id?: number;
   /** @format date-time */
@@ -603,6 +625,7 @@ export interface OrderImportDto {
   currency: string;
   testOrder?: boolean;
   data?: string | null;
+  source?: string | null;
   /** @format int32 */
   id?: number | null;
   /** @format date-time */
@@ -633,6 +656,7 @@ export interface OrderItemCreateDto {
    * @max 2147483647
    */
   quantity: number;
+  source?: string | null;
 }
 
 export interface OrderItemDetailsDto {
@@ -652,6 +676,7 @@ export interface OrderItemDetailsDto {
    * @max 2147483647
    */
   quantity: number;
+  source?: string | null;
   /** @format int32 */
   id?: number;
   /** @format date-time */
@@ -681,6 +706,7 @@ export interface OrderItemImportDto {
    * @max 2147483647
    */
   quantity: number;
+  source?: string | null;
   /** @format int32 */
   id?: number | null;
   /** @minLength 1 */
@@ -751,14 +777,18 @@ export interface TaskExecutionDto {
 export interface Unsubscribe {
   /** @format int32 */
   id?: number;
+  source?: string | null;
   /** @format date-time */
   createdAt: string;
   createdByIp?: string | null;
   createdByUserAgent?: string | null;
-  source?: string | null;
   reason?: string | null;
   /** @format int32 */
   contactId?: number | null;
+}
+
+export interface User {
+  name?: string | null;
 }
 
 export type QueryParamsType = Record<string | number, any>;
@@ -973,9 +1003,109 @@ export class HttpClient<SecurityDataType = unknown> {
 
 /**
  * @title OnlineSales API
- * @version 1.2.0.0
+ * @version 1.2.1.0
  */
 export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
+  microsoftIdentity = {
+    /**
+     * No description
+     *
+     * @tags Account
+     * @name AccountSignInDetail
+     * @request GET:/microsoft-identity/account/sign-in/{scheme}
+     * @secure
+     */
+    accountSignInDetail: (
+      scheme: string,
+      query?: {
+        redirectUri?: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<void, any>({
+        path: `/microsoft-identity/account/sign-in/${scheme}`,
+        method: "GET",
+        query: query,
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Account
+     * @name AccountChallengeDetail
+     * @request GET:/microsoft-identity/account/challenge/{scheme}
+     * @secure
+     */
+    accountChallengeDetail: (
+      scheme: string,
+      query?: {
+        redirectUri?: string;
+        scope?: string;
+        loginHint?: string;
+        domainHint?: string;
+        claims?: string;
+        policy?: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<void, any>({
+        path: `/microsoft-identity/account/challenge/${scheme}`,
+        method: "GET",
+        query: query,
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Account
+     * @name AccountSignOutDetail
+     * @request GET:/microsoft-identity/account/sign-out/{scheme}
+     * @secure
+     */
+    accountSignOutDetail: (scheme: string, params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/microsoft-identity/account/sign-out/${scheme}`,
+        method: "GET",
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Account
+     * @name AccountResetPasswordDetail
+     * @request GET:/microsoft-identity/account/reset-password/{scheme}
+     * @secure
+     */
+    accountResetPasswordDetail: (scheme: string, params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/microsoft-identity/account/reset-password/${scheme}`,
+        method: "GET",
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Account
+     * @name AccountEditProfileDetail
+     * @request GET:/microsoft-identity/account/edit-profile/{scheme}
+     * @secure
+     */
+    accountEditProfileDetail: (scheme: string, params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/microsoft-identity/account/edit-profile/${scheme}`,
+        method: "GET",
+        secure: true,
+        ...params,
+      }),
+  };
   api = {
     /**
      * No description
@@ -1077,8 +1207,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     accountsList: (
       query?: {
         query?: string;
-        /** @default false */
-        downloadCsv?: boolean;
       },
       params: RequestParams = {},
     ) =>
@@ -1116,6 +1244,67 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
+     * @tags Auth
+     * @name AuthLoginList
+     * @request GET:/api/auth/login
+     * @secure
+     */
+    authLoginList: (
+      query?: {
+        redirectUrl?: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<void, void | ProblemDetails>({
+        path: `/api/auth/login`,
+        method: "GET",
+        query: query,
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Auth
+     * @name AuthLogoutList
+     * @request GET:/api/auth/logout
+     * @secure
+     */
+    authLogoutList: (
+      query?: {
+        redirectUrl?: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<any, void | ProblemDetails>({
+        path: `/api/auth/logout`,
+        method: "GET",
+        query: query,
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Auth
+     * @name AuthProfileList
+     * @request GET:/api/auth/profile
+     * @secure
+     */
+    authProfileList: (params: RequestParams = {}) =>
+      this.request<User, void | ProblemDetails>({
+        path: `/api/auth/profile`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
      * @tags Comments
      * @name CommentsList
      * @request GET:/api/comments
@@ -1124,8 +1313,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     commentsList: (
       query?: {
         query?: string;
-        /** @default false */
-        downloadCsv?: boolean;
       },
       params: RequestParams = {},
     ) =>
@@ -1312,8 +1499,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     contactsList: (
       query?: {
         query?: string;
-        /** @default false */
-        downloadCsv?: boolean;
       },
       params: RequestParams = {},
     ) =>
@@ -1388,6 +1573,35 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
+     * @tags ContactUs
+     * @name ContactUsCreate
+     * @request POST:/api/contact-us
+     * @secure
+     */
+    contactUsCreate: (
+      data: {
+        /** @format binary */
+        Attachment?: File;
+        Message: string;
+        /** @format email */
+        Email: string;
+        PrivacyPolicy?: boolean;
+        Language: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<void, void>({
+        path: `/api/contact-us`,
+        method: "POST",
+        body: data,
+        secure: true,
+        type: ContentType.FormData,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
      * @tags Content
      * @name ContentList
      * @request GET:/api/content
@@ -1396,8 +1610,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     contentList: (
       query?: {
         query?: string;
-        /** @default false */
-        downloadCsv?: boolean;
       },
       params: RequestParams = {},
     ) =>
@@ -1672,8 +1884,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     domainsList: (
       query?: {
         query?: string;
-        /** @default false */
-        downloadCsv?: boolean;
       },
       params: RequestParams = {},
     ) =>
@@ -1806,8 +2016,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     emailGroupsList: (
       query?: {
         query?: string;
-        /** @default false */
-        downloadCsv?: boolean;
       },
       params: RequestParams = {},
     ) =>
@@ -1924,8 +2132,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     emailTemplatesList: (
       query?: {
         query?: string;
-        /** @default false */
-        downloadCsv?: boolean;
       },
       params: RequestParams = {},
     ) =>
@@ -1963,6 +2169,87 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
+     * @tags Fullfillment
+     * @name VerifoneFullfillmentCreate
+     * @request POST:/api/verifone/fullfillment
+     * @secure
+     */
+    verifoneFullfillmentCreate: (
+      data: {
+        Address?: string;
+        City?: string;
+        CompanyName?: string;
+        Country?: string;
+        CountryCode?: string;
+        Email?: string;
+        Fax?: string;
+        FirstName?: string;
+        Hash?: string;
+        Info?: string;
+        Lang?: string;
+        LastName?: string;
+        LicenseExp?: string;
+        LicenseLifetime?: string;
+        LicenseRef?: string;
+        LicenseType?: string;
+        PCode?: string;
+        Phone?: string;
+        PID?: string;
+        PSKU?: string;
+        /** @format int32 */
+        Quantity?: number;
+        RefNo?: string;
+        RefNoExt?: string;
+        State?: string;
+        TestOrder?: string;
+        Timezone?: string;
+        Zipcode?: string;
+      },
+      query?: {
+        secret?: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<void, any>({
+        path: `/api/verifone/fullfillment`,
+        method: "POST",
+        query: query,
+        body: data,
+        secure: true,
+        type: ContentType.FormData,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Licenses
+     * @name LicensesTrialCreate
+     * @request POST:/api/licenses/trial
+     * @secure
+     */
+    licensesTrialCreate: (
+      query: {
+        /** @format email */
+        Email: string;
+        /** @format int32 */
+        TimeZoneOffset: number;
+        Language: string;
+        AcceptGuides: boolean;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<void, void>({
+        path: `/api/licenses/trial`,
+        method: "POST",
+        query: query,
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
      * @tags Links
      * @name LinksCreate
      * @request POST:/api/links
@@ -1990,8 +2277,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     linksList: (
       query?: {
         query?: string;
-        /** @default false */
-        downloadCsv?: boolean;
       },
       params: RequestParams = {},
     ) =>
@@ -2216,8 +2501,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     orderItemsList: (
       query?: {
         query?: string;
-        /** @default false */
-        downloadCsv?: boolean;
       },
       params: RequestParams = {},
     ) =>
@@ -2422,8 +2705,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     ordersList: (
       query?: {
         query?: string;
-        /** @default false */
-        downloadCsv?: boolean;
       },
       params: RequestParams = {},
     ) =>
