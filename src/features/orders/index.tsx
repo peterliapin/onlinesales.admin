@@ -65,6 +65,16 @@ export const Orders = () => {
       flex: 1,
     },
     {
+      field: "exchangeRate",
+      headerName: "Exchange Rate",
+      flex: 1,
+    },
+    {
+      field: "currency",
+      headerName: "Currency",
+      flex: 1,
+    },
+    {
       field: "createdAt",
       headerName: "Created At",
       flex: 1,
@@ -90,7 +100,7 @@ export const Orders = () => {
       getExportUrl={getOrderExportUrlAsync}
       dataImportCreate={handleOrderImport}
       initialGridState={{
-        columns: {},
+        columns: { columnVisibilityModel: { currency: false, exchangeRate: false } },
         sorting: {
           sortModel: [{ field: defaultFilterOrderColumn, sort: defaultFilterOrderDirection }],
         },

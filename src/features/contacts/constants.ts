@@ -20,3 +20,5 @@ export const contactFormBreadcrumbLinks: BreadcrumbLink[] = [
 export const contactEditHeader = "Edit Contact";
 
 export const contactAddHeader = "Add Contact";
+
+export const contactViewHeader = "View Contact";

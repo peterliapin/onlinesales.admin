@@ -72,6 +72,7 @@ export const Accounts = () => {
     {
       field: "continentCode",
       headerName: "Continent Code",
+      flex: 1,
     },
   ];
 
