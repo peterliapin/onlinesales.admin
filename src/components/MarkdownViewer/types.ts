@@ -1,3 +1,3 @@
-export interface MarkdownViewerProps{
+export interface MarkdownViewerProps {
   source: string;
 }

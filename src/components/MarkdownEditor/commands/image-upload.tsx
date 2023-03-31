@@ -12,7 +12,7 @@ export const ImageUpload = (networkContext: RequestContextType, contentDetails: 
     name: "Upload Image",
     keyCommand: "image-upload",
     buttonProps: { "aria-label": "Upload image" },
-    icon: <ImageIcon sx={{ fontSize: 20 }}/>,
+    icon: <ImageIcon sx={{ fontSize: 20 }} />,
     render(command, disabled, executeCommand) {
       const onClick = () => {
         executeCommand(command, command.groupName);
@@ -22,7 +22,7 @@ export const ImageUpload = (networkContext: RequestContextType, contentDetails: 
           <Button
             variant="outlined"
             disabled={disabled}
-            startIcon={<ImageIcon sx={{ fontSize: 20 }}/>}
+            startIcon={<ImageIcon sx={{ fontSize: 20 }} />}
             onClick={onClick}
           >
             Upload Image
@@ -30,14 +30,14 @@ export const ImageUpload = (networkContext: RequestContextType, contentDetails: 
         </>
       );
     },
-    execute(state, api){
-      if (this.contentDetails.slug.length === 0){
+    execute(state, api) {
+      if (this.contentDetails.slug.length === 0) {
         toast.error("Specify slug first!");
         return;
       }
       const inputElement = document.createElement("input");
       inputElement.style.display = "none";
-      inputElement.type= "file";
+      inputElement.type = "file";
       inputElement.addEventListener("change", async () => {
         if (inputElement.files === null || inputElement.files.length === 0) {
           document.body.removeChild(inputElement);
@@ -47,11 +47,10 @@ export const ImageUpload = (networkContext: RequestContextType, contentDetails: 
         const replaceText = `![${selectedFile.name}](Uploading...)`;
         const textPosStart = api.replaceSelection("").selection.start;
         api.replaceSelection(replaceText);
-        const response = await this.networkContext.client.api.mediaCreate(
-          {
-            Image: selectedFile,
-            ScopeUid: this.contentDetails.slug,
-          });
+        const response = await this.networkContext.client.api.mediaCreate({
+          Image: selectedFile,
+          ScopeUid: this.contentDetails.slug,
+        });
         api.setSelectionRange({
           start: textPosStart,
           end: replaceText.length + textPosStart,
@@ -61,8 +60,7 @@ export const ImageUpload = (networkContext: RequestContextType, contentDetails: 
       });
       document.body.appendChild(inputElement);
       inputElement.click();
-    }
+    },
   } as ExtendedCommandBase<string>;
   return command;
 };
-

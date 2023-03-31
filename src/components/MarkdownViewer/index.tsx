@@ -15,9 +15,8 @@ import "./styles.css";
 // re-renders AST tree for each change which requires about 60 msecs which causes
 // HUGE performance drop when typing something
 
-
 const ImageUriTransformer = (src: string, alt: string, title: string | null) => {
-  if (src.startsWith("/api")){
+  if (src.startsWith("/api")) {
     return new URL(src, process.env.CORE_API).href;
   }
   return src;
@@ -39,7 +38,7 @@ function DirectiveHandler() {
       }
     });
   };
-};
+}
 
 const MarkdownViewer = ({ source }: MarkdownViewerProps) => {
   const [body, setBody] = useState<string>(source);
@@ -49,16 +48,9 @@ const MarkdownViewer = ({ source }: MarkdownViewerProps) => {
   useEffect(() => {
     onChange(source);
   }, [source]);
-  return(
+  return (
     <ReactMarkdown
-      remarkPlugins={
-        [
-          remarkGfm,
-          remarkBreaks,
-          remarkDirective,
-          DirectiveHandler,
-        ]
-      }
+      remarkPlugins={[remarkGfm, remarkBreaks, remarkDirective, DirectiveHandler]}
       transformImageUri={ImageUriTransformer}
     >
       {body}
@@ -67,9 +59,7 @@ const MarkdownViewer = ({ source }: MarkdownViewerProps) => {
 };
 
 export const MarkdownViewerFunc = (source: string) => {
-  return (
-    <MarkdownViewer source={source}/>
-  );
+  return <MarkdownViewer source={source} />;
 };
 
 export default MarkdownViewer;

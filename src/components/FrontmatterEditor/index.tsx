@@ -10,21 +10,20 @@ type onChangeFunc = (items: []) => void;
 type handleModalCloseFunc = (items: []) => void;
 
 export interface FrontmatterEditorInitialValue {
-    key: string;
-    value: string;
-};
+  key: string;
+  value: string;
+}
 
 interface FrontmatterEditorProps {
-    onChange: onChangeFunc;
-    initialValues: FrontmatterEditorInitialValue[];
-};
+  onChange: onChangeFunc;
+  initialValues: FrontmatterEditorInitialValue[];
+}
 
 interface FrontmatterEditorModalProps {
-    isOpen: boolean;
-    handleClose: handleModalCloseFunc;
-    initialValues: FrontmatterEditorInitialValue[];
-};
-
+  isOpen: boolean;
+  handleClose: handleModalCloseFunc;
+  initialValues: FrontmatterEditorInitialValue[];
+}
 
 const defaults: KVItemType[] = [
   {
@@ -32,18 +31,18 @@ const defaults: KVItemType[] = [
     value: "",
     options: {
       fixed: true,
-    }
+    },
   },
   {
     key: "SeoDescription",
     value: "",
     options: {
       fixed: true,
-    }
+    },
   },
-]; 
+];
 
-export const FrontmatterEditor = ({onChange, initialValues}: FrontmatterEditorProps) => {
+export const FrontmatterEditor = ({ onChange, initialValues }: FrontmatterEditorProps) => {
   let startValues = initialValues.map((item) => {
     const newItem: KVItemType = {
       key: item.key,
@@ -51,53 +50,43 @@ export const FrontmatterEditor = ({onChange, initialValues}: FrontmatterEditorPr
     };
     return newItem;
   });
-  if (startValues.filter(
-    (item) => defaults.filter(
-      (item2) => item.key === item2.key).length > 0
-  ).length === 0){
+  if (
+    startValues.filter((item) => defaults.filter((item2) => item.key === item2.key).length > 0)
+      .length === 0
+  ) {
     startValues = startValues.concat(defaults);
   }
   return (
     <>
-      <KVEditor
-        defaults={startValues}
-        onChange={onChange}
-        options={{stretchLabels: true}}
-      />
+      <KVEditor defaults={startValues} onChange={onChange} options={{ stretchLabels: true }} />
     </>
   );
 };
 
-
 const FrontmatterEditorModal = ({
-  isOpen, 
-  handleClose, 
-  initialValues}: FrontmatterEditorModalProps) => {
+  isOpen,
+  handleClose,
+  initialValues,
+}: FrontmatterEditorModalProps) => {
   const [editorItems, setEditorItems] = useState<[]>([]);
   const onClose = () => {
     handleClose(editorItems);
   };
   return (
-    <Modal
-      open={isOpen}
-      onClose={onClose}
-    >
+    <Modal open={isOpen} onClose={onClose}>
       <Fade in={isOpen}>
         <BoxStyled bgcolor={greyColor[500]}>
-          <Grid 
-            container
-            direction="column"
-            alignItems="flex-end"
-            xs={12}
-          >
+          <Grid container direction="column" alignItems="flex-end" xs={12}>
             <Grid item xs={1}>
               <IconButton onClick={onClose}>
-                <Close/>
+                <Close />
               </IconButton>
             </Grid>
             <Grid item xs={12}>
               <FrontmatterEditor
-                onChange={(items) => {setEditorItems(items);}}
+                onChange={(items) => {
+                  setEditorItems(items);
+                }}
                 initialValues={initialValues}
               />
             </Grid>
