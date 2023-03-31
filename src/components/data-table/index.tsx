@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import {
   DataGrid,
   getGridStringOperators,
@@ -20,13 +20,15 @@ type DataTableProps = {
   pageSize?: number;
   totalRowCount: number;
   rowsPerPageOptions: number[];
+  pageNumber: number;
   setSortColumn: (sortColumn: string) => void;
   setSortOrder: (sortOrder: string) => void;
   setPageSize: (pageSize: number) => void;
   setSkipLimit: (skipLimit: number) => void;
   setFilterField: (filterField: string) => void;
   setFilterFieldValue: (fieldValue: string) => void;
-  initialState: GridInitialStateCommunity | undefined;
+  setPageNumber: (pageNumber: number) => void;
+  initialState?: GridInitialStateCommunity | undefined;
   showActionsColumn: boolean;
   disableEditRoute: boolean;
   disableViewRoute: boolean;
@@ -38,12 +40,14 @@ export const DataTableGrid = ({
   pageSize,
   totalRowCount,
   rowsPerPageOptions,
+  pageNumber,
   setSortColumn,
   setSortOrder,
   setPageSize,
   setSkipLimit,
   setFilterField,
   setFilterFieldValue,
+  setPageNumber,
   initialState,
   showActionsColumn,
   disableEditRoute,
@@ -84,8 +88,6 @@ export const DataTableGrid = ({
     navigate(getViewFormRoute(row.id!), { state: row });
   };
 
-  const [page, setPage] = useState(0);
-
   const filterAdjustedColumns = useMemo(
     () =>
       columns.map((col) => {
@@ -100,7 +102,7 @@ export const DataTableGrid = ({
   );
 
   const handlePageChange = (page: number) => {
-    setPage(page);
+    setPageNumber(page);
     setSkipLimit(page * pageSize!);
   };
 
@@ -138,7 +140,7 @@ export const DataTableGrid = ({
         rowCount={totalRowCount}
         rowsPerPageOptions={rowsPerPageOptions}
         pagination
-        page={page}
+        page={pageNumber}
         pageSize={pageSize}
         paginationMode="server"
         onPageChange={(newPage) => handlePageChange(newPage)}

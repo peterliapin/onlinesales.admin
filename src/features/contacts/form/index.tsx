@@ -1,6 +1,5 @@
 import { useState } from "react";
 import {
-  AlertColor,
   Backdrop,
   Button,
   Card,
@@ -8,21 +7,20 @@ import {
   CircularProgress,
   Grid,
   TextField,
-  Typography,
 } from "@mui/material";
 import { ContactDetailsDto } from "lib/network/swagger-client";
 import {
   ModuleContainer,
   ModuleHeaderContainer,
   ModuleHeaderSubtitleContainer,
-  ModuleHeaderTitleContainer,
 } from "components/module";
 import { CustomizedSnackbar } from "components/snackbar";
 import { CoreModule } from "lib/router";
-import { EMAIL_REGEX } from "utils/constants";
 import { initialSnackBarParams, serverErrorSnackBarParams } from "components/snackbar/constants";
 import { BreadCrumbNavigation } from "components/breadcrumbs";
 import { contactFormBreadcrumbLinks } from "../constants";
+import { useCoreModuleNavigation } from "utils/helper";
+import { isValidEmail, isValidNumber } from "utils/validators";
 
 interface ContactFormProps {
   contact: ContactDetailsDto;
@@ -32,6 +30,8 @@ interface ContactFormProps {
 }
 
 export const ContactForm = ({ contact, updateContact, handleSave, isEdit }: ContactFormProps) => {
+  const handleNavigation = useCoreModuleNavigation();
+
   const [isInvalidEmail, setIsInvalidEmail] = useState(false);
 
   const [isInvalidNumber, setIsInvalidNumber] = useState(false);
@@ -47,27 +47,19 @@ export const ContactForm = ({ contact, updateContact, handleSave, isEdit }: Cont
     updateContact((currentContact: ContactDetailsDto) => ({ ...currentContact, [name]: value }));
   };
 
-  const isValidEmail = (email: string) => {
-    return email && EMAIL_REGEX.test(email);
-  };
-
   const validateAndSave = async () => {
     setIsInvalidEmail(false);
     setIsInvalidNumber(false);
 
     if (!isValidEmail(contact.email)) {
       setIsInvalidEmail(true);
-    } else if (!contact.timezone || isNaN(contact.timezone!)) {
+    } else if (!isValidNumber(contact.timezone)) {
       setIsInvalidNumber(true);
     } else {
       try {
         setIsSaving(true);
         await handleSave();
-        setSnackBarParams({
-          message: isEdit ? "Updated Successfully" : "Saved Successfully",
-          isOpen: true,
-          severity: "success" as AlertColor,
-        });
+        handleSuccess();
       } catch (e) {
         console.log(e);
         setSnackBarParams(serverErrorSnackBarParams);
@@ -77,12 +69,17 @@ export const ContactForm = ({ contact, updateContact, handleSave, isEdit }: Cont
     }
   };
 
+  const handleSuccess = () => {
+    handleNavigation(CoreModule.contacts);
+  };
+
+  const handleCancel = () => {
+    handleNavigation(CoreModule.contacts);
+  };
+
   return (
     <ModuleContainer>
       <ModuleHeaderContainer>
-        <ModuleHeaderTitleContainer>
-          <Typography variant="h3">{header}</Typography>
-        </ModuleHeaderTitleContainer>
         <ModuleHeaderSubtitleContainer>
           <BreadCrumbNavigation
             links={contactFormBreadcrumbLinks}
@@ -188,6 +185,7 @@ export const ContactForm = ({ contact, updateContact, handleSave, isEdit }: Cont
               <TextField
                 label="Timezone"
                 name="timezone"
+                type="text"
                 value={contact.timezone || ""}
                 placeholder="Enter timezone"
                 variant="outlined"
@@ -208,7 +206,17 @@ export const ContactForm = ({ contact, updateContact, handleSave, isEdit }: Cont
                 fullWidth
               ></TextField>
             </Grid>
-            <Grid item xs={6}></Grid>
+            <Grid item xs={6}>
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                onClick={handleCancel}
+                fullWidth
+              >
+                Cancel
+              </Button>
+            </Grid>
             <Grid item xs={6}>
               <Button
                 type="submit"
@@ -217,7 +225,7 @@ export const ContactForm = ({ contact, updateContact, handleSave, isEdit }: Cont
                 onClick={validateAndSave}
                 fullWidth
               >
-                Submit
+                Save
               </Button>
             </Grid>
           </Grid>
