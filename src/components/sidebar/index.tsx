@@ -1,5 +1,5 @@
 import { List, ListItem } from "@mui/material";
-import { People, Business, Inventory } from "@mui/icons-material";
+import { People, Business, Inventory, Web } from "@mui/icons-material";
 import { CoreModule, coreModuleRoute, getCoreModuleRoute } from "lib/router";
 import { SidebarLinkButton } from "./sidebar-link-button";
 import { ListSubheaderStyled, SidebarStyled } from "./index.styled";
@@ -33,6 +33,14 @@ export const Sidebar = () => {
             to={getCoreModuleRoute(CoreModule.orders)}
             Icon={Inventory}
             selected={moduleName === CoreModule.orders}
+          />
+        </ListItem>
+        <ListItem>
+          <SidebarLinkButton
+            title="Domains"
+            to={getCoreModuleRoute(CoreModule.domains)}
+            Icon={Web}
+            selected={moduleName === CoreModule.domains}
           />
         </ListItem>
       </List>

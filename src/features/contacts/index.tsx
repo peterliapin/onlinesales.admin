@@ -3,7 +3,7 @@ import { ContactDetailsDto, ContactImportDto } from "lib/network/swagger-client"
 import { useRequestContext } from "providers/request-provider";
 import { ContactNameListItem, ContactNameListItemText } from "./index.styled";
 import {
-  contactListCurrentBreadcrumb,
+  contactListPageBreadcrumb,
   defaultFilterOrderColumn,
   defaultFilterOrderDirection,
   modelName,
@@ -60,10 +60,12 @@ export const Contacts = () => {
     {
       field: "lastName",
       headerName: "Last Name",
+      flex: 2,
     },
     {
       field: "email",
       headerName: "Email",
+      flex: 3,
     },
     {
       field: "address1",
@@ -97,7 +99,7 @@ export const Contacts = () => {
       modelName={modelName}
       columns={columns}
       dataListBreadcrumbLinks={dataListBreadcrumbLinks}
-      currentBreadcrumb={contactListCurrentBreadcrumb}
+      currentBreadcrumb={contactListPageBreadcrumb}
       defaultFilterOrderColumn={defaultFilterOrderColumn}
       defaultFilterOrderDirection={defaultFilterOrderDirection}
       searchBarLabel={searchLabel}

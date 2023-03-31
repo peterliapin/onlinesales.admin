@@ -10,9 +10,15 @@ export const searchLabel = "Search contacts";
 
 export const modelName = "contact";
 
+export const contactListPageBreadcrumb = "Contacts";
+
 export const contactFormBreadcrumbLinks: BreadcrumbLink[] = [
   ...dataListBreadcrumbLinks,
-  { linkText: "Contacts", toRoute: getCoreModuleRoute(CoreModule.contacts) },
+  { linkText: contactListPageBreadcrumb, toRoute: getCoreModuleRoute(CoreModule.contacts) },
 ];
 
-export const contactListCurrentBreadcrumb = "Contacts";
+export const contactEditHeader = "Edit Contact";
+
+export const contactAddHeader = "Add Contact";
+
+export const contactViewHeader = "View Contact";

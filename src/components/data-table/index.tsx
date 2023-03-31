@@ -3,6 +3,7 @@ import {
   DataGrid,
   getGridStringOperators,
   GridColDef,
+  GridColumnVisibilityModel,
   GridFilterModel,
   GridSortModel,
 } from "@mui/x-data-grid";
@@ -28,6 +29,7 @@ type DataTableProps = {
   setFilterField: (filterField: string) => void;
   setFilterFieldValue: (fieldValue: string) => void;
   setPageNumber: (pageNumber: number) => void;
+  handleColumnVisibilityModel: (model: GridColumnVisibilityModel) => void;
   initialState?: GridInitialStateCommunity | undefined;
   showActionsColumn: boolean;
   disableEditRoute: boolean;
@@ -48,6 +50,7 @@ export const DataTableGrid = ({
   setFilterField,
   setFilterFieldValue,
   setPageNumber,
+  handleColumnVisibilityModel,
   initialState,
   showActionsColumn,
   disableEditRoute,
@@ -149,6 +152,7 @@ export const DataTableGrid = ({
         onSortModelChange={(newSortModel) => handleSortChange(newSortModel)}
         filterMode="server"
         onFilterModelChange={(newFilterModel) => handleFilterChange(newFilterModel)}
+        onColumnVisibilityModelChange={(newModel) => handleColumnVisibilityModel(newModel)}
         initialState={initialState}
       />
     </DataTableContainer>
