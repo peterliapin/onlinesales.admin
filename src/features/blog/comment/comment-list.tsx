@@ -1,14 +1,14 @@
-import React, {useEffect, useState} from "react";
-import {useRequestContext} from "../../../providers/request-provider";
-import {CommentExtendedDto, CommentForm} from "./comment-form";
-import {CommentsContainer, CommentsTitle} from "../index.styled";
+import React, { useEffect, useState } from "react";
+import { useRequestContext } from "../../../providers/request-provider";
+import { CommentExtendedDto, CommentForm } from "./comment-form";
+import { CommentsContainer, CommentsTitle } from "../index.styled";
 
 interface CommentListProps {
   contentId?: number;
 }
 
-export const CommentList = ({contentId}: CommentListProps) => {
-  const {client} = useRequestContext();
+export const CommentList = ({ contentId }: CommentListProps) => {
+  const { client } = useRequestContext();
   const [comments, setComments] = useState<CommentExtendedDto[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -19,14 +19,19 @@ export const CommentList = ({contentId}: CommentListProps) => {
         setIsLoading(true);
         setComments([]);
         if (contentId) {
-          const filter = {
-            "filter[where][contentId]": contentId,
-            "filter[where][approved]": "Approved",
-          };
+          const filter = [
+            `filter[where][contentId]=${contentId}`,
+            "filter[where][approved]=Approved",
+          ].join("&");
 
-          const {data} = await client.extendedApi.commentsList(filter, {
-            signal: controller.signal,
-          });
+          const { data } = await client.api.commentsList(
+            {
+              query: filter,
+            },
+            {
+              signal: controller.signal,
+            }
+          );
           const getReplays = (parentId: number): CommentExtendedDto[] => {
             return data
               .filter((i) => i.parentId == parentId)
@@ -70,7 +75,7 @@ export const CommentList = ({contentId}: CommentListProps) => {
         <div>
           <CommentsTitle>Comments:</CommentsTitle>
           {comments.map((comment, i) => (
-            <CommentForm key={i} comment={comment}/>
+            <CommentForm key={i} comment={comment} />
           ))}
         </div>
       )}

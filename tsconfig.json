@@ -12,6 +12,17 @@
     "strict": true,
     "skipLibCheck": true,
     "resolveJsonModule": true,
-    "baseUrl": "./src"
+    "baseUrl": "./src",
+    "paths": {
+      "@providers/*": ["providers/*"],
+      "@lib/*": ["lib/*"],
+      "@features/*": ["features/*"],
+      "@components/*": ["components/*"],
+    },
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "types": [
+      "node"
+    ],
   }
 }

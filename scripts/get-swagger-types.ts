@@ -2,6 +2,7 @@ import { generateApi } from "swagger-typescript-api";
 import path from "path";
 import dotenv from "dotenv";
 import { exit } from "process";
+import fs from 'fs';
 
 dotenv.config();
 
@@ -13,4 +14,16 @@ generateApi({
   output: path.resolve(process.cwd(), "./src/lib/network"),
   name: "swagger-client.generated.ts",
   httpClientType: "fetch",
-}).then(() => exit(0));
+}).then(async () => {
+  const res = await fetch(apiPath);
+  const swaggerJson = await res.json();
+  fs.writeFile("./src/lib/network/swagger.json", JSON.stringify(swaggerJson), (err) => {
+    if (err) {
+      console.error(err);
+      return;
+    }
+    console.log('Swagger JSON file has been saved!');
+  });
+}).catch((err) => {
+  console.error('Error generating API:', err);
+});;

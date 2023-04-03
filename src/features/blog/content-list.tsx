@@ -11,19 +11,27 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { ContentDetailsDto } from "lib/network/swagger-client";
-import { ContentListContainer, SearchBoxContainer, TimestampContainer } from "./index.styled";
+import { ContentDetailsDto } from "@lib/network/swagger-client";
+import { 
+  ContentListContainer, 
+  SearchBoxContainer, 
+  TimestampContainer, 
+  ActionsContainer, 
+  LeftContainer, 
+  RightContainer,
+  ExtraActionsContainer,
+  AddButtonContainer,
+} from "./index.styled";
 import React, { useEffect, useState } from "react";
 import {
-  ModuleHeaderActionContainer,
   ModuleHeaderContainer,
   ModuleHeaderSubtitleContainer,
-  ModuleHeaderTitleContainer,
-} from "../../components/module";
-import { Add, NavigateNext } from "@mui/icons-material";
-import { rootRoute } from "../../lib/router";
-import { GhostLink } from "../../components/ghost-link";
-import { useRequestContext } from "../../providers/request-provider";
+} from "@components/module";
+import { Add, NavigateNext, Upload, Download, } from "@mui/icons-material";
+import { rootRoute } from "@lib/router";
+import { GhostLink } from "@components/ghost-link";
+import { useRequestContext } from "@providers/request-provider";
+import { SearchBar } from "@components/search-bar";
 
 const coreApi = process.env.CORE_API;
 
@@ -65,9 +73,6 @@ export const ContentList = () => {
   return (
     <>
       <ModuleHeaderContainer>
-        <ModuleHeaderTitleContainer>
-          <Typography variant="h3">Blog</Typography>
-        </ModuleHeaderTitleContainer>
         <ModuleHeaderSubtitleContainer>
           <Breadcrumbs separator={<NavigateNext fontSize="small" />}>
             <Link to={rootRoute} component={GhostLink} underline="hover">
@@ -76,21 +81,31 @@ export const ContentList = () => {
             <Typography variant="body1">Blog</Typography>
           </Breadcrumbs>
         </ModuleHeaderSubtitleContainer>
-        <ModuleHeaderActionContainer>
-          <Button variant="contained" href={`${location}/new`} startIcon={<Add />}>
-            Add new content
-          </Button>
-        </ModuleHeaderActionContainer>
       </ModuleHeaderContainer>
-      <SearchBoxContainer>
-        <TextField
-          variant={"outlined"}
-          placeholder={"Search by title"}
-          value={searchText}
-          onChange={(e) => e.target && setSearchText(e.target.value)}
-          size={"small"}
-        />
-      </SearchBoxContainer>
+      <ActionsContainer>
+        <LeftContainer>
+          <SearchBar
+            setSearchTermOnChange={(value) => setSearchText(value)}
+            searchBoxLabel="Search Content"
+            initialValue={searchText}
+          ></SearchBar>
+        </LeftContainer>
+        <RightContainer>
+          <ExtraActionsContainer>
+            <Button startIcon={<Upload />} disabled={true}>
+              Import
+            </Button>
+            <Button startIcon={<Download />} disabled={true}>
+              Export
+            </Button>
+          </ExtraActionsContainer>
+          <AddButtonContainer>
+            <Button variant="contained" href={`${location}/new`} startIcon={<Add />}>
+              Add content
+            </Button>
+          </AddButtonContainer>
+        </RightContainer>
+      </ActionsContainer>
       <ContentListContainer>
         {isLoading && <div>Loading...</div>}
         {!isLoading && (!contentItems || contentItems.length === 0) && <div>No resultes</div>}

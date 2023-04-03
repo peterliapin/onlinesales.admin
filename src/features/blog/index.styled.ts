@@ -72,3 +72,29 @@ export const CommentContainer = styled("div")`
 export const CommentDateContainer = styled("span")`
   font-size: 80%;
 `;
+
+export const ActionsContainer = styled("div")`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+export const LeftContainer = styled("div")`
+  display: flex;
+  align-items: center;
+`;
+
+export const RightContainer = styled("div")`
+  display: flex;
+  align-items: center;
+`;
+
+export const ExtraActionsContainer = styled("div")`
+  display: flex;
+  flex-flow: row;
+  gap: ${({ theme }) => theme.spacing(2)};
+`;
+
+export const AddButtonContainer = styled("div")`
+  margin-left: ${({ theme }) => theme.spacing(10)};
+`;
