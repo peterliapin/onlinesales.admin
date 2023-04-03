@@ -2,10 +2,10 @@ import { Typography } from "@mui/material";
 import { rootRoute } from "lib/router";
 import { GhostLink } from "components/ghost-link";
 import { useAuthState } from "providers/auth-provider";
-import { AppBarStyled, AppBarToolbar } from "./index.styled";
+import { AppBarStyled, AppBarToolbar, LogoutStyled } from "./index.styled";
 
 export const AppHeader = () => {
-  const { account } = useAuthState();
+  const { account, logout } = useAuthState();
 
   return (
     <AppBarStyled>
@@ -13,7 +13,9 @@ export const AppHeader = () => {
         <Typography component={GhostLink} to={rootRoute} variant="h5">
           OnlineSales
         </Typography>
-        <Typography>{account?.name}</Typography>
+        <Typography>
+          {account?.name} {account?.username && <LogoutStyled onClick={logout} />}{" "}
+        </Typography>
       </AppBarToolbar>
     </AppBarStyled>
   );

@@ -21,7 +21,7 @@ const client = new Api<getTokenFn>({
   },
 });
 
-type RequestContextType = {
+export type RequestContextType = {
   client: Api<getTokenFn>;
 };
 

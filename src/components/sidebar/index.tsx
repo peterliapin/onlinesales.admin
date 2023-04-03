@@ -4,6 +4,7 @@ import { CoreModule, coreModuleRoute, getCoreModuleRoute } from "lib/router";
 import { SidebarLinkButton } from "./sidebar-link-button";
 import { ListSubheaderStyled, SidebarStyled } from "./index.styled";
 import { useRouteParams } from "typesafe-routes";
+import { Newspaper } from "@mui/icons-material";
 
 export const Sidebar = () => {
   const { moduleName } = useRouteParams(coreModuleRoute);
@@ -11,6 +12,14 @@ export const Sidebar = () => {
   return (
     <SidebarStyled>
       <List component="nav" subheader={<ListSubheaderStyled>General</ListSubheaderStyled>}>
+        <ListItem>
+          <SidebarLinkButton
+            title="Blog"
+            to={getCoreModuleRoute(CoreModule.blog)}
+            Icon={Newspaper}
+            selected={moduleName === CoreModule.blog}
+          />
+        </ListItem>
         <ListItem>
           <SidebarLinkButton
             title="Contacts"

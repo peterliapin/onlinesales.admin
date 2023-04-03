@@ -570,6 +570,10 @@ export interface LogRecord {
   message?: string | null;
 }
 
+export interface MediaDetailsDto {
+  location?: string | null;
+}
+
 export interface OrderCreateDto {
   /** @format int32 */
   contactId: number;
@@ -2428,12 +2432,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       },
       params: RequestParams = {},
     ) =>
-      this.request<void, void | ProblemDetails>({
+      this.request<MediaDetailsDto, void | ProblemDetails>({
         path: `/api/media`,
         method: "POST",
         body: data,
         secure: true,
         type: ContentType.FormData,
+        format: "json",
         ...params,
       }),
 

@@ -39,12 +39,22 @@ export const useAuthState = () => {
 
   const getToken = useCallback(async () => {
     try {
-      const { idToken } = await instance.acquireTokenSilent({ scopes: ["User.Read"], account });
+      const { idToken } = await instance.acquireTokenSilent({
+        scopes: ["User.Read"],
+        account,
+      });
+
       return idToken;
     } catch {
-      instance.loginRedirect();
+      await instance.loginRedirect();
     }
   }, [instance, account]);
 
-  return { account, getToken };
+  const logout = useCallback(async () => {
+    if (instance && account) {
+      await instance.logout();
+    }
+  }, [instance, account]);
+
+  return { account, getToken, logout };
 };

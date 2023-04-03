@@ -1,7 +1,6 @@
 import { generateApi } from "swagger-typescript-api";
 import path from "path";
 import dotenv from "dotenv";
-import { exit } from "process";
 import fs from 'fs';
 
 dotenv.config();
@@ -26,4 +25,4 @@ generateApi({
   });
 }).catch((err) => {
   console.error('Error generating API:', err);
-});;
+});
