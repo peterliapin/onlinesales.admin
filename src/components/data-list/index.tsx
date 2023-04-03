@@ -89,29 +89,19 @@ export const DataList = ({
   const [columnVisibilityModel, setColumnVisibilityModel] = useState(
     initialGridState?.columns?.columnVisibilityModel
   );
-  const [gridSettingsUpdated, setGridSettingsUpdated] = useState(false);
+  const [gridSettingsLoaded, setGridSettingsLoaded] = useState(false);
 
   const whereFilterQuery = getWhereFilterQuery(whereField, whereFieldValue);
-
   const basicFilterQuery = getBasicFilterQuery(filterLimit, sortColumn, sortOrder, skipLimit);
-
   const basicExportFilterQuery = getBasicExportFilterQuery(sortColumn, sortOrder);
 
   const gridSettingsStorageName = `${modelName}DataListSettings`;
 
   useEffect(() => {
-    (async () => {
-      const result = await getModelDataList(`${searchTerm}&${basicFilterQuery}${whereFilterQuery}`);
-      if (result) {
-        const { data, headers } = result;
-        setTotalResultsCount(headers.get(totalCountHeaderName));
-        setModelData(data);
-        saveGridState();
-        setGridSettingsUpdated(true);
-      } else {
-        setModelData(undefined);
-      }
-    })();
+    if (gridSettingsLoaded) {
+      saveGridStateInLocalStorage();
+      getDataListAsync();
+    }
   }, [
     searchTerm,
     filterLimit,
@@ -120,19 +110,8 @@ export const DataList = ({
     sortOrder,
     whereFieldValue,
     columnVisibilityModel,
+    gridSettingsLoaded,
   ]);
-
-  useEffect(() => {
-    if (totalRowCount === -1) {
-      throw new Error("Server error: x-total-count header is not provided.");
-    }
-  }, [totalRowCount]);
-
-  useEffect(() => {
-    if (!modelData) {
-      throw new Error("Server error: Data cannot be retrieved from server.");
-    }
-  }, [modelData]);
 
   useEffect(() => {
     const settingsState = localStorage.getItem(gridSettingsStorageName);
@@ -160,9 +139,22 @@ export const DataList = ({
       setColumnVisibilityModel(columnVisibilityModel);
       updateGridSettings(settings);
     }
+    setGridSettingsLoaded(true);
   }, []);
 
-  const saveGridState = () => {
+  useEffect(() => {
+    if (totalRowCount === -1) {
+      throw new Error("Server error: x-total-count header is not provided.");
+    }
+  }, [totalRowCount]);
+
+  useEffect(() => {
+    if (!modelData) {
+      throw new Error("Server error: Data cannot be retrieved from server.");
+    }
+  }, [modelData]);
+
+  const saveGridStateInLocalStorage = () => {
     localStorage.setItem(
       gridSettingsStorageName,
       JSON.stringify({
@@ -177,6 +169,19 @@ export const DataList = ({
         columnVisibilityModel,
       } as dataListSettings)
     );
+  };
+
+  const getDataListAsync = () => {
+    (async () => {
+      const result = await getModelDataList(`${searchTerm}&${basicFilterQuery}${whereFilterQuery}`);
+      if (result) {
+        const { data, headers } = result;
+        setTotalResultsCount(headers.get(totalCountHeaderName));
+        setModelData(data);
+      } else {
+        setModelData(undefined);
+      }
+    })();
   };
 
   const updateGridSettings = (gridSettings: dataListSettings) => {
@@ -201,7 +206,6 @@ export const DataList = ({
       pageSize: gridSettings.filterLimit,
     };
     initialGridState!.columns = { columnVisibilityModel: gridSettings.columnVisibilityModel };
-    setGridSettingsUpdated(true);
   };
 
   const setTotalResultsCount = (headerCount: string | null) => {
@@ -237,7 +241,7 @@ export const DataList = ({
 
   const importFieldsObject = getModelByName(modelName);
 
-  return gridSettingsUpdated ? (
+  return gridSettingsLoaded ? (
     <ModuleContainer>
       <ModuleHeaderContainer>
         <ModuleHeaderSubtitleContainer>
