@@ -4,7 +4,7 @@ import {
   ContentDetailsDto,
   ContentUpdateDto,
   ContentCreateDto,
-} from "@lib/network/swagger-client.generated";
+} from "@lib/network/swagger-client";
 import { ContentDetails } from "@features/blog/ContentEdit/types";
 
 export const Automapper = createMapper({
