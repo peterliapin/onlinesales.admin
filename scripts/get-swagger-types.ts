@@ -11,6 +11,6 @@ if (!apiPath) throw new Error("CORE_API_SWAGGER env isn't set");
 generateApi({
   url: apiPath,
   output: path.resolve(process.cwd(), "./src/lib/network"),
-  name: "swagger-client.ts",
+  name: "swagger-client.generated.ts",
   httpClientType: "fetch",
 }).then(() => exit(0));
