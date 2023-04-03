@@ -10,9 +10,9 @@ export const searchLabel = "Search orders";
 
 export const modelName = "order";
 
-export const accountFormBreadcrumbLinks: BreadcrumbLink[] = [
-  ...dataListBreadcrumbLinks,
-  { linkText: "Orders", toRoute: getCoreModuleRoute(CoreModule.contacts) },
-];
+export const orderListPageBreadcrumb = "Orders";
 
-export const accountListCurrentBreadcrumb = "Orders";
+export const orderFormBreadcrumbLinks: BreadcrumbLink[] = [
+  ...dataListBreadcrumbLinks,
+  { linkText: orderListPageBreadcrumb, toRoute: getCoreModuleRoute(CoreModule.contacts) },
+];
