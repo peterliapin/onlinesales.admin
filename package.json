@@ -91,7 +91,7 @@
     "unist-util-visit": "^4.1.2",
     "use-debounce": "^9.0.3",
     "use-local-storage": "^2.3.6",
-    "zod-formik-adapter": "^1.2.0",
-    "zod": "^3.21.4"
+    "zod": "^3.21.4",
+    "zod-formik-adapter": "^1.2.0"
   }
 }

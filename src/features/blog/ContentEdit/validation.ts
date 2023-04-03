@@ -3,7 +3,7 @@ import { TypeDefaultValues } from "./types";
 
 export const ContentEditAvailableLanguages = ["English", "Russian"] as const;
 
-export const ContentEditAvailableTypes = ["Product", "Case", "Other"] as const;
+export const ContentEditAvailableTypes = ["Blog Post", "Release Notes", "Other"] as const;
 
 /// TODO: Runtime
 export const ContentEditAvailableTags = ["Tag 1", "Tag 2", "Tag 3"] as const;
@@ -15,10 +15,10 @@ export const ContentEditMaximumImageSize = 3 * 1000 * 1000; // 3 megabytes
 
 export const ContentEditDefaultValues: TypeDefaultValues[] = [
   {
-    type: "Product",
+    type: "Blog Post",
     defaultValues: {
       id: null,
-      type: "Product",
+      type: "Blog Post",
       title: "",
       description: "",
       body: "",
@@ -38,10 +38,10 @@ export const ContentEditDefaultValues: TypeDefaultValues[] = [
     },
   },
   {
-    type: "Case",
+    type: "Release Notes",
     defaultValues: {
       id: null,
-      type: "Case",
+      type: "Release Notes",
       title: "",
       description: "",
       body: "",

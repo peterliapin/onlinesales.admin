@@ -274,6 +274,7 @@ export const ContentEdit = (props: ContentEditProps) => {
             localStorageSnapshot.data.filter((data) => data.id === id)[0].savedData
           );
           await formik.setFieldValue("coverImageFile", new File([], "dummy"));
+          setWasModified(true);
           return;
         }
         if (client && id) {

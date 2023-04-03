@@ -25,6 +25,7 @@ import { CoreModule, rootRoute } from "../../lib/router";
 import { GhostLink } from "../../components/ghost-link";
 import MarkdownViewer from "@components/MarkdownViewer";
 import { CommentList } from "./comment/comment-list";
+import graymatter from "gray-matter";
 
 const coreApi = process.env.CORE_API;
 
@@ -33,6 +34,7 @@ export const ContentView = () => {
   const { id } = useParams();
   const [contentItem, setContentItem] = useState<ContentDetailsDto>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [ body, setBody ] = useState<string>(""); 
 
   useEffect(() => {
     (async () => {
@@ -40,6 +42,8 @@ export const ContentView = () => {
         setIsLoading(true);
         if (client && id) {
           const { data } = await client.api.contentDetail(Number(id));
+          const mattered = graymatter(data.body);
+          setBody(mattered.content);
           setContentItem(data);
         }
       } catch (e) {
@@ -109,7 +113,7 @@ export const ContentView = () => {
                 <DescriptionContainer>Description: {contentItem.description}</DescriptionContainer>
               </div>
             </HeaderContainer>
-            <MarkdownViewer source={contentItem.body} />
+            <MarkdownViewer source={body} />
 
             {contentItem.allowComments && (
               <>
