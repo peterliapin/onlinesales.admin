@@ -42,27 +42,27 @@ export const Accounts = () => {
     {
       field: "name",
       headerName: "Account Name",
-      flex: 1,
+      flex: 2,
     },
     {
       field: "state",
       headerName: "State",
-      flex: 1,
+      flex: 2,
     },
     {
       field: "countryCode",
       headerName: "Country Code",
-      flex: 1,
+      flex: 2,
     },
     {
       field: "cityName",
       headerName: "City",
-      flex: 1,
+      flex: 2,
     },
     {
       field: "createdAt",
       headerName: "Created At",
-      flex: 1,
+      flex: 2,
       valueGetter: (params) => {
         const createdAt = params.value as string;
         const formattedDate = new Date(createdAt).toLocaleDateString();
@@ -72,6 +72,7 @@ export const Accounts = () => {
     {
       field: "continentCode",
       headerName: "Continent Code",
+      flex: 2,
     },
   ];
 

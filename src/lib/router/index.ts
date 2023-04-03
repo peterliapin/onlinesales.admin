@@ -5,6 +5,7 @@ export const enum CoreModule {
   blog = "blog",
   accounts = "accounts",
   orders = "orders",
+  domains = "domains",
 }
 
 const coreModuleParser: Parser<CoreModule> = {

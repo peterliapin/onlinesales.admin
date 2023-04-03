@@ -37,7 +37,12 @@ export const CustomizedSnackbar = ({ message, severerity, isOpen, navigateTo }: 
 
   return (
     <Stack spacing={2}>
-      <Snackbar open={open} autoHideDuration={2000} onClose={handleClose}>
+      <Snackbar
+        open={open}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        autoHideDuration={20000}
+        onClose={handleClose}
+      >
         <Alert onClose={handleClose} severity={severerity}>
           {message}
         </Alert>

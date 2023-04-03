@@ -1,10 +1,10 @@
-import { OrderDetailsDto, OrderImportDto } from "lib/network/swagger-client";
+import { DomainDetailsDto, DomainImportDto } from "lib/network/swagger-client";
 import { useRequestContext } from "providers/request-provider";
 import {
   defaultFilterOrderColumn,
   defaultFilterOrderDirection,
   modelName,
-  orderListPageBreadcrumb,
+  domainListPageBreadcrumb,
   searchLabel,
 } from "./constants";
 import { DataList } from "components/data-list";
@@ -12,12 +12,12 @@ import { GridColDef } from "@mui/x-data-grid";
 import { CoreModule } from "lib/router";
 import { dataListBreadcrumbLinks } from "utils/constants";
 
-export const Orders = () => {
+export const Domains = () => {
   const { client } = useRequestContext();
 
-  const getOrderList = async (query: string) => {
+  const getDomainList = async (query: string) => {
     try {
-      const result = await client.api.ordersList({
+      const result = await client.api.domainsList({
         query: query,
       });
       return result;
@@ -27,51 +27,46 @@ export const Orders = () => {
     }
   };
 
-  const getOrderExportUrlAsync = async (query: string) => {
-    const { url } = await client.api.ordersExportList({
+  const getDomainExportUrlAsync = async (query: string) => {
+    const { url } = await client.api.domainsExportList({
       query: query,
     });
     return url;
   };
 
-  const handleOrderImport = async (data: OrderImportDto[]) => {
-    await client.api.ordersImportCreate(data);
+  const handleDomainImport = async (data: DomainImportDto[]) => {
+    await client.api.domainsImportCreate(data);
   };
 
-  const columns: GridColDef<OrderDetailsDto>[] = [
+  const columns: GridColDef<DomainDetailsDto>[] = [
     {
-      field: "orderNumber",
-      headerName: "Order Number",
+      field: "name",
+      headerName: "Name",
       flex: 2,
     },
     {
-      field: "refNo",
-      headerName: "Reference Number",
+      field: "title",
+      headerName: "Title",
       flex: 2,
     },
     {
-      field: "affiliateName",
-      headerName: "Affiliate",
+      field: "description",
+      headerName: "Description",
       flex: 2,
     },
     {
-      field: "quantity",
-      headerName: "Quantity",
+      field: "url",
+      headerName: "Url",
       flex: 2,
     },
     {
-      field: "total",
-      headerName: "Total",
+      field: "dnsCheck",
+      headerName: "Dns Check",
       flex: 2,
     },
     {
-      field: "exchangeRate",
-      headerName: "Exchange Rate",
-      flex: 2,
-    },
-    {
-      field: "currency",
-      headerName: "Currency",
+      field: "free",
+      headerName: "Free",
       flex: 2,
     },
     {
@@ -91,16 +86,16 @@ export const Orders = () => {
       modelName={modelName}
       columns={columns}
       dataListBreadcrumbLinks={dataListBreadcrumbLinks}
-      currentBreadcrumb={orderListPageBreadcrumb}
+      currentBreadcrumb={domainListPageBreadcrumb}
       defaultFilterOrderColumn={defaultFilterOrderColumn}
       defaultFilterOrderDirection={defaultFilterOrderDirection}
       searchBarLabel={searchLabel}
       endRoute={CoreModule.orders}
-      getModelDataList={getOrderList}
-      getExportUrl={getOrderExportUrlAsync}
-      dataImportCreate={handleOrderImport}
+      getModelDataList={getDomainList}
+      getExportUrl={getDomainExportUrlAsync}
+      dataImportCreate={handleDomainImport}
       initialGridState={{
-        columns: { columnVisibilityModel: { currency: false, exchangeRate: false } },
+        columns: { columnVisibilityModel: { dnsCheck: false, free: false } },
         sorting: {
           sortModel: [{ field: defaultFilterOrderColumn, sort: defaultFilterOrderDirection }],
         },

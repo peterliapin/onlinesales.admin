@@ -230,6 +230,70 @@ const mappings = [
     example: "ABC Holdings",
     validations: [],
   },
+  {
+    label: "Name",
+    key: "name",
+    alternateMatches: [],
+    fieldType: {
+      type: "input",
+    },
+    example: "Stephanie",
+    validations: [
+      {
+        rule: "required",
+        errorMessage: "Name is required",
+        level: "error",
+      },
+    ],
+  },
+  {
+    label: "Reference Number",
+    key: "refNo",
+    alternateMatches: [],
+    fieldType: {
+      type: "input",
+    },
+    example: "ref12",
+    validations: [
+      {
+        rule: "required",
+        errorMessage: "Reference Number is required",
+        level: "error",
+      },
+    ],
+  },
+  {
+    label: "Exchange Rate",
+    key: "exchangeRate",
+    alternateMatches: [],
+    fieldType: {
+      type: "input",
+    },
+    example: "100",
+    validations: [
+      {
+        rule: "required",
+        errorMessage: "Exchange Rate is required",
+        level: "error",
+      },
+    ],
+  },
+  {
+    label: "Contact Id",
+    key: "contactId",
+    alternateMatches: [],
+    fieldType: {
+      type: "input",
+    },
+    example: "12",
+    validations: [
+      {
+        rule: "required",
+        errorMessage: "Contact Id is required",
+        level: "error",
+      },
+    ],
+  },
 ];
 
 const getMappings = (key: string) => {

@@ -18,7 +18,7 @@ import { CustomizedSnackbar } from "components/snackbar";
 import { CoreModule } from "lib/router";
 import { initialSnackBarParams, serverErrorSnackBarParams } from "components/snackbar/constants";
 import { BreadCrumbNavigation } from "components/breadcrumbs";
-import { contactFormBreadcrumbLinks } from "../constants";
+import { contactAddHeader, contactEditHeader, contactFormBreadcrumbLinks } from "../constants";
 import { useCoreModuleNavigation } from "utils/helper";
 import { isValidEmail, isValidNumber } from "utils/validators";
 
@@ -40,7 +40,7 @@ export const ContactForm = ({ contact, updateContact, handleSave, isEdit }: Cont
 
   const [snackBarParams, setSnackBarParams] = useState(initialSnackBarParams);
 
-  const header = isEdit ? "Contact edit" : "Contact add";
+  const header = isEdit ? contactEditHeader : contactAddHeader;
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
