@@ -78,7 +78,7 @@ export const ContentList = () => {
             <Link to={rootRoute} component={GhostLink} underline="hover">
               Dashboard
             </Link>
-            <Typography variant="body1">Blog</Typography>
+            <Typography variant="body1">Content</Typography>
           </Breadcrumbs>
         </ModuleHeaderSubtitleContainer>
       </ModuleHeaderContainer>
@@ -86,7 +86,7 @@ export const ContentList = () => {
         <LeftContainer>
           <SearchBar
             setSearchTermOnChange={(value) => setSearchText(value)}
-            searchBoxLabel="Search Content"
+            searchBoxLabel="Content"
             initialValue={searchText}
           ></SearchBar>
         </LeftContainer>
