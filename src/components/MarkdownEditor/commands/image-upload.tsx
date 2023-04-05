@@ -3,9 +3,10 @@ import { Button } from "@mui/material";
 import { ExtendedCommandBase } from "../types";
 import { RequestContextType } from "@providers/request-provider";
 import { ContentDetails } from "@features/blog/ContentEdit/types";
-import { toast } from "react-toastify";
+import { useLoggerContext } from "@providers/logger-provider";
 
 export const ImageUpload = (networkContext: RequestContextType, contentDetails: ContentDetails) => {
+  const { logger } = useLoggerContext();
   const command = {
     networkContext,
     contentDetails,
@@ -32,7 +33,7 @@ export const ImageUpload = (networkContext: RequestContextType, contentDetails: 
     },
     execute(state, api) {
       if (this.contentDetails.slug.length === 0) {
-        toast.error("Specify slug first!");
+        logger.error("Specify slug first!");
         return;
       }
       const inputElement = document.createElement("input");
