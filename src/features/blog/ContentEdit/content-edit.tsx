@@ -312,7 +312,7 @@ export const ContentEdit = (props: ContentEditProps) => {
               </Breadcrumbs>
             </Grid>
             <Fade in={showAutosaveBar}>
-              <Grid container item spacing={3} sm={1} xs={1}>
+              <Grid container item spacing={3} sm="auto" xs="auto">
                 <Grid item>
                   <CircularProgress size={14}/>
                 </Grid>
@@ -494,19 +494,6 @@ export const ContentEdit = (props: ContentEditProps) => {
                     />
                   </Grid>
                   <Grid xs={6} sm={6} item>
-                    <FormControlLabel
-                      label="Allow Comments"
-                      control={
-                        <Checkbox
-                          disabled={props.readonly}
-                          checked={formik.values.allowComments}
-                          onChange={valueUpdate}
-                          name="allowComments"
-                        />
-                      }
-                    />
-                  </Grid>
-                  <Grid xs={6} sm={6} item>
                     <Autocomplete
                       freeSolo
                       multiple
@@ -524,6 +511,19 @@ export const ContentEdit = (props: ContentEditProps) => {
                           helperText={formik.touched.tags && formik.errors.tags}
                         />
                       )}
+                    />
+                  </Grid>
+                  <Grid xs={6} sm={6} item>
+                    <FormControlLabel
+                      label="Allow Comments"
+                      control={
+                        <Checkbox
+                          disabled={props.readonly}
+                          checked={formik.values.allowComments}
+                          onChange={valueUpdate}
+                          name="allowComments"
+                        />
+                      }
                     />
                   </Grid>
                   <Grid xs={6} sm={6} item>
@@ -546,12 +546,14 @@ export const ContentEdit = (props: ContentEditProps) => {
                       )}
                     />
                   </Grid>
-                  <Grid item xs={12}>
+                  <Grid item xs={6}>
                     {!props.readonly && (
                       <Button
-                        startIcon={<Save />}
                         disabled={!(wasModified || coverWasModified)}
                         type="submit"
+                        variant="contained"
+                        fullWidth
+                        size="large"
                       >
                         Save
                       </Button>
