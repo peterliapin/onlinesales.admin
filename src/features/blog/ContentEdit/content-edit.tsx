@@ -389,7 +389,7 @@ export const ContentEdit = (props: ContentEditProps) => {
                       ></TextField>
                     </Grid>
                   </Grid>
-                  <Grid item xs={6} sm={6}>
+                  <Grid item xs={6} sm={6} pb="0.7rem">
                     <FileDropdown
                       onChange={onCoverImageChange}
                       acceptMIME="image/*"
