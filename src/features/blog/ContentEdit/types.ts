@@ -1,4 +1,4 @@
-import { FrontmatterEditorInitialValue } from "@components/FrontmatterEditor";
+import { ImageData } from "@components/FileDropdown";
 
 export interface ContentDetails {
   id: string | null;
@@ -7,7 +7,7 @@ export interface ContentDetails {
   description: string;
   body: string;
   coverImageUrl: string;
-  coverImageFile: File | null;
+  coverImagePending: ImageData;
   coverImageAlt: string;
   slug: string;
   author: string;
@@ -18,7 +18,6 @@ export interface ContentDetails {
   createdAt: string | null;
   updatedAt: string | null;
   files: File[] | null;
-  frontmatter: FrontmatterEditorInitialValue[];
 }
 
 export interface TypeDefaultValues {

@@ -14,7 +14,7 @@ export const Sidebar = () => {
       <List component="nav" subheader={<ListSubheaderStyled>General</ListSubheaderStyled>}>
         <ListItem>
           <SidebarLinkButton
-            title="Blog"
+            title="Content"
             to={getCoreModuleRoute(CoreModule.blog)}
             Icon={Newspaper}
             selected={moduleName === CoreModule.blog}

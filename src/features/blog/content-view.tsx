@@ -63,7 +63,7 @@ export const ContentView = () => {
               Dashboard
             </Link>
             <Link to={`${rootRoute}${CoreModule.blog}`} component={GhostLink} underline="hover">
-              Blog
+              Content
             </Link>
             <Typography variant="body1">{contentItem && contentItem.title}</Typography>
           </Breadcrumbs>

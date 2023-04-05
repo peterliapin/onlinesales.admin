@@ -1,0 +1,5 @@
+.error-line {
+  border-bottom: 1px;
+  border-bottom-style: dashed;
+  border-bottom-color: red;
+}
