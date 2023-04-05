@@ -365,6 +365,7 @@ export const ContentEdit = (props: ContentEditProps) => {
                             variant="outlined"
                             error={formik.touched.type && Boolean(formik.errors.type)}
                             helperText={formik.touched.type && formik.errors.type}
+                            fullWidth
                           />
                         )}
                       />
@@ -456,6 +457,7 @@ export const ContentEdit = (props: ContentEditProps) => {
                   <Grid xs={6} sm={6} item>
                     <Autocomplete
                       freeSolo
+                      autoSelect
                       disabled={props.readonly}
                       value={formik.values.author}
                       onChange={(ev, val) => autoCompleteValueUpdate<string | null>("author", val)}
@@ -469,6 +471,7 @@ export const ContentEdit = (props: ContentEditProps) => {
                           variant="outlined"
                           error={formik.touched.author && Boolean(formik.errors.author)}
                           helperText={formik.touched.author && formik.errors.author}
+                          fullWidth
                         />
                       )}
                     />
@@ -476,6 +479,7 @@ export const ContentEdit = (props: ContentEditProps) => {
                   <Grid xs={6} sm={6} item>
                     <Autocomplete
                       freeSolo
+                      autoSelect
                       disabled={props.readonly}
                       value={formik.values.language}
                       onChange={(ev, val) =>
@@ -491,6 +495,7 @@ export const ContentEdit = (props: ContentEditProps) => {
                           name="language"
                           error={formik.touched.language && Boolean(formik.errors.language)}
                           helperText={formik.touched.language && formik.errors.language}
+                          fullWidth
                         />
                       )}
                     />
@@ -499,6 +504,7 @@ export const ContentEdit = (props: ContentEditProps) => {
                     <Autocomplete
                       freeSolo
                       multiple
+                      autoSelect
                       limitTags={3}
                       options={ContentEditAvailableTags as unknown as string[]}
                       value={formik.values.tags}
@@ -511,6 +517,8 @@ export const ContentEdit = (props: ContentEditProps) => {
                           name="tags"
                           error={formik.touched.tags && Boolean(formik.errors.tags)}
                           helperText={formik.touched.tags && formik.errors.tags}
+                          fullWidth
+
                         />
                       )}
                     />
@@ -532,6 +540,7 @@ export const ContentEdit = (props: ContentEditProps) => {
                     <Autocomplete
                       freeSolo
                       multiple
+                      autoSelect
                       limitTags={3}
                       options={ContentEditAvailableCategories as unknown as string[]}
                       value={formik.values.categories}
@@ -544,6 +553,7 @@ export const ContentEdit = (props: ContentEditProps) => {
                           name="categories"
                           error={formik.touched.categories && Boolean(formik.errors.categories)}
                           helperText={formik.touched.categories && formik.errors.categories}
+                          fullWidth
                         />
                       )}
                     />
