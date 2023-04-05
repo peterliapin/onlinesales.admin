@@ -119,7 +119,7 @@ export const ContentEdit = (props: ContentEditProps) => {
     try {
       setIsSaving(true);
       if (frontmatterState !== null){
-        toast.dismiss(loadingToastId);
+        toast.done(loadingToastId);
         toast.error(frontmatterState.errorMessage);
         return;
       }
