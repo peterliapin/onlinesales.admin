@@ -22,7 +22,9 @@ import {
   Card,
   CardContent,
   Checkbox,
+  CircularProgress,
   Divider,
+  Fade,
   FormControlLabel,
   Grid,
   Link,
@@ -84,6 +86,7 @@ export const ContentEdit = (props: ContentEditProps) => {
   const [restoreDataState, setRestoreDataState] = useState<ContentEditRestoreState>(
     ContentEditRestoreState.Idle
   );
+  const [ showAutosaveBar, setShowAutosaveBar] = useState<boolean>(false);
 
   const autoSave = useDebouncedCallback((value) => {
     if (!wasModified && !coverWasModified) {
@@ -101,9 +104,10 @@ export const ContentEdit = (props: ContentEditProps) => {
     } else {
       (reference.latestAutoSave = new Date()), (reference.savedData = value);
     }
-    toast.info("Auto saved", {
-      autoClose: 3000,
-    }); /// TODO: User Settings
+    setShowAutosaveBar(true);
+    setTimeout(() => {
+      setShowAutosaveBar(false);
+    }, 3000);
     setEditorLocalStorage(localStorageSnapshot);
   }, 3000); ///TODO: User Settings
 
@@ -291,15 +295,35 @@ export const ContentEdit = (props: ContentEditProps) => {
       />
       <ModuleHeaderContainer>
         <ModuleHeaderSubtitleContainer>
-          <Breadcrumbs separator={<NavigateNext fontSize="small" />}>
-            <Link to={rootRoute} component={GhostLink} underline="hover">
-              Dashboard
-            </Link>
-            <Link to={`${rootRoute}${CoreModule.blog}`} component={GhostLink} underline="hover">
-              Blog
-            </Link>
-            <Typography variant="body1">{formik.values.title}</Typography>
-          </Breadcrumbs>
+          <Grid 
+            container 
+            direction="row" 
+            justifyContent="space-between"
+          >
+            <Grid item>
+              <Breadcrumbs separator={<NavigateNext fontSize="small" />}>
+                <Link to={rootRoute} component={GhostLink} underline="hover">
+                  Dashboard
+                </Link>
+                <Link to={`${rootRoute}${CoreModule.blog}`} component={GhostLink} underline="hover">
+                  Blog
+                </Link>
+                <Typography variant="body1">{formik.values.title}</Typography>
+              </Breadcrumbs>
+            </Grid>
+            <Fade in={showAutosaveBar}>
+              <Grid container item spacing={3} sm={1} xs={1}>
+                <Grid item>
+                  <CircularProgress size={14}/>
+                </Grid>
+                <Grid item>
+                  <Typography>
+                    Saving...
+                  </Typography>
+                </Grid>
+              </Grid>
+            </Fade>
+          </Grid>
         </ModuleHeaderSubtitleContainer>
         <ModuleHeaderActionContainer></ModuleHeaderActionContainer>
       </ModuleHeaderContainer>
