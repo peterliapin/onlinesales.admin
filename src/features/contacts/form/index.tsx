@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { SyntheticEvent, useEffect, useState } from "react";
 import {
+  Autocomplete,
   Backdrop,
   Button,
   Card,
@@ -19,8 +20,10 @@ import { CoreModule } from "lib/router";
 import { initialSnackBarParams, serverErrorSnackBarParams } from "components/snackbar/constants";
 import { BreadCrumbNavigation } from "components/breadcrumbs";
 import { contactAddHeader, contactEditHeader, contactFormBreadcrumbLinks } from "../constants";
-import { useCoreModuleNavigation } from "utils/helper";
+import { getCountryList, useCoreModuleNavigation } from "utils/helper";
 import { isValidEmail, isValidNumber } from "utils/validators";
+import { useRequestContext } from "@providers/request-provider";
+import { toast } from "react-toastify";
 
 interface ContactFormProps {
   contact: ContactDetailsDto;
@@ -29,22 +32,51 @@ interface ContactFormProps {
   isEdit: boolean;
 }
 
+type Country = {
+  code: string;
+  name: string;
+};
+
 export const ContactForm = ({ contact, updateContact, handleSave, isEdit }: ContactFormProps) => {
+  const context = useRequestContext();
   const handleNavigation = useCoreModuleNavigation();
 
   const [isInvalidEmail, setIsInvalidEmail] = useState(false);
-
   const [isInvalidNumber, setIsInvalidNumber] = useState(false);
-
   const [isSaving, setIsSaving] = useState(false);
-
   const [snackBarParams, setSnackBarParams] = useState(initialSnackBarParams);
+  const [countryList, setCountryList] = useState<Country[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const header = isEdit ? contactEditHeader : contactAddHeader;
+
+  useEffect(() => {
+    (async () => {
+      const countries = await getCountryList(context);
+      if (countries) {
+        setCountryList(Object.entries(countries).map(([code, name]) => ({ code, name })));
+        setIsLoading(false);
+      } else {
+        toast.error("Server error: country list not available.");
+      }
+    })();
+  }, []);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     updateContact((currentContact: ContactDetailsDto) => ({ ...currentContact, [name]: value }));
+  };
+
+  const handleCountryChange = (
+    e: SyntheticEvent<Element, Event>,
+    value: { code: string; name: string } | null
+  ) => {
+    if (value) {
+      updateContact((currentContact: ContactDetailsDto) => ({
+        ...currentContact,
+        ["countryCode"]: value.code,
+      }));
+    }
   };
 
   const validateAndSave = async () => {
@@ -154,6 +186,30 @@ export const ContactForm = ({ contact, updateContact, handleSave, isEdit }: Cont
                 name="address2"
                 value={contact.address2 || ""}
                 placeholder="Enter address"
+                variant="outlined"
+                onChange={handleInputChange}
+                fullWidth
+              ></TextField>
+            </Grid>
+            <Grid xs={12} sm={6} item>
+              {!isLoading && (
+                <Autocomplete
+                  disablePortal
+                  options={countryList}
+                  getOptionLabel={(option) => option.name}
+                  value={countryList.find((c) => c.code === contact.countryCode) || null}
+                  onChange={handleCountryChange}
+                  fullWidth
+                  renderInput={(params) => <TextField {...params} label="Country" />}
+                />
+              )}
+            </Grid>
+            <Grid xs={12} sm={6} item>
+              <TextField
+                label="City"
+                name="cityName"
+                value={contact.cityName || ""}
+                placeholder="Enter state"
                 variant="outlined"
                 onChange={handleInputChange}
                 fullWidth

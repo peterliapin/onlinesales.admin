@@ -10,6 +10,7 @@ export const isValidEmail = (email: string) => {
 
 export const isValidNumber = (value: any) => {
   return (
+    value &&
     requiredValidator.safeParse(value.toString()).success &&
     numberValidator.safeParse(value).success
   );

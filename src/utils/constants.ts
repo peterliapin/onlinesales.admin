@@ -4,3 +4,5 @@ import { BreadcrumbLink } from "./types";
 export const dataListBreadcrumbLinks: BreadcrumbLink[] = [
   { linkText: "Dashboard", toRoute: rootRoute },
 ];
+
+export const countryListStorageKey = "countryList";
