@@ -78,10 +78,6 @@ const FileDropdown = ({
               <Box
                 component="img"
                 sx={{
-                  height: 1,
-                  width: 1,
-                  maxHeight: { xs: 233, md: 167 },
-                  maxWidth: { xs: 350, md: 250 },
                   "object-fit": "contain",
                 }}
                 alt="Cover image preview"

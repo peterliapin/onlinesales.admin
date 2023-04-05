@@ -124,7 +124,7 @@ export const ContentEdit = (props: ContentEditProps) => {
       }
       if (coverWasModified) {
         const { data } = await client.api.mediaCreate({
-          Image: await (await fetch(values.coverImagePending)).blob() as File,
+          Image: await (await fetch(values.coverImagePending!)).blob() as File,
           ScopeUid: values.slug,
         });
         if (data.location === null) {
@@ -232,6 +232,7 @@ export const ContentEdit = (props: ContentEditProps) => {
 
   const onCoverImageChange = (url: string) => {
     formik.setFieldValue("coverImagePending", url);
+    console.log(url);
     setCoverWasModified(true);
   };
 
@@ -393,11 +394,7 @@ export const ContentEdit = (props: ContentEditProps) => {
                       onChange={onCoverImageChange}
                       acceptMIME="image/*"
                       maxFileSize={ContentEditMaximumImageSize}
-                      url={
-                        formik.values.coverImageUrl &&
-                        buildAbsoluteUrl(formik.values.coverImageUrl) ||
-                        formik.values.coverImagePending
-                      }
+                      url={formik.values.coverImagePending}
                       error={
                         formik.touched.coverImagePending && Boolean(formik.errors.coverImagePending)
                       }
