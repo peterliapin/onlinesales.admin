@@ -9,19 +9,19 @@ import { validateFrontmatter, ValidateFrontmatterError } from "utils/frontmatter
 import "./styles.css";
 
 const EditorViewFunc = (
-  value: string, 
-  onChange: any, 
+  value: string,
+  onChange: any,
   onErrorChange: onFrontmatterErrorChangeFunc
 ) => {
   useEffect(() => {
     const validationResult = validateFrontmatter(value);
-    if (validationResult !== true){
+    if (validationResult !== true) {
       onErrorChange(validationResult);
       if (validationResult.errorLine === -1) {
         return;
       }
       const lines = document.querySelectorAll(".code-line");
-      if (lines.length === 0 ){
+      if (lines.length === 0) {
         return;
       }
       const element = lines[validationResult.errorLine - 1] as HTMLTextAreaElement;
@@ -30,8 +30,8 @@ const EditorViewFunc = (
     }
     onErrorChange(null);
   }, [value]);
-  
-  return ( 
+
+  return (
     <CodeEditor
       value={value}
       language="yaml"
@@ -47,7 +47,6 @@ const EditorViewFunc = (
     />
   );
 };
-
 
 const MarkdownEditor = ({
   value,
@@ -71,12 +70,12 @@ const MarkdownEditor = ({
     [networkContext, contentDetails]
   );
   const onErrorChange = (error: ValidateFrontmatterError | null) => {
-    error !== null ? 
-      setCurrentError(`Frontmatter Error \n (${error.errorMessage})\n`) :
-      setCurrentError("");
+    error !== null
+      ? setCurrentError(`Frontmatter Error \n (${error.errorMessage})\n`)
+      : setCurrentError("");
     onFrontmatterErrorChange(error);
   };
-  const strippedValue = value.replace(/(---.*?---)/s, ""); 
+  const strippedValue = value.replace(/(---.*?---)/s, "");
   return (
     <>
       <MDEditor
@@ -87,10 +86,12 @@ const MarkdownEditor = ({
         value={value}
         onChange={onChange}
         commands={customCommands}
-        style={{padding: 0}}
+        style={{ padding: 0 }}
         highlightEnable
         components={{
-          preview: (value) => { return MarkdownViewerFunc(`${currentError}${strippedValue}`); },
+          preview: (value) => {
+            return MarkdownViewerFunc(`${currentError}${strippedValue}`);
+          },
           textarea: () => EditorViewFunc(value, onChange, onErrorChange),
         }}
       />

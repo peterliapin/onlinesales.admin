@@ -1,7 +1,7 @@
 import Dropzone, { Accept, FileRejection } from "react-dropzone";
 import { BoxStyled } from "./index.styled";
 import { Button, Grid, Box } from "@mui/material";
-import { useLoggerContext } from "@providers/logger-provider";
+import { useLogger } from "@hooks/logger-hook";
 
 export interface ImageData {
   fileName: string;
@@ -27,7 +27,7 @@ const FileDropdown = ({
   error,
   helperText,
 }: FileDropdownProps) => {
-  const { logger } = useLoggerContext();
+  const { logger } = useLogger();
   const onDrop = (acceptedFiles: File[], rejections: FileRejection[]) => {
     if (rejections.length > 0) {
       rejections.map((rejection) => {

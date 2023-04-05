@@ -1,5 +1,4 @@
-import { createContext, memo, PropsWithChildren, useContext } from "react";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 enum LogLevel {
@@ -58,21 +57,8 @@ class Logger {
   }
 }
 
-export type MessengerContextType = {
-  logger: Logger;
+const staticLogger = new Logger();
+
+export const useLogger = (): { logger: Logger } => {
+  return { logger: staticLogger };
 };
-
-const logger = new Logger();
-
-const LoggerContext = createContext<MessengerContextType>({ logger });
-
-export const LoggerProvider = memo(function LoggerProvider({ children }: PropsWithChildren) {
-  return (
-    <LoggerContext.Provider value={{ logger }}>
-      <ToastContainer />
-      {children}
-    </LoggerContext.Provider>
-  );
-});
-
-export const useLoggerContext = () => useContext(LoggerContext);

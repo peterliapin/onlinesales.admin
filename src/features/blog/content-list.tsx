@@ -12,22 +12,19 @@ import {
   Typography,
 } from "@mui/material";
 import { ContentDetailsDto } from "@lib/network/swagger-client";
-import { 
-  ContentListContainer, 
-  SearchBoxContainer, 
-  TimestampContainer, 
-  ActionsContainer, 
-  LeftContainer, 
+import {
+  ContentListContainer,
+  SearchBoxContainer,
+  TimestampContainer,
+  ActionsContainer,
+  LeftContainer,
   RightContainer,
   ExtraActionsContainer,
   AddButtonContainer,
 } from "./index.styled";
 import React, { useEffect, useState } from "react";
-import {
-  ModuleHeaderContainer,
-  ModuleHeaderSubtitleContainer,
-} from "@components/module";
-import { Add, NavigateNext, Upload, Download, } from "@mui/icons-material";
+import { ModuleHeaderContainer, ModuleHeaderSubtitleContainer } from "@components/module";
+import { Add, NavigateNext, Upload, Download } from "@mui/icons-material";
 import { rootRoute } from "@lib/router";
 import { GhostLink } from "@components/ghost-link";
 import { useRequestContext } from "@providers/request-provider";
@@ -109,11 +106,7 @@ export const ContentList = () => {
       <ContentListContainer>
         {isLoading && <div>Loading...</div>}
         {!isLoading && (!contentItems || contentItems.length === 0) && <div>No resultes</div>}
-        <Grid 
-          container
-          spacing={15}
-          justifyContent="flex-start"
-        >
+        <Grid container spacing={15} justifyContent="flex-start">
           {(contentItems || []).map((item, index) => (
             <Grid item key={`card-${index}`} sm="auto" xs="auto">
               <Card

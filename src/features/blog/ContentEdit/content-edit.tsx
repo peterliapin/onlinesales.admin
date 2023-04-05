@@ -63,14 +63,14 @@ import { RestoreDataModal } from "@components/RestoreData";
 import { useDebouncedCallback } from "use-debounce";
 import { ValidateFrontmatterError } from "utils/frontmatter-validator";
 import { ImageData } from "@components/FileDropdown";
-import { useLoggerContext } from "@providers/logger-provider";
+import { useLogger } from "@hooks/logger-hook";
 
 interface ContentEditProps {
   readonly?: boolean;
 }
 
 export const ContentEdit = (props: ContentEditProps) => {
-  const { logger } = useLoggerContext();
+  const { logger } = useLogger();
   const networkContext = useRequestContext();
   const [editorLocalStorage, setEditorLocalStorage] = useLocalStorage<ContentEditData>(
     "onlinesales_editor_autosave",

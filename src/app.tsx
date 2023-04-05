@@ -7,14 +7,14 @@ import {coreModuleRoute, rootRoute} from "@lib/router";
 import {ModuleLoader} from "@features/module-loader";
 import {RequestProvider} from "@providers/request-provider";
 import {AuthProvider} from "@providers/auth-provider";
-import {LoggerProvider} from "@providers/logger-provider";
+import {ToastContainer} from "react-toastify";
 
 export const App = () => {
   return (
-    <LoggerProvider>
       <ThemeProvider>
         <AuthProvider>
           <RequestProvider>
+            <ToastContainer />
             <BrowserRouter>
               <Routes>
                 <Route
@@ -37,6 +37,5 @@ export const App = () => {
           </RequestProvider>
         </AuthProvider>
       </ThemeProvider>
-    </LoggerProvider>
   );
 };

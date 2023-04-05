@@ -3,10 +3,10 @@ import { Button } from "@mui/material";
 import { ExtendedCommandBase } from "../types";
 import { RequestContextType } from "@providers/request-provider";
 import { ContentDetails } from "@features/blog/ContentEdit/types";
-import { useLoggerContext } from "@providers/logger-provider";
+import { useLogger } from "@hooks/logger-hook";
 
 export const ImageUpload = (networkContext: RequestContextType, contentDetails: ContentDetails) => {
-  const { logger } = useLoggerContext();
+  const { logger } = useLogger();
   const command = {
     networkContext,
     contentDetails,

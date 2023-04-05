@@ -14,4 +14,3 @@ export const isValidNumber = (value: any) => {
     numberValidator.safeParse(value).success
   );
 };
-
