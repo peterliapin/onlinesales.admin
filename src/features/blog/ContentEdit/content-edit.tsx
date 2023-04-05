@@ -253,7 +253,6 @@ export const ContentEdit = (props: ContentEditProps) => {
           await formik.setValues(
             localStorageSnapshot.data.filter((data) => data.id === id)[0].savedData
           );
-          await formik.setFieldValue("coverImageFile", new File([], "dummy"));
           setWasModified(true);
           return;
         }
@@ -266,7 +265,7 @@ export const ContentEdit = (props: ContentEditProps) => {
               "ContentDetails"
             )
           );
-          await formik.setFieldValue("coverImageFile", new File([], "dummy"));
+          await formik.setFieldValue("coverImagePending", buildAbsoluteUrl(data.coverImageUrl!));
         }
       } catch (e) {
         console.log(e);
