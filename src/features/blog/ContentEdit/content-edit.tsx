@@ -22,16 +22,18 @@ import {
   Card,
   CardContent,
   Checkbox,
+  CircularProgress,
+  Divider,
+  Fade,
   FormControlLabel,
   Grid,
   Link,
   TextField,
   Typography,
 } from "@mui/material";
-import { CurrencyBitcoin, NavigateNext, Report, Save } from "@mui/icons-material";
+import { NavigateNext, Save } from "@mui/icons-material";
 import { CoreModule, rootRoute } from "@lib/router";
 import { GhostLink } from "@components/ghost-link";
-import MarkdownViewer from "@components/MarkdownViewer";
 import { useFormik, FormikHelpers } from "formik";
 import {
   TypeDefaultValues,
@@ -48,20 +50,19 @@ import {
   ContentEditAvailableCategories,
   ContentEditDefaultValues,
   ContentEditMaximumImageSize,
+  ContentEditAvailableAuthors
 } from "./validation";
-import { toFormikValidate, toFormikValidationSchema } from "zod-formik-adapter";
+import { toFormikValidationSchema } from "zod-formik-adapter";
 import { Automapper } from "@lib/automapper";
 import MarkdownEditor from "@components/MarkdownEditor";
 import { Id, toast } from "react-toastify";
 import FileDropdown from "@components/FileDropdown";
-import FrontmatterEditorModal, {
-  FrontmatterEditorInitialValue,
-} from "@components/FrontmatterEditor";
 import { buildAbsoluteUrl } from "@lib/network/utils";
-import graymatter from "gray-matter";
 import useLocalStorage from "use-local-storage";
 import { RestoreDataModal } from "@components/RestoreData";
 import { useDebouncedCallback } from "use-debounce";
+import { ValidateFrontmatterError } from "utils/frontmatter-validator";
+import { ImageData } from "@components/FileDropdown";
 
 interface ContentEditProps {
   readonly?: boolean;
@@ -82,10 +83,11 @@ export const ContentEdit = (props: ContentEditProps) => {
   const [coverWasModified, setCoverWasModified] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isSaving, setIsSaving] = useState<boolean>(false);
-  const [isFrontmatterEditorOpened, setFrontmatterEditorOpened] = useState<boolean>(false);
+  const [frontmatterState, setfrontmatterState] = useState<ValidateFrontmatterError | null>(null);
   const [restoreDataState, setRestoreDataState] = useState<ContentEditRestoreState>(
     ContentEditRestoreState.Idle
   );
+  const [ showAutosaveBar, setShowAutosaveBar] = useState<boolean>(false);
 
   const autoSave = useDebouncedCallback((value) => {
     if (!wasModified && !coverWasModified) {
@@ -103,9 +105,10 @@ export const ContentEdit = (props: ContentEditProps) => {
     } else {
       (reference.latestAutoSave = new Date()), (reference.savedData = value);
     }
-    toast.info("Auto saved", {
-      autoClose: 3000,
-    }); /// TODO: User Settings
+    setShowAutosaveBar(true);
+    setTimeout(() => {
+      setShowAutosaveBar(false);
+    }, 3000);
     setEditorLocalStorage(localStorageSnapshot);
   }, 3000); ///TODO: User Settings
 
@@ -113,22 +116,18 @@ export const ContentEdit = (props: ContentEditProps) => {
     let response: HttpResponse<ContentDetailsDto, void | ProblemDetails>;
     let coverUrl = values.coverImageUrl;
     const loadingToastId = toast.loading(`${values?.id ? "Updating" : "Creating"} a post...`);
-    const graymatteredFrontmatter = values.frontmatter.reduce(
-      (previousValue: { [key: string]: string }, currentValue) => {
-        const copy = { ...previousValue };
-        const key = currentValue.key;
-        const value = currentValue.value;
-        copy[key] = value;
-        return copy;
-      },
-      {} as { [key: string]: string }
-    );
-    const matteredBody = graymatter.stringify(values.body, graymatteredFrontmatter);
     try {
       setIsSaving(true);
+      if (frontmatterState !== null){
+        toast.done(loadingToastId);
+        toast.error(frontmatterState.errorMessage);
+        return;
+      }
       if (coverWasModified) {
+        const blob = await (await fetch(values.coverImagePending.url!)).blob();
+        const file = new File([blob], values.coverImagePending.fileName);
         const { data } = await client.api.mediaCreate({
-          Image: values.coverImageFile!,
+          Image: file,
           ScopeUid: values.slug,
         });
         if (data.location === null) {
@@ -153,7 +152,6 @@ export const ContentEdit = (props: ContentEditProps) => {
         response = await client.api.contentPartialUpdate(Number(values.id), {
           ...content,
           coverImageUrl: coverUrl,
-          body: matteredBody,
         });
       } else {
         const content = Automapper.map<ContentDetails, ContentCreateDto>(
@@ -164,7 +162,6 @@ export const ContentEdit = (props: ContentEditProps) => {
         response = await client.api.contentCreate({
           ...content,
           coverImageUrl: coverUrl,
-          body: matteredBody,
         });
       }
       helpers.setValues(
@@ -174,16 +171,8 @@ export const ContentEdit = (props: ContentEditProps) => {
           "ContentDetails"
         )
       );
-      const mattered = graymatter(response.data.body);
-
-      const normalizedFrontmatter = Object.keys(mattered.data).map((key) => {
-        return {
-          key: key,
-          value: mattered.data[key],
-        } as FrontmatterEditorInitialValue;
-      });
-      helpers.setFieldValue("frontmatter", normalizedFrontmatter);
-      helpers.setFieldValue("body", mattered.content);
+      await helpers.setFieldValue("coverImagePending", 
+        {url: buildAbsoluteUrl(response.data.coverImageUrl!), fileName: ""});
       toast.update(loadingToastId, {
         render: `Successfully ${values?.id ? "updated" : "created"} post`,
         type: "success",
@@ -192,6 +181,7 @@ export const ContentEdit = (props: ContentEditProps) => {
         closeOnClick: true,
         hideProgressBar: false,
       });
+      
       setWasModified(false);
       setCoverWasModified(false);
       const localStorageSnapshot = { ...editorLocalStorage };
@@ -233,21 +223,22 @@ export const ContentEdit = (props: ContentEditProps) => {
     let template: TypeDefaultValues;
     let typeName: string;
     if (value === null) {
-      template = ContentEditDefaultValues.filter((v) => v.type == "Other")[0];
+      template = ContentEditDefaultValues.filter((v) => v.type == "Blog Post")[0];
       typeName = template.defaultValues.type;
     } else {
-      template =
-        ContentEditDefaultValues.filter((v) => v.type == value)[0] ||
-        ContentEditDefaultValues.filter((v) => v.type == "Other")[0];
+      template = ContentEditDefaultValues.filter((v) => v.type == value)[0];
       typeName = value;
     }
     // Override 'type' because otherwise it always would be 'Other' in case of failure type set
-    formik.setValues({ ...template.defaultValues, type: typeName });
+    if (template !== null){
+      formik.setValues({ ...template.defaultValues, type: typeName });
+    }
     setWasModified(true);
   };
 
-  const onCoverImageChange = (file: File | null) => {
-    formik.setFieldValue("coverImageFile", file);
+  const onCoverImageChange = (url: ImageData) => {
+    formik.setFieldValue("coverImagePending", url);
+    console.log(url);
     setCoverWasModified(true);
   };
 
@@ -273,7 +264,10 @@ export const ContentEdit = (props: ContentEditProps) => {
           await formik.setValues(
             localStorageSnapshot.data.filter((data) => data.id === id)[0].savedData
           );
-          await formik.setFieldValue("coverImageFile", new File([], "dummy"));
+          if (localStorageSnapshot.data.filter((data) => data.id === id)[0]
+            .savedData.coverImagePending.fileName.length > 0){
+            setCoverWasModified(true);
+          }
           setWasModified(true);
           return;
         }
@@ -286,17 +280,8 @@ export const ContentEdit = (props: ContentEditProps) => {
               "ContentDetails"
             )
           );
-          await formik.setFieldValue("coverImageFile", new File([], "dummy"));
-          const mattered = graymatter(data.body);
-
-          const normalizedFrontmatter = Object.keys(mattered.data).map((key) => {
-            return {
-              key: key,
-              value: mattered.data[key],
-            } as FrontmatterEditorInitialValue;
-          });
-          await formik.setFieldValue("frontmatter", normalizedFrontmatter);
-          await formik.setFieldValue("body", mattered.content);
+          await formik.setFieldValue("coverImagePending", 
+            {url: buildAbsoluteUrl(data.coverImageUrl!), fileName: ""});
         }
       } catch (e) {
         console.log(e);
@@ -312,15 +297,6 @@ export const ContentEdit = (props: ContentEditProps) => {
 
   return (
     <>
-      <FrontmatterEditorModal
-        isOpen={isFrontmatterEditorOpened}
-        handleClose={(items) => {
-          formik.setFieldValue("frontmatter", items);
-          setFrontmatterEditorOpened(false);
-          setWasModified(true);
-        }}
-        initialValues={formik.values.frontmatter}
-      />
       <RestoreDataModal
         isOpen={restoreDataState === ContentEditRestoreState.Requested}
         onClose={(value) =>
@@ -331,15 +307,35 @@ export const ContentEdit = (props: ContentEditProps) => {
       />
       <ModuleHeaderContainer>
         <ModuleHeaderSubtitleContainer>
-          <Breadcrumbs separator={<NavigateNext fontSize="small" />}>
-            <Link to={rootRoute} component={GhostLink} underline="hover">
-              Dashboard
-            </Link>
-            <Link to={`${rootRoute}${CoreModule.blog}`} component={GhostLink} underline="hover">
-              Blog
-            </Link>
-            <Typography variant="body1">{formik.values.title}</Typography>
-          </Breadcrumbs>
+          <Grid 
+            container 
+            direction="row" 
+            justifyContent="space-between"
+          >
+            <Grid item>
+              <Breadcrumbs separator={<NavigateNext fontSize="small" />}>
+                <Link to={rootRoute} component={GhostLink} underline="hover">
+                  Dashboard
+                </Link>
+                <Link to={`${rootRoute}${CoreModule.blog}`} component={GhostLink} underline="hover">
+                  Blog
+                </Link>
+                <Typography variant="body1">{formik.values.title}</Typography>
+              </Breadcrumbs>
+            </Grid>
+            <Fade in={showAutosaveBar}>
+              <Grid container item spacing={3} sm="auto" xs="auto">
+                <Grid item>
+                  <CircularProgress size={14}/>
+                </Grid>
+                <Grid item>
+                  <Typography>
+                    Saving...
+                  </Typography>
+                </Grid>
+              </Grid>
+            </Fade>
+          </Grid>
         </ModuleHeaderSubtitleContainer>
         <ModuleHeaderActionContainer></ModuleHeaderActionContainer>
       </ModuleHeaderContainer>
@@ -350,10 +346,11 @@ export const ContentEdit = (props: ContentEditProps) => {
           <form onSubmit={formik.handleSubmit}>
             <Card>
               <CardContent>
-                <Grid container spacing={3} xs={12} sm={12}>
-                  <Grid container spacing={3} xs={6} sm={6}>
+                <Grid container spacing={1} xs={12} sm={12}>
+                  <Grid container item spacing={4} xs={6} sm={6}>
                     <Grid xs={12} sm={12} item>
                       <Autocomplete
+                        freeSolo
                         disabled={props.readonly}
                         value={formik.values.type}
                         onChange={typeFieldUpdate}
@@ -403,26 +400,24 @@ export const ContentEdit = (props: ContentEditProps) => {
                       ></TextField>
                     </Grid>
                   </Grid>
-                  <Grid item xs={6} sm={6}>
+                  <Grid item xs={6} sm={6} pb={{sm: "0.7rem"}}>
                     <FileDropdown
                       onChange={onCoverImageChange}
                       acceptMIME="image/*"
                       maxFileSize={ContentEditMaximumImageSize}
-                      initialUrl={buildAbsoluteUrl(formik.values.coverImageUrl)}
-                      error={formik.touched.coverImageFile && Boolean(formik.errors.coverImageFile)}
-                      helperText={formik.touched.coverImageFile && formik.errors.coverImageFile}
+                      data={formik.values.coverImagePending}
                     />
                   </Grid>
-                  <Grid item xs={6} sm={6}>
-                    <Button onClick={() => setFrontmatterEditorOpened(true)}>Frontmatter</Button>
-                  </Grid>
                 </Grid>
-                <Grid container spacing={3} xs={12} sm={12}>
+                <Grid container spacing={3} xs={12} sm={12} sx={{mt: 2 }}>
                   <Grid xs={12} sm={12} item data-color-mode="light">
                     <MarkdownEditor
                       onChange={async (value) => {
                         setWasModified(true);
                         await formik.setFieldValue("body", value);
+                      }}
+                      onFrontmatterErrorChange={async (value) => {
+                        setfrontmatterState(value);
                       }}
                       value={formik.values.body}
                       isReadOnly={props.readonly}
@@ -460,10 +455,11 @@ export const ContentEdit = (props: ContentEditProps) => {
                   </Grid>
                   <Grid xs={6} sm={6} item>
                     <Autocomplete
+                      freeSolo
                       disabled={props.readonly}
                       value={formik.values.author}
                       onChange={(ev, val) => autoCompleteValueUpdate<string | null>("author", val)}
-                      options={["Author 1", "Author 2"]}
+                      options={ContentEditAvailableAuthors}
                       renderInput={(params) => (
                         <TextField
                           {...params}
@@ -479,6 +475,7 @@ export const ContentEdit = (props: ContentEditProps) => {
                   </Grid>
                   <Grid xs={6} sm={6} item>
                     <Autocomplete
+                      freeSolo
                       disabled={props.readonly}
                       value={formik.values.language}
                       onChange={(ev, val) =>
@@ -499,20 +496,8 @@ export const ContentEdit = (props: ContentEditProps) => {
                     />
                   </Grid>
                   <Grid xs={6} sm={6} item>
-                    <FormControlLabel
-                      label="Allow Comments"
-                      control={
-                        <Checkbox
-                          disabled={props.readonly}
-                          checked={formik.values.allowComments}
-                          onChange={valueUpdate}
-                          name="allowComments"
-                        />
-                      }
-                    />
-                  </Grid>
-                  <Grid xs={6} sm={6} item>
                     <Autocomplete
+                      freeSolo
                       multiple
                       limitTags={3}
                       options={ContentEditAvailableTags as unknown as string[]}
@@ -531,7 +516,21 @@ export const ContentEdit = (props: ContentEditProps) => {
                     />
                   </Grid>
                   <Grid xs={6} sm={6} item>
+                    <FormControlLabel
+                      label="Allow Comments"
+                      control={
+                        <Checkbox
+                          disabled={props.readonly}
+                          checked={formik.values.allowComments}
+                          onChange={valueUpdate}
+                          name="allowComments"
+                        />
+                      }
+                    />
+                  </Grid>
+                  <Grid xs={6} sm={6} item>
                     <Autocomplete
+                      freeSolo
                       multiple
                       limitTags={3}
                       options={ContentEditAvailableCategories as unknown as string[]}
@@ -549,12 +548,14 @@ export const ContentEdit = (props: ContentEditProps) => {
                       )}
                     />
                   </Grid>
-                  <Grid item xs={12}>
+                  <Grid item xs={6}>
                     {!props.readonly && (
                       <Button
-                        startIcon={<Save />}
                         disabled={!(wasModified || coverWasModified)}
                         type="submit"
+                        variant="contained"
+                        fullWidth
+                        size="large"
                       >
                         Save
                       </Button>

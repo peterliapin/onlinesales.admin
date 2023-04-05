@@ -4,13 +4,18 @@ import { Button, Grid, Box } from "@mui/material";
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 
-type onChangeFunc = (files: File | null) => void;
+export interface ImageData {
+  fileName: string,
+  url: string,
+}
+
+type onChangeFunc = (file: ImageData) => void;
 
 interface FileDropdownProps {
   acceptMIME: string;
   maxFileSize: number;
   onChange: onChangeFunc;
-  initialUrl: string;
+  data: ImageData;
   error?: boolean | null;
   helperText?: string | boolean | undefined;
 }
@@ -19,14 +24,10 @@ const FileDropdown = ({
   acceptMIME,
   maxFileSize,
   onChange,
-  initialUrl,
+  data,
   error,
   helperText,
 }: FileDropdownProps) => {
-  const [currentImageUrl, setCurrentImageUrl] = useState<string>(initialUrl);
-  // If we're restoring content with already set (uploaded ) cover we need this
-  useEffect(() => setCurrentImageUrl(initialUrl), [initialUrl]);
-
   const onDrop = (acceptedFiles: File[], rejections: FileRejection[]) => {
     if (rejections.length > 0) {
       rejections.map((rejection) => {
@@ -43,22 +44,19 @@ const FileDropdown = ({
           toast.error(`Failed to select image ${file.name} (File System error).`);
           return;
         }
-        setCurrentImageUrl(e.target.result as string);
+        onChange({fileName: file.name, url: e.target.result as string});
       };
       fileReader.readAsDataURL(file);
-      onChange(acceptedFiles[0]);
     }
   };
 
   const onReset = () => {
-    setCurrentImageUrl("");
-    onChange(null);
+    onChange({fileName: "", url:""});
   };
-
   return (
     <>
       <BoxStyled>
-        {currentImageUrl.length === 0 ? (
+        {data === undefined || data.url === undefined || data.url.length === 0 ? (
           <Dropzone
             onDrop={onDrop}
             maxSize={maxFileSize}
@@ -83,14 +81,10 @@ const FileDropdown = ({
               <Box
                 component="img"
                 sx={{
-                  height: 1,
-                  width: 1,
-                  maxHeight: { xs: 233, md: 167 },
-                  maxWidth: { xs: 350, md: 250 },
                   "object-fit": "contain",
                 }}
                 alt="Cover image preview"
-                src={currentImageUrl}
+                src={data.url}
               />
             </Grid>
             <Grid item xs={12} style={{ textAlign: "center" }}>
