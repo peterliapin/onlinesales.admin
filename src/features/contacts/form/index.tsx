@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { SyntheticEvent, useEffect, useState } from "react";
 import {
   Autocomplete,
   Backdrop,
@@ -20,10 +20,9 @@ import { CoreModule } from "lib/router";
 import { initialSnackBarParams, serverErrorSnackBarParams } from "components/snackbar/constants";
 import { BreadCrumbNavigation } from "components/breadcrumbs";
 import { contactAddHeader, contactEditHeader, contactFormBreadcrumbLinks } from "../constants";
-import { useCoreModuleNavigation } from "utils/helper";
+import { getCountryList, useCoreModuleNavigation } from "utils/helper";
 import { isValidEmail, isValidNumber } from "utils/validators";
 import { useRequestContext } from "@providers/request-provider";
-import { countryListStorageKey } from "utils/constants";
 import { toast } from "react-toastify";
 
 interface ContactFormProps {
@@ -39,8 +38,7 @@ type Country = {
 };
 
 export const ContactForm = ({ contact, updateContact, handleSave, isEdit }: ContactFormProps) => {
-  const { client } = useRequestContext();
-
+  const context = useRequestContext();
   const handleNavigation = useCoreModuleNavigation();
 
   const [isInvalidEmail, setIsInvalidEmail] = useState(false);
@@ -54,7 +52,7 @@ export const ContactForm = ({ contact, updateContact, handleSave, isEdit }: Cont
 
   useEffect(() => {
     (async () => {
-      const countries = await getCountryList();
+      const countries = await getCountryList(context);
       if (countries) {
         setCountryList(Object.entries(countries).map(([code, name]) => ({ code, name })));
         setIsLoading(false);
@@ -64,30 +62,13 @@ export const ContactForm = ({ contact, updateContact, handleSave, isEdit }: Cont
     })();
   }, []);
 
-  const getCountryList = async () => {
-    const countries = localStorage.getItem(countryListStorageKey);
-    if (countries) {
-      return JSON.parse(countries) as Record<string, string>;
-    } else {
-      (async () => {
-        try {
-          const { data } = await client.api.countriesList();
-          localStorage.setItem(countryListStorageKey, JSON.stringify(data));
-          return data;
-        } catch (e) {
-          return null;
-        }
-      })();
-    }
-  };
-
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     updateContact((currentContact: ContactDetailsDto) => ({ ...currentContact, [name]: value }));
   };
 
   const handleCountryChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
+    e: SyntheticEvent<Element, Event>,
     value: { code: string; name: string } | null
   ) => {
     if (value) {
