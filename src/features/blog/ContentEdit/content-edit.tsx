@@ -171,6 +171,8 @@ export const ContentEdit = (props: ContentEditProps) => {
           "ContentDetails"
         )
       );
+      await helpers.setFieldValue("coverImagePending", 
+        {url: buildAbsoluteUrl(response.data.coverImageUrl!), fileName: ""});
       toast.update(loadingToastId, {
         render: `Successfully ${values?.id ? "updated" : "created"} post`,
         type: "success",
@@ -179,6 +181,7 @@ export const ContentEdit = (props: ContentEditProps) => {
         closeOnClick: true,
         hideProgressBar: false,
       });
+      
       setWasModified(false);
       setCoverWasModified(false);
       const localStorageSnapshot = { ...editorLocalStorage };
@@ -261,6 +264,10 @@ export const ContentEdit = (props: ContentEditProps) => {
           await formik.setValues(
             localStorageSnapshot.data.filter((data) => data.id === id)[0].savedData
           );
+          if (localStorageSnapshot.data.filter((data) => data.id === id)[0]
+            .savedData.coverImagePending.fileName.length > 0){
+            setCoverWasModified(true);
+          }
           setWasModified(true);
           return;
         }

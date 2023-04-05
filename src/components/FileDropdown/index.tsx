@@ -28,7 +28,6 @@ const FileDropdown = ({
   error,
   helperText,
 }: FileDropdownProps) => {
-
   const onDrop = (acceptedFiles: File[], rejections: FileRejection[]) => {
     if (rejections.length > 0) {
       rejections.map((rejection) => {
@@ -57,7 +56,7 @@ const FileDropdown = ({
   return (
     <>
       <BoxStyled>
-        {data.url.length === 0 ? (
+        {data === undefined || data.url === undefined || data.url.length === 0 ? (
           <Dropzone
             onDrop={onDrop}
             maxSize={maxFileSize}
