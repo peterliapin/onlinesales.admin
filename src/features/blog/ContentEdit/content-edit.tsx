@@ -28,10 +28,9 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { CurrencyBitcoin, NavigateNext, Report, Save } from "@mui/icons-material";
+import { NavigateNext, Save } from "@mui/icons-material";
 import { CoreModule, rootRoute } from "@lib/router";
 import { GhostLink } from "@components/ghost-link";
-import MarkdownViewer from "@components/MarkdownViewer";
 import { useFormik, FormikHelpers } from "formik";
 import {
   TypeDefaultValues,
@@ -49,19 +48,16 @@ import {
   ContentEditDefaultValues,
   ContentEditMaximumImageSize,
 } from "./validation";
-import { toFormikValidate, toFormikValidationSchema } from "zod-formik-adapter";
+import { toFormikValidationSchema } from "zod-formik-adapter";
 import { Automapper } from "@lib/automapper";
 import MarkdownEditor from "@components/MarkdownEditor";
 import { Id, toast } from "react-toastify";
 import FileDropdown from "@components/FileDropdown";
-import FrontmatterEditorModal, {
-  FrontmatterEditorInitialValue,
-} from "@components/FrontmatterEditor";
 import { buildAbsoluteUrl } from "@lib/network/utils";
-import graymatter from "gray-matter";
 import useLocalStorage from "use-local-storage";
 import { RestoreDataModal } from "@components/RestoreData";
 import { useDebouncedCallback } from "use-debounce";
+import { ValidateFrontmatterError } from "utils/frontmatter-validator";
 
 interface ContentEditProps {
   readonly?: boolean;
@@ -82,7 +78,7 @@ export const ContentEdit = (props: ContentEditProps) => {
   const [coverWasModified, setCoverWasModified] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isSaving, setIsSaving] = useState<boolean>(false);
-  const [isFrontmatterEditorOpened, setFrontmatterEditorOpened] = useState<boolean>(false);
+  const [frontmatterState, setfrontmatterState] = useState<ValidateFrontmatterError | null>(null);
   const [restoreDataState, setRestoreDataState] = useState<ContentEditRestoreState>(
     ContentEditRestoreState.Idle
   );
@@ -113,19 +109,13 @@ export const ContentEdit = (props: ContentEditProps) => {
     let response: HttpResponse<ContentDetailsDto, void | ProblemDetails>;
     let coverUrl = values.coverImageUrl;
     const loadingToastId = toast.loading(`${values?.id ? "Updating" : "Creating"} a post...`);
-    const graymatteredFrontmatter = values.frontmatter.reduce(
-      (previousValue: { [key: string]: string }, currentValue) => {
-        const copy = { ...previousValue };
-        const key = currentValue.key;
-        const value = currentValue.value;
-        copy[key] = value;
-        return copy;
-      },
-      {} as { [key: string]: string }
-    );
-    const matteredBody = graymatter.stringify(values.body, graymatteredFrontmatter);
     try {
       setIsSaving(true);
+      if (frontmatterState !== null){
+        toast.dismiss(loadingToastId);
+        toast.error(frontmatterState.errorMessage);
+        return;
+      }
       if (coverWasModified) {
         const { data } = await client.api.mediaCreate({
           Image: values.coverImageFile!,
@@ -153,7 +143,6 @@ export const ContentEdit = (props: ContentEditProps) => {
         response = await client.api.contentPartialUpdate(Number(values.id), {
           ...content,
           coverImageUrl: coverUrl,
-          body: matteredBody,
         });
       } else {
         const content = Automapper.map<ContentDetails, ContentCreateDto>(
@@ -164,7 +153,6 @@ export const ContentEdit = (props: ContentEditProps) => {
         response = await client.api.contentCreate({
           ...content,
           coverImageUrl: coverUrl,
-          body: matteredBody,
         });
       }
       helpers.setValues(
@@ -174,16 +162,6 @@ export const ContentEdit = (props: ContentEditProps) => {
           "ContentDetails"
         )
       );
-      const mattered = graymatter(response.data.body);
-
-      const normalizedFrontmatter = Object.keys(mattered.data).map((key) => {
-        return {
-          key: key,
-          value: mattered.data[key],
-        } as FrontmatterEditorInitialValue;
-      });
-      helpers.setFieldValue("frontmatter", normalizedFrontmatter);
-      helpers.setFieldValue("body", mattered.content);
       toast.update(loadingToastId, {
         render: `Successfully ${values?.id ? "updated" : "created"} post`,
         type: "success",
@@ -287,16 +265,6 @@ export const ContentEdit = (props: ContentEditProps) => {
             )
           );
           await formik.setFieldValue("coverImageFile", new File([], "dummy"));
-          const mattered = graymatter(data.body);
-
-          const normalizedFrontmatter = Object.keys(mattered.data).map((key) => {
-            return {
-              key: key,
-              value: mattered.data[key],
-            } as FrontmatterEditorInitialValue;
-          });
-          await formik.setFieldValue("frontmatter", normalizedFrontmatter);
-          await formik.setFieldValue("body", mattered.content);
         }
       } catch (e) {
         console.log(e);
@@ -312,15 +280,6 @@ export const ContentEdit = (props: ContentEditProps) => {
 
   return (
     <>
-      <FrontmatterEditorModal
-        isOpen={isFrontmatterEditorOpened}
-        handleClose={(items) => {
-          formik.setFieldValue("frontmatter", items);
-          setFrontmatterEditorOpened(false);
-          setWasModified(true);
-        }}
-        initialValues={formik.values.frontmatter}
-      />
       <RestoreDataModal
         isOpen={restoreDataState === ContentEditRestoreState.Requested}
         onClose={(value) =>
@@ -413,9 +372,6 @@ export const ContentEdit = (props: ContentEditProps) => {
                       helperText={formik.touched.coverImageFile && formik.errors.coverImageFile}
                     />
                   </Grid>
-                  <Grid item xs={6} sm={6}>
-                    <Button onClick={() => setFrontmatterEditorOpened(true)}>Frontmatter</Button>
-                  </Grid>
                 </Grid>
                 <Grid container spacing={3} xs={12} sm={12}>
                   <Grid xs={12} sm={12} item data-color-mode="light">
@@ -423,6 +379,9 @@ export const ContentEdit = (props: ContentEditProps) => {
                       onChange={async (value) => {
                         setWasModified(true);
                         await formik.setFieldValue("body", value);
+                      }}
+                      onFrontmatterErrorChange={async (value) => {
+                        setfrontmatterState(value);
                       }}
                       value={formik.values.body}
                       isReadOnly={props.readonly}

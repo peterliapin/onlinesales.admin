@@ -1,5 +1,3 @@
-import { FrontmatterEditorInitialValue } from "@components/FrontmatterEditor";
-
 export interface ContentDetails {
   id: string | null;
   type: string;
@@ -18,7 +16,6 @@ export interface ContentDetails {
   createdAt: string | null;
   updatedAt: string | null;
   files: File[] | null;
-  frontmatter: FrontmatterEditorInitialValue[];
 }
 
 export interface TypeDefaultValues {

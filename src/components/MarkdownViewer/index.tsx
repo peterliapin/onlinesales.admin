@@ -42,9 +42,11 @@ function DirectiveHandler() {
 
 const MarkdownViewer = ({ source }: MarkdownViewerProps) => {
   const [body, setBody] = useState<string>(source);
+
   const onChange = useDebouncedCallback((value) => {
     setBody(value);
   }, 200);
+
   useEffect(() => {
     onChange(source);
   }, [source]);
