@@ -3,7 +3,9 @@ import { TypeDefaultValues } from "./types";
 
 export const ContentEditAvailableLanguages = ["English", "Russian"] as const;
 
-export const ContentEditAvailableTypes = ["Blog Post", "Release Notes", "Other"] as const;
+export const ContentEditAvailableTypes = ["Blog Post", "Release Note"] as const;
+
+export const ContentEditAvailableAuthors = ["Author 1", "Author 2"] as const;
 
 /// TODO: Runtime
 export const ContentEditAvailableTags = ["Tag 1", "Tag 2", "Tag 3"] as const;
@@ -23,7 +25,7 @@ export const ContentEditDefaultValues: TypeDefaultValues[] = [
       description: "",
       body: "",
       coverImageUrl: "",
-      coverImageFile: null,
+      coverImagePending: "",
       coverImageAlt: "",
       slug: "",
       author: "",
@@ -37,15 +39,15 @@ export const ContentEditDefaultValues: TypeDefaultValues[] = [
     },
   },
   {
-    type: "Release Notes",
+    type: "Release Note",
     defaultValues: {
       id: null,
-      type: "Release Notes",
+      type: "Release Note",
       title: "",
       description: "",
       body: "",
       coverImageUrl: "",
-      coverImageFile: null,
+      coverImagePending: "",
       coverImageAlt: "",
       slug: "",
       author: "",
@@ -65,12 +67,12 @@ export const ContentEditValidationScheme = zod.object({
   title: zod.string(),
   description: zod.string(),
   body: zod.string(),
-  coverImageFile: zod.instanceof(File),
+  coverImagePending: zod.string(),
   coverImageAlt: zod.string(),
   slug: zod.string(),
   author: zod.string(),
   language: zod.enum(ContentEditAvailableLanguages),
   allowComments: zod.boolean(),
-  tags: zod.string().array(),
+  tags: zod.string().array().optional(),
   categories: zod.string().array(),
 });

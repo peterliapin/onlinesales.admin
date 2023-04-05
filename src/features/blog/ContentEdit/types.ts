@@ -5,7 +5,7 @@ export interface ContentDetails {
   description: string;
   body: string;
   coverImageUrl: string;
-  coverImageFile: File | null;
+  coverImagePending: string;
   coverImageAlt: string;
   slug: string;
   author: string;

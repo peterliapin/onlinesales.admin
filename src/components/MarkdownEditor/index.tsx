@@ -87,6 +87,7 @@ const MarkdownEditor = ({
         value={value}
         onChange={onChange}
         commands={customCommands}
+        style={{padding: 0}}
         highlightEnable
         components={{
           preview: (value) => { return MarkdownViewerFunc(`${currentError}${strippedValue}`); },

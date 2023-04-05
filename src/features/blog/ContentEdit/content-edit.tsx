@@ -22,6 +22,7 @@ import {
   Card,
   CardContent,
   Checkbox,
+  Divider,
   FormControlLabel,
   Grid,
   Link,
@@ -47,6 +48,7 @@ import {
   ContentEditAvailableCategories,
   ContentEditDefaultValues,
   ContentEditMaximumImageSize,
+  ContentEditAvailableAuthors
 } from "./validation";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 import { Automapper } from "@lib/automapper";
@@ -118,7 +120,7 @@ export const ContentEdit = (props: ContentEditProps) => {
       }
       if (coverWasModified) {
         const { data } = await client.api.mediaCreate({
-          Image: values.coverImageFile!,
+          Image: await (await fetch(values.coverImagePending)).blob() as File,
           ScopeUid: values.slug,
         });
         if (data.location === null) {
@@ -211,21 +213,21 @@ export const ContentEdit = (props: ContentEditProps) => {
     let template: TypeDefaultValues;
     let typeName: string;
     if (value === null) {
-      template = ContentEditDefaultValues.filter((v) => v.type == "Other")[0];
+      template = ContentEditDefaultValues.filter((v) => v.type == "Blog Post")[0];
       typeName = template.defaultValues.type;
     } else {
-      template =
-        ContentEditDefaultValues.filter((v) => v.type == value)[0] ||
-        ContentEditDefaultValues.filter((v) => v.type == "Other")[0];
+      template = ContentEditDefaultValues.filter((v) => v.type == value)[0];
       typeName = value;
     }
     // Override 'type' because otherwise it always would be 'Other' in case of failure type set
-    formik.setValues({ ...template.defaultValues, type: typeName });
+    if (template !== null){
+      formik.setValues({ ...template.defaultValues, type: typeName });
+    }
     setWasModified(true);
   };
 
-  const onCoverImageChange = (file: File | null) => {
-    formik.setFieldValue("coverImageFile", file);
+  const onCoverImageChange = (url: string) => {
+    formik.setFieldValue("coverImagePending", url);
     setCoverWasModified(true);
   };
 
@@ -309,10 +311,11 @@ export const ContentEdit = (props: ContentEditProps) => {
           <form onSubmit={formik.handleSubmit}>
             <Card>
               <CardContent>
-                <Grid container spacing={3} xs={12} sm={12}>
-                  <Grid container spacing={3} xs={6} sm={6}>
+                <Grid container spacing={1} xs={12} sm={12}>
+                  <Grid container item spacing={4} xs={6} sm={6}>
                     <Grid xs={12} sm={12} item>
                       <Autocomplete
+                        freeSolo
                         disabled={props.readonly}
                         value={formik.values.type}
                         onChange={typeFieldUpdate}
@@ -367,13 +370,21 @@ export const ContentEdit = (props: ContentEditProps) => {
                       onChange={onCoverImageChange}
                       acceptMIME="image/*"
                       maxFileSize={ContentEditMaximumImageSize}
-                      initialUrl={buildAbsoluteUrl(formik.values.coverImageUrl)}
-                      error={formik.touched.coverImageFile && Boolean(formik.errors.coverImageFile)}
-                      helperText={formik.touched.coverImageFile && formik.errors.coverImageFile}
+                      url={
+                        formik.values.coverImageUrl &&
+                        buildAbsoluteUrl(formik.values.coverImageUrl) ||
+                        formik.values.coverImagePending
+                      }
+                      error={
+                        formik.touched.coverImagePending && Boolean(formik.errors.coverImagePending)
+                      }
+                      helperText={
+                        formik.touched.coverImagePending && formik.errors.coverImagePending
+                      }
                     />
                   </Grid>
                 </Grid>
-                <Grid container spacing={3} xs={12} sm={12}>
+                <Grid container spacing={3} xs={12} sm={12} sx={{mt: 2 }}>
                   <Grid xs={12} sm={12} item data-color-mode="light">
                     <MarkdownEditor
                       onChange={async (value) => {
@@ -419,10 +430,11 @@ export const ContentEdit = (props: ContentEditProps) => {
                   </Grid>
                   <Grid xs={6} sm={6} item>
                     <Autocomplete
+                      freeSolo
                       disabled={props.readonly}
                       value={formik.values.author}
                       onChange={(ev, val) => autoCompleteValueUpdate<string | null>("author", val)}
-                      options={["Author 1", "Author 2"]}
+                      options={ContentEditAvailableAuthors}
                       renderInput={(params) => (
                         <TextField
                           {...params}
@@ -438,6 +450,7 @@ export const ContentEdit = (props: ContentEditProps) => {
                   </Grid>
                   <Grid xs={6} sm={6} item>
                     <Autocomplete
+                      freeSolo
                       disabled={props.readonly}
                       value={formik.values.language}
                       onChange={(ev, val) =>
@@ -472,6 +485,7 @@ export const ContentEdit = (props: ContentEditProps) => {
                   </Grid>
                   <Grid xs={6} sm={6} item>
                     <Autocomplete
+                      freeSolo
                       multiple
                       limitTags={3}
                       options={ContentEditAvailableTags as unknown as string[]}
@@ -491,6 +505,7 @@ export const ContentEdit = (props: ContentEditProps) => {
                   </Grid>
                   <Grid xs={6} sm={6} item>
                     <Autocomplete
+                      freeSolo
                       multiple
                       limitTags={3}
                       options={ContentEditAvailableCategories as unknown as string[]}

@@ -82,11 +82,37 @@ createMap<ContentDetailsDto, ContentDetails>(
   "ContentDetails",
   forMember(
     (d) => d.tags,
-    mapFrom((s) => s.tags?.split(";") ?? [])
+    mapFrom((s) => s.tags && s.tags.split(";") || [])
+  ),
+  forMember(
+    (d) => d.language,
+    mapFrom((s) => {
+      switch (s.language){
+      case "ru":
+        return "Russian";
+      case "en":
+        return "English";
+      default:
+        return "Unknown";
+      }
+    }),
+  ),
+  forMember(
+    (d) => d.type,
+    mapFrom((s) => {
+      switch (s.type){
+      case "post":
+        return "Blog Post";
+      case "release-note":
+        return "Release Note";
+      default:
+        return "Unknown";
+      }
+    }),
   ),
   forMember(
     (d) => d.categories,
-    mapFrom((s) => s.categories?.split(";") ?? [])
+    mapFrom((s) => s.categories && s.categories.split(";") || [])
   )
 );
 createMap<ContentDetails, ContentUpdateDto>(
@@ -96,6 +122,32 @@ createMap<ContentDetails, ContentUpdateDto>(
   forMember(
     (d) => d.tags,
     mapFrom((s) => s.tags.join(";"))
+  ),
+  forMember(
+    (d) => d.language,
+    mapFrom((s) => {
+      switch (s.language){
+      case "Russian":
+        return "ru";
+      case "English":
+        return "en";
+      default:
+        return "Unknown";
+      }
+    }),
+  ),
+  forMember(
+    (d) => d.type,
+    mapFrom((s) => {
+      switch (s.type){
+      case "Blog Post":
+        return "post";
+      case "Release Note":
+        return "release-note";
+      default:
+        return "Unknown";
+      }
+    }),
   ),
   forMember(
     (d) => d.categories,
@@ -109,6 +161,32 @@ createMap<ContentDetails, ContentCreateDto>(
   forMember(
     (d) => d.tags,
     mapFrom((s) => s.tags.join(";"))
+  ),
+  forMember(
+    (d) => d.language,
+    mapFrom((s) => {
+      switch (s.language){
+      case "Russian":
+        return "ru";
+      case "English":
+        return "en";
+      default:
+        return "Unknown";
+      }
+    }),
+  ),
+  forMember(
+    (d) => d.type,
+    mapFrom((s) => {
+      switch (s.type){
+      case "Blog Post":
+        return "post";
+      case "Release Note":
+        return "release-note";
+      default:
+        return "Unknown";
+      }
+    }),
   ),
   forMember(
     (d) => d.categories,

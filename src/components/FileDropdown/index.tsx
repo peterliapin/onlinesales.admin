@@ -4,13 +4,13 @@ import { Button, Grid, Box } from "@mui/material";
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 
-type onChangeFunc = (files: File | null) => void;
+type onChangeFunc = (files: string) => void;
 
 interface FileDropdownProps {
   acceptMIME: string;
   maxFileSize: number;
   onChange: onChangeFunc;
-  initialUrl: string;
+  url: string;
   error?: boolean | null;
   helperText?: string | boolean | undefined;
 }
@@ -19,13 +19,10 @@ const FileDropdown = ({
   acceptMIME,
   maxFileSize,
   onChange,
-  initialUrl,
+  url,
   error,
   helperText,
 }: FileDropdownProps) => {
-  const [currentImageUrl, setCurrentImageUrl] = useState<string>(initialUrl);
-  // If we're restoring content with already set (uploaded ) cover we need this
-  useEffect(() => setCurrentImageUrl(initialUrl), [initialUrl]);
 
   const onDrop = (acceptedFiles: File[], rejections: FileRejection[]) => {
     if (rejections.length > 0) {
@@ -43,22 +40,20 @@ const FileDropdown = ({
           toast.error(`Failed to select image ${file.name} (File System error).`);
           return;
         }
-        setCurrentImageUrl(e.target.result as string);
+        onChange(e.target.result as string);
       };
       fileReader.readAsDataURL(file);
-      onChange(acceptedFiles[0]);
     }
   };
 
   const onReset = () => {
-    setCurrentImageUrl("");
-    onChange(null);
+    onChange("");
   };
 
   return (
     <>
       <BoxStyled>
-        {currentImageUrl.length === 0 ? (
+        {url.length === 0 ? (
           <Dropzone
             onDrop={onDrop}
             maxSize={maxFileSize}
@@ -90,7 +85,7 @@ const FileDropdown = ({
                   "object-fit": "contain",
                 }}
                 alt="Cover image preview"
-                src={currentImageUrl}
+                src={url}
               />
             </Grid>
             <Grid item xs={12} style={{ textAlign: "center" }}>
