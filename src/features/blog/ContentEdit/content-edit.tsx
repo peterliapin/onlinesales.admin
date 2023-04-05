@@ -62,6 +62,7 @@ import useLocalStorage from "use-local-storage";
 import { RestoreDataModal } from "@components/RestoreData";
 import { useDebouncedCallback } from "use-debounce";
 import { ValidateFrontmatterError } from "utils/frontmatter-validator";
+import { ImageData } from "@components/FileDropdown";
 
 interface ContentEditProps {
   readonly?: boolean;
@@ -123,8 +124,10 @@ export const ContentEdit = (props: ContentEditProps) => {
         return;
       }
       if (coverWasModified) {
+        const blob = await (await fetch(values.coverImagePending.url!)).blob();
+        const file = new File([blob], values.coverImagePending.fileName);
         const { data } = await client.api.mediaCreate({
-          Image: await (await fetch(values.coverImagePending!)).blob() as File,
+          Image: file,
           ScopeUid: values.slug,
         });
         if (data.location === null) {
@@ -230,7 +233,7 @@ export const ContentEdit = (props: ContentEditProps) => {
     setWasModified(true);
   };
 
-  const onCoverImageChange = (url: string) => {
+  const onCoverImageChange = (url: ImageData) => {
     formik.setFieldValue("coverImagePending", url);
     console.log(url);
     setCoverWasModified(true);
@@ -270,7 +273,8 @@ export const ContentEdit = (props: ContentEditProps) => {
               "ContentDetails"
             )
           );
-          await formik.setFieldValue("coverImagePending", buildAbsoluteUrl(data.coverImageUrl!));
+          await formik.setFieldValue("coverImagePending", 
+            {url: buildAbsoluteUrl(data.coverImageUrl!), fileName: ""});
         }
       } catch (e) {
         console.log(e);
@@ -394,13 +398,7 @@ export const ContentEdit = (props: ContentEditProps) => {
                       onChange={onCoverImageChange}
                       acceptMIME="image/*"
                       maxFileSize={ContentEditMaximumImageSize}
-                      url={formik.values.coverImagePending}
-                      error={
-                        formik.touched.coverImagePending && Boolean(formik.errors.coverImagePending)
-                      }
-                      helperText={
-                        formik.touched.coverImagePending && formik.errors.coverImagePending
-                      }
+                      data={formik.values.coverImagePending}
                     />
                   </Grid>
                 </Grid>

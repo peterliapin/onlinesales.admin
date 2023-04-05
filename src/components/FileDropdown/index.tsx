@@ -4,13 +4,18 @@ import { Button, Grid, Box } from "@mui/material";
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 
-type onChangeFunc = (files: string) => void;
+export interface ImageData {
+  fileName: string,
+  url: string,
+}
+
+type onChangeFunc = (file: ImageData) => void;
 
 interface FileDropdownProps {
   acceptMIME: string;
   maxFileSize: number;
   onChange: onChangeFunc;
-  url: string;
+  data: ImageData;
   error?: boolean | null;
   helperText?: string | boolean | undefined;
 }
@@ -19,7 +24,7 @@ const FileDropdown = ({
   acceptMIME,
   maxFileSize,
   onChange,
-  url,
+  data,
   error,
   helperText,
 }: FileDropdownProps) => {
@@ -40,20 +45,19 @@ const FileDropdown = ({
           toast.error(`Failed to select image ${file.name} (File System error).`);
           return;
         }
-        onChange(e.target.result as string);
+        onChange({fileName: file.name, url: e.target.result as string});
       };
       fileReader.readAsDataURL(file);
     }
   };
 
   const onReset = () => {
-    onChange("");
+    onChange({fileName: "", url:""});
   };
-
   return (
     <>
       <BoxStyled>
-        {url.length === 0 ? (
+        {data.url.length === 0 ? (
           <Dropzone
             onDrop={onDrop}
             maxSize={maxFileSize}
@@ -81,7 +85,7 @@ const FileDropdown = ({
                   "object-fit": "contain",
                 }}
                 alt="Cover image preview"
-                src={url}
+                src={data.url}
               />
             </Grid>
             <Grid item xs={12} style={{ textAlign: "center" }}>

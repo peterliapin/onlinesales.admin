@@ -1,5 +1,6 @@
 import zod from "zod";
 import { TypeDefaultValues } from "./types";
+import { ImageData } from "@components/FileDropdown";
 
 export const ContentEditAvailableLanguages = ["English", "Russian"] as const;
 
@@ -25,7 +26,7 @@ export const ContentEditDefaultValues: TypeDefaultValues[] = [
       description: "",
       body: "",
       coverImageUrl: "",
-      coverImagePending: "",
+      coverImagePending: {fileName: "", url:""},
       coverImageAlt: "",
       slug: "",
       author: "",
@@ -47,7 +48,7 @@ export const ContentEditDefaultValues: TypeDefaultValues[] = [
       description: "",
       body: "",
       coverImageUrl: "",
-      coverImagePending: "",
+      coverImagePending: {fileName: "", url:""},
       coverImageAlt: "",
       slug: "",
       author: "",
@@ -67,7 +68,6 @@ export const ContentEditValidationScheme = zod.object({
   title: zod.string(),
   description: zod.string(),
   body: zod.string(),
-  coverImagePending: zod.string(),
   coverImageAlt: zod.string(),
   slug: zod.string(),
   author: zod.string(),
