@@ -5,25 +5,43 @@ import { viewFormRoute } from "lib/router";
 import { useRequestContext } from "providers/request-provider";
 import { useRouteParams } from "typesafe-routes";
 import { ContactCardHeader, ContactRowGrid } from "../../index.styled";
+import { toast } from "react-toastify";
+import { getCountryList } from "utils/helper";
 
 export const ContactView = () => {
-  const { client } = useRequestContext();
+  const context = useRequestContext();
+  const { client } = context;
   const { id } = useRouteParams(viewFormRoute);
   const [contact, setContact] = useState<ContactDetailsDto>({
-    firstName: "",
     email: "",
   });
+  const [selectedCountry, setSelectedCountry] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     (async () => {
       try {
         const { data } = await client.api.contactsDetail(id);
+        setCountry(data.countryCode);
         setContact(data);
       } catch (e) {
         console.log(e);
       }
     })();
   }, [client]);
+
+  const setCountry = async (countryCode: string | null | undefined) => {
+    if (countryCode) {
+      const countries = await getCountryList(context);
+      if (countries) {
+        const countryList = Object.entries(countries).map(([code, name]) => ({ code, name }));
+        setSelectedCountry(countryList.find((c) => c.code === countryCode)!.name);
+        setIsLoading(false);
+      } else {
+        toast.error("Server error: country list not available.");
+      }
+    }
+  };
 
   return (
     <Grid container spacing={3}>
@@ -54,17 +72,19 @@ export const ContactView = () => {
               <Grid item xs={2}>
                 <Typography fontWeight="bold">Country</Typography>
               </Grid>
-              <Grid item xs={10}>
-                {""}
-              </Grid>
+              {!isLoading && (
+                <Grid item xs={10}>
+                  {selectedCountry}
+                </Grid>
+              )}
             </ContactRowGrid>
             <Divider variant="fullWidth" />
             <ContactRowGrid container>
               <Grid item xs={2}>
-                <Typography fontWeight="bold">State/Region</Typography>
+                <Typography fontWeight="bold">City</Typography>
               </Grid>
               <Grid item xs={10}>
-                {contact.state}
+                {contact.cityName}
               </Grid>
             </ContactRowGrid>
             <Divider variant="fullWidth" />
