@@ -791,10 +791,6 @@ export interface Unsubscribe {
   contactId?: number | null;
 }
 
-export interface User {
-  name?: string | null;
-}
-
 export type QueryParamsType = Record<string | number, any>;
 export type ResponseFormat = keyof Omit<Body, "body" | "bodyUsed">;
 
@@ -1010,106 +1006,6 @@ export class HttpClient<SecurityDataType = unknown> {
  * @version 1.2.1.0
  */
 export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
-  microsoftIdentity = {
-    /**
-     * No description
-     *
-     * @tags Account
-     * @name AccountSignInDetail
-     * @request GET:/microsoft-identity/account/sign-in/{scheme}
-     * @secure
-     */
-    accountSignInDetail: (
-      scheme: string,
-      query?: {
-        redirectUri?: string;
-      },
-      params: RequestParams = {},
-    ) =>
-      this.request<void, any>({
-        path: `/microsoft-identity/account/sign-in/${scheme}`,
-        method: "GET",
-        query: query,
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @tags Account
-     * @name AccountChallengeDetail
-     * @request GET:/microsoft-identity/account/challenge/{scheme}
-     * @secure
-     */
-    accountChallengeDetail: (
-      scheme: string,
-      query?: {
-        redirectUri?: string;
-        scope?: string;
-        loginHint?: string;
-        domainHint?: string;
-        claims?: string;
-        policy?: string;
-      },
-      params: RequestParams = {},
-    ) =>
-      this.request<void, any>({
-        path: `/microsoft-identity/account/challenge/${scheme}`,
-        method: "GET",
-        query: query,
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @tags Account
-     * @name AccountSignOutDetail
-     * @request GET:/microsoft-identity/account/sign-out/{scheme}
-     * @secure
-     */
-    accountSignOutDetail: (scheme: string, params: RequestParams = {}) =>
-      this.request<void, any>({
-        path: `/microsoft-identity/account/sign-out/${scheme}`,
-        method: "GET",
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @tags Account
-     * @name AccountResetPasswordDetail
-     * @request GET:/microsoft-identity/account/reset-password/{scheme}
-     * @secure
-     */
-    accountResetPasswordDetail: (scheme: string, params: RequestParams = {}) =>
-      this.request<void, any>({
-        path: `/microsoft-identity/account/reset-password/${scheme}`,
-        method: "GET",
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @tags Account
-     * @name AccountEditProfileDetail
-     * @request GET:/microsoft-identity/account/edit-profile/{scheme}
-     * @secure
-     */
-    accountEditProfileDetail: (scheme: string, params: RequestParams = {}) =>
-      this.request<void, any>({
-        path: `/microsoft-identity/account/edit-profile/${scheme}`,
-        method: "GET",
-        secure: true,
-        ...params,
-      }),
-  };
   api = {
     /**
      * No description
@@ -1242,67 +1138,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         method: "GET",
         query: query,
         secure: true,
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @tags Auth
-     * @name AuthLoginList
-     * @request GET:/api/auth/login
-     * @secure
-     */
-    authLoginList: (
-      query?: {
-        redirectUrl?: string;
-      },
-      params: RequestParams = {},
-    ) =>
-      this.request<void, void | ProblemDetails>({
-        path: `/api/auth/login`,
-        method: "GET",
-        query: query,
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @tags Auth
-     * @name AuthLogoutList
-     * @request GET:/api/auth/logout
-     * @secure
-     */
-    authLogoutList: (
-      query?: {
-        redirectUrl?: string;
-      },
-      params: RequestParams = {},
-    ) =>
-      this.request<any, void | ProblemDetails>({
-        path: `/api/auth/logout`,
-        method: "GET",
-        query: query,
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @tags Auth
-     * @name AuthProfileList
-     * @request GET:/api/auth/profile
-     * @secure
-     */
-    authProfileList: (params: RequestParams = {}) =>
-      this.request<User, void | ProblemDetails>({
-        path: `/api/auth/profile`,
-        method: "GET",
-        secure: true,
-        format: "json",
         ...params,
       }),
 
@@ -1571,35 +1406,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         method: "GET",
         query: query,
         secure: true,
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @tags ContactUs
-     * @name ContactUsCreate
-     * @request POST:/api/contact-us
-     * @secure
-     */
-    contactUsCreate: (
-      data: {
-        /** @format binary */
-        Attachment?: File;
-        Message: string;
-        /** @format email */
-        Email: string;
-        PrivacyPolicy?: boolean;
-        Language: string;
-      },
-      params: RequestParams = {},
-    ) =>
-      this.request<void, void>({
-        path: `/api/contact-us`,
-        method: "POST",
-        body: data,
-        secure: true,
-        type: ContentType.FormData,
         ...params,
       }),
 
@@ -2165,87 +1971,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       this.request<any, void | ProblemDetails>({
         path: `/api/email-templates/export`,
         method: "GET",
-        query: query,
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @tags Fullfillment
-     * @name VerifoneFullfillmentCreate
-     * @request POST:/api/verifone/fullfillment
-     * @secure
-     */
-    verifoneFullfillmentCreate: (
-      data: {
-        Address?: string;
-        City?: string;
-        CompanyName?: string;
-        Country?: string;
-        CountryCode?: string;
-        Email?: string;
-        Fax?: string;
-        FirstName?: string;
-        Hash?: string;
-        Info?: string;
-        Lang?: string;
-        LastName?: string;
-        LicenseExp?: string;
-        LicenseLifetime?: string;
-        LicenseRef?: string;
-        LicenseType?: string;
-        PCode?: string;
-        Phone?: string;
-        PID?: string;
-        PSKU?: string;
-        /** @format int32 */
-        Quantity?: number;
-        RefNo?: string;
-        RefNoExt?: string;
-        State?: string;
-        TestOrder?: string;
-        Timezone?: string;
-        Zipcode?: string;
-      },
-      query?: {
-        secret?: string;
-      },
-      params: RequestParams = {},
-    ) =>
-      this.request<void, any>({
-        path: `/api/verifone/fullfillment`,
-        method: "POST",
-        query: query,
-        body: data,
-        secure: true,
-        type: ContentType.FormData,
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @tags Licenses
-     * @name LicensesTrialCreate
-     * @request POST:/api/licenses/trial
-     * @secure
-     */
-    licensesTrialCreate: (
-      query: {
-        /** @format email */
-        Email: string;
-        /** @format int32 */
-        TimeZoneOffset: number;
-        Language: string;
-        AcceptGuides: boolean;
-      },
-      params: RequestParams = {},
-    ) =>
-      this.request<void, void>({
-        path: `/api/licenses/trial`,
-        method: "POST",
         query: query,
         secure: true,
         ...params,
