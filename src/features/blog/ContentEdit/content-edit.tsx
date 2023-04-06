@@ -69,7 +69,7 @@ interface ContentEditProps {
 }
 
 export const ContentEdit = (props: ContentEditProps) => {
-  const { notificationService } = useNotificationsService();
+  const { notificationsService } = useNotificationsService();
   const networkContext = useRequestContext();
   const [editorLocalStorage, setEditorLocalStorage] = useLocalStorage<ContentEditData>(
     "onlinesales_editor_autosave",
@@ -116,11 +116,11 @@ export const ContentEdit = (props: ContentEditProps) => {
   const submit = async (values: ContentDetails, helpers: FormikHelpers<ContentDetails>) => {
     let response: HttpResponse<ContentDetailsDto, void | ProblemDetails>;
     let coverUrl = values.coverImageUrl;
-    notificationService.info(`${values?.id ? "Updating" : "Creating"} a post...`);
+    notificationsService.info(`${values?.id ? "Updating" : "Creating"} a post...`);
     try {
       setIsSaving(true);
       if (frontmatterState !== null) {
-        notificationService.error(frontmatterState.errorMessage);
+        notificationsService.error(frontmatterState.errorMessage);
         return;
       }
       if (coverWasModified) {
@@ -132,7 +132,9 @@ export const ContentEdit = (props: ContentEditProps) => {
         });
         if (data.location === null) {
           const errMessage = "imageupload.data.location is null";
-          notificationService.error(`Failed to ${values?.id ? "update" : "create"} post (${errMessage})`);
+          notificationsService.error(
+            `Failed to ${values?.id ? "update" : "create"} post (${errMessage})`
+          );
         }
         coverUrl = data.location as string;
       }
@@ -168,7 +170,7 @@ export const ContentEdit = (props: ContentEditProps) => {
         url: buildAbsoluteUrl(response.data.coverImageUrl!),
         fileName: "",
       });
-      notificationService.success(`Successfully ${values?.id ? "updated" : "created"} post`);
+      notificationsService.success(`Successfully ${values?.id ? "updated" : "created"} post`);
 
       setWasModified(false);
       setCoverWasModified(false);
@@ -177,7 +179,9 @@ export const ContentEdit = (props: ContentEditProps) => {
       setEditorLocalStorage(localStorageSnapshot);
     } catch (data: any) {
       const errMessage = data.error && data.error.title;
-      notificationService.error(`Failed to ${values?.id ? "update" : "create"} post (${errMessage})`);
+      notificationsService.error(
+        `Failed to ${values?.id ? "update" : "create"} post (${errMessage})`
+      );
     } finally {
       setIsSaving(false);
       helpers.setSubmitting(false);

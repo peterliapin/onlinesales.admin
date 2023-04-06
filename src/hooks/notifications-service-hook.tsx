@@ -1,4 +1,4 @@
-import {toast} from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export interface NotificationOptions {
@@ -42,8 +42,9 @@ class NotificationsService {
   }
 }
 
-
-export const useNotificationsService = (settings: NotificationsServiceSettings = {}): { notificationService: NotificationsService } => {
-  const notificationService = new NotificationsService(settings);
-  return {notificationService: notificationService};
+export const useNotificationsService = (
+  settings: NotificationsServiceSettings = {}
+): { notificationsService: NotificationsService } => {
+  const notificationsService = new NotificationsService(settings);
+  return { notificationsService: notificationsService };
 };

@@ -27,13 +27,13 @@ const FileDropdown = ({
   error,
   helperText,
 }: FileDropdownProps) => {
-  const { notificationService } = useNotificationsService();
+  const { notificationsService } = useNotificationsService();
   const onDrop = (acceptedFiles: File[], rejections: FileRejection[]) => {
     if (rejections.length > 0) {
       rejections.map((rejection) => {
         const fileName = rejection.file.name;
         const error = rejection.errors[0].message;
-        notificationService.error(`Failed to select image ${fileName} (${error}).`);
+        notificationsService.error(`Failed to select image ${fileName} (${error}).`);
       });
     }
     if (acceptedFiles.length !== 0) {
@@ -41,7 +41,7 @@ const FileDropdown = ({
       const fileReader = new FileReader();
       fileReader.onload = (e) => {
         if (e.target === null || e.target.result === null) {
-          notificationService.error(`Failed to select image ${file.name} (File System error).`);
+          notificationsService.error(`Failed to select image ${file.name} (File System error).`);
           return;
         }
         onChange({ fileName: file.name, url: e.target.result as string });

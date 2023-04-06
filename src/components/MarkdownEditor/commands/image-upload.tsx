@@ -6,7 +6,7 @@ import { ContentDetails } from "@features/blog/ContentEdit/types";
 import { useNotificationsService } from "@hooks";
 
 export const ImageUpload = (networkContext: RequestContextType, contentDetails: ContentDetails) => {
-  const { notificationService } = useNotificationsService();
+  const { notificationsService } = useNotificationsService();
   const command = {
     networkContext,
     contentDetails,
@@ -33,7 +33,7 @@ export const ImageUpload = (networkContext: RequestContextType, contentDetails: 
     },
     execute(state, api) {
       if (this.contentDetails.slug.length === 0) {
-        notificationService.error("Specify slug first!");
+        notificationsService.error("Specify slug first!");
         return;
       }
       const inputElement = document.createElement("input");
