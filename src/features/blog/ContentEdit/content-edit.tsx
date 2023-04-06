@@ -1,5 +1,5 @@
-import { useEffect, useState, useCallback } from "react";
-import { useParams } from "react-router-dom";
+import {useEffect, useState} from "react";
+import {useParams} from "react-router-dom";
 import {
   ContentDetailsDto,
   ContentUpdateDto,
@@ -7,13 +7,12 @@ import {
   HttpResponse,
   ProblemDetails,
 } from "@lib/network/swagger-client";
-import { useRequestContext } from "@providers/request-provider";
-import { ContentEditContainer } from "../index.styled";
+import {useRequestContext} from "@providers/request-provider";
+import {ContentEditContainer} from "../index.styled";
 import {
   ModuleHeaderActionContainer,
   ModuleHeaderContainer,
   ModuleHeaderSubtitleContainer,
-  ModuleHeaderTitleContainer,
 } from "@components/module";
 import {
   Autocomplete,
@@ -23,7 +22,6 @@ import {
   CardContent,
   Checkbox,
   CircularProgress,
-  Divider,
   Fade,
   FormControlLabel,
   Grid,
@@ -31,10 +29,10 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { NavigateNext, Save } from "@mui/icons-material";
-import { CoreModule, rootRoute } from "@lib/router";
-import { GhostLink } from "@components/ghost-link";
-import { useFormik, FormikHelpers } from "formik";
+import {NavigateNext} from "@mui/icons-material";
+import {CoreModule, rootRoute} from "@lib/router";
+import {GhostLink} from "@components/ghost-link";
+import {useFormik, FormikHelpers} from "formik";
 import {
   TypeDefaultValues,
   ContentDetails,
@@ -52,33 +50,34 @@ import {
   ContentEditMaximumImageSize,
   ContentEditAvailableAuthors
 } from "./validation";
-import { toFormikValidationSchema } from "zod-formik-adapter";
-import { Automapper } from "@lib/automapper";
+import {toFormikValidationSchema} from "zod-formik-adapter";
+import {Automapper} from "@lib/automapper";
 import MarkdownEditor from "@components/MarkdownEditor";
-import { Id, toast } from "react-toastify";
 import FileDropdown from "@components/FileDropdown";
-import { buildAbsoluteUrl } from "@lib/network/utils";
+import {buildAbsoluteUrl} from "@lib/network/utils";
 import useLocalStorage from "use-local-storage";
-import { RestoreDataModal } from "@components/RestoreData";
-import { useDebouncedCallback } from "use-debounce";
-import { ValidateFrontmatterError } from "utils/frontmatter-validator";
-import { ImageData } from "@components/FileDropdown";
+import {RestoreDataModal} from "@components/RestoreData";
+import {useDebouncedCallback} from "use-debounce";
+import {ValidateFrontmatterError} from "utils/frontmatter-validator";
+import {ImageData} from "@components/FileDropdown";
+import {useNotificationsService} from "@hooks";
 
 interface ContentEditProps {
   readonly?: boolean;
 }
 
 export const ContentEdit = (props: ContentEditProps) => {
+  const {notificationsService} = useNotificationsService();
   const networkContext = useRequestContext();
   const [editorLocalStorage, setEditorLocalStorage] = useLocalStorage<ContentEditData>(
     "onlinesales_editor_autosave",
-    { data: [] },
+    {data: []},
     {
       logger: (error) => console.log(error),
     }
   );
-  const { client } = networkContext;
-  const { id } = useParams();
+  const {client} = networkContext;
+  const {id} = useParams();
   const [wasModified, setWasModified] = useState<boolean>(false);
   const [coverWasModified, setCoverWasModified] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -87,13 +86,13 @@ export const ContentEdit = (props: ContentEditProps) => {
   const [restoreDataState, setRestoreDataState] = useState<ContentEditRestoreState>(
     ContentEditRestoreState.Idle
   );
-  const [ showAutosaveBar, setShowAutosaveBar] = useState<boolean>(false);
+  const [showAutosaveBar, setShowAutosaveBar] = useState<boolean>(false);
 
   const autoSave = useDebouncedCallback((value) => {
     if (!wasModified && !coverWasModified) {
       return;
     }
-    const localStorageSnapshot = { ...editorLocalStorage };
+    const localStorageSnapshot = {...editorLocalStorage};
     let reference = localStorageSnapshot.data.filter((data) => data.id === id)[0];
     if (reference === undefined) {
       reference = {
@@ -115,31 +114,23 @@ export const ContentEdit = (props: ContentEditProps) => {
   const submit = async (values: ContentDetails, helpers: FormikHelpers<ContentDetails>) => {
     let response: HttpResponse<ContentDetailsDto, void | ProblemDetails>;
     let coverUrl = values.coverImageUrl;
-    const loadingToastId = toast.loading(`${values?.id ? "Updating" : "Creating"} a post...`);
+    notificationsService.info(`${values?.id ? "Updating" : "Creating"} a post...`);
     try {
       setIsSaving(true);
-      if (frontmatterState !== null){
-        toast.done(loadingToastId);
-        toast.error(frontmatterState.errorMessage);
+      if (frontmatterState !== null) {
+        notificationsService.error(frontmatterState.errorMessage);
         return;
       }
       if (coverWasModified) {
         const blob = await (await fetch(values.coverImagePending.url!)).blob();
         const file = new File([blob], values.coverImagePending.fileName);
-        const { data } = await client.api.mediaCreate({
+        const {data} = await client.api.mediaCreate({
           Image: file,
           ScopeUid: values.slug,
         });
         if (data.location === null) {
           const errMessage = "imageupload.data.location is null";
-          toast.update(loadingToastId, {
-            render: `Failed to ${values?.id ? "update" : "create"} post (${errMessage})`,
-            type: "error",
-            isLoading: false,
-            autoClose: 5000,
-            closeOnClick: true,
-            hideProgressBar: false,
-          });
+          notificationsService.error(`Failed to ${values?.id ? "update" : "create"} post (${errMessage})`);
         }
         coverUrl = data.location as string;
       }
@@ -171,32 +162,18 @@ export const ContentEdit = (props: ContentEditProps) => {
           "ContentDetails"
         )
       );
-      await helpers.setFieldValue("coverImagePending", 
+      await helpers.setFieldValue("coverImagePending",
         {url: buildAbsoluteUrl(response.data.coverImageUrl!), fileName: ""});
-      toast.update(loadingToastId, {
-        render: `Successfully ${values?.id ? "updated" : "created"} post`,
-        type: "success",
-        isLoading: false,
-        autoClose: 5000,
-        closeOnClick: true,
-        hideProgressBar: false,
-      });
-      
+      notificationsService.success(`Successfully ${values?.id ? "updated" : "created"} post`);
+
       setWasModified(false);
       setCoverWasModified(false);
-      const localStorageSnapshot = { ...editorLocalStorage };
+      const localStorageSnapshot = {...editorLocalStorage};
       localStorageSnapshot.data = localStorageSnapshot.data.filter((data) => data.id !== id);
       setEditorLocalStorage(localStorageSnapshot);
     } catch (data: any) {
       const errMessage = data.error && data.error.title;
-      toast.update(loadingToastId, {
-        render: `Failed to ${values?.id ? "update" : "create"} post (${errMessage})`,
-        type: "error",
-        isLoading: false,
-        autoClose: 5000,
-        closeOnClick: true,
-        hideProgressBar: false,
-      });
+      notificationsService.error(`Failed to ${values?.id ? "update" : "create"} post (${errMessage})`);
     } finally {
       setIsSaving(false);
       helpers.setSubmitting(false);
@@ -234,9 +211,9 @@ export const ContentEdit = (props: ContentEditProps) => {
       typeName = value;
     }
     // Override 'type' because otherwise it always would be 'Other' in case of failure type set
-    if (template !== undefined){
-      formik.setValues({ ...template.defaultValues, type: typeName });
-    }else{
+    if (template !== undefined) {
+      formik.setValues({...template.defaultValues, type: typeName});
+    } else {
       formik.setFieldValue("type", value);
     }
     setWasModified(true);
@@ -251,33 +228,33 @@ export const ContentEdit = (props: ContentEditProps) => {
     (async () => {
       try {
         setIsLoading(true);
-        const localStorageSnapshot = { ...editorLocalStorage };
+        const localStorageSnapshot = {...editorLocalStorage};
         switch (restoreDataState) {
-        case ContentEditRestoreState.Idle:
-          if (localStorageSnapshot.data.filter((data) => data.id === id).length > 0) {
-            setRestoreDataState(ContentEditRestoreState.Requested);
+          case ContentEditRestoreState.Idle:
+            if (localStorageSnapshot.data.filter((data) => data.id === id).length > 0) {
+              setRestoreDataState(ContentEditRestoreState.Requested);
+              return;
+            }
+            break;
+          case ContentEditRestoreState.Requested:
             return;
-          }
-          break;
-        case ContentEditRestoreState.Requested:
-          return;
-        case ContentEditRestoreState.Rejected:
-          localStorageSnapshot.data = localStorageSnapshot.data.filter((data) => data.id !== id);
-          setEditorLocalStorage(localStorageSnapshot);
-          break;
-        case ContentEditRestoreState.Accepted:
-          await formik.setValues(
-            localStorageSnapshot.data.filter((data) => data.id === id)[0].savedData
-          );
-          if (localStorageSnapshot.data.filter((data) => data.id === id)[0]
-            .savedData.coverImagePending.fileName.length > 0){
-            setCoverWasModified(true);
-          }
-          setWasModified(true);
-          return;
+          case ContentEditRestoreState.Rejected:
+            localStorageSnapshot.data = localStorageSnapshot.data.filter((data) => data.id !== id);
+            setEditorLocalStorage(localStorageSnapshot);
+            break;
+          case ContentEditRestoreState.Accepted:
+            await formik.setValues(
+              localStorageSnapshot.data.filter((data) => data.id === id)[0].savedData
+            );
+            if (localStorageSnapshot.data.filter((data) => data.id === id)[0]
+              .savedData.coverImagePending.fileName.length > 0) {
+              setCoverWasModified(true);
+            }
+            setWasModified(true);
+            return;
         }
         if (client && id) {
-          const { data } = await client.api.contentDetail(Number(id));
+          const {data} = await client.api.contentDetail(Number(id));
           await formik.setValues(
             Automapper.map<ContentDetailsDto, ContentDetails>(
               data,
@@ -285,7 +262,7 @@ export const ContentEdit = (props: ContentEditProps) => {
               "ContentDetails"
             )
           );
-          await formik.setFieldValue("coverImagePending", 
+          await formik.setFieldValue("coverImagePending",
             {url: buildAbsoluteUrl(data.coverImageUrl!), fileName: ""});
         }
       } catch (e) {
@@ -312,13 +289,13 @@ export const ContentEdit = (props: ContentEditProps) => {
       />
       <ModuleHeaderContainer>
         <ModuleHeaderSubtitleContainer>
-          <Grid 
-            container 
-            direction="row" 
+          <Grid
+            container
+            direction="row"
             justifyContent="space-between"
           >
             <Grid item>
-              <Breadcrumbs separator={<NavigateNext fontSize="small" />}>
+              <Breadcrumbs separator={<NavigateNext fontSize="small"/>}>
                 <Link to={rootRoute} component={GhostLink} underline="hover">
                   Dashboard
                 </Link>
@@ -415,7 +392,7 @@ export const ContentEdit = (props: ContentEditProps) => {
                     />
                   </Grid>
                 </Grid>
-                <Grid container spacing={3} xs={12} sm={12} sx={{mt: 2 }}>
+                <Grid container spacing={3} xs={12} sm={12} sx={{mt: 2}}>
                   <Grid xs={12} sm={12} item data-color-mode="light">
                     <MarkdownEditor
                       onChange={async (value) => {
