@@ -34,7 +34,7 @@ export const ContentView = () => {
   const { id } = useParams();
   const [contentItem, setContentItem] = useState<ContentDetailsDto>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [ body, setBody ] = useState<string>(""); 
+  const [body, setBody] = useState<string>("");
 
   useEffect(() => {
     (async () => {

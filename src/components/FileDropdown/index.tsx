@@ -1,12 +1,11 @@
 import Dropzone, { Accept, FileRejection } from "react-dropzone";
 import { BoxStyled } from "./index.styled";
 import { Button, Grid, Box } from "@mui/material";
-import { useState, useEffect } from "react";
-import { toast } from "react-toastify";
+import { useNotificationsService } from "@hooks";
 
 export interface ImageData {
-  fileName: string,
-  url: string,
+  fileName: string;
+  url: string;
 }
 
 type onChangeFunc = (file: ImageData) => void;
@@ -28,12 +27,13 @@ const FileDropdown = ({
   error,
   helperText,
 }: FileDropdownProps) => {
+  const { notificationsService } = useNotificationsService();
   const onDrop = (acceptedFiles: File[], rejections: FileRejection[]) => {
     if (rejections.length > 0) {
       rejections.map((rejection) => {
         const fileName = rejection.file.name;
         const error = rejection.errors[0].message;
-        toast.error(`Failed to select image ${fileName} (${error}).`);
+        notificationsService.error(`Failed to select image ${fileName} (${error}).`);
       });
     }
     if (acceptedFiles.length !== 0) {
@@ -41,17 +41,17 @@ const FileDropdown = ({
       const fileReader = new FileReader();
       fileReader.onload = (e) => {
         if (e.target === null || e.target.result === null) {
-          toast.error(`Failed to select image ${file.name} (File System error).`);
+          notificationsService.error(`Failed to select image ${file.name} (File System error).`);
           return;
         }
-        onChange({fileName: file.name, url: e.target.result as string});
+        onChange({ fileName: file.name, url: e.target.result as string });
       };
       fileReader.readAsDataURL(file);
     }
   };
 
   const onReset = () => {
-    onChange({fileName: "", url:""});
+    onChange({ fileName: "", url: "" });
   };
   return (
     <>

@@ -18,6 +18,7 @@
       "@lib/*": ["lib/*"],
       "@features/*": ["features/*"],
       "@components/*": ["components/*"],
+      "@hooks": ["hooks/index"],
     },
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,

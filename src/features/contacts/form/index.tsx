@@ -23,7 +23,7 @@ import { contactAddHeader, contactEditHeader, contactFormBreadcrumbLinks } from 
 import { getCountryList, useCoreModuleNavigation } from "utils/helper";
 import { isValidEmail, isValidNumber } from "utils/validators";
 import { useRequestContext } from "@providers/request-provider";
-import { toast } from "react-toastify";
+import { useNotificationsService } from "@hooks";
 
 interface ContactFormProps {
   contact: ContactDetailsDto;
@@ -38,6 +38,7 @@ type Country = {
 };
 
 export const ContactForm = ({ contact, updateContact, handleSave, isEdit }: ContactFormProps) => {
+  const { notificationsService } = useNotificationsService();
   const context = useRequestContext();
   const handleNavigation = useCoreModuleNavigation();
 
@@ -57,7 +58,7 @@ export const ContactForm = ({ contact, updateContact, handleSave, isEdit }: Cont
         setCountryList(Object.entries(countries).map(([code, name]) => ({ code, name })));
         setIsLoading(false);
       } else {
-        toast.error("Server error: country list not available.");
+        notificationsService.error("Server error: country list not available.");
       }
     })();
   }, []);

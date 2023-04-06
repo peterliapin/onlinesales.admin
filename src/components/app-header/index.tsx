@@ -14,8 +14,16 @@ export const AppHeader = () => {
           OnlineSales
         </Typography>
         <Typography>
-          {account?.name} {account?.username && <LogoutStyled sx={{
-            marginLeft: "1rem", marginRight: "0.8rem" }} onClick={logout} />}{" "}
+          {account?.name}{" "}
+          {account?.username && (
+            <LogoutStyled
+              sx={{
+                marginLeft: "1rem",
+                marginRight: "0.8rem",
+              }}
+              onClick={logout}
+            />
+          )}{" "}
         </Typography>
       </AppBarToolbar>
     </AppBarStyled>

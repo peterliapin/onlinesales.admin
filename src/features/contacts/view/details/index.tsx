@@ -5,10 +5,11 @@ import { viewFormRoute } from "lib/router";
 import { useRequestContext } from "providers/request-provider";
 import { useRouteParams } from "typesafe-routes";
 import { ContactCardHeader, ContactRowGrid } from "../../index.styled";
-import { toast } from "react-toastify";
 import { getCountryList } from "utils/helper";
+import { useNotificationsService } from "@hooks";
 
 export const ContactView = () => {
+  const { notificationsService } = useNotificationsService();
   const context = useRequestContext();
   const { client } = context;
   const { id } = useRouteParams(viewFormRoute);
@@ -38,7 +39,7 @@ export const ContactView = () => {
         setSelectedCountry(countryList.find((c) => c.code === countryCode)!.name);
         setIsLoading(false);
       } else {
-        toast.error("Server error: country list not available.");
+        notificationsService.error("Server error: country list not available.");
       }
     }
   };
