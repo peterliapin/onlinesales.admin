@@ -213,6 +213,10 @@ export const ContentEdit = (props: ContentEditProps) => {
     setWasModified(true);
     formik.handleChange(event);
   };
+  const valueUpdateGeneric = (field: string, value: any) => {
+    setWasModified(true);
+    formik.setFieldValue(field, value);
+  };
 
   function autoCompleteValueUpdate<UpdateType>(field: string, value: UpdateType): void {
     setWasModified(true);
@@ -230,15 +234,16 @@ export const ContentEdit = (props: ContentEditProps) => {
       typeName = value;
     }
     // Override 'type' because otherwise it always would be 'Other' in case of failure type set
-    if (template !== null){
+    if (template !== undefined){
       formik.setValues({ ...template.defaultValues, type: typeName });
+    }else{
+      formik.setFieldValue("type", value);
     }
     setWasModified(true);
   };
 
   const onCoverImageChange = (url: ImageData) => {
     formik.setFieldValue("coverImagePending", url);
-    console.log(url);
     setCoverWasModified(true);
   };
 
@@ -354,7 +359,7 @@ export const ContentEdit = (props: ContentEditProps) => {
                         disabled={props.readonly}
                         value={formik.values.type}
                         onChange={typeFieldUpdate}
-                        autoSelect={true}
+                        autoSelect
                         options={ContentEditAvailableTypes}
                         renderInput={(params) => (
                           <TextField
@@ -530,7 +535,7 @@ export const ContentEdit = (props: ContentEditProps) => {
                         <Checkbox
                           disabled={props.readonly}
                           checked={formik.values.allowComments}
-                          onChange={valueUpdate}
+                          onChange={(ev) => valueUpdateGeneric("allowComments", ev.target.checked)}
                           name="allowComments"
                         />
                       }
