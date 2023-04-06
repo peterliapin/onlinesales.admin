@@ -25,6 +25,9 @@ const EditorViewFunc = (
         return;
       }
       const element = lines[validationResult.errorLine - 1] as HTMLTextAreaElement;
+      if (element === undefined){
+        return;
+      }
       element.classList.add("error-line");
       return;
     }
