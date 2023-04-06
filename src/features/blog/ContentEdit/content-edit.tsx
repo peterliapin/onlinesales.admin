@@ -55,7 +55,6 @@ import {
 import { toFormikValidationSchema } from "zod-formik-adapter";
 import { Automapper } from "@lib/automapper";
 import MarkdownEditor from "@components/MarkdownEditor";
-import { Id, toast } from "react-toastify";
 import FileDropdown from "@components/FileDropdown";
 import { buildAbsoluteUrl } from "@lib/network/utils";
 import useLocalStorage from "use-local-storage";
@@ -63,14 +62,14 @@ import { RestoreDataModal } from "@components/RestoreData";
 import { useDebouncedCallback } from "use-debounce";
 import { ValidateFrontmatterError } from "utils/frontmatter-validator";
 import { ImageData } from "@components/FileDropdown";
-import { useLogger } from "@hooks/logger-hook";
+import { useNotificationsService } from "@hooks";
 
 interface ContentEditProps {
   readonly?: boolean;
 }
 
 export const ContentEdit = (props: ContentEditProps) => {
-  const { logger } = useLogger();
+  const { notificationService } = useNotificationsService();
   const networkContext = useRequestContext();
   const [editorLocalStorage, setEditorLocalStorage] = useLocalStorage<ContentEditData>(
     "onlinesales_editor_autosave",
@@ -117,11 +116,11 @@ export const ContentEdit = (props: ContentEditProps) => {
   const submit = async (values: ContentDetails, helpers: FormikHelpers<ContentDetails>) => {
     let response: HttpResponse<ContentDetailsDto, void | ProblemDetails>;
     let coverUrl = values.coverImageUrl;
-    logger.info(`${values?.id ? "Updating" : "Creating"} a post...`);
+    notificationService.info(`${values?.id ? "Updating" : "Creating"} a post...`);
     try {
       setIsSaving(true);
       if (frontmatterState !== null) {
-        logger.error(frontmatterState.errorMessage);
+        notificationService.error(frontmatterState.errorMessage);
         return;
       }
       if (coverWasModified) {
@@ -133,7 +132,7 @@ export const ContentEdit = (props: ContentEditProps) => {
         });
         if (data.location === null) {
           const errMessage = "imageupload.data.location is null";
-          logger.error(`Failed to ${values?.id ? "update" : "create"} post (${errMessage})`);
+          notificationService.error(`Failed to ${values?.id ? "update" : "create"} post (${errMessage})`);
         }
         coverUrl = data.location as string;
       }
@@ -169,7 +168,7 @@ export const ContentEdit = (props: ContentEditProps) => {
         url: buildAbsoluteUrl(response.data.coverImageUrl!),
         fileName: "",
       });
-      logger.success(`Successfully ${values?.id ? "updated" : "created"} post`);
+      notificationService.success(`Successfully ${values?.id ? "updated" : "created"} post`);
 
       setWasModified(false);
       setCoverWasModified(false);
@@ -178,7 +177,7 @@ export const ContentEdit = (props: ContentEditProps) => {
       setEditorLocalStorage(localStorageSnapshot);
     } catch (data: any) {
       const errMessage = data.error && data.error.title;
-      logger.error(`Failed to ${values?.id ? "update" : "create"} post (${errMessage})`);
+      notificationService.error(`Failed to ${values?.id ? "update" : "create"} post (${errMessage})`);
     } finally {
       setIsSaving(false);
       helpers.setSubmitting(false);

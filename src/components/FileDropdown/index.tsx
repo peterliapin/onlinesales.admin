@@ -1,7 +1,7 @@
 import Dropzone, { Accept, FileRejection } from "react-dropzone";
 import { BoxStyled } from "./index.styled";
 import { Button, Grid, Box } from "@mui/material";
-import { useLogger } from "@hooks/logger-hook";
+import { useNotificationsService } from "@hooks";
 
 export interface ImageData {
   fileName: string;
@@ -27,13 +27,13 @@ const FileDropdown = ({
   error,
   helperText,
 }: FileDropdownProps) => {
-  const { logger } = useLogger();
+  const { notificationService } = useNotificationsService();
   const onDrop = (acceptedFiles: File[], rejections: FileRejection[]) => {
     if (rejections.length > 0) {
       rejections.map((rejection) => {
         const fileName = rejection.file.name;
         const error = rejection.errors[0].message;
-        logger.error(`Failed to select image ${fileName} (${error}).`);
+        notificationService.error(`Failed to select image ${fileName} (${error}).`);
       });
     }
     if (acceptedFiles.length !== 0) {
@@ -41,7 +41,7 @@ const FileDropdown = ({
       const fileReader = new FileReader();
       fileReader.onload = (e) => {
         if (e.target === null || e.target.result === null) {
-          logger.error(`Failed to select image ${file.name} (File System error).`);
+          notificationService.error(`Failed to select image ${file.name} (File System error).`);
           return;
         }
         onChange({ fileName: file.name, url: e.target.result as string });

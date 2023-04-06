@@ -3,10 +3,10 @@ import { Button } from "@mui/material";
 import { ExtendedCommandBase } from "../types";
 import { RequestContextType } from "@providers/request-provider";
 import { ContentDetails } from "@features/blog/ContentEdit/types";
-import { useLogger } from "@hooks/logger-hook";
+import { useNotificationsService } from "@hooks";
 
 export const ImageUpload = (networkContext: RequestContextType, contentDetails: ContentDetails) => {
-  const { logger } = useLogger();
+  const { notificationService } = useNotificationsService();
   const command = {
     networkContext,
     contentDetails,
@@ -33,7 +33,7 @@ export const ImageUpload = (networkContext: RequestContextType, contentDetails: 
     },
     execute(state, api) {
       if (this.contentDetails.slug.length === 0) {
-        logger.error("Specify slug first!");
+        notificationService.error("Specify slug first!");
         return;
       }
       const inputElement = document.createElement("input");
