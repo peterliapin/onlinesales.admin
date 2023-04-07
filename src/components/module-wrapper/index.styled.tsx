@@ -27,13 +27,17 @@ export const AddButtonContainer = styled("div")`
 `;
 
 export const ModuleContentContainer = styled("div")`
-  height: calc(100%);
   position: relative;
+  flex: 1 1 auto;
 `;
 
 export const ScrollContainer = styled("div")`
   overflow-y: auto;
-  height: calc(100%);
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
 `;
 
 export const LoadingIndicatorContainer = styled("div")`
