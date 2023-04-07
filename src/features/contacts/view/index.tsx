@@ -14,7 +14,7 @@ import { BreadCrumbNavigation } from "components/breadcrumbs";
 export const ContactBase = () => {
   const { state } = useLocation();
   const contact = state as ContactDetailsDto;
-  const contactFullName = `${contact.firstName} ${contact.lastName}`;
+  const contactFullName = `${contact.firstName || ""} ${contact.lastName || ""}`;
 
   const navigate = useNavigate();
   const [tabValue, setTabValue] = useState("details");
