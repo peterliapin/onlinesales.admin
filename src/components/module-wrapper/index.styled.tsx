@@ -48,7 +48,7 @@ export const LoadingIndicatorContainer = styled("div")`
   bottom: 0;
   background-color: lightgray;
   opacity: 0.2;
-  z: 98;
+  z-index: 98;
 `;
 
 export const CenteredCircularProgress = styled(CircularProgress)`
@@ -57,7 +57,7 @@ export const CenteredCircularProgress = styled(CircularProgress)`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  z: 99;
+  z-index: 99;
 `;
 
 export const SavingIndicatorContainer = styled("div")`
@@ -65,5 +65,5 @@ export const SavingIndicatorContainer = styled("div")`
   margin: 25px;
   right: 0;
   top: 0;
-  z: 9999;
+  z-index: 99;
 `;
