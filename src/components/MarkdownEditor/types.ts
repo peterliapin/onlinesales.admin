@@ -8,8 +8,8 @@ type textChangeFunc = (value: string | undefined) => void;
 export type onFrontmatterErrorChangeFunc = (error: ValidateFrontmatterError | null) => void;
 
 export interface ExtendedCommandBase<T> extends ICommandBase<T> {
-  networkContext: RequestContextType;
   contentDetails: ContentDetails;
+  networkContext: RequestContextType;
 }
 
 export interface CommandContext {
@@ -21,7 +21,6 @@ export interface MarkdownEditorProps {
   value: string;
   onChange: textChangeFunc;
   isReadOnly: boolean | undefined;
-  networkContext: RequestContextType;
   contentDetails: ContentDetails;
   onFrontmatterErrorChange: onFrontmatterErrorChangeFunc;
 }

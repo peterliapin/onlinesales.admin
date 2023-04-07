@@ -1,16 +1,16 @@
 import ImageIcon from "@mui/icons-material/Image";
 import { Button } from "@mui/material";
 import { ExtendedCommandBase } from "../types";
-import { RequestContextType } from "@providers/request-provider";
+import { RequestContextType, useRequestContext } from "@providers/request-provider";
 import { ContentDetails } from "@features/blog/ContentEdit/types";
 import { useNotificationsService } from "@hooks";
 
 export const ImageUpload = (
-  networkContext: RequestContextType, 
   contentDetails: ContentDetails, 
   isInToolbar: boolean
 ) => {
   const { notificationsService } = useNotificationsService();
+  const networkContext = useRequestContext();
   const command = {
     networkContext,
     contentDetails,

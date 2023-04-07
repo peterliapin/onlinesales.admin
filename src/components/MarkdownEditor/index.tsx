@@ -55,7 +55,6 @@ const MarkdownEditor = ({
   value,
   onChange,
   isReadOnly,
-  networkContext,
   contentDetails,
   onFrontmatterErrorChange,
 }: MarkdownEditorProps) => {
@@ -63,14 +62,14 @@ const MarkdownEditor = ({
   const customCommands = useMemo(
     () =>
       commands.getCommands().concat([
-        commands.group([ImageUpload(networkContext, contentDetails, false)], {
+        commands.group([ImageUpload(contentDetails, false)], {
           name: "OnlineSales components",
           groupName: "onlinesales-components",
           buttonProps: { "aria-label": "Insert onlinesales custom components" },
           icon: <AppsIcon sx={{ fontSize: 15 }} />,
         }),
       ]),
-    [networkContext, contentDetails]
+    [contentDetails]
   );
   const onErrorChange = (error: ValidateFrontmatterError | null) => {
     error !== null
@@ -81,7 +80,7 @@ const MarkdownEditor = ({
 
   const commandFilter = (command: ICommand, isExtra: boolean) => {
     if (command.name === "image"){
-      return ImageUpload(networkContext, contentDetails, true);
+      return ImageUpload(contentDetails, true);
     }
     return command;
   };

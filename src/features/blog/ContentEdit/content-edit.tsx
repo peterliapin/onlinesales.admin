@@ -410,7 +410,6 @@ export const ContentEdit = (props: ContentEditProps) => {
                       }}
                       value={formik.values.body}
                       isReadOnly={props.readonly}
-                      networkContext={networkContext}
                       contentDetails={formik.values}
                     />
                   </Grid>
