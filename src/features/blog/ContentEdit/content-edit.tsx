@@ -118,7 +118,9 @@ export const ContentEdit = (props: ContentEditProps) => {
     try {
       setIsSaving(true);
       if (frontmatterState !== null) {
-        notificationsService.error(frontmatterState.errorMessage);
+        notificationsService.error(
+          "Frontmatter validation error. Check preview window for details"
+        );
         return;
       }
       if (coverWasModified) {
@@ -130,7 +132,9 @@ export const ContentEdit = (props: ContentEditProps) => {
         });
         if (data.location === null) {
           const errMessage = "imageupload.data.location is null";
-          notificationsService.error(`Failed to ${values?.id ? "update" : "create"} post (${errMessage})`);
+          notificationsService.error(
+            `Failed to ${values?.id ? "update" : "create"} post (${errMessage})`
+          );
         }
         coverUrl = data.location as string;
       }
@@ -173,7 +177,9 @@ export const ContentEdit = (props: ContentEditProps) => {
       setEditorLocalStorage(localStorageSnapshot);
     } catch (data: any) {
       const errMessage = data.error && data.error.title;
-      notificationsService.error(`Failed to ${values?.id ? "update" : "create"} post (${errMessage})`);
+      notificationsService.error(
+        `Failed to ${values?.id ? "update" : "create"} post (${errMessage})`
+      );
     } finally {
       setIsSaving(false);
       helpers.setSubmitting(false);
@@ -230,28 +236,28 @@ export const ContentEdit = (props: ContentEditProps) => {
         setIsLoading(true);
         const localStorageSnapshot = {...editorLocalStorage};
         switch (restoreDataState) {
-          case ContentEditRestoreState.Idle:
-            if (localStorageSnapshot.data.filter((data) => data.id === id).length > 0) {
-              setRestoreDataState(ContentEditRestoreState.Requested);
-              return;
-            }
-            break;
-          case ContentEditRestoreState.Requested:
+        case ContentEditRestoreState.Idle:
+          if (localStorageSnapshot.data.filter((data) => data.id === id).length > 0) {
+            setRestoreDataState(ContentEditRestoreState.Requested);
             return;
-          case ContentEditRestoreState.Rejected:
-            localStorageSnapshot.data = localStorageSnapshot.data.filter((data) => data.id !== id);
-            setEditorLocalStorage(localStorageSnapshot);
-            break;
-          case ContentEditRestoreState.Accepted:
-            await formik.setValues(
-              localStorageSnapshot.data.filter((data) => data.id === id)[0].savedData
-            );
-            if (localStorageSnapshot.data.filter((data) => data.id === id)[0]
-              .savedData.coverImagePending.fileName.length > 0) {
-              setCoverWasModified(true);
-            }
-            setWasModified(true);
-            return;
+          }
+          break;
+        case ContentEditRestoreState.Requested:
+          return;
+        case ContentEditRestoreState.Rejected:
+          localStorageSnapshot.data = localStorageSnapshot.data.filter((data) => data.id !== id);
+          setEditorLocalStorage(localStorageSnapshot);
+          break;
+        case ContentEditRestoreState.Accepted:
+          await formik.setValues(
+            localStorageSnapshot.data.filter((data) => data.id === id)[0].savedData
+          );
+          if (localStorageSnapshot.data.filter((data) => data.id === id)[0]
+            .savedData.coverImagePending.fileName.length > 0) {
+            setCoverWasModified(true);
+          }
+          setWasModified(true);
+          return;
         }
         if (client && id) {
           const {data} = await client.api.contentDetail(Number(id));

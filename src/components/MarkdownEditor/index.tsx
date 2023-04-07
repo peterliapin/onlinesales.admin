@@ -1,4 +1,4 @@
-import MDEditor, { commands } from "@uiw/react-md-editor";
+import MDEditor, { ICommand, commands } from "@uiw/react-md-editor";
 import { ImageUpload } from "./commands";
 import AppsIcon from "@mui/icons-material/Apps";
 import { MarkdownEditorProps, onFrontmatterErrorChangeFunc } from "./types";
@@ -63,7 +63,7 @@ const MarkdownEditor = ({
   const customCommands = useMemo(
     () =>
       commands.getCommands().concat([
-        commands.group([ImageUpload(networkContext, contentDetails)], {
+        commands.group([ImageUpload(networkContext, contentDetails, false)], {
           name: "OnlineSales components",
           groupName: "onlinesales-components",
           buttonProps: { "aria-label": "Insert onlinesales custom components" },
@@ -78,6 +78,14 @@ const MarkdownEditor = ({
       : setCurrentError("");
     onFrontmatterErrorChange(error);
   };
+
+  const commandFilter = (command: ICommand, isExtra: boolean) => {
+    if (command.name === "image"){
+      return ImageUpload(networkContext, contentDetails, true);
+    }
+    return command;
+  };
+
   const strippedValue = value.replace(/(---.*?---)/s, "");
   return (
     <>
@@ -89,6 +97,7 @@ const MarkdownEditor = ({
         value={value}
         onChange={onChange}
         commands={customCommands}
+        commandsFilter={commandFilter}
         style={{ padding: 0 }}
         highlightEnable
         components={{

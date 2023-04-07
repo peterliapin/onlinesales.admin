@@ -5,7 +5,11 @@ import { RequestContextType } from "@providers/request-provider";
 import { ContentDetails } from "@features/blog/ContentEdit/types";
 import { useNotificationsService } from "@hooks";
 
-export const ImageUpload = (networkContext: RequestContextType, contentDetails: ContentDetails) => {
+export const ImageUpload = (
+  networkContext: RequestContextType, 
+  contentDetails: ContentDetails, 
+  isInToolbar: boolean
+) => {
   const { notificationsService } = useNotificationsService();
   const command = {
     networkContext,
@@ -13,8 +17,8 @@ export const ImageUpload = (networkContext: RequestContextType, contentDetails: 
     name: "Upload Image",
     keyCommand: "image-upload",
     buttonProps: { "aria-label": "Upload image" },
-    icon: <ImageIcon sx={{ fontSize: 20 }} />,
-    render(command, disabled, executeCommand) {
+    icon: <ImageIcon sx={{ fontSize: 14, padding: 0 }} />,
+    render: isInToolbar ? undefined :(command, disabled, executeCommand) => {
       const onClick = () => {
         executeCommand(command, command.groupName);
       };
