@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { ContentDetailsDto } from "../../lib/network/swagger-client";
-import { useRequestContext } from "../../providers/request-provider";
+import { ContentDetailsDto } from "@lib/network/swagger-client";
+import { useRequestContext } from "@providers/request-provider";
 import {
   AuthorContainer,
   ContentEditContainer,
@@ -13,33 +13,33 @@ import {
   TimestampContainer,
   TitleContainer,
 } from "./index.styled";
-import {
-  ModuleHeaderActionContainer,
-  ModuleHeaderContainer,
-  ModuleHeaderSubtitleContainer,
-  ModuleHeaderTitleContainer,
-} from "../../components/module";
-import { Breadcrumbs, Chip, Link, Typography } from "@mui/material";
-import { NavigateNext } from "@mui/icons-material";
-import { CoreModule, rootRoute } from "../../lib/router";
-import { GhostLink } from "../../components/ghost-link";
+import { Chip } from "@mui/material";
 import MarkdownViewer from "@components/MarkdownViewer";
 import { CommentList } from "./comment/comment-list";
 import graymatter from "gray-matter";
+import { useModuleWrapperContext } from "@providers/module-wrapper-provider";
+import { blogFormBreadcrumbLinks } from "@features/blog/constants";
 
 const coreApi = process.env.CORE_API;
 
 export const ContentView = () => {
+  const {
+    setBreadcrumbs,
+    setCurrentBreadcrumb,
+    setLeftContainerChildren,
+    setExtraActionsContainerChildren,
+    setAddButtonContainerChildren,
+    setBusy,
+  } = useModuleWrapperContext();
+
   const { client } = useRequestContext();
   const { id } = useParams();
   const [contentItem, setContentItem] = useState<ContentDetailsDto>();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [body, setBody] = useState<string>("");
 
   useEffect(() => {
-    (async () => {
+    setBusy(async () => {
       try {
-        setIsLoading(true);
         if (client && id) {
           const { data } = await client.api.contentDetail(Number(id));
           const mattered = graymatter(data.body);
@@ -48,31 +48,29 @@ export const ContentView = () => {
         }
       } catch (e) {
         console.log(e);
-      } finally {
-        setIsLoading(false);
       }
-    })();
+    });
   }, [client, id]);
+
+  useEffect(() => {
+    setBreadcrumbs(blogFormBreadcrumbLinks);
+    setCurrentBreadcrumb(contentItem?.title || "");
+    setLeftContainerChildren(undefined);
+    setExtraActionsContainerChildren(undefined);
+    setAddButtonContainerChildren(undefined);
+  }, [
+    contentItem,
+    setBreadcrumbs,
+    setCurrentBreadcrumb,
+    setLeftContainerChildren,
+    setExtraActionsContainerChildren,
+    setAddButtonContainerChildren,
+  ]);
 
   return (
     <>
-      <ModuleHeaderContainer>
-        <ModuleHeaderSubtitleContainer>
-          <Breadcrumbs separator={<NavigateNext fontSize="small" />}>
-            <Link to={rootRoute} component={GhostLink} underline="hover">
-              Dashboard
-            </Link>
-            <Link to={`${rootRoute}${CoreModule.blog}`} component={GhostLink} underline="hover">
-              Content
-            </Link>
-            <Typography variant="body1">{contentItem && contentItem.title}</Typography>
-          </Breadcrumbs>
-        </ModuleHeaderSubtitleContainer>
-        <ModuleHeaderActionContainer></ModuleHeaderActionContainer>
-      </ModuleHeaderContainer>
       <ContentEditContainer>
-        {isLoading && <div>Loading...</div>}
-        {!isLoading && contentItem && (
+        {contentItem && (
           <ContentItemContainer data-color-mode="light">
             <HeaderContainer>
               <CoverImage

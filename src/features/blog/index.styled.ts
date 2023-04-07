@@ -8,13 +8,6 @@ export const ContentEditContainer = styled("div")`
   flex-grow: 1;
 `;
 
-export const SearchBoxContainer = styled("div")`
-  display: flex;
-  flex-flow: row;
-  align-self: center;
-  gap: ${({ theme }) => theme.spacing(2)};
-`;
-
 export const ContentItemContainer = styled("div")`
   padding: 0 5%;
 `;
@@ -37,10 +30,6 @@ export const TitleContainer = styled("div")`
   font-size: 32px;
   font-weight: 500;
   width: 100%;
-`;
-
-export const CapitalizeContainer = styled("span")`
-  text-transform: capitalize;
 `;
 
 export const TimestampContainer = styled("div")`
@@ -71,30 +60,4 @@ export const CommentContainer = styled("div")`
 
 export const CommentDateContainer = styled("span")`
   font-size: 80%;
-`;
-
-export const ActionsContainer = styled("div")`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
-
-export const LeftContainer = styled("div")`
-  display: flex;
-  align-items: center;
-`;
-
-export const RightContainer = styled("div")`
-  display: flex;
-  align-items: center;
-`;
-
-export const ExtraActionsContainer = styled("div")`
-  display: flex;
-  flex-flow: row;
-  gap: ${({ theme }) => theme.spacing(2)};
-`;
-
-export const AddButtonContainer = styled("div")`
-  margin-left: ${({ theme }) => theme.spacing(10)};
 `;

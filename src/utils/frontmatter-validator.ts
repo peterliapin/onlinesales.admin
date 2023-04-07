@@ -14,36 +14,32 @@ const FrontmatterValidationScheme = zod.object({
   sourceHref: zod.string().url().optional(),
 });
 
-
 export interface ValidateFrontmatterError {
-  errorMessage: string,
-  errorLine: number,
-};
+  errorMessage: string;
+  errorLine: number;
+}
 
-type ErrorInfo = { _errors: string[]; }
-
+type ErrorInfo = { _errors: string[] };
 
 const ProcessError = (errorObject: any, level: number) => {
   let errMessage = "";
   let i = 0;
   for (const [key, value] of Object.entries(errorObject)) {
     i++;
-    if (key === "_errors" && Object.keys(errorObject).length > 1){
+    if (key === "_errors" && Object.keys(errorObject).length > 1) {
       continue;
     }
     const errInfo = value as ErrorInfo;
     let error;
-    if (Object.keys(errInfo).length > 1){
+    if (Object.keys(errInfo).length > 1) {
       error = ProcessError(errInfo, level + 1);
-    }else
-    {
+    } else {
       error = (value as ErrorInfo)._errors[0];
     }
     const newLine = i === Object.keys(errorObject).length ? "" : "\n";
-    const levelTabs = [...Array(level).keys()].reduce(
-      (acc, val, index) =>{ 
-        return `${acc} &nbsp; &nbsp; `; 
-      }, "");
+    const levelTabs = [...Array(level).keys()].reduce((acc, val, index) => {
+      return `${acc} &nbsp; &nbsp; `;
+    }, "");
     errMessage = `${errMessage}${level > 0 ? "\n" : ""}${levelTabs}**${key}** : ${error}${newLine}`;
   }
   return errMessage;
@@ -51,9 +47,9 @@ const ProcessError = (errorObject: any, level: number) => {
 
 export const validateFrontmatter = (body: string) => {
   const frontmatterString = /---(.*?)---/s.exec(body);
-  if (frontmatterString === null || frontmatterString[1] === null){
+  if (frontmatterString === null || frontmatterString[1] === null) {
     return {
-      errorMessage: "Frontmatter doesn't exists", 
+      errorMessage: "Frontmatter doesn't exists",
       errorLine: -1,
     } as ValidateFrontmatterError;
   }
@@ -62,7 +58,7 @@ export const validateFrontmatter = (body: string) => {
       strict: true,
     });
     const validationResult = FrontmatterValidationScheme.safeParse(yaml);
-    if (validationResult.success === false){
+    if (validationResult.success === false) {
       const formatted = validationResult.error.format();
       const errMessage = ProcessError(formatted, 0);
       return {
@@ -71,10 +67,10 @@ export const validateFrontmatter = (body: string) => {
       } as ValidateFrontmatterError;
     }
     return true;
-  }catch (e) {
+  } catch (e) {
     const exc = e as YAMLParseError;
     return {
-      errorMessage: exc.message, 
+      errorMessage: exc.message,
       errorLine: exc.linePos && exc.linePos[0].line,
     } as ValidateFrontmatterError;
   }
