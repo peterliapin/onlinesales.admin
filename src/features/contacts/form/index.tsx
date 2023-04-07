@@ -15,9 +15,7 @@ import {
   ModuleHeaderContainer,
   ModuleHeaderSubtitleContainer,
 } from "components/module";
-import { CustomizedSnackbar } from "components/snackbar";
 import { CoreModule } from "lib/router";
-import { initialSnackBarParams, serverErrorSnackBarParams } from "components/snackbar/constants";
 import { BreadCrumbNavigation } from "components/breadcrumbs";
 import { contactAddHeader, contactEditHeader, contactFormBreadcrumbLinks } from "../constants";
 import { getCountryList, useCoreModuleNavigation } from "utils/helper";
@@ -45,7 +43,6 @@ export const ContactForm = ({ contact, updateContact, handleSave, isEdit }: Cont
   const [isInvalidEmail, setIsInvalidEmail] = useState(false);
   const [isInvalidNumber, setIsInvalidNumber] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
-  const [snackBarParams, setSnackBarParams] = useState(initialSnackBarParams);
   const [countryList, setCountryList] = useState<Country[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -95,7 +92,7 @@ export const ContactForm = ({ contact, updateContact, handleSave, isEdit }: Cont
         handleSuccess();
       } catch (e) {
         console.log(e);
-        setSnackBarParams(serverErrorSnackBarParams);
+        notificationsService.error("Server error occurred.");
       } finally {
         setIsSaving(false);
       }
@@ -103,6 +100,7 @@ export const ContactForm = ({ contact, updateContact, handleSave, isEdit }: Cont
   };
 
   const handleSuccess = () => {
+    notificationsService.success(`Contact ${isEdit ? "updated" : "added"} successfully.`);
     handleNavigation(CoreModule.contacts);
   };
 
@@ -291,12 +289,6 @@ export const ContactForm = ({ contact, updateContact, handleSave, isEdit }: Cont
       <Backdrop open={isSaving} style={{ zIndex: 999 }}>
         <CircularProgress color="inherit" />
       </Backdrop>
-      <CustomizedSnackbar
-        isOpen={snackBarParams.isOpen}
-        severerity={snackBarParams.severity}
-        message={snackBarParams.message}
-        navigateTo={CoreModule.contacts}
-      ></CustomizedSnackbar>
     </ModuleContainer>
   );
 };

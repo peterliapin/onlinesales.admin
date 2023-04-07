@@ -1,8 +1,6 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { downloadFile } from "components/download";
-import { CustomizedSnackbar } from "components/snackbar";
-import { initialSnackBarParams, serverErrorSnackBarParams } from "components/snackbar/constants";
-import { CoreModule } from "lib/router";
+import { useNotificationsService } from "@hooks";
 
 interface csvExportPorps {
   getExportUrlAsync: () => Promise<string>;
@@ -11,8 +9,8 @@ interface csvExportPorps {
 }
 
 export const CsvExport = ({ getExportUrlAsync, closeExport, endRoute }: csvExportPorps) => {
-  const [snackBarParams, setSnackBarParams] = useState(initialSnackBarParams);
   const didExportRef = useRef(false);
+  const { notificationsService } = useNotificationsService();
 
   useEffect(() => {
     if (!didExportRef.current) {
@@ -22,7 +20,7 @@ export const CsvExport = ({ getExportUrlAsync, closeExport, endRoute }: csvExpor
           downloadFile(url);
           closeExport();
         } catch (error) {
-          setSnackBarParams(serverErrorSnackBarParams);
+          notificationsService.error("Server error occurred.");
         }
       };
       exportFile();
@@ -30,14 +28,5 @@ export const CsvExport = ({ getExportUrlAsync, closeExport, endRoute }: csvExpor
     }
   }, []);
 
-  return (
-    <>
-      <CustomizedSnackbar
-        isOpen={snackBarParams.isOpen}
-        severerity={snackBarParams.severity}
-        message={snackBarParams.message}
-        navigateTo={endRoute as CoreModule}
-      />
-    </>
-  );
+  return <></>;
 };

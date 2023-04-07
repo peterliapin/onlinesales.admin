@@ -1,13 +1,11 @@
 import { CircularProgress } from "@mui/material";
-import { CustomizedSnackbar } from "components/snackbar";
-import { initialSnackBarParams, uploadFailedSnackBarParams } from "components/snackbar/constants";
-import { CoreModule } from "lib/router";
 import { useState } from "react";
 import { ReactSpreadsheetImport } from "@wavepoint/react-spreadsheet-import";
 import { Result } from "@wavepoint/react-spreadsheet-import/types/types";
 import { StyledBackdrop } from "./index.styled";
 import { getImportFields } from "utils/import-key-mappings";
 import { useCoreModuleNavigation } from "utils/helper";
+import { useNotificationsService } from "@hooks";
 
 interface csvImportPorps {
   isOpen: boolean;
@@ -19,8 +17,8 @@ interface csvImportPorps {
 
 export const CsvImport = ({ isOpen, onClose, onUpload, object, endRoute }: csvImportPorps) => {
   const handleNavigation = useCoreModuleNavigation();
+  const { notificationsService } = useNotificationsService();
   const [isUploading, setIsUploading] = useState(false);
-  const [snackBarParams, setSnackBarParams] = useState(initialSnackBarParams);
 
   const onSubmit = async (data: Result<string>) => {
     try {
@@ -32,13 +30,14 @@ export const CsvImport = ({ isOpen, onClose, onUpload, object, endRoute }: csvIm
       handleSuccess();
     } catch (error) {
       console.log(error);
-      setSnackBarParams(uploadFailedSnackBarParams);
+      notificationsService.error("Error when importing data.");
     } finally {
       setIsUploading(false);
     }
   };
 
   const handleSuccess = () => {
+    notificationsService.success("Data import completed.");
     handleNavigation(endRoute);
   };
 
@@ -53,12 +52,6 @@ export const CsvImport = ({ isOpen, onClose, onUpload, object, endRoute }: csvIm
       <StyledBackdrop open={isUploading}>
         <CircularProgress color="inherit" />
       </StyledBackdrop>
-      <CustomizedSnackbar
-        isOpen={snackBarParams.isOpen}
-        severerity={snackBarParams.severity}
-        message={snackBarParams.message}
-        navigateTo={endRoute as CoreModule}
-      />
     </>
   );
 };

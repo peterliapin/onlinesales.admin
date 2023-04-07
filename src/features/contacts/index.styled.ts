@@ -1,4 +1,4 @@
-import { CardHeader, Grid, ListItem, ListItemText, Paper, styled } from "@mui/material";
+import { Button, CardHeader, Grid, ListItem, ListItemText, Paper, styled } from "@mui/material";
 
 export const ActionsContainer = styled("div")`
   display: flex;
@@ -54,3 +54,7 @@ export const ContactRowGrid = styled(Grid)({
 export const ContactCardHeader = styled(CardHeader)({
   paddingLeft: 0,
 });
+
+export const DeleteButtonContainer = styled("div")`
+  padding-left: ${({ theme }) => theme.spacing(2)};
+`;
