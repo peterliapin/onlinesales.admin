@@ -51,7 +51,7 @@ export const Contacts = () => {
             <Avatar src={row.avatarUrl!}></Avatar>
           </ListItemAvatar>
           <ContactNameListItemText
-            primary={`${row.firstName ? row.firstName : ""} ${row.lastName ? row.lastName : ""}`}
+            primary={`${row.firstName || ""} ${row.lastName || ""}`}
             secondary={row.email}
           />
         </ContactNameListItem>
