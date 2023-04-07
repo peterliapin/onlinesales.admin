@@ -15,9 +15,11 @@ import {
   Card,
   CardContent,
   Checkbox,
+  CircularProgress,
   FormControlLabel,
   Grid,
   TextField,
+  Typography,
 } from "@mui/material";
 import { useFormik, FormikHelpers } from "formik";
 import {
@@ -62,6 +64,8 @@ export const ContentEdit = (props: ContentEditProps) => {
     setLeftContainerChildren,
     setExtraActionsContainerChildren,
     setAddButtonContainerChildren,
+    setSaveIndicatorElement,
+    setSaving,
     setBusy,
   } = useModuleWrapperContext();
 
@@ -83,7 +87,6 @@ export const ContentEdit = (props: ContentEditProps) => {
   const [restoreDataState, setRestoreDataState] = useState<ContentEditRestoreState>(
     ContentEditRestoreState.Idle
   );
-  const [showAutosaveBar, setShowAutosaveBar] = useState<boolean>(false);
 
   const autoSave = useDebouncedCallback((value) => {
     if (!wasModified && !coverWasModified) {
@@ -101,11 +104,9 @@ export const ContentEdit = (props: ContentEditProps) => {
     } else {
       (reference.latestAutoSave = new Date()), (reference.savedData = value);
     }
-    setShowAutosaveBar(true);
-    setTimeout(() => {
-      setShowAutosaveBar(false);
-    }, 3000);
-    setEditorLocalStorage(localStorageSnapshot);
+    setSaving(async () => {
+      setEditorLocalStorage(localStorageSnapshot);
+    });
   }, 3000); ///TODO: User Settings
 
   const submit = async (values: ContentDetails, helpers: FormikHelpers<ContentDetails>) => {
@@ -232,30 +233,30 @@ export const ContentEdit = (props: ContentEditProps) => {
       try {
         const localStorageSnapshot = { ...editorLocalStorage };
         switch (restoreDataState) {
-          case ContentEditRestoreState.Idle:
-            if (localStorageSnapshot.data.filter((data) => data.id === id).length > 0) {
-              setRestoreDataState(ContentEditRestoreState.Requested);
-              return;
-            }
-            break;
-          case ContentEditRestoreState.Requested:
+        case ContentEditRestoreState.Idle:
+          if (localStorageSnapshot.data.filter((data) => data.id === id).length > 0) {
+            setRestoreDataState(ContentEditRestoreState.Requested);
             return;
-          case ContentEditRestoreState.Rejected:
-            localStorageSnapshot.data = localStorageSnapshot.data.filter((data) => data.id !== id);
-            setEditorLocalStorage(localStorageSnapshot);
-            break;
-          case ContentEditRestoreState.Accepted:
-            await formik.setValues(
-              localStorageSnapshot.data.filter((data) => data.id === id)[0].savedData
-            );
-            if (
-              localStorageSnapshot.data.filter((data) => data.id === id)[0].savedData
-                .coverImagePending.fileName.length > 0
-            ) {
-              setCoverWasModified(true);
-            }
-            setWasModified(true);
-            return;
+          }
+          break;
+        case ContentEditRestoreState.Requested:
+          return;
+        case ContentEditRestoreState.Rejected:
+          localStorageSnapshot.data = localStorageSnapshot.data.filter((data) => data.id !== id);
+          setEditorLocalStorage(localStorageSnapshot);
+          break;
+        case ContentEditRestoreState.Accepted:
+          await formik.setValues(
+            localStorageSnapshot.data.filter((data) => data.id === id)[0].savedData
+          );
+          if (
+            localStorageSnapshot.data.filter((data) => data.id === id)[0].savedData
+              .coverImagePending.fileName.length > 0
+          ) {
+            setCoverWasModified(true);
+          }
+          setWasModified(true);
+          return;
         }
         if (client && id) {
           const { data } = await client.api.contentDetail(Number(id));
@@ -281,12 +282,26 @@ export const ContentEdit = (props: ContentEditProps) => {
     autoSave(formik.values);
   }, [formik.values]);
 
+  const savingIndicatorElement = (
+    <>
+      <Grid container item spacing={3} sm="auto" xs="auto">
+        <Grid item>
+          <CircularProgress size={14} />
+        </Grid>
+        <Grid item>
+          <Typography>Saving...</Typography>
+        </Grid>
+      </Grid>
+    </>
+  );
+
   useEffect(() => {
     setBreadcrumbs(blogFormBreadcrumbLinks);
     setCurrentBreadcrumb(formik.values.title);
     setLeftContainerChildren(undefined);
     setExtraActionsContainerChildren(undefined);
     setAddButtonContainerChildren(undefined);
+    setSaveIndicatorElement(savingIndicatorElement);
   }, [
     formik.values.title,
     setBreadcrumbs,
@@ -294,6 +309,7 @@ export const ContentEdit = (props: ContentEditProps) => {
     setLeftContainerChildren,
     setExtraActionsContainerChildren,
     setAddButtonContainerChildren,
+    setSaveIndicatorElement,
   ]);
 
   return (
@@ -306,41 +322,6 @@ export const ContentEdit = (props: ContentEditProps) => {
             : setRestoreDataState(ContentEditRestoreState.Rejected)
         }
       />
-
-      {/*<ModuleHeaderContainer>*/}
-      {/*  <ModuleHeaderSubtitleContainer>*/}
-      {/*    <Grid*/}
-      {/*      container*/}
-      {/*      direction="row"*/}
-      {/*      justifyContent="space-between"*/}
-      {/*    >*/}
-      {/*      <Grid item>*/}
-      {/*        <Breadcrumbs separator={<NavigateNext fontSize="small"/>}>*/}
-      {/*          <Link to={rootRoute} component={GhostLink} underline="hover">*/}
-      {/*            Dashboard*/}
-      {/*          </Link>*/}
-      {/*          <Link to={`${rootRoute}${CoreModule.blog}`} component={GhostLink} underline="hover">*/}
-      {/*            Blog*/}
-      {/*          </Link>*/}
-      {/*          <Typography variant="body1">{formik.values.title}</Typography>*/}
-      {/*        </Breadcrumbs>*/}
-      {/*      </Grid>*/}
-      {/*      <Fade in={showAutosaveBar}>*/}
-      {/*        <Grid container item spacing={3} sm="auto" xs="auto">*/}
-      {/*          <Grid item>*/}
-      {/*            <CircularProgress size={14}/>*/}
-      {/*          </Grid>*/}
-      {/*          <Grid item>*/}
-      {/*            <Typography>*/}
-      {/*              Saving...*/}
-      {/*            </Typography>*/}
-      {/*          </Grid>*/}
-      {/*        </Grid>*/}
-      {/*      </Fade>*/}
-      {/*    </Grid>*/}
-      {/*  </ModuleHeaderSubtitleContainer>*/}
-      {/*  <ModuleHeaderActionContainer></ModuleHeaderActionContainer>*/}
-      {/*</ModuleHeaderContainer>*/}
 
       <ContentEditContainer>
         {isSaving && <div>Saving...</div>}

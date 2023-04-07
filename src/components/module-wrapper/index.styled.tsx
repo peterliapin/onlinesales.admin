@@ -26,10 +26,14 @@ export const AddButtonContainer = styled("div")`
   margin-left: ${({ theme }) => theme.spacing(10)};
 `;
 
+export const ModuleContentContainer = styled("div")`
+  height: calc(100%);
+  position: relative;
+`;
+
 export const ScrollContainer = styled("div")`
   overflow-y: auto;
   height: calc(100%);
-  position: relative;
 `;
 
 export const LoadingIndicatorContainer = styled("div")`
@@ -50,4 +54,12 @@ export const CenteredCircularProgress = styled(CircularProgress)`
   left: 50%;
   transform: translate(-50%, -50%);
   z: 99;
+`;
+
+export const SavingIndicatorContainer = styled("div")`
+  position: absolute;
+  margin: 25px;
+  right: 0;
+  top: 0;
+  z: 9999;
 `;

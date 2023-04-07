@@ -12,7 +12,9 @@ import {
   ExtraActionsContainer,
   LeftContainer,
   LoadingIndicatorContainer,
+  ModuleContentContainer,
   RightContainer,
+  SavingIndicatorContainer,
   ScrollContainer,
 } from "./index.styled";
 import { useModuleWrapperContext } from "@providers/module-wrapper-provider";
@@ -28,6 +30,8 @@ export const ModuleWrapper = ({ key, children }: ModuleWrapperProps) => {
     leftContainerChildren,
     extraActionsContainerChildren,
     addButtonContainerChildren,
+    saveIndicatorElement,
+    isSaving,
     isBusy,
   } = useModuleWrapperContext();
 
@@ -56,15 +60,18 @@ export const ModuleWrapper = ({ key, children }: ModuleWrapperProps) => {
           )}
         </ActionsContainer>
       )}
-      <ScrollContainer>
-        {children}
+      <ModuleContentContainer>
+        <ScrollContainer>{children}</ScrollContainer>
+        {isSaving && saveIndicatorElement && (
+          <SavingIndicatorContainer>{saveIndicatorElement}</SavingIndicatorContainer>
+        )}
         {isBusy && (
           <>
             <LoadingIndicatorContainer />
             <CenteredCircularProgress />
           </>
         )}
-      </ScrollContainer>
+      </ModuleContentContainer>
     </ModuleContainer>
   );
 };
