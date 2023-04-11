@@ -53,6 +53,8 @@ import { useNotificationsService } from "@hooks";
 import { useModuleWrapperContext } from "@providers/module-wrapper-provider";
 import { blogFormBreadcrumbLinks } from "@features/blog/constants";
 import { ModuleWrapper } from "@components/module-wrapper";
+import { RemoteAutocomplete } from "@components/RemoteAutocomplete";
+import { RemoteValues } from "@components/RemoteAutocomplete/types";
 
 interface ContentEditProps {
   readonly?: boolean;
@@ -491,16 +493,14 @@ export const ContentEdit = (props: ContentEditProps) => {
                 <Grid xs={6} sm={6} item>
                   <RemoteAutocomplete
                     type={RemoteValues.CATEGORIES}
-                    label="Categories"
-                    placeholder="Select Categories"
-                    error={formik.touched.categories && Boolean(formik.errors.categories)}
-                    helperText={formik.touched.categories && formik.errors.categories}
-                    value={formik.values.categories}
+                    label="Category"
+                    placeholder="Select Category"
+                    error={formik.touched.category && Boolean(formik.errors.category)}
+                    helperText={formik.touched.category && formik.errors.category}
+                    value={formik.values.category}
                     onChange={(ev, val) => 
-                      autoCompleteValueUpdate<string[]>("categories", val as string[])}
+                      autoCompleteValueUpdate<string>("category", val as string)}
                     freeSolo
-                    multiple
-                    limit={3}
                   />
                 </Grid>
                 <Grid item xs={6}>
