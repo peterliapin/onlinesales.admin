@@ -52,6 +52,15 @@ export interface AccountDetailsDto {
 export interface AccountImportDto {
   /** @format int32 */
   id?: number | null;
+  source?: string | null;
+  /** @format date-time */
+  createdAt?: string | null;
+  /** @format date-time */
+  updatedAt?: string | null;
+  createdByIp?: string | null;
+  createdByUserAgent?: string | null;
+  updatedByIp?: string | null;
+  updatedByUserAgent?: string | null;
   name?: string | null;
   city?: string | null;
   stateCode?: string | null;
@@ -63,11 +72,6 @@ export interface AccountImportDto {
   tags?: string[] | null;
   socialMedia?: Record<string, string>;
   data?: string | null;
-  source?: string | null;
-  /** @format date-time */
-  createdAt?: string | null;
-  /** @format date-time */
-  updatedAt?: string | null;
 }
 
 export interface AccountUpdateDto {
@@ -119,6 +123,15 @@ export interface CommentDetailsDto {
 export interface CommentImportDto {
   /** @format int32 */
   id?: number | null;
+  source?: string | null;
+  /** @format date-time */
+  createdAt?: string | null;
+  /** @format date-time */
+  updatedAt?: string | null;
+  createdByIp?: string | null;
+  createdByUserAgent?: string | null;
+  updatedByIp?: string | null;
+  updatedByUserAgent?: string | null;
   authorName?: string | null;
   /** @format email */
   authorEmail?: string | null;
@@ -129,18 +142,8 @@ export interface CommentImportDto {
   contentSlug?: string | null;
   /** @format int32 */
   parentId?: number | null;
-  /** @minLength 1 */
-  key: string;
+  key?: string | null;
   parentKey?: string | null;
-  /** @format date-time */
-  createdAt?: string | null;
-  /** @format date-time */
-  updatedAt?: string | null;
-  createdByIp?: string | null;
-  createdByUserAgent?: string | null;
-  updatedByIp?: string | null;
-  updatedByUserAgent?: string | null;
-  source?: string | null;
 }
 
 export interface CommentUpdateDto {
@@ -151,8 +154,8 @@ export interface CommentUpdateDto {
 export interface ContactCreateDto {
   lastName?: string | null;
   firstName?: string | null;
-  continentCode?: string | null;
-  countryCode?: string | null;
+  continentCode?: Continent;
+  countryCode?: Country;
   cityName?: string | null;
   address1?: string | null;
   address2?: string | null;
@@ -175,8 +178,8 @@ export interface ContactCreateDto {
 export interface ContactDetailsDto {
   lastName?: string | null;
   firstName?: string | null;
-  continentCode?: string | null;
-  countryCode?: string | null;
+  continentCode?: Continent;
+  countryCode?: Country;
   cityName?: string | null;
   address1?: string | null;
   address2?: string | null;
@@ -206,10 +209,23 @@ export interface ContactDetailsDto {
 }
 
 export interface ContactImportDto {
+  /** @format int32 */
+  id?: number | null;
+  source?: string | null;
+  /** @format date-time */
+  createdAt?: string | null;
+  /** @format date-time */
+  updatedAt?: string | null;
+  createdByIp?: string | null;
+  createdByUserAgent?: string | null;
+  updatedByIp?: string | null;
+  updatedByUserAgent?: string | null;
+  /** @format email */
+  email?: string | null;
   lastName?: string | null;
   firstName?: string | null;
-  continentCode?: string | null;
-  countryCode?: string | null;
+  continentCode?: Continent;
+  countryCode?: Country;
   cityName?: string | null;
   address1?: string | null;
   address2?: string | null;
@@ -221,34 +237,18 @@ export interface ContactImportDto {
   language?: string | null;
   /** @format int32 */
   unsubscribeId?: number | null;
-  source?: string | null;
-  /**
-   * @format email
-   * @minLength 1
-   */
-  email: string;
-  /** @format int32 */
-  id?: number | null;
-  /** @format date-time */
-  createdAt?: string | null;
-  /** @format date-time */
-  updatedAt?: string | null;
-  createdByIp?: string | null;
-  createdByUserAgent?: string | null;
-  updatedByIp?: string | null;
-  updatedByUserAgent?: string | null;
   /** @format int32 */
   accountId?: number | null;
-  /** @format int32 */
-  domainId?: number;
   accountName?: string | null;
+  /** @format int32 */
+  domainId?: number | null;
 }
 
 export interface ContactUpdateDto {
   lastName?: string | null;
   firstName?: string | null;
-  continentCode?: string | null;
-  countryCode?: string | null;
+  continentCode?: Continent;
+  countryCode?: Country;
   cityName?: string | null;
   address1?: string | null;
   address2?: string | null;
@@ -282,8 +282,8 @@ export interface ContentCreateDto {
   author: string;
   /** @minLength 1 */
   language: string;
-  categories?: string | null;
-  tags?: string | null;
+  categories?: string[] | null;
+  tags?: string[] | null;
   allowComments?: boolean;
   source?: string | null;
 }
@@ -305,8 +305,8 @@ export interface ContentDetailsDto {
   author: string;
   /** @minLength 1 */
   language: string;
-  categories?: string | null;
-  tags?: string | null;
+  categories?: string[] | null;
+  tags?: string[] | null;
   allowComments?: boolean;
   source?: string | null;
   /** @format int32 */
@@ -318,28 +318,9 @@ export interface ContentDetailsDto {
 }
 
 export interface ContentImportDto {
-  /** @minLength 1 */
-  title: string;
-  /** @minLength 1 */
-  description: string;
-  /** @minLength 1 */
-  body: string;
-  coverImageUrl?: string | null;
-  coverImageAlt?: string | null;
-  /** @minLength 1 */
-  slug: string;
-  /** @minLength 1 */
-  type: string;
-  /** @minLength 1 */
-  author: string;
-  /** @minLength 1 */
-  language: string;
-  categories?: string | null;
-  tags?: string | null;
-  allowComments?: boolean;
-  source?: string | null;
   /** @format int32 */
   id?: number | null;
+  source?: string | null;
   /** @format date-time */
   createdAt?: string | null;
   /** @format date-time */
@@ -348,9 +329,6 @@ export interface ContentImportDto {
   createdByUserAgent?: string | null;
   updatedByIp?: string | null;
   updatedByUserAgent?: string | null;
-}
-
-export interface ContentUpdateDto {
   title?: string | null;
   description?: string | null;
   body?: string | null;
@@ -363,7 +341,286 @@ export interface ContentUpdateDto {
   categories?: string | null;
   tags?: string | null;
   allowComments?: boolean | null;
+}
+
+export interface ContentUpdateDto {
+  title?: string | null;
+  description?: string | null;
+  body?: string | null;
+  coverImageUrl?: string | null;
+  coverImageAlt?: string | null;
+  slug?: string | null;
+  type?: string | null;
+  author?: string | null;
+  language?: string | null;
+  categories?: string[] | null;
+  tags?: string[] | null;
+  allowComments?: boolean | null;
   source?: string | null;
+}
+
+export enum Continent {
+  ZZ = "ZZ",
+  AF = "AF",
+  AN = "AN",
+  AS = "AS",
+  EU = "EU",
+  NA = "NA",
+  OC = "OC",
+  SA = "SA",
+}
+
+export enum Country {
+  ZZ = "ZZ",
+  AF = "AF",
+  AL = "AL",
+  AQ = "AQ",
+  DZ = "DZ",
+  AS = "AS",
+  AD = "AD",
+  AO = "AO",
+  AG = "AG",
+  AZ = "AZ",
+  AR = "AR",
+  AU = "AU",
+  AT = "AT",
+  BS = "BS",
+  BH = "BH",
+  BD = "BD",
+  AM = "AM",
+  BB = "BB",
+  BE = "BE",
+  BM = "BM",
+  BT = "BT",
+  BO = "BO",
+  BA = "BA",
+  BW = "BW",
+  BV = "BV",
+  BR = "BR",
+  BZ = "BZ",
+  IO = "IO",
+  SB = "SB",
+  VG = "VG",
+  BN = "BN",
+  BG = "BG",
+  MM = "MM",
+  BI = "BI",
+  BY = "BY",
+  KH = "KH",
+  CM = "CM",
+  CA = "CA",
+  CV = "CV",
+  KY = "KY",
+  CF = "CF",
+  LK = "LK",
+  TD = "TD",
+  CL = "CL",
+  CN = "CN",
+  TW = "TW",
+  CX = "CX",
+  CC = "CC",
+  CO = "CO",
+  KM = "KM",
+  YT = "YT",
+  CG = "CG",
+  CD = "CD",
+  CK = "CK",
+  CR = "CR",
+  HR = "HR",
+  CU = "CU",
+  CY = "CY",
+  CZ = "CZ",
+  BJ = "BJ",
+  DK = "DK",
+  DM = "DM",
+  DO = "DO",
+  EC = "EC",
+  SV = "SV",
+  GQ = "GQ",
+  ET = "ET",
+  ER = "ER",
+  EE = "EE",
+  FO = "FO",
+  FK = "FK",
+  GS = "GS",
+  FJ = "FJ",
+  FI = "FI",
+  AX = "AX",
+  FR = "FR",
+  GF = "GF",
+  PF = "PF",
+  TF = "TF",
+  DJ = "DJ",
+  GA = "GA",
+  GE = "GE",
+  GM = "GM",
+  PS = "PS",
+  DE = "DE",
+  GH = "GH",
+  GI = "GI",
+  KI = "KI",
+  GR = "GR",
+  GL = "GL",
+  GD = "GD",
+  GP = "GP",
+  GU = "GU",
+  GT = "GT",
+  GN = "GN",
+  GY = "GY",
+  HT = "HT",
+  HM = "HM",
+  VA = "VA",
+  HN = "HN",
+  HK = "HK",
+  HU = "HU",
+  IS = "IS",
+  IN = "IN",
+  ID = "ID",
+  IR = "IR",
+  IQ = "IQ",
+  IE = "IE",
+  IL = "IL",
+  IT = "IT",
+  CI = "CI",
+  JM = "JM",
+  JP = "JP",
+  KZ = "KZ",
+  JO = "JO",
+  KE = "KE",
+  KP = "KP",
+  KR = "KR",
+  KW = "KW",
+  KG = "KG",
+  LA = "LA",
+  LB = "LB",
+  LS = "LS",
+  LV = "LV",
+  LR = "LR",
+  LY = "LY",
+  LI = "LI",
+  LT = "LT",
+  LU = "LU",
+  MO = "MO",
+  MG = "MG",
+  MW = "MW",
+  MY = "MY",
+  MV = "MV",
+  ML = "ML",
+  MT = "MT",
+  MQ = "MQ",
+  MR = "MR",
+  MU = "MU",
+  MX = "MX",
+  MC = "MC",
+  MN = "MN",
+  MD = "MD",
+  ME = "ME",
+  MS = "MS",
+  MA = "MA",
+  MZ = "MZ",
+  OM = "OM",
+  NA = "NA",
+  NR = "NR",
+  NP = "NP",
+  NL = "NL",
+  CW = "CW",
+  AW = "AW",
+  SX = "SX",
+  BQ = "BQ",
+  NC = "NC",
+  VU = "VU",
+  NZ = "NZ",
+  NI = "NI",
+  NE = "NE",
+  NG = "NG",
+  NU = "NU",
+  NF = "NF",
+  NO = "NO",
+  MP = "MP",
+  UM = "UM",
+  FM = "FM",
+  MH = "MH",
+  PW = "PW",
+  PK = "PK",
+  PA = "PA",
+  PG = "PG",
+  PY = "PY",
+  PE = "PE",
+  PH = "PH",
+  PN = "PN",
+  PL = "PL",
+  PT = "PT",
+  GW = "GW",
+  TL = "TL",
+  PR = "PR",
+  QA = "QA",
+  RE = "RE",
+  RO = "RO",
+  RU = "RU",
+  RW = "RW",
+  BL = "BL",
+  SH = "SH",
+  KN = "KN",
+  AI = "AI",
+  LC = "LC",
+  MF = "MF",
+  PM = "PM",
+  VC = "VC",
+  SM = "SM",
+  ST = "ST",
+  SA = "SA",
+  SN = "SN",
+  RS = "RS",
+  SC = "SC",
+  SL = "SL",
+  SG = "SG",
+  SK = "SK",
+  VN = "VN",
+  SI = "SI",
+  SO = "SO",
+  ZA = "ZA",
+  ZW = "ZW",
+  ES = "ES",
+  SS = "SS",
+  SD = "SD",
+  EH = "EH",
+  SR = "SR",
+  SJ = "SJ",
+  SZ = "SZ",
+  SE = "SE",
+  CH = "CH",
+  SY = "SY",
+  TJ = "TJ",
+  TH = "TH",
+  TG = "TG",
+  TK = "TK",
+  TO = "TO",
+  TT = "TT",
+  AE = "AE",
+  TN = "TN",
+  TR = "TR",
+  TM = "TM",
+  TC = "TC",
+  TV = "TV",
+  UG = "UG",
+  UA = "UA",
+  MK = "MK",
+  EG = "EG",
+  GB = "GB",
+  GG = "GG",
+  JE = "JE",
+  IM = "IM",
+  TZ = "TZ",
+  US = "US",
+  VI = "VI",
+  BF = "BF",
+  UY = "UY",
+  UZ = "UZ",
+  VE = "VE",
+  WF = "WF",
+  WS = "WS",
+  YE = "YE",
+  ZM = "ZM",
 }
 
 export interface DnsRecord {
@@ -414,6 +671,11 @@ export interface DomainDetailsDto {
 export interface DomainImportDto {
   /** @format int32 */
   id?: number | null;
+  source?: string | null;
+  /** @format date-time */
+  createdAt?: string | null;
+  /** @format date-time */
+  updatedAt?: string | null;
   /** @minLength 1 */
   name: string;
   title?: string | null;
@@ -425,11 +687,6 @@ export interface DomainImportDto {
   catchAll?: boolean | null;
   dnsRecords?: DnsRecord[] | null;
   dnsCheck?: boolean | null;
-  /** @format date-time */
-  createdAt?: string | null;
-  /** @format date-time */
-  updatedAt?: string | null;
-  source?: string | null;
 }
 
 export interface DomainUpdateDto {
@@ -522,6 +779,24 @@ export interface EmailTemplateUpdateDto {
   groupId?: number | null;
 }
 
+export interface ImportError {
+  /** @format int32 */
+  row?: number;
+  message?: string | null;
+}
+
+export interface ImportResult {
+  /** @format int32 */
+  added?: number;
+  /** @format int32 */
+  updated?: number;
+  /** @format int32 */
+  failed?: number;
+  /** @format int32 */
+  skipped?: number;
+  errors?: ImportError[] | null;
+}
+
 export interface LinkCreateDto {
   uid?: string | null;
   /** @minLength 1 */
@@ -574,6 +849,16 @@ export interface MediaDetailsDto {
   location?: string | null;
 }
 
+export interface MessageEventDto {
+  email?: string | null;
+  processed?: string | null;
+  sendGridMessageId?: string | null;
+  event?: string | null;
+  type?: string | null;
+  reason?: string | null;
+  originatingIp?: string | null;
+}
+
 export interface OrderCreateDto {
   /** @format int32 */
   contactId: number;
@@ -618,20 +903,8 @@ export interface OrderDetailsDto {
 
 export interface OrderImportDto {
   /** @format int32 */
-  contactId: number;
-  /** @minLength 1 */
-  refNo: string;
-  orderNumber?: string | null;
-  affiliateName?: string | null;
-  /** @format double */
-  exchangeRate: number;
-  /** @minLength 1 */
-  currency: string;
-  testOrder?: boolean;
-  data?: string | null;
-  source?: string | null;
-  /** @format int32 */
   id?: number | null;
+  source?: string | null;
   /** @format date-time */
   createdAt?: string | null;
   /** @format date-time */
@@ -640,7 +913,18 @@ export interface OrderImportDto {
   createdByUserAgent?: string | null;
   updatedByIp?: string | null;
   updatedByUserAgent?: string | null;
+  refNo?: string | null;
+  orderNumber?: string | null;
+  affiliateName?: string | null;
+  /** @format double */
+  exchangeRate?: number | null;
+  /** @minLength 1 */
+  currency: string;
+  /** @format int32 */
+  contactId?: number | null;
   contactEmail?: string | null;
+  testOrder?: boolean | null;
+  data?: string | null;
 }
 
 export interface OrderItemCreateDto {
@@ -695,26 +979,8 @@ export interface OrderItemDetailsDto {
 
 export interface OrderItemImportDto {
   /** @format int32 */
-  orderId: number;
-  /** @minLength 1 */
-  productName: string;
-  /** @minLength 1 */
-  licenseCode: string;
-  /** @format double */
-  unitPrice: number;
-  /** @minLength 1 */
-  currency: string;
-  /**
-   * @format int32
-   * @min 1
-   * @max 2147483647
-   */
-  quantity: number;
-  source?: string | null;
-  /** @format int32 */
   id?: number | null;
-  /** @minLength 1 */
-  orderRefNo: string;
+  source?: string | null;
   /** @format date-time */
   createdAt?: string | null;
   /** @format date-time */
@@ -723,6 +989,16 @@ export interface OrderItemImportDto {
   createdByUserAgent?: string | null;
   updatedByIp?: string | null;
   updatedByUserAgent?: string | null;
+  /** @format int32 */
+  orderId?: number | null;
+  orderRefNo?: string | null;
+  productName?: string | null;
+  licenseCode?: string | null;
+  /** @format double */
+  unitPrice?: number | null;
+  currency?: string | null;
+  /** @format int32 */
+  quantity?: number | null;
 }
 
 export interface OrderItemUpdateDto {
@@ -789,6 +1065,10 @@ export interface Unsubscribe {
   reason?: string | null;
   /** @format int32 */
   contactId?: number | null;
+}
+
+export interface User {
+  name?: string | null;
 }
 
 export type QueryParamsType = Record<string | number, any>;
@@ -1006,6 +1286,106 @@ export class HttpClient<SecurityDataType = unknown> {
  * @version 1.2.1.0
  */
 export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
+  microsoftIdentity = {
+    /**
+     * No description
+     *
+     * @tags Account
+     * @name AccountSignInDetail
+     * @request GET:/microsoft-identity/account/sign-in/{scheme}
+     * @secure
+     */
+    accountSignInDetail: (
+      scheme: string,
+      query?: {
+        redirectUri?: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<void, any>({
+        path: `/microsoft-identity/account/sign-in/${scheme}`,
+        method: "GET",
+        query: query,
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Account
+     * @name AccountChallengeDetail
+     * @request GET:/microsoft-identity/account/challenge/{scheme}
+     * @secure
+     */
+    accountChallengeDetail: (
+      scheme: string,
+      query?: {
+        redirectUri?: string;
+        scope?: string;
+        loginHint?: string;
+        domainHint?: string;
+        claims?: string;
+        policy?: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<void, any>({
+        path: `/microsoft-identity/account/challenge/${scheme}`,
+        method: "GET",
+        query: query,
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Account
+     * @name AccountSignOutDetail
+     * @request GET:/microsoft-identity/account/sign-out/{scheme}
+     * @secure
+     */
+    accountSignOutDetail: (scheme: string, params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/microsoft-identity/account/sign-out/${scheme}`,
+        method: "GET",
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Account
+     * @name AccountResetPasswordDetail
+     * @request GET:/microsoft-identity/account/reset-password/{scheme}
+     * @secure
+     */
+    accountResetPasswordDetail: (scheme: string, params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/microsoft-identity/account/reset-password/${scheme}`,
+        method: "GET",
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Account
+     * @name AccountEditProfileDetail
+     * @request GET:/microsoft-identity/account/edit-profile/{scheme}
+     * @secure
+     */
+    accountEditProfileDetail: (scheme: string, params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/microsoft-identity/account/edit-profile/${scheme}`,
+        method: "GET",
+        secure: true,
+        ...params,
+      }),
+  };
   api = {
     /**
      * No description
@@ -1016,12 +1396,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @secure
      */
     accountsImportCreate: (data: AccountImportDto[], params: RequestParams = {}) =>
-      this.request<void, void | ProblemDetails>({
+      this.request<ImportResult, void | ProblemDetails>({
         path: `/api/accounts/import`,
         method: "POST",
         body: data,
         secure: true,
         type: ContentType.Json,
+        format: "json",
         ...params,
       }),
 
@@ -1144,6 +1525,67 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
+     * @tags Auth
+     * @name AuthLoginList
+     * @request GET:/api/auth/login
+     * @secure
+     */
+    authLoginList: (
+      query?: {
+        redirectUrl?: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<void, void | ProblemDetails>({
+        path: `/api/auth/login`,
+        method: "GET",
+        query: query,
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Auth
+     * @name AuthLogoutList
+     * @request GET:/api/auth/logout
+     * @secure
+     */
+    authLogoutList: (
+      query?: {
+        redirectUrl?: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<any, void | ProblemDetails>({
+        path: `/api/auth/logout`,
+        method: "GET",
+        query: query,
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Auth
+     * @name AuthProfileList
+     * @request GET:/api/auth/profile
+     * @secure
+     */
+    authProfileList: (params: RequestParams = {}) =>
+      this.request<User, void | ProblemDetails>({
+        path: `/api/auth/profile`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
      * @tags Comments
      * @name CommentsList
      * @request GET:/api/comments
@@ -1244,12 +1686,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @secure
      */
     commentsImportCreate: (data: CommentImportDto[], params: RequestParams = {}) =>
-      this.request<void, void | ProblemDetails>({
+      this.request<ImportResult, void | ProblemDetails>({
         path: `/api/comments/import`,
         method: "POST",
         body: data,
         secure: true,
         type: ContentType.Json,
+        format: "json",
         ...params,
       }),
 
@@ -1378,12 +1821,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @secure
      */
     contactsImportCreate: (data: ContactImportDto[], params: RequestParams = {}) =>
-      this.request<void, void | ProblemDetails>({
+      this.request<ImportResult, void | ProblemDetails>({
         path: `/api/contacts/import`,
         method: "POST",
         body: data,
         secure: true,
         type: ContentType.Json,
+        format: "json",
         ...params,
       }),
 
@@ -1507,17 +1951,52 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * No description
      *
      * @tags Content
+     * @name ContentTagsList
+     * @request GET:/api/content/tags
+     * @secure
+     */
+    contentTagsList: (params: RequestParams = {}) =>
+      this.request<string[], void | ProblemDetails>({
+        path: `/api/content/tags`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Content
+     * @name ContentCategoriesList
+     * @request GET:/api/content/categories
+     * @secure
+     */
+    contentCategoriesList: (params: RequestParams = {}) =>
+      this.request<string[], void | ProblemDetails>({
+        path: `/api/content/categories`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Content
      * @name ContentImportCreate
      * @request POST:/api/content/import
      * @secure
      */
     contentImportCreate: (data: ContentImportDto[], params: RequestParams = {}) =>
-      this.request<void, void | ProblemDetails>({
+      this.request<ImportResult, void | ProblemDetails>({
         path: `/api/content/import`,
         method: "POST",
         body: data,
         secure: true,
         type: ContentType.Json,
+        format: "json",
         ...params,
       }),
 
@@ -1603,12 +2082,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @secure
      */
     domainsImportCreate: (data: DomainImportDto[], params: RequestParams = {}) =>
-      this.request<void, void | ProblemDetails>({
+      this.request<ImportResult, void | ProblemDetails>({
         path: `/api/domains/import`,
         method: "POST",
         body: data,
         secure: true,
         type: ContentType.Json,
+        format: "json",
         ...params,
       }),
 
@@ -2304,12 +2784,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @secure
      */
     orderItemsImportCreate: (data: OrderItemImportDto[], params: RequestParams = {}) =>
-      this.request<void, void | ProblemDetails>({
+      this.request<ImportResult, void | ProblemDetails>({
         path: `/api/order-items/import`,
         method: "POST",
         body: data,
         secure: true,
         type: ContentType.Json,
+        format: "json",
         ...params,
       }),
 
@@ -2344,12 +2825,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @secure
      */
     ordersImportCreate: (data: OrderImportDto[], params: RequestParams = {}) =>
-      this.request<void, void | ProblemDetails>({
+      this.request<ImportResult, void | ProblemDetails>({
         path: `/api/orders/import`,
         method: "POST",
         body: data,
         secure: true,
         type: ContentType.Json,
+        format: "json",
         ...params,
       }),
 
@@ -2465,6 +2947,40 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/api/orders/export`,
         method: "GET",
         query: query,
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Sendgrid
+     * @name SendgridImportCreate
+     * @request POST:/api/sendgrid/import
+     * @secure
+     */
+    sendgridImportCreate: (data: MessageEventDto[], params: RequestParams = {}) =>
+      this.request<void, void | ProblemDetails>({
+        path: `/api/sendgrid/import`,
+        method: "POST",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Sendgrid
+     * @name SendgridWebhookCreate
+     * @request POST:/api/sendgrid/webhook
+     * @secure
+     */
+    sendgridWebhookCreate: (params: RequestParams = {}) =>
+      this.request<void, void | ProblemDetails>({
+        path: `/api/sendgrid/webhook`,
+        method: "POST",
         secure: true,
         ...params,
       }),

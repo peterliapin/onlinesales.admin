@@ -17,8 +17,8 @@ PojosMetadataMap.create<ContentDetailsDto>("ContentDetailsDto", {
   type: String,
   author: String,
   language: String,
-  categories: String,
-  tags: String,
+  categories: [String],
+  tags: [String],
   allowComments: Boolean,
   id: Number,
   createdAt: String,
@@ -53,8 +53,8 @@ PojosMetadataMap.create<ContentUpdateDto>("ContentUpdateDto", {
   type: String,
   author: String,
   language: String,
-  categories: String,
-  tags: String,
+  categories: [String],
+  tags: [String],
   allowComments: Boolean,
 });
 PojosMetadataMap.create<ContentCreateDto>("ContentCreateDto", {
@@ -67,8 +67,8 @@ PojosMetadataMap.create<ContentCreateDto>("ContentCreateDto", {
   type: String,
   author: String,
   language: String,
-  categories: String,
-  tags: String,
+  categories: [String],
+  tags: [String],
   allowComments: Boolean,
 });
 
@@ -76,10 +76,6 @@ createMap<ContentDetailsDto, ContentDetails>(
   Automapper,
   "ContentDetailsDto",
   "ContentDetails",
-  forMember(
-    (d) => d.tags,
-    mapFrom((s) => (s.tags && s.tags.split(";")) || [])
-  ),
   forMember(
     (d) => d.language,
     mapFrom((s) => {
@@ -99,26 +95,18 @@ createMap<ContentDetailsDto, ContentDetails>(
       switch (s.type) {
       case "post":
         return "Blog Post";
-      case "release-note":
+      case "release":
         return "Release Note";
       default:
-        return "Unknown";
+        return s.type;
       }
     })
   ),
-  forMember(
-    (d) => d.categories,
-    mapFrom((s) => (s.categories && s.categories.split(";")) || [])
-  )
 );
 createMap<ContentDetails, ContentUpdateDto>(
   Automapper,
   "ContentDetails",
   "ContentUpdateDto",
-  forMember(
-    (d) => d.tags,
-    mapFrom((s) => s.tags.join(";"))
-  ),
   forMember(
     (d) => d.language,
     mapFrom((s) => {
@@ -128,7 +116,7 @@ createMap<ContentDetails, ContentUpdateDto>(
       case "English":
         return "en";
       default:
-        return "Unknown";
+        return s.language;
       }
     })
   ),
@@ -139,15 +127,11 @@ createMap<ContentDetails, ContentUpdateDto>(
       case "Blog Post":
         return "post";
       case "Release Note":
-        return "release-note";
+        return "release";
       default:
-        return "Unknown";
+        return s.type;
       }
     })
-  ),
-  forMember(
-    (d) => d.categories,
-    mapFrom((s) => s.categories.join(";"))
   )
 );
 createMap<ContentDetails, ContentCreateDto>(
@@ -155,10 +139,6 @@ createMap<ContentDetails, ContentCreateDto>(
   "ContentDetails",
   "ContentCreateDto",
   forMember(
-    (d) => d.tags,
-    mapFrom((s) => s.tags.join(";"))
-  ),
-  forMember(
     (d) => d.language,
     mapFrom((s) => {
       switch (s.language) {
@@ -167,7 +147,7 @@ createMap<ContentDetails, ContentCreateDto>(
       case "English":
         return "en";
       default:
-        return "Unknown";
+        return s.language;
       }
     })
   ),
@@ -178,14 +158,10 @@ createMap<ContentDetails, ContentCreateDto>(
       case "Blog Post":
         return "post";
       case "Release Note":
-        return "release-note";
+        return "release";
       default:
-        return "Unknown";
+        return s.type;
       }
     })
   ),
-  forMember(
-    (d) => d.categories,
-    mapFrom((s) => s.categories.join(";"))
-  )
 );
