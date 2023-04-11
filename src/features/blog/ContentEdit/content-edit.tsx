@@ -332,7 +332,7 @@ export const ContentEdit = (props: ContentEditProps) => {
         <form onSubmit={formik.handleSubmit}>
           <Card>
             <CardContent>
-              <Grid container spacing={1} xs={12} sm={12}>
+              <Grid container spacing={1}>
                 <Grid container item spacing={4} xs={6} sm={6}>
                   <Grid xs={12} sm={12} item>
                     <Autocomplete
@@ -396,7 +396,7 @@ export const ContentEdit = (props: ContentEditProps) => {
                   />
                 </Grid>
               </Grid>
-              <Grid container spacing={3} xs={12} sm={12} sx={{ mt: 2 }}>
+              <Grid container spacing={3} sx={{ mt: 2 }}>
                 <Grid xs={12} sm={12} item data-color-mode="light">
                   <MarkdownEditor
                     onChange={async (value) => {
