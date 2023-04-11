@@ -16,18 +16,12 @@ import { useRequestContext } from "@providers/request-provider";
 import { SearchBar } from "@components/search-bar";
 import { useModuleWrapperContext } from "@providers/module-wrapper-provider";
 import { blogBreadcrumbLinks } from "@features/blog/constants";
+import { ModuleWrapper } from "@components/module-wrapper";
 
 const coreApi = process.env.CORE_API;
 
 export const ContentList = () => {
-  const {
-    setBreadcrumbs,
-    setCurrentBreadcrumb,
-    setLeftContainerChildren,
-    setExtraActionsContainerChildren,
-    setAddButtonContainerChildren,
-    setBusy,
-  } = useModuleWrapperContext();
+  const { setBusy } = useModuleWrapperContext();
 
   const { client } = useRequestContext();
   const [contentItems, setContentItems] = useState<ContentDetailsDto[]>();
@@ -57,20 +51,6 @@ export const ContentList = () => {
   );
 
   useEffect(() => {
-    setBreadcrumbs(blogBreadcrumbLinks);
-    setCurrentBreadcrumb("Content");
-    setLeftContainerChildren(searchBar);
-    setExtraActionsContainerChildren(extraActions);
-    setAddButtonContainerChildren(addButton);
-  }, [
-    setBreadcrumbs,
-    setCurrentBreadcrumb,
-    setLeftContainerChildren,
-    setExtraActionsContainerChildren,
-    setAddButtonContainerChildren,
-  ]);
-
-  useEffect(() => {
     const controller = new AbortController();
 
     setBusy(async () => {
@@ -96,7 +76,13 @@ export const ContentList = () => {
   }, [client, searchText]);
 
   return (
-    <>
+    <ModuleWrapper
+      breadcrumbs={blogBreadcrumbLinks}
+      currentBreadcrumb={"Content"}
+      leftContainerChildren={searchBar}
+      extraActionsContainerChildren={extraActions}
+      addButtonContainerChildren={addButton}
+    >
       <ContentListContainer>
         <Grid container spacing={15} justifyContent="flex-start">
           {(contentItems || []).map((item, index) => (
@@ -146,6 +132,6 @@ export const ContentList = () => {
           ))}
         </Grid>
       </ContentListContainer>
-    </>
+    </ModuleWrapper>
   );
 };
