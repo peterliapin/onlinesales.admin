@@ -3,7 +3,7 @@ import {
   ProblemDetails,
   RequestParams
 } from "@lib/network/swagger-client";
-import {DtoSchema, camelCaseToTitleCase} from "@components/generic-crud/common";
+import {DtoSchema, camelCaseToTitleCase} from "@components/generic-components/common";
 import {ReactNode, useEffect, useState} from "react";
 import {useModuleWrapperContext} from "@providers/module-wrapper-provider";
 import {

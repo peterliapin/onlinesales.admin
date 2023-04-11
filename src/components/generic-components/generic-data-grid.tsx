@@ -5,42 +5,74 @@ import {
   RequestParams
 } from "@lib/network/swagger-client";
 import {useModuleWrapperContext} from "@providers/module-wrapper-provider";
-import {DataGrid, GridSortModel} from "@mui/x-data-grid";
-import {GridColumns} from "@mui/x-data-grid/models/colDef/gridColDef";
+import {DataGrid, GridColDef, GridSortModel} from "@mui/x-data-grid";
 import {totalCountHeaderName} from "@lib/query";
-import {DtoSchema, camelCaseToTitleCase} from "@components/generic-crud/common";
+import {DtoSchema, camelCaseToTitleCase} from "@components/generic-components/common";
+import {ActionButtonContainer} from "@components/data-table/index.styled";
+import {IconButton} from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
 interface GenericDataGridProps<T> {
   getItemsFn: (query?: { query?: string }, params?: RequestParams) => Promise<HttpResponse<T[], void | ProblemDetails>>;
   schema: DtoSchema;
+  detailsNavigate?: (item: T) => void;
+  editNavigate?: (item: T) => void;
 }
-
 
 export function GenericDataGrid<T>({
                                      getItemsFn,
-                                     schema
+                                     schema,
+                                     detailsNavigate,
+                                     editNavigate
                                    }: GenericDataGridProps<T>)
   : ReactNode {
   const {setBusy} = useModuleWrapperContext();
 
-  const columns: GridColumns = [
-    ...(Object.keys(schema.properties).map((key) => {
-      return {
-        field: key,
-        type: schema.properties[key].type,
-        width: 200,
-        description: schema.properties[key]["description"],
-        headerName: camelCaseToTitleCase(key)
-      }
-    }))
-  ];
+  const actionsColumn: GridColDef = {
+    field: "_actions",
+    headerName: "Actions",
+    width: 120,
+    align: "center",
+    headerAlign: "center",
+    filterable: false,
+    sortable: false,
+    disableColumnMenu: true,
+    renderCell: ({row}: any) => {
+      return (
+        <ActionButtonContainer>
+          {editNavigate && <IconButton onClick={() => editNavigate(row)}>
+            <EditIcon fontSize="small"/>
+          </IconButton>}
+          {detailsNavigate && <IconButton onClick={() => detailsNavigate(row)}>
+            <ArrowForwardIcon fontSize="small"/>
+          </IconButton>}
+        </ActionButtonContainer>
+      );
+    },
+  };
+
+  const columns: GridColDef[] = [actionsColumn]
+    .concat([
+      ...(Object.keys(schema.properties)
+        .map((key) => {
+          const column: GridColDef = {
+            field: key,
+            type: schema.properties[key].type,
+            width: 200,
+            description: schema.properties[key]["description"],
+            headerName: camelCaseToTitleCase(key)
+          };
+          return column;
+        }))
+    ]);
 
   const [items, setItems] = useState<T[] | undefined>();
 
   const [totalItemsCount, setTotalItemsCount] = useState<number>(0);
   const [pageNumber, setPageNumber] = useState<number>(0);
   const [pageSize, setPageSize] = useState<number>(10);
-  const [sortColumn, setSortColumn] = useState<string>(columns.length > 0 ? columns[0].field : "");
+  const [sortColumn, setSortColumn] = useState<string>("id");
   const [sortDirection, setSortDirection] = useState<string>("asc");
 
   useEffect(() => {
@@ -77,7 +109,7 @@ export function GenericDataGrid<T>({
     } else setSortDirection("asc");
   };
 
-  return <DataGrid columns={columns}
+  return <DataGrid columns={columns || []}
                    rows={items || []}
                    loading={!items}
                    checkboxSelection={false}
