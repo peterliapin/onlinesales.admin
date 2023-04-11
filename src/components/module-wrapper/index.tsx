@@ -4,7 +4,7 @@ import {
   ModuleHeaderSubtitleContainer,
 } from "@components/module";
 import { BreadCrumbNavigation } from "@components/breadcrumbs";
-import { PropsWithChildren } from "react";
+import { PropsWithChildren, ReactNode } from "react";
 import {
   ActionsContainer,
   AddButtonContainer,
@@ -18,22 +18,29 @@ import {
   ScrollContainer,
 } from "./index.styled";
 import { useModuleWrapperContext } from "@providers/module-wrapper-provider";
+import { BreadcrumbLink } from "../../utils/types";
 
 export interface ModuleWrapperProps extends PropsWithChildren {
   key?: string;
+  breadcrumbs: BreadcrumbLink[];
+  currentBreadcrumb: string;
+  leftContainerChildren?: ReactNode | undefined;
+  extraActionsContainerChildren?: ReactNode | undefined;
+  addButtonContainerChildren?: ReactNode | undefined;
+  saveIndicatorElement?: ReactNode | undefined;
 }
 
-export const ModuleWrapper = ({ key, children }: ModuleWrapperProps) => {
-  const {
-    breadcrumbs,
-    currentBreadcrumb,
-    leftContainerChildren,
-    extraActionsContainerChildren,
-    addButtonContainerChildren,
-    saveIndicatorElement,
-    isSaving,
-    isBusy,
-  } = useModuleWrapperContext();
+export const ModuleWrapper = ({
+  key,
+  breadcrumbs,
+  currentBreadcrumb,
+  leftContainerChildren,
+  extraActionsContainerChildren,
+  addButtonContainerChildren,
+  saveIndicatorElement,
+  children,
+}: ModuleWrapperProps) => {
+  const { isSaving, isBusy } = useModuleWrapperContext();
 
   return (
     <ModuleContainer key={key}>

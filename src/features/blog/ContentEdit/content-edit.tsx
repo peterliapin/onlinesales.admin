@@ -52,24 +52,14 @@ import { ImageData } from "@components/FileDropdown";
 import { useNotificationsService } from "@hooks";
 import { useModuleWrapperContext } from "@providers/module-wrapper-provider";
 import { blogFormBreadcrumbLinks } from "@features/blog/constants";
-import { RemoteAutocomplete } from "@components/RemoteAutocomplete";
-import { RemoteValues } from "@components/RemoteAutocomplete/types";
+import { ModuleWrapper } from "@components/module-wrapper";
 
 interface ContentEditProps {
   readonly?: boolean;
 }
 
 export const ContentEdit = (props: ContentEditProps) => {
-  const {
-    setBreadcrumbs,
-    setCurrentBreadcrumb,
-    setLeftContainerChildren,
-    setExtraActionsContainerChildren,
-    setAddButtonContainerChildren,
-    setSaveIndicatorElement,
-    setSaving,
-    setBusy,
-  } = useModuleWrapperContext();
+  const { setSaving, setBusy } = useModuleWrapperContext();
 
   const { notificationsService } = useNotificationsService();
   const networkContext = useRequestContext();
@@ -299,25 +289,12 @@ export const ContentEdit = (props: ContentEditProps) => {
     </>
   );
 
-  useEffect(() => {
-    setBreadcrumbs(blogFormBreadcrumbLinks);
-    setCurrentBreadcrumb(formik.values.title);
-    setLeftContainerChildren(undefined);
-    setExtraActionsContainerChildren(undefined);
-    setAddButtonContainerChildren(undefined);
-    setSaveIndicatorElement(savingIndicatorElement);
-  }, [
-    formik.values.title,
-    setBreadcrumbs,
-    setCurrentBreadcrumb,
-    setLeftContainerChildren,
-    setExtraActionsContainerChildren,
-    setAddButtonContainerChildren,
-    setSaveIndicatorElement,
-  ]);
-
   return (
-    <>
+    <ModuleWrapper
+      breadcrumbs={blogFormBreadcrumbLinks}
+      currentBreadcrumb={formik.values.title}
+      saveIndicatorElement={savingIndicatorElement}
+    >
       <RestoreDataModal
         isOpen={restoreDataState === ContentEditRestoreState.Requested}
         onClose={(value) =>
@@ -544,6 +521,6 @@ export const ContentEdit = (props: ContentEditProps) => {
           </Card>
         </form>
       </ContentEditContainer>
-    </>
+    </ModuleWrapper>
   );
 };
