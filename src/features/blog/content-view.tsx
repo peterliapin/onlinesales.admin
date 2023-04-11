@@ -19,18 +19,12 @@ import { CommentList } from "./comment/comment-list";
 import graymatter from "gray-matter";
 import { useModuleWrapperContext } from "@providers/module-wrapper-provider";
 import { blogFormBreadcrumbLinks } from "@features/blog/constants";
+import { ModuleWrapper } from "@components/module-wrapper";
 
 const coreApi = process.env.CORE_API;
 
 export const ContentView = () => {
-  const {
-    setBreadcrumbs,
-    setCurrentBreadcrumb,
-    setLeftContainerChildren,
-    setExtraActionsContainerChildren,
-    setAddButtonContainerChildren,
-    setBusy,
-  } = useModuleWrapperContext();
+  const { setBusy } = useModuleWrapperContext();
 
   const { client } = useRequestContext();
   const { id } = useParams();
@@ -52,23 +46,11 @@ export const ContentView = () => {
     });
   }, [client, id]);
 
-  useEffect(() => {
-    setBreadcrumbs(blogFormBreadcrumbLinks);
-    setCurrentBreadcrumb(contentItem?.title || "");
-    setLeftContainerChildren(undefined);
-    setExtraActionsContainerChildren(undefined);
-    setAddButtonContainerChildren(undefined);
-  }, [
-    contentItem,
-    setBreadcrumbs,
-    setCurrentBreadcrumb,
-    setLeftContainerChildren,
-    setExtraActionsContainerChildren,
-    setAddButtonContainerChildren,
-  ]);
-
   return (
-    <>
+    <ModuleWrapper
+      breadcrumbs={blogFormBreadcrumbLinks}
+      currentBreadcrumb={contentItem?.title || ""}
+    >
       <ContentEditContainer>
         {contentItem && (
           <ContentItemContainer data-color-mode="light">
@@ -122,6 +104,6 @@ export const ContentView = () => {
           </ContentItemContainer>
         )}
       </ContentEditContainer>
-    </>
+    </ModuleWrapper>
   );
 };
