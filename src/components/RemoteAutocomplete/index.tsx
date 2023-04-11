@@ -65,8 +65,8 @@ export function RemoteAutocomplete({
       options={options}
       loading={isLoading}
       freeSolo={freeSolo}
-      multiple={multiple}
-      limitTags={limit}
+      multiple={multiple ? multiple : false}
+      limitTags={limit ? limit : -1}
       autoSelect
       value={value}
       onChange={onChange}

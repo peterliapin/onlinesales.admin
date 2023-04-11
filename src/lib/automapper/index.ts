@@ -17,7 +17,7 @@ PojosMetadataMap.create<ContentDetailsDto>("ContentDetailsDto", {
   type: String,
   author: String,
   language: String,
-  categories: [String],
+  category: String,
   tags: [String],
   allowComments: Boolean,
   id: Number,
@@ -27,7 +27,7 @@ PojosMetadataMap.create<ContentDetailsDto>("ContentDetailsDto", {
 
 PojosMetadataMap.create<ContentDetails>("ContentDetails", {
   tags: [String],
-  categories: [String],
+  category: String,
   id: Number,
   allowComments: Boolean,
   createdAt: String,
@@ -53,7 +53,7 @@ PojosMetadataMap.create<ContentUpdateDto>("ContentUpdateDto", {
   type: String,
   author: String,
   language: String,
-  categories: [String],
+  category: String,
   tags: [String],
   allowComments: Boolean,
 });
@@ -67,7 +67,7 @@ PojosMetadataMap.create<ContentCreateDto>("ContentCreateDto", {
   type: String,
   author: String,
   language: String,
-  categories: [String],
+  category: String,
   tags: [String],
   allowComments: Boolean,
 });

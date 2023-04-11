@@ -282,7 +282,7 @@ export interface ContentCreateDto {
   author: string;
   /** @minLength 1 */
   language: string;
-  categories?: string[] | null;
+  category?: string | null;
   tags?: string[] | null;
   allowComments?: boolean;
   source?: string | null;
@@ -305,7 +305,7 @@ export interface ContentDetailsDto {
   author: string;
   /** @minLength 1 */
   language: string;
-  categories?: string[] | null;
+  category?: string | null;
   tags?: string[] | null;
   allowComments?: boolean;
   source?: string | null;
@@ -338,7 +338,7 @@ export interface ContentImportDto {
   type?: string | null;
   author?: string | null;
   language?: string | null;
-  categories?: string | null;
+  category?: string | null;
   tags?: string | null;
   allowComments?: boolean | null;
 }
@@ -353,7 +353,7 @@ export interface ContentUpdateDto {
   type?: string | null;
   author?: string | null;
   language?: string | null;
-  categories?: string[] | null;
+  category?: string | null;
   tags?: string[] | null;
   allowComments?: boolean | null;
   source?: string | null;
