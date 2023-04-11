@@ -8,28 +8,13 @@ import {useModuleWrapperContext} from "@providers/module-wrapper-provider";
 import {DataGrid, GridSortModel} from "@mui/x-data-grid";
 import {GridColumns} from "@mui/x-data-grid/models/colDef/gridColDef";
 import {totalCountHeaderName} from "@lib/query";
-
-interface Schema{
-  "required": string[];
-  "properties": {
-    [x: string] : {
-      "type": string;
-      "format"?: string;
-      "nullable"?: boolean;
-      "description"?: string;
-    }
-  }
-}
+import {DtoSchema, camelCaseToTitleCase} from "@components/generic-crud/common";
 
 interface GenericDataGridProps<T> {
   getItemsFn: (query?: { query?: string }, params?: RequestParams) => Promise<HttpResponse<T[], void | ProblemDetails>>;
-  schema: Schema
+  schema: DtoSchema;
 }
 
-const camelCaseToTitleCase = (str: string) => {
-  const titleCase = str.replace(/[A-Z]/g, (match) => ` ${match}`);
-  return titleCase.charAt(0).toUpperCase() + titleCase.slice(1);
-};
 
 export function GenericDataGrid<T>({
                                      getItemsFn,
