@@ -5,7 +5,7 @@ import {
   viewFormRoute
 } from "@lib/router";
 import {BasicTypeForGeneric, getBreadcrumbLinks} from "@components/generic-components/common";
-import {ReactNode, useMemo} from "react";
+import {PropsWithChildren, ReactNode, useMemo} from "react";
 import {
   GenericDataGrid,
   GenericDataGridProps
@@ -16,7 +16,7 @@ import {GenericForm, GenericFormProps} from "@components/generic-components/gene
 import {useRouteParams} from "typesafe-routes";
 import {CircularProgress, Grid, Typography} from "@mui/material";
 
-interface GenericModuleProps<TView extends BasicTypeForGeneric, TCreate, TUpdate> {
+interface GenericModuleProps<TView extends BasicTypeForGeneric, TCreate, TUpdate> extends PropsWithChildren {
   moduleName: string;
   modulePath: CoreModule;
   tableProps?: GenericDataGridProps<TView>;
@@ -34,6 +34,7 @@ export function GenericModule<
     tableProps,
     editFormProps,
     viewFormProps,
+    children
   }: GenericModuleProps<TView, TCreate, TUpdate>): ReactNode {
 
   const getGenericTable = (key: string, tableProps: GenericDataGridProps<TView>) => {
@@ -88,6 +89,7 @@ export function GenericModule<
         <Route index element={genericTable}/>
         <Route path={editFormRoute.template} element={genericEditForm}/>
         <Route path={viewFormRoute.template} element={genericViewForm}/>
+        {children}
       </Routes>
       <Outlet/>
     </>
