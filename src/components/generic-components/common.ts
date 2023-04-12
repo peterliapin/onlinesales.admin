@@ -6,6 +6,21 @@ export interface DtoSchema {
   "required"?: string[];
   "properties": {
     [x: string]: {
+      "type": "integer";
+      "format"?: "int32" | "int64";
+      "nullable"?: boolean;
+      "description"?: string;
+    } | {
+      "type": "number";
+      "format"?: "float" | "double";
+      "nullable"?: boolean;
+      "description"?: string;
+    } | {
+      "type": "string";
+      "format"?: "email" | "password" | string;
+      "nullable"?: boolean;
+      "description"?: string;
+    } | {
       "type": string;
       "format"?: string;
       "nullable"?: boolean;

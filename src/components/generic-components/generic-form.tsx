@@ -14,10 +14,10 @@ import {
   Button,
   Card,
   CardContent,
-  Grid,
-  TextField
+  Grid
 } from "@mui/material";
 import {useParams} from "react-router-dom";
+import {NumberEdit, TextEdit} from "@components/generic-components/edit-components";
 
 export interface DtoField<TView> {
   "name": string;
@@ -162,22 +162,46 @@ export function GenericForm<
     }));
   };
 
+  const getEdit = (field: DtoField<TView>) => {
+    const commonProps = {
+      key: field.name,
+      label: field.label,
+      value: values[field.name],
+      disabled: !editable || !field.editable,
+      onChange: (newValue: any) => {
+        setValues((prevValues: any) => ({
+          ...prevValues,
+          [field.name]: newValue
+        }));
+      }
+    }
+    switch (field.type) {
+      case "integer":
+        return NumberEdit({
+          ...commonProps
+        });
+      case "number":
+        return NumberEdit({
+          ...commonProps
+        });
+      default:
+        return TextEdit({
+          ...commonProps
+        });
+    }
+  };
+
   return <>
     <Card>
       <CardContent>
         <Grid container spacing={3}>
-          {detailsFields.map(field => (
-            <Grid key={field.name} item xs={6} sm={6}>
-              <TextField name={field.name}
-                         type={field.type || "text"}
-                         label={field.label}
-                         disabled={!editable || !field.editable}
-                         value={values[field.name]}
-                         onChange={handleChange}
-                         variant={"outlined"}
-                         fullWidth={true}/>
-            </Grid>
-          ))}
+          {
+            detailsFields.map(field => (
+              <Grid key={field.name} item xs={6} sm={6}>
+                {getEdit(field)}
+              </Grid>
+            ))
+          }
           <Grid item xs={12} sm={12}>
             {editable &&
               <Button type="submit"
