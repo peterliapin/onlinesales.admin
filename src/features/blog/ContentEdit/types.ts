@@ -14,7 +14,7 @@ export interface ContentDetails {
   language: string;
   allowComments: boolean;
   tags: string[];
-  categories: string[];
+  category: string;
   createdAt: string | null;
   updatedAt: string | null;
   files: File[] | null;

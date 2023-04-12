@@ -37,7 +37,6 @@ const EditorViewFunc = (
   return (
     <CodeEditor
       value={value}
-      language="yaml"
       onChange={(evn) => onChange(evn.target.value)}
       padding={16}
       style={{
@@ -59,18 +58,14 @@ const MarkdownEditor = ({
   onFrontmatterErrorChange,
 }: MarkdownEditorProps) => {
   const [currentError, setCurrentError] = useState<string>("");
-  const customCommands = useMemo(
-    () =>
-      commands.getCommands().concat([
-        commands.group([ImageUpload(contentDetails, false)], {
-          name: "OnlineSales components",
-          groupName: "onlinesales-components",
-          buttonProps: { "aria-label": "Insert onlinesales custom components" },
-          icon: <AppsIcon sx={{ fontSize: 15 }} />,
-        }),
-      ]),
-    [contentDetails]
-  );
+  const customCommands = commands.getCommands().concat([
+    commands.group([ImageUpload(contentDetails, false)], {
+      name: "OnlineSales components",
+      groupName: "onlinesales-components",
+      buttonProps: { "aria-label": "Insert onlinesales custom components" },
+      icon: <AppsIcon sx={{ fontSize: 15 }} />,
+    }),
+  ]);
   const onErrorChange = (error: ValidateFrontmatterError | null) => {
     error !== null
       ? setCurrentError(`Frontmatter Error \n (${error.errorMessage})\n`)

@@ -64,7 +64,7 @@ const FileDropdown = ({
             accept={{ key: [acceptMIME] } as Accept}
           >
             {({ getRootProps, getInputProps }) => (
-              <Grid container spacing={0} xs={12} direction="row" justifyContent="center">
+              <Grid container spacing={0} direction="row" justifyContent="center">
                 <div {...getRootProps()}>
                   <input {...getInputProps()} />
                   <p>Drag drop some files here, or click to select files</p>
@@ -76,12 +76,12 @@ const FileDropdown = ({
             )}
           </Dropzone>
         ) : (
-          <Grid container xs={12} direction="column" justifyContent="center">
+          <Grid container direction="column" justifyContent="center">
             <Grid item xs={12} style={{ textAlign: "center" }}>
               <Box
                 component="img"
                 sx={{
-                  "object-fit": "contain",
+                  "objectFit": "contain",
                 }}
                 alt="Cover image preview"
                 src={data.url}

@@ -74,16 +74,8 @@ export const ContentView = () => {
                   </>
                 </TagsContainer>
                 <TagsContainer>
-                  Categories:{" "}
-                  <>
-                    {`${contentItem.categories || ""}`
-                      .split(";")
-                      .filter((i) => i)
-                      .filter((v, index, items) => items.indexOf(v) === index)
-                      .map((s, index) => (
-                        <Chip size={"small"} key={index} label={s} variant="outlined" />
-                      ))}
-                  </>
+                  Category:{" "}
+                  <Chip size={"small"} label={contentItem.category} variant="outlined" />
                 </TagsContainer>
                 <AuthorContainer>Author: {contentItem.author}</AuthorContainer>
                 <TimestampContainer>
