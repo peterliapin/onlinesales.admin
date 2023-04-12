@@ -1,9 +1,10 @@
 import { ContactCardHeader, ContactRowGrid } from "@features/contacts/index.styled";
 import { Card, CardContent, Divider, Grid, Typography } from "@mui/material";
+import { Fragment } from "react";
 
 type dataViewProps = {
   header: string;
-  rows: { label: string; value: string }[];
+  rows: { label: string; value: any }[];
 };
 
 export const DataView = ({ header, rows }: dataViewProps) => {
@@ -14,8 +15,8 @@ export const DataView = ({ header, rows }: dataViewProps) => {
           <ContactCardHeader title={header}></ContactCardHeader>
           <Divider variant="fullWidth" />
           {rows.map(({ label, value }, index) => (
-            <>
-              <ContactRowGrid key={index} container>
+            <Fragment key={index}>
+              <ContactRowGrid container>
                 <Grid item xs={2}>
                   <Typography fontWeight="bold">{label}</Typography>
                 </Grid>
@@ -24,7 +25,7 @@ export const DataView = ({ header, rows }: dataViewProps) => {
                 </Grid>
               </ContactRowGrid>
               <Divider variant="fullWidth" />
-            </>
+            </Fragment>
           ))}
         </CardContent>
       </Card>
