@@ -17,7 +17,7 @@ import {
   Grid,
   TextField
 } from "@mui/material";
-
+import {useParams} from "react-router-dom";
 
 export interface DtoField<TView> {
   "name": string;
@@ -29,12 +29,11 @@ export interface DtoField<TView> {
   "editable": boolean;
 }
 
-interface GenericFormProps<
+export interface GenericFormProps<
   TView extends BasicTypeForGeneric,
   TCreate,
   TUpdate
 > {
-  itemId?: number;
   editable: boolean;
   getItemFn: (id: number, params?: RequestParams) => Promise<HttpResponse<TView, void | ProblemDetails>>;
   updateItemFn: (id: number, data: TUpdate, params: RequestParams) => Promise<HttpResponse<TView, void | ProblemDetails>>;
@@ -50,7 +49,6 @@ export function GenericForm<
   TUpdate
 >({
     editable,
-    itemId,
     getItemFn,
     createItemFn,
     updateItemFn,
@@ -64,6 +62,8 @@ export function GenericForm<
     setSaving,
     isSaving,
   } = useModuleWrapperContext();
+  const params = useParams();
+  const itemId = Number(params && params["*"] && params["*"].match(/^\d+?/)?.[0]);
 
   const detailsFields: DtoField<TUpdate>[] = Object.keys(detailsSchema.properties)
     .map((key) => {

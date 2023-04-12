@@ -1,3 +1,7 @@
+import {BreadcrumbLink} from "../../utils/types";
+import {dataListBreadcrumbLinks} from "../../utils/constants";
+import {CoreModule, getCoreModuleRoute} from "@lib/router";
+
 export interface DtoSchema {
   "required"?: string[];
   "properties": {
@@ -20,3 +24,10 @@ export interface BasicTypeForGeneric {
   "createdAt"?: string | null;
   "updatedAt"?: string | null;
 }
+
+export const getBreadcrumbLinks = (moduleName: string, modulePath: CoreModule): BreadcrumbLink[] => {
+  return [
+    ...dataListBreadcrumbLinks,
+    {linkText: moduleName, toRoute: getCoreModuleRoute(modulePath)},
+  ]
+};

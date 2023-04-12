@@ -31,7 +31,6 @@ export interface ModuleWrapperProps extends PropsWithChildren {
 }
 
 export const ModuleWrapper = ({
-  key,
   breadcrumbs,
   currentBreadcrumb,
   leftContainerChildren,
@@ -43,7 +42,7 @@ export const ModuleWrapper = ({
   const { isSaving, isBusy } = useModuleWrapperContext();
 
   return (
-    <ModuleContainer key={key}>
+    <ModuleContainer>
       <ModuleHeaderContainer>
         <ModuleHeaderSubtitleContainer>
           <BreadCrumbNavigation

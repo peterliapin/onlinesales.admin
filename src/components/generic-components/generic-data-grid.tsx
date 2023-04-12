@@ -17,7 +17,7 @@ import {IconButton} from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
-interface GenericDataGridProps<T extends BasicTypeForGeneric> {
+export interface GenericDataGridProps<T extends BasicTypeForGeneric> {
   getItemsFn: (query?: { query?: string }, params?: RequestParams) => Promise<HttpResponse<T[], void | ProblemDetails>>;
   schema: DtoSchema;
   detailsNavigate?: (item: T) => void;
