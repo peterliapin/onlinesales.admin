@@ -14,3 +14,9 @@ export const camelCaseToTitleCase = (str: string) => {
   const titleCase = str.replace(/[A-Z]/g, (match) => ` ${match}`);
   return titleCase.charAt(0).toUpperCase() + titleCase.slice(1);
 };
+
+export interface BasicTypeForGeneric {
+  "id"?: number;
+  "createdAt"?: string | null;
+  "updatedAt"?: string | null;
+}

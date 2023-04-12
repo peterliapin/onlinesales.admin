@@ -7,25 +7,29 @@ import {
 import {useModuleWrapperContext} from "@providers/module-wrapper-provider";
 import {DataGrid, GridColDef, GridSortModel} from "@mui/x-data-grid";
 import {totalCountHeaderName} from "@lib/query";
-import {DtoSchema, camelCaseToTitleCase} from "@components/generic-components/common";
+import {
+  DtoSchema,
+  camelCaseToTitleCase,
+  BasicTypeForGeneric
+} from "@components/generic-components/common";
 import {ActionButtonContainer} from "@components/data-table/index.styled";
 import {IconButton} from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
-interface GenericDataGridProps<T> {
+interface GenericDataGridProps<T extends BasicTypeForGeneric> {
   getItemsFn: (query?: { query?: string }, params?: RequestParams) => Promise<HttpResponse<T[], void | ProblemDetails>>;
   schema: DtoSchema;
   detailsNavigate?: (item: T) => void;
   editNavigate?: (item: T) => void;
 }
 
-export function GenericDataGrid<T>({
-                                     getItemsFn,
-                                     schema,
-                                     detailsNavigate,
-                                     editNavigate
-                                   }: GenericDataGridProps<T>)
+export function GenericDataGrid<T extends BasicTypeForGeneric>({
+                                                                 getItemsFn,
+                                                                 schema,
+                                                                 detailsNavigate,
+                                                                 editNavigate
+                                                               }: GenericDataGridProps<T>)
   : ReactNode {
   const {setBusy} = useModuleWrapperContext();
 

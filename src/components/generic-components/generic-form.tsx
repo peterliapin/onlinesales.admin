@@ -3,7 +3,11 @@ import {
   ProblemDetails,
   RequestParams
 } from "@lib/network/swagger-client";
-import {DtoSchema, camelCaseToTitleCase} from "@components/generic-components/common";
+import {
+  DtoSchema,
+  camelCaseToTitleCase,
+  BasicTypeForGeneric
+} from "@components/generic-components/common";
 import {ReactNode, useEffect, useState} from "react";
 import {useModuleWrapperContext} from "@providers/module-wrapper-provider";
 import {
@@ -22,9 +26,14 @@ export interface DtoField<TView> {
   "format"?: string;
   "nullable"?: boolean;
   "description"?: string;
+  "editable": boolean;
 }
 
-interface GenericFormProps<TView, TCreate, TUpdate> {
+interface GenericFormProps<
+  TView extends BasicTypeForGeneric,
+  TCreate,
+  TUpdate
+> {
   itemId?: number;
   editable: boolean;
   getItemFn: (id: number, params?: RequestParams) => Promise<HttpResponse<TView, void | ProblemDetails>>;
@@ -35,16 +44,20 @@ interface GenericFormProps<TView, TCreate, TUpdate> {
   createSchema: DtoSchema;
 }
 
-export function GenericForm<TView, TCreate, TUpdate>({
-                                                       editable,
-                                                       itemId,
-                                                       getItemFn,
-                                                       createItemFn,
-                                                       updateItemFn,
-                                                       detailsSchema,
-                                                       updateSchema,
-                                                       createSchema
-                                                     }: GenericFormProps<TView, TCreate, TUpdate>): ReactNode {
+export function GenericForm<
+  TView extends BasicTypeForGeneric,
+  TCreate,
+  TUpdate
+>({
+    editable,
+    itemId,
+    getItemFn,
+    createItemFn,
+    updateItemFn,
+    detailsSchema,
+    updateSchema,
+    createSchema
+  }: GenericFormProps<TView, TCreate, TUpdate>): ReactNode {
   const {
     setBusy,
     isBusy,
@@ -61,6 +74,7 @@ export function GenericForm<TView, TCreate, TUpdate>({
         format: detailsSchema.properties[key].format,
         nullable: detailsSchema.properties[key].nullable,
         description: detailsSchema.properties[key].description,
+        editable: key in updateSchema.properties
       };
     });
 
@@ -73,6 +87,7 @@ export function GenericForm<TView, TCreate, TUpdate>({
         format: detailsSchema.properties[key].format,
         nullable: detailsSchema.properties[key].nullable,
         description: detailsSchema.properties[key].description,
+        editable: true
       };
     });
 
@@ -85,6 +100,7 @@ export function GenericForm<TView, TCreate, TUpdate>({
         format: detailsSchema.properties[key].format,
         nullable: detailsSchema.properties[key].nullable,
         description: detailsSchema.properties[key].description,
+        editable: true
       };
     });
 
@@ -136,6 +152,9 @@ export function GenericForm<TView, TCreate, TUpdate>({
   }
 
   const handleChange = (event: { target: { name: any; value: any; }; }) => {
+    if (!editable) {
+      return;
+    }
     const {name, value} = event.target;
     setValues((prevValues: any) => ({
       ...prevValues,
@@ -152,6 +171,7 @@ export function GenericForm<TView, TCreate, TUpdate>({
               <TextField name={field.name}
                          type={field.type || "text"}
                          label={field.label}
+                         disabled={!editable || !field.editable}
                          value={values[field.name]}
                          onChange={handleChange}
                          variant={"outlined"}
