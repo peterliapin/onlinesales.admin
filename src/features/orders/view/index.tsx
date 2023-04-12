@@ -38,7 +38,7 @@ export const OrderViewBase = () => {
     (async () => {
       try {
         const { data } = await client.api.ordersDetail(id);
-        setCustomer(data.contactId);
+        setContactState(data.contactId);
         setOrderItems(await getOrderItems(data.id!));
         setOrder(data);
       } catch (e) {
@@ -47,12 +47,12 @@ export const OrderViewBase = () => {
     })();
   }, [client]);
 
-  const setCustomer = async (id: number) => {
+  const setContactState = async (id: number) => {
     try {
       const { data } = await client.api.contactsDetail(id);
       setContact(data);
       if (data.countryCode) {
-        setCustomerCountry(data.countryCode);
+        setContactCountryState(data.countryCode);
       }
     } catch (error) {
       console.log(error);
@@ -60,7 +60,7 @@ export const OrderViewBase = () => {
     }
   };
 
-  const setCustomerCountry = async (code: string) => {
+  const setContactCountryState = async (code: string) => {
     const country = await getCountryByCode(context, code);
     if (country) {
       setContactCountry(country);
