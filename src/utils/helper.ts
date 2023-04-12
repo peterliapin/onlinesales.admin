@@ -32,3 +32,30 @@ export const getCountryList = async (context: RequestContextType) => {
     }
   }
 };
+
+export const getCountryByCode = async (context: RequestContextType, code: string) => {
+  const countries = await getCountryList(context);
+  if (countries) {
+    const countryList = Object.entries(countries).map(([code, name]) => ({ code, name }));
+    return countryList.find((c) => c.code === code)!.name;
+  } else {
+    return null;
+  }
+};
+
+export const getFormattedDateTime = (dateToConvert: string) => {
+  const date = new Date(dateToConvert);
+  const formattedDate = date.toLocaleDateString(undefined, {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  });
+  const formattedTime = date.toLocaleTimeString(undefined, {
+    hour: "numeric",
+    minute: "numeric",
+    second: "numeric",
+    hour12: true,
+  });
+  const formattedDateTime = `${formattedDate}  ${formattedTime}`;
+  return formattedDateTime;
+};

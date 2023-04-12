@@ -14,5 +14,5 @@ export const orderListPageBreadcrumb = "Orders";
 
 export const orderFormBreadcrumbLinks: BreadcrumbLink[] = [
   ...dataListBreadcrumbLinks,
-  { linkText: orderListPageBreadcrumb, toRoute: getCoreModuleRoute(CoreModule.contacts) },
+  { linkText: orderListPageBreadcrumb, toRoute: getCoreModuleRoute(CoreModule.orders) },
 ];
