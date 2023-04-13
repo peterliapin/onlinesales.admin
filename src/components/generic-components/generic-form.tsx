@@ -17,7 +17,7 @@ import {
   Grid
 } from "@mui/material";
 import {useParams} from "react-router-dom";
-import {NumberEdit, TextEdit} from "@components/generic-components/edit-components";
+import {NumberEdit, TextEdit, DatetimeEdit} from "@components/generic-components/edit-components";
 
 export interface DtoField<TView> {
   "name": string;
@@ -27,6 +27,7 @@ export interface DtoField<TView> {
   "nullable"?: boolean;
   "description"?: string;
   "editable": boolean;
+  "enum"?: string[];
 }
 
 export interface GenericFormProps<
@@ -41,6 +42,7 @@ export interface GenericFormProps<
   detailsSchema: DtoSchema;
   updateSchema: DtoSchema;
   createSchema: DtoSchema;
+  mode?: "create" | "update" | "details";
 }
 
 export function GenericForm<
@@ -54,7 +56,8 @@ export function GenericForm<
     updateItemFn,
     detailsSchema,
     updateSchema,
-    createSchema
+    createSchema,
+    mode
   }: GenericFormProps<TView, TCreate, TUpdate>): ReactNode {
   const {
     setBusy,
@@ -151,16 +154,16 @@ export function GenericForm<
     });
   }
 
-  const handleChange = (event: { target: { name: any; value: any; }; }) => {
-    if (!editable) {
-      return;
+  const fieldsSet = () => {
+    switch (mode) {
+      case "create":
+        return createFields;
+      case "update":
+        return detailsFields;
+      default:
+        return detailsFields;
     }
-    const {name, value} = event.target;
-    setValues((prevValues: any) => ({
-      ...prevValues,
-      [name]: value
-    }));
-  };
+  }
 
   const getEdit = (field: DtoField<TView>) => {
     const commonProps = {
@@ -168,7 +171,7 @@ export function GenericForm<
       label: field.label,
       value: values[field.name],
       disabled: !editable || !field.editable,
-      onChange: (newValue: any) => {
+      onChangeValue: (newValue: any) => {
         setValues((prevValues: any) => ({
           ...prevValues,
           [field.name]: newValue
@@ -184,6 +187,23 @@ export function GenericForm<
         return NumberEdit({
           ...commonProps
         });
+      case "string":
+        if (field.format === "date-time") {
+          return DatetimeEdit({
+            ...commonProps,
+            value: values[field.name] ? new Date(values[field.name]) : null,
+            onChangeValue: (newValue: Date | null) => {
+              setValues((prevValues: any) => ({
+                ...prevValues,
+                [field.name]: newValue ? newValue.toISOString() : null
+              }));
+            }
+          })
+        } else {
+          return TextEdit({
+            ...commonProps
+          });
+        }
       default:
         return TextEdit({
           ...commonProps
@@ -196,7 +216,7 @@ export function GenericForm<
       <CardContent>
         <Grid container spacing={3}>
           {
-            detailsFields.map(field => (
+            fieldsSet().map(field => (
               <Grid key={field.name} item xs={6} sm={6}>
                 {getEdit(field)}
               </Grid>

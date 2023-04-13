@@ -7,7 +7,7 @@ export const NumberEdit = ({
                              key,
                              label,
                              value,
-                             onChange,
+                             onChangeValue,
                              disabled
                            }: EditProps<number>): ReactNode => {
   return <TextField key={key}
@@ -16,7 +16,7 @@ export const NumberEdit = ({
                     disabled={disabled}
                     value={value}
                     onChange={(e) => {
-                      onChange && onChange(Number(e.target.value || "0"));
+                      onChangeValue && onChangeValue(Number(e.target.value || "0"));
                     }}
                     variant={"outlined"}
                     fullWidth={true}/>

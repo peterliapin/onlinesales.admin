@@ -22,7 +22,6 @@ export interface GenericDataGridProps<T extends BasicTypeForGeneric> {
   schema: DtoSchema;
   detailsNavigate?: (item: T) => void;
   editNavigate?: (item: T) => void;
-  searchFields?: (keyof T)[];
   searchText?: string;
 }
 
@@ -31,8 +30,7 @@ export function GenericDataGrid<T extends BasicTypeForGeneric>({
                                                                  schema,
                                                                  detailsNavigate,
                                                                  editNavigate,
-                                                                 searchText,
-                                                                 searchFields
+                                                                 searchText
                                                                }: GenericDataGridProps<T>)
   : ReactNode {
   const {setBusy} = useModuleWrapperContext();
@@ -95,10 +93,8 @@ export function GenericDataGrid<T extends BasicTypeForGeneric>({
             "filter[skip]": pageSize * pageNumber
           };
 
-          if(searchText && searchFields && searchFields.length > 0){
-            searchFields.forEach((searchField) => {
-              query[`filter[where][or][${searchField.toString()}][like]`] = `${searchText}`
-            });
+          if (searchText) {
+            query["query"] = searchText;
           }
 
           const {data, headers} = await getItemsFn(query as any, {
@@ -126,7 +122,7 @@ export function GenericDataGrid<T extends BasicTypeForGeneric>({
 
   return <DataGrid columns={columns || []}
                    rows={items || []}
-                   loading={!items}
+                   loading={false}
                    checkboxSelection={false}
                    autoHeight={false}
                    rowCount={totalItemsCount}
