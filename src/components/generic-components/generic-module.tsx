@@ -5,7 +5,7 @@ import {
   viewFormRoute
 } from "@lib/router";
 import {BasicTypeForGeneric, getBreadcrumbLinks} from "@components/generic-components/common";
-import {PropsWithChildren, ReactNode, useMemo} from "react";
+import React, {PropsWithChildren, ReactNode, useState} from "react";
 import {
   GenericDataGrid,
   GenericDataGridProps
@@ -13,8 +13,8 @@ import {
 import {ModuleWrapper} from "@components/module-wrapper";
 import {dataListBreadcrumbLinks} from "../../utils/constants";
 import {GenericForm, GenericFormProps} from "@components/generic-components/generic-form";
-import {useRouteParams} from "typesafe-routes";
 import {CircularProgress, Grid, Typography} from "@mui/material";
+import {SearchBar} from "@components/search-bar";
 
 interface GenericModuleProps<TView extends BasicTypeForGeneric, TCreate, TUpdate> extends PropsWithChildren {
   moduleName: string;
@@ -36,12 +36,25 @@ export function GenericModule<
     viewFormProps,
     children
   }: GenericModuleProps<TView, TCreate, TUpdate>): ReactNode {
+  const [searchText, setSearchText] = useState("");
 
   const getGenericTable = (key: string, tableProps: GenericDataGridProps<TView>) => {
-    const genericDataGrid = GenericDataGrid<TView>(tableProps);
+    const genericDataGrid = GenericDataGrid<TView>({
+      ...tableProps,
+      searchText: searchText
+    });
+
+    const searchBox = tableProps.searchFields && tableProps.searchFields.length > 0
+      ? <SearchBar
+        setSearchTermOnChange={(value) => setSearchText(value)}
+        searchBoxLabel={`search by ${tableProps.searchFields.join(", ")}`}
+        initialValue={""}
+      />
+      : undefined;
 
     return <ModuleWrapper key={key}
                           breadcrumbs={dataListBreadcrumbLinks}
+                          leftContainerChildren={searchBox}
                           currentBreadcrumb={moduleName}>
       {genericDataGrid}
     </ModuleWrapper>;

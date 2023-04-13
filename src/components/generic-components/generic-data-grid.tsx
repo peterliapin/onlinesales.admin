@@ -1,4 +1,4 @@
-import {ReactNode, useEffect, useState} from "react";
+import {ChangeEventHandler, EventHandler, ReactNode, useEffect, useState} from "react";
 import {
   HttpResponse,
   ProblemDetails,
@@ -22,13 +22,17 @@ export interface GenericDataGridProps<T extends BasicTypeForGeneric> {
   schema: DtoSchema;
   detailsNavigate?: (item: T) => void;
   editNavigate?: (item: T) => void;
+  searchFields?: (keyof T)[];
+  searchText?: string;
 }
 
 export function GenericDataGrid<T extends BasicTypeForGeneric>({
                                                                  getItemsFn,
                                                                  schema,
                                                                  detailsNavigate,
-                                                                 editNavigate
+                                                                 editNavigate,
+                                                                 searchText,
+                                                                 searchFields
                                                                }: GenericDataGridProps<T>)
   : ReactNode {
   const {setBusy} = useModuleWrapperContext();
@@ -85,11 +89,18 @@ export function GenericDataGrid<T extends BasicTypeForGeneric>({
     if (getItemsFn) {
       setBusy(async () => {
         try {
-          const query = {
+          const query: any = {
             "filter[limit]": pageSize,
             "filter[order]": sortColumn ? `${sortColumn} ${sortDirection}` : undefined,
             "filter[skip]": pageSize * pageNumber
           };
+
+          if(searchText && searchFields && searchFields.length > 0){
+            searchFields.forEach((searchField) => {
+              query[`filter[where][or][${searchField.toString()}][like]`] = `${searchText}`
+            });
+          }
+
           const {data, headers} = await getItemsFn(query as any, {
             signal: abortController.signal
           });
@@ -104,7 +115,7 @@ export function GenericDataGrid<T extends BasicTypeForGeneric>({
     return () => {
       abortController.abort("canceled")
     };
-  }, [getItemsFn, pageSize, pageNumber, sortColumn, sortDirection]);
+  }, [getItemsFn, pageSize, pageNumber, sortColumn, sortDirection, searchText]);
 
   const handleSortChange = (sortModel: GridSortModel) => {
     if (sortModel.length > 0) {
