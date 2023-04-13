@@ -4,7 +4,11 @@ import {
   editFormRoute,
   viewFormRoute
 } from "@lib/router";
-import {BasicTypeForGeneric, getBreadcrumbLinks} from "@components/generic-components/common";
+import {
+  BasicTypeForGeneric,
+  camelCaseToTitleCase,
+  getBreadcrumbLinks
+} from "@components/generic-components/common";
 import React, {PropsWithChildren, ReactNode, useState} from "react";
 import {
   GenericDataGrid,
@@ -47,7 +51,7 @@ export function GenericModule<
     const searchBox = tableProps.searchFields && tableProps.searchFields.length > 0
       ? <SearchBar
         setSearchTermOnChange={(value) => setSearchText(value)}
-        searchBoxLabel={`search by ${tableProps.searchFields.join(", ")}`}
+        searchBoxLabel={`Search by ${tableProps.searchFields.map(field => `"${camelCaseToTitleCase(field.toString())}"`).join(", ")}`}
         initialValue={""}
       />
       : undefined;
