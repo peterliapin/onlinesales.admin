@@ -17,7 +17,12 @@ import {
   Grid
 } from "@mui/material";
 import {useParams} from "react-router-dom";
-import {NumberEdit, TextEdit, DatetimeEdit} from "@components/generic-components/edit-components";
+import {
+  NumberEdit,
+  TextEdit,
+  DatetimeEdit,
+  EnumEdit
+} from "@components/generic-components/edit-components";
 
 export interface DtoField<TView> {
   "name": string;
@@ -199,6 +204,11 @@ export function GenericForm<
               }));
             }
           })
+        } else if (field.enum && field.enum.length > 0) {
+          return EnumEdit({
+            ...commonProps,
+            valueOptions: field.enum
+          });
         } else {
           return TextEdit({
             ...commonProps
