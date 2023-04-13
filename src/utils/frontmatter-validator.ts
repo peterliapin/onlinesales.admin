@@ -2,7 +2,7 @@ import { parse as parseYaml, YAMLParseError } from "yaml";
 import zod from "zod";
 
 const FrontmatterSideMenu = zod.object({
-  title: zod.string(),
+  name: zod.string(),
   link: zod.string(),
 });
 

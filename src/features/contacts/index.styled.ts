@@ -47,7 +47,7 @@ export const ContactNameListItemText = styled(ListItemText)`
 `;
 
 export const ContactRowGrid = styled(Grid)({
-  height: 60,
+  minHeight: 60,
   alignItems: "center",
 });
 

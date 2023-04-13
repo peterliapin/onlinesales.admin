@@ -28,10 +28,18 @@ export const RestoreDataModal = ({ isOpen, onClose }: RestoreDataProps) => {
       TransitionComponent={Transition}
       keepMounted
     >
-      <DialogTitle id="alert-dialog-title">{"Restore data from previous session?"}</DialogTitle>
+      <DialogTitle>{"Restore Draft Version"}</DialogTitle>
       <DialogContent>
-        <DialogContentText id="alert-dialog-description">
-          We have found that you have not submitted your latest edits. Do u want to restore them?
+        <DialogContentText>
+          Would you like to restore the locally saved draft version and continue editing? 
+        </DialogContentText>
+        <DialogContentText>
+          &nbsp;
+        </DialogContentText>
+        <DialogContentText>
+          Any unsaved changes made after the last save will be lost.
+          Click &apos;Restore&apos; to continue editing the draft,
+          or &apos;Cancel&apos; to discard the draft and start a new one.
         </DialogContentText>
       </DialogContent>
       <DialogActions>

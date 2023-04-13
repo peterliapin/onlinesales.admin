@@ -53,6 +53,8 @@ import { useNotificationsService } from "@hooks";
 import { useModuleWrapperContext } from "@providers/module-wrapper-provider";
 import { blogFormBreadcrumbLinks } from "@features/blog/constants";
 import { ModuleWrapper } from "@components/module-wrapper";
+import { RemoteAutocomplete } from "@components/RemoteAutocomplete";
+import { RemoteValues } from "@components/RemoteAutocomplete/types";
 
 interface ContentEditProps {
   readonly?: boolean;
@@ -227,30 +229,30 @@ export const ContentEdit = (props: ContentEditProps) => {
       try {
         const localStorageSnapshot = { ...editorLocalStorage };
         switch (restoreDataState) {
-          case ContentEditRestoreState.Idle:
-            if (localStorageSnapshot.data.filter((data) => data.id === id).length > 0) {
-              setRestoreDataState(ContentEditRestoreState.Requested);
-              return;
-            }
-            break;
-          case ContentEditRestoreState.Requested:
+        case ContentEditRestoreState.Idle:
+          if (localStorageSnapshot.data.filter((data) => data.id === id).length > 0) {
+            setRestoreDataState(ContentEditRestoreState.Requested);
             return;
-          case ContentEditRestoreState.Rejected:
-            localStorageSnapshot.data = localStorageSnapshot.data.filter((data) => data.id !== id);
-            setEditorLocalStorage(localStorageSnapshot);
-            break;
-          case ContentEditRestoreState.Accepted:
-            await formik.setValues(
-              localStorageSnapshot.data.filter((data) => data.id === id)[0].savedData
-            );
-            if (
-              localStorageSnapshot.data.filter((data) => data.id === id)[0].savedData
-                .coverImagePending.fileName.length > 0
-            ) {
-              setCoverWasModified(true);
-            }
-            setWasModified(true);
-            return;
+          }
+          break;
+        case ContentEditRestoreState.Requested:
+          return;
+        case ContentEditRestoreState.Rejected:
+          localStorageSnapshot.data = localStorageSnapshot.data.filter((data) => data.id !== id);
+          setEditorLocalStorage(localStorageSnapshot);
+          break;
+        case ContentEditRestoreState.Accepted:
+          await formik.setValues(
+            localStorageSnapshot.data.filter((data) => data.id === id)[0].savedData
+          );
+          if (
+            localStorageSnapshot.data.filter((data) => data.id === id)[0].savedData
+              .coverImagePending.fileName.length > 0
+          ) {
+            setCoverWasModified(true);
+          }
+          setWasModified(true);
+          return;
         }
         if (client && id) {
           const { data } = await client.api.contentDetail(Number(id));
@@ -309,7 +311,7 @@ export const ContentEdit = (props: ContentEditProps) => {
         <form onSubmit={formik.handleSubmit}>
           <Card>
             <CardContent>
-              <Grid container spacing={1} xs={12} sm={12}>
+              <Grid container spacing={1}>
                 <Grid container item spacing={4} xs={6} sm={6}>
                   <Grid xs={12} sm={12} item>
                     <Autocomplete
@@ -373,7 +375,7 @@ export const ContentEdit = (props: ContentEditProps) => {
                   />
                 </Grid>
               </Grid>
-              <Grid container spacing={3} xs={12} sm={12} sx={{ mt: 2 }}>
+              <Grid container spacing={3} sx={{ mt: 2 }}>
                 <Grid xs={12} sm={12} item data-color-mode="light">
                   <MarkdownEditor
                     onChange={async (value) => {
@@ -461,25 +463,18 @@ export const ContentEdit = (props: ContentEditProps) => {
                   />
                 </Grid>
                 <Grid xs={6} sm={6} item>
-                  <Autocomplete
+                  <RemoteAutocomplete
+                    type={RemoteValues.TAGS}
+                    label="Tags"
+                    placeholder="Select Tags"
+                    error={formik.touched.tags && Boolean(formik.errors.tags)}
+                    helperText={formik.touched.tags && formik.errors.tags}
+                    value={formik.values.tags}
+                    onChange={(ev, val) => 
+                      autoCompleteValueUpdate<string[]>("tags", val as string[])}
                     freeSolo
                     multiple
-                    autoSelect
-                    limitTags={3}
-                    options={ContentEditAvailableTags as unknown as string[]}
-                    value={formik.values.tags}
-                    onChange={(ev, val) => autoCompleteValueUpdate<string[]>("tags", val)}
-                    renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        label="Tags"
-                        placeholder="Select Tags"
-                        name="tags"
-                        error={formik.touched.tags && Boolean(formik.errors.tags)}
-                        helperText={formik.touched.tags && formik.errors.tags}
-                        fullWidth
-                      />
-                    )}
+                    limit={3}
                   />
                 </Grid>
                 <Grid xs={6} sm={6} item>
@@ -496,25 +491,16 @@ export const ContentEdit = (props: ContentEditProps) => {
                   />
                 </Grid>
                 <Grid xs={6} sm={6} item>
-                  <Autocomplete
+                  <RemoteAutocomplete
+                    type={RemoteValues.CATEGORIES}
+                    label="Category"
+                    placeholder="Select Category"
+                    error={formik.touched.category && Boolean(formik.errors.category)}
+                    helperText={formik.touched.category && formik.errors.category}
+                    value={formik.values.category}
+                    onChange={(ev, val) => 
+                      autoCompleteValueUpdate<string>("category", val as string)}
                     freeSolo
-                    multiple
-                    autoSelect
-                    limitTags={3}
-                    options={ContentEditAvailableCategories as unknown as string[]}
-                    value={formik.values.categories}
-                    onChange={(ev, val) => autoCompleteValueUpdate<string[]>("categories", val)}
-                    renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        label="Categories"
-                        placeholder="Select Categories"
-                        name="categories"
-                        error={formik.touched.categories && Boolean(formik.errors.categories)}
-                        helperText={formik.touched.categories && formik.errors.categories}
-                        fullWidth
-                      />
-                    )}
                   />
                 </Grid>
                 <Grid item xs={6}>

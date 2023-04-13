@@ -17,10 +17,11 @@ import { ContactDetailsDto } from "lib/network/swagger-client";
 import { CoreModule, viewFormRoute } from "lib/router";
 import { useRequestContext } from "providers/request-provider";
 import { useRouteParams } from "typesafe-routes";
-import { ContactCardHeader, ContactRowGrid, DeleteButtonContainer } from "../../index.styled";
+import { ContactCardHeader, DeleteButtonContainer } from "../../index.styled";
 import { getCountryList, useCoreModuleNavigation } from "utils/helper";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useNotificationsService } from "@hooks";
+import { DataView } from "components/data-view";
 
 export const ContactView = () => {
   const { notificationsService } = useNotificationsService();
@@ -32,8 +33,15 @@ export const ContactView = () => {
     email: "",
   });
   const [selectedCountry, setSelectedCountry] = useState("");
-  const [isLoading, setIsLoading] = useState(true);
   const [openConfirmation, setOpenConfirmation] = useState(false);
+  const contactViewData = contact && [
+    { label: "Email", value: contact.email || "" },
+    { label: "Phone", value: contact.phone || "" },
+    { label: "Country", value: selectedCountry || "" },
+    { label: "City", value: contact.cityName || "" },
+    { label: "Address 1", value: contact.address1 || "" },
+    { label: "Address 2", value: contact.address2 || "" },
+  ];
 
   useEffect(() => {
     (async () => {
@@ -53,7 +61,6 @@ export const ContactView = () => {
       if (countries) {
         const countryList = Object.entries(countries).map(([code, name]) => ({ code, name }));
         setSelectedCountry(countryList.find((c) => c.code === countryCode)!.name);
-        setIsLoading(false);
       } else {
         notificationsService.error("Server error: country list not available.");
       }
@@ -83,69 +90,7 @@ export const ContactView = () => {
   return (
     <>
       <Grid container spacing={3}>
-        <Grid xs={12} sm={6} item>
-          <Card>
-            <CardContent>
-              <ContactCardHeader title="Contact Details"></ContactCardHeader>
-              <Divider variant="fullWidth" />
-              <ContactRowGrid container>
-                <Grid item xs={2}>
-                  <Typography fontWeight="bold">Email</Typography>
-                </Grid>
-                <Grid item xs={10}>
-                  {contact.email}
-                </Grid>
-              </ContactRowGrid>
-              <Divider variant="fullWidth" />
-              <ContactRowGrid container>
-                <Grid item xs={2}>
-                  <Typography fontWeight="bold">Phone</Typography>
-                </Grid>
-                <Grid item xs={10}>
-                  {contact.phone}
-                </Grid>
-              </ContactRowGrid>
-              <Divider variant="fullWidth" />
-              <ContactRowGrid container>
-                <Grid item xs={2}>
-                  <Typography fontWeight="bold">Country</Typography>
-                </Grid>
-                {!isLoading && (
-                  <Grid item xs={10}>
-                    {selectedCountry}
-                  </Grid>
-                )}
-              </ContactRowGrid>
-              <Divider variant="fullWidth" />
-              <ContactRowGrid container>
-                <Grid item xs={2}>
-                  <Typography fontWeight="bold">City</Typography>
-                </Grid>
-                <Grid item xs={10}>
-                  {contact.cityName}
-                </Grid>
-              </ContactRowGrid>
-              <Divider variant="fullWidth" />
-              <ContactRowGrid container>
-                <Grid item xs={2}>
-                  <Typography fontWeight="bold">Address 1</Typography>
-                </Grid>
-                <Grid item xs={10}>
-                  {contact.address1}
-                </Grid>
-              </ContactRowGrid>
-              <Divider variant="fullWidth" />
-              <ContactRowGrid container>
-                <Grid item xs={2}>
-                  <Typography fontWeight="bold">Address 2</Typography>
-                </Grid>
-                <Grid item xs={10}>
-                  {contact.address2}
-                </Grid>
-              </ContactRowGrid>
-            </CardContent>
-          </Card>
-        </Grid>
+        <DataView header="Contact details" rows={contactViewData}></DataView>
         <Grid xs={12} sm={6} item>
           <Card>
             <CardContent>
