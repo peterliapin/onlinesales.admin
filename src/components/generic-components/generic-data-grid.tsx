@@ -63,17 +63,17 @@ export function GenericDataGrid<T extends BasicTypeForGeneric>({
   const columns: GridColDef[] = [actionsColumn].concat([
     ...(schema.properties
       ? Object.keys(schema.properties)
-          .map((key) => {
-            const column: GridColDef = {
-              field: key,
-              type: (schema.properties || {})[key].type,
-              width: 200,
-              description: (schema.properties || {})[key].description,
-              headerName: camelCaseToTitleCase(key),
-            };
-            return column;
-          })
-          .filter((i) => i)
+        .map((key) => {
+          const column: GridColDef = {
+            field: key,
+            type: (schema.properties || {})[key].type,
+            width: 200,
+            description: (schema.properties || {})[key].description,
+            headerName: camelCaseToTitleCase(key),
+          };
+          return column;
+        })
+        .filter((i) => i)
       : []),
   ]);
 
