@@ -161,6 +161,12 @@ export function GenericForm<
           console.log(e);
         }
       });
+    } else {
+      const initValues: any = {};
+      detailsFields.forEach(field => {
+        initValues[field.name] = "";
+      })
+      setValues({...initValues});
     }
     return () => {
       abortController.abort("cancelled");
