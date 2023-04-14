@@ -1,24 +1,23 @@
-import {ReactNode, useEffect, useState} from "react";
-import {
-  HttpResponse,
-  ProblemDetails,
-  RequestParams
-} from "@lib/network/swagger-client";
-import {useModuleWrapperContext} from "@providers/module-wrapper-provider";
-import {DataGrid, GridColDef, GridSortModel} from "@mui/x-data-grid";
-import {totalCountHeaderName} from "@lib/query";
+import { ReactNode, useEffect, useState } from "react";
+import { HttpResponse, ProblemDetails, RequestParams } from "@lib/network/swagger-client";
+import { useModuleWrapperContext } from "@providers/module-wrapper-provider";
+import { DataGrid, GridColDef, GridSortModel } from "@mui/x-data-grid";
+import { totalCountHeaderName } from "@lib/query";
 import {
   DtoSchema,
   camelCaseToTitleCase,
-  BasicTypeForGeneric
+  BasicTypeForGeneric,
 } from "@components/generic-components/common";
-import {ActionButtonContainer} from "@components/data-table/index.styled";
-import {IconButton} from "@mui/material";
+import { ActionButtonContainer } from "@components/data-table/index.styled";
+import { IconButton } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
 export interface GenericDataGridProps<T extends BasicTypeForGeneric> {
-  getItemsFn: (query?: { query?: string }, params?: RequestParams) => Promise<HttpResponse<T[], void | ProblemDetails>>;
+  getItemsFn: (
+    query?: { query?: string },
+    params?: RequestParams
+  ) => Promise<HttpResponse<T[], void | ProblemDetails>>;
   schema: DtoSchema;
   detailsNavigate?: (item: T) => void;
   editNavigate?: (item: T) => void;
@@ -26,14 +25,13 @@ export interface GenericDataGridProps<T extends BasicTypeForGeneric> {
 }
 
 export function GenericDataGrid<T extends BasicTypeForGeneric>({
-                                                                 getItemsFn,
-                                                                 schema,
-                                                                 detailsNavigate,
-                                                                 editNavigate,
-                                                                 searchText
-                                                               }: GenericDataGridProps<T>)
-  : ReactNode {
-  const {setBusy} = useModuleWrapperContext();
+  getItemsFn,
+  schema,
+  detailsNavigate,
+  editNavigate,
+  searchText,
+}: GenericDataGridProps<T>): ReactNode {
+  const { setBusy } = useModuleWrapperContext();
 
   const actionsColumn: GridColDef = {
     field: "_actions",
@@ -44,37 +42,40 @@ export function GenericDataGrid<T extends BasicTypeForGeneric>({
     filterable: false,
     sortable: false,
     disableColumnMenu: true,
-    renderCell: ({row}: any) => {
+    renderCell: ({ row }: any) => {
       return (
         <ActionButtonContainer>
-          {editNavigate && <IconButton onClick={() => editNavigate(row)}>
-            <EditIcon fontSize="small"/>
-          </IconButton>}
-          {detailsNavigate && <IconButton onClick={() => detailsNavigate(row)}>
-            <ArrowForwardIcon fontSize="small"/>
-          </IconButton>}
+          {editNavigate && (
+            <IconButton onClick={() => editNavigate(row)}>
+              <EditIcon fontSize="small" />
+            </IconButton>
+          )}
+          {detailsNavigate && (
+            <IconButton onClick={() => detailsNavigate(row)}>
+              <ArrowForwardIcon fontSize="small" />
+            </IconButton>
+          )}
         </ActionButtonContainer>
       );
     },
   };
 
-  const columns: GridColDef[] = [actionsColumn]
-    .concat([
-      ...(schema.properties
-        ? Object.keys(schema.properties)
+  const columns: GridColDef[] = [actionsColumn].concat([
+    ...(schema.properties
+      ? Object.keys(schema.properties)
           .map((key) => {
             const column: GridColDef = {
               field: key,
               type: (schema.properties || {})[key].type,
               width: 200,
               description: (schema.properties || {})[key].description,
-              headerName: camelCaseToTitleCase(key)
+              headerName: camelCaseToTitleCase(key),
             };
             return column;
           })
-          .filter(i => i)
-        : [])
-    ]);
+          .filter((i) => i)
+      : []),
+  ]);
 
   const [items, setItems] = useState<T[] | undefined>();
 
@@ -93,15 +94,15 @@ export function GenericDataGrid<T extends BasicTypeForGeneric>({
           const query: any = {
             "filter[limit]": pageSize,
             "filter[order]": sortColumn ? `${sortColumn} ${sortDirection}` : undefined,
-            "filter[skip]": pageSize * pageNumber
+            "filter[skip]": pageSize * pageNumber,
           };
 
           if (searchText) {
             query["query"] = searchText;
           }
 
-          const {data, headers} = await getItemsFn(query as any, {
-            signal: abortController.signal
+          const { data, headers } = await getItemsFn(query as any, {
+            signal: abortController.signal,
           });
           setTotalItemsCount(() => parseInt(headers.get(totalCountHeaderName) || "0"));
           setItems(() => data);
@@ -112,7 +113,7 @@ export function GenericDataGrid<T extends BasicTypeForGeneric>({
     }
 
     return () => {
-      abortController.abort("canceled")
+      abortController.abort("canceled");
     };
   }, [getItemsFn, pageSize, pageNumber, sortColumn, sortDirection, searchText]);
 
@@ -123,21 +124,25 @@ export function GenericDataGrid<T extends BasicTypeForGeneric>({
     } else setSortDirection("asc");
   };
 
-  return <DataGrid columns={columns || []}
-                   rows={items || []}
-                   loading={false}
-                   checkboxSelection={false}
-                   autoHeight={false}
-                   rowCount={totalItemsCount}
-                   rowsPerPageOptions={[2, 10, 25, 50, 100]}
-                   pagination
-                   page={pageNumber}
-                   pageSize={pageSize}
-                   paginationMode="server"
-                   onPageChange={(newPage) => setPageNumber(newPage)}
-                   onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
-                   sortingMode="server"
-                   onSortModelChange={(newSortModel) => handleSortChange(newSortModel)}
-                   filterMode="server"
-                   initialState={{}}/>;
+  return (
+    <DataGrid
+      columns={columns || []}
+      rows={items || []}
+      loading={false}
+      checkboxSelection={false}
+      autoHeight={false}
+      rowCount={totalItemsCount}
+      rowsPerPageOptions={[2, 10, 25, 50, 100]}
+      pagination
+      page={pageNumber}
+      pageSize={pageSize}
+      paginationMode="server"
+      onPageChange={(newPage) => setPageNumber(newPage)}
+      onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+      sortingMode="server"
+      onSortModelChange={(newSortModel) => handleSortChange(newSortModel)}
+      filterMode="server"
+      initialState={{}}
+    />
+  );
 }

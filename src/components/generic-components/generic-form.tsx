@@ -1,82 +1,72 @@
-import {
-  HttpResponse,
-  ProblemDetails,
-  RequestParams
-} from "@lib/network/swagger-client";
+import { HttpResponse, ProblemDetails, RequestParams } from "@lib/network/swagger-client";
 import {
   DtoSchema,
   camelCaseToTitleCase,
-  BasicTypeForGeneric
+  BasicTypeForGeneric,
 } from "@components/generic-components/common";
-import {ReactNode, useEffect, useState} from "react";
-import {useModuleWrapperContext} from "@providers/module-wrapper-provider";
-import {
-  Button,
-  Card,
-  CardContent,
-  Grid
-} from "@mui/material";
-import {useParams} from "react-router-dom";
+import { ReactNode, useEffect, useState } from "react";
+import { useModuleWrapperContext } from "@providers/module-wrapper-provider";
+import { Button, Card, CardContent, Grid } from "@mui/material";
+import { useParams } from "react-router-dom";
 import {
   NumberEdit,
   TextEdit,
   DatetimeEdit,
-  EnumEdit
+  EnumEdit,
 } from "@components/generic-components/edit-components";
 
-export interface DtoField<TView> {
-  "name": string;
-  "label": string;
-  "type"?: string;
-  "format"?: string;
-  "nullable"?: boolean;
-  "description"?: string;
-  "editable": boolean;
-  "enum"?: string[];
+export interface DtoField {
+  name: string;
+  label: string;
+  type?: string;
+  format?: string;
+  nullable?: boolean;
+  description?: string;
+  editable: boolean;
+  enum?: string[];
 }
 
-export interface GenericFormProps<
-  TView extends BasicTypeForGeneric,
-  TCreate,
-  TUpdate
-> {
+interface DynamicValues {
+  [x: string]: any;
+}
+
+export interface GenericFormProps<TView extends BasicTypeForGeneric, TCreate, TUpdate> {
   editable: boolean;
-  getItemFn: (id: number, params?: RequestParams) => Promise<HttpResponse<TView, void | ProblemDetails>>;
-  updateItemFn: (id: number, data: TUpdate, params: RequestParams) => Promise<HttpResponse<TView, void | ProblemDetails>>;
-  createItemFn: (data: TCreate, params: RequestParams) => Promise<HttpResponse<TView, void | ProblemDetails>>;
+  getItemFn: (
+    id: number,
+    params?: RequestParams
+  ) => Promise<HttpResponse<TView, void | ProblemDetails>>;
+  updateItemFn: (
+    id: number,
+    data: TUpdate,
+    params: RequestParams
+  ) => Promise<HttpResponse<TView, void | ProblemDetails>>;
+  createItemFn: (
+    data: TCreate,
+    params: RequestParams
+  ) => Promise<HttpResponse<TView, void | ProblemDetails>>;
   detailsSchema: DtoSchema;
   updateSchema: DtoSchema;
   createSchema: DtoSchema;
   mode?: "create" | "update" | "details";
 }
 
-export function GenericForm<
-  TView extends BasicTypeForGeneric,
-  TCreate,
-  TUpdate
->({
-    editable,
-    getItemFn,
-    createItemFn,
-    updateItemFn,
-    detailsSchema,
-    updateSchema,
-    createSchema,
-    mode
-  }: GenericFormProps<TView, TCreate, TUpdate>): ReactNode {
-  const {
-    setBusy,
-    isBusy,
-    setSaving,
-    isSaving,
-  } = useModuleWrapperContext();
+export function GenericForm<TView extends BasicTypeForGeneric, TCreate, TUpdate>({
+  editable,
+  getItemFn,
+  createItemFn,
+  updateItemFn,
+  detailsSchema,
+  updateSchema,
+  createSchema,
+  mode,
+}: GenericFormProps<TView, TCreate, TUpdate>): ReactNode {
+  const { setBusy, isBusy, setSaving, isSaving } = useModuleWrapperContext();
   const params = useParams();
   const itemId = Number(params && params["*"] && params["*"].match(/^\d+?/)?.[0]);
 
-
-  const updateFields: DtoField<TUpdate>[] = updateSchema.properties
-    ? Object.keys(updateSchema.properties)
-      .map((key) => {
+  const updateFields: DtoField[] = updateSchema.properties
+    ? Object.keys(updateSchema.properties).map((key) => {
         return {
           name: key,
           label: updateSchema.properties[key].title || camelCaseToTitleCase(key),
@@ -90,9 +80,8 @@ export function GenericForm<
       })
     : [];
 
-  const createFields: DtoField<TUpdate>[] = createSchema.properties
-    ? Object.keys(createSchema.properties)
-      .map((key) => {
+  const createFields: DtoField[] = createSchema.properties
+    ? Object.keys(createSchema.properties).map((key) => {
         return {
           name: key,
           label: createSchema.properties[key].title || camelCaseToTitleCase(key),
@@ -101,15 +90,13 @@ export function GenericForm<
           nullable: createSchema.properties[key].nullable,
           description: createSchema.properties[key].description,
           enum: createSchema.properties[key].enum,
-          editable: true
+          editable: true,
         };
       })
     : [];
 
-  // @ts-ignore
-  const detailsFields: DtoField<TUpdate>[] = detailsSchema.properties
-    ? Object.keys(detailsSchema.properties)
-      .map((key) => {
+  const detailsFields: DtoField[] = detailsSchema.properties
+    ? Object.keys(detailsSchema.properties).map((key) => {
         return {
           name: key,
           label: detailsSchema.properties[key].title || camelCaseToTitleCase(key),
@@ -123,11 +110,11 @@ export function GenericForm<
       })
     : [];
 
-  const [values, setValues] = useState<any>(() => {
-    const initValues: any = {};
-    detailsFields.forEach(field => {
+  const [values, setValues] = useState<DynamicValues>(() => {
+    const initValues: DynamicValues = {};
+    detailsFields.forEach((field) => {
       initValues[field.name] = "";
-    })
+    });
     return initValues;
   });
 
@@ -136,18 +123,18 @@ export function GenericForm<
     if (itemId) {
       setBusy(async () => {
         try {
-          const {data} = await getItemFn(itemId);
-          setValues((values: any) => ({...values, ...data}));
+          const { data } = await getItemFn(itemId);
+          setValues((values) => ({ ...values, ...data }));
         } catch (e) {
           console.log(e);
         }
       });
     } else {
-      const initValues: any = {};
-      detailsFields.forEach(field => {
+      const initValues: DynamicValues = {};
+      detailsFields.forEach((field) => {
         initValues[field.name] = "";
-      })
-      setValues({...initValues});
+      });
+      setValues({ ...initValues });
     }
     return () => {
       abortController.abort("cancelled");
@@ -157,24 +144,21 @@ export function GenericForm<
   const save = () => {
     setSaving(async () => {
       const saveData: any = {};
-
-      (itemId
-        ? updateFields
-        : createFields).forEach(field => {
+      (itemId ? updateFields : createFields).forEach((field) => {
         if (values[field.name]) {
           saveData[field.name] = values[field.name];
         }
       });
 
       if (itemId) {
-        const {data} = await updateItemFn(itemId, saveData, {});
-        setValues((values: any) => ({...values, ...data}));
+        const { data } = await updateItemFn(itemId, saveData, {});
+        setValues((values) => ({ ...values, ...data }));
       } else {
-        const {data} = await createItemFn(saveData, {});
-        setValues((values: any) => ({...values, ...data}));
+        const { data } = await createItemFn(saveData, {});
+        setValues((values) => ({ ...values, ...data }));
       }
     });
-  }
+  };
 
   const fieldsSet = () => {
     switch (mode) {
@@ -185,29 +169,29 @@ export function GenericForm<
       default:
         return detailsFields;
     }
-  }
+  };
 
-  const getEdit = (field: DtoField<TView>) => {
+  const getEdit = (field: DtoField) => {
     const commonProps = {
       key: field.name,
       label: field.label,
       value: values[field.name],
       disabled: !editable || !field.editable,
       onChangeValue: (newValue: any) => {
-        setValues((prevValues: any) => ({
+        setValues((prevValues) => ({
           ...prevValues,
-          [field.name]: newValue
+          [field.name]: newValue,
         }));
-      }
-    }
+      },
+    };
     switch (field.type) {
       case "integer":
         return NumberEdit({
-          ...commonProps
+          ...commonProps,
         });
       case "number":
         return NumberEdit({
-          ...commonProps
+          ...commonProps,
         });
       case "string":
         if (field.format === "date-time") {
@@ -215,53 +199,56 @@ export function GenericForm<
             ...commonProps,
             value: values[field.name] ? new Date(values[field.name]) : null,
             onChangeValue: (newValue: Date | null) => {
-              setValues((prevValues: any) => ({
+              setValues((prevValues) => ({
                 ...prevValues,
-                [field.name]: newValue ? newValue.toISOString() : null
+                [field.name]: newValue ? newValue.toISOString() : null,
               }));
-            }
-          })
+            },
+          });
         } else if (field.enum && field.enum.length > 0) {
           return EnumEdit({
             ...commonProps,
-            valueOptions: field.enum
+            valueOptions: field.enum,
           });
         } else {
           return TextEdit({
-            ...commonProps
+            ...commonProps,
           });
         }
       default:
         return TextEdit({
-          ...commonProps
+          ...commonProps,
         });
     }
   };
 
-  return <>
-    <Card>
-      <CardContent>
-        <Grid container spacing={3}>
-          {
-            fieldsSet().map(field => (
+  return (
+    <>
+      <Card>
+        <CardContent>
+          <Grid container spacing={3}>
+            {fieldsSet().map((field) => (
               <Grid key={field.name} item xs={6} sm={6}>
                 {getEdit(field)}
               </Grid>
-            ))
-          }
-          <Grid item xs={12} sm={12}>
-            {editable &&
-              <Button type="submit"
-                      disabled={isBusy || isSaving}
-                      variant="contained"
-                      fullWidth
-                      onClick={save}
-                      size="large">
-                Save
-              </Button>}
+            ))}
+            <Grid item xs={12} sm={12}>
+              {editable && (
+                <Button
+                  type="submit"
+                  disabled={isBusy || isSaving}
+                  variant="contained"
+                  fullWidth
+                  onClick={save}
+                  size="large"
+                >
+                  Save
+                </Button>
+              )}
+            </Grid>
           </Grid>
-        </Grid>
-      </CardContent>
-    </Card>
-  </>;
+        </CardContent>
+      </Card>
+    </>
+  );
 }

@@ -1,83 +1,91 @@
-import {BreadcrumbLink} from "../../utils/types";
-import {dataListBreadcrumbLinks} from "../../utils/constants";
-import {CoreModule, getCoreModuleRoute} from "@lib/router";
+import { BreadcrumbLink } from "../../utils/types";
+import { dataListBreadcrumbLinks } from "../../utils/constants";
+import { CoreModule, getCoreModuleRoute } from "@lib/router";
 
 export interface DtoSchemaSource {
-  "type": string;
-  "enum"?: string[];
-  "required"?: string[];
-  "properties"?: {
-    [x: string]: {
-      "$ref"?: string;
-      "type"?: "integer";
-      "format"?: "int32" | "int64";
-      "nullable"?: boolean;
-      "title"?: string;
-      "description"?: string;
-      "enum"?: string[];
-    } | {
-      "$ref"?: string;
-      "type"?: "number";
-      "format"?: "float" | "double";
-      "nullable"?: boolean;
-      "title"?: string;
-      "description"?: string;
-      "enum"?: string[];
-    } | {
-      "$ref"?: string;
-      "type"?: "string";
-      "format"?: "email" | "password" | string;
-      "nullable"?: boolean;
-      "title"?: string;
-      "description"?: string;
-      "enum"?: string[];
-    } | {
-      "$ref"?: string;
-      "type"?: string;
-      "format"?: string;
-      "nullable"?: boolean;
-      "title"?: string;
-      "description"?: string;
-      "enum"?: string[];
-    }
-  }
+  type: string;
+  enum?: string[];
+  required?: string[];
+  properties?: {
+    [x: string]:
+      | {
+          $ref?: string;
+          type?: "integer";
+          format?: "int32" | "int64";
+          nullable?: boolean;
+          title?: string;
+          description?: string;
+          enum?: string[];
+        }
+      | {
+          $ref?: string;
+          type?: "number";
+          format?: "float" | "double";
+          nullable?: boolean;
+          title?: string;
+          description?: string;
+          enum?: string[];
+        }
+      | {
+          $ref?: string;
+          type?: "string";
+          format?: "email" | "password" | string;
+          nullable?: boolean;
+          title?: string;
+          description?: string;
+          enum?: string[];
+        }
+      | {
+          $ref?: string;
+          type?: string;
+          format?: string;
+          nullable?: boolean;
+          title?: string;
+          description?: string;
+          enum?: string[];
+        };
+  };
 }
 
 export interface DtoSchema {
-  "type": string;
-  "enum"?: string[];
-  "required"?: string[];
-  "properties": {
-    [x: string]: {
-      "type": "integer";
-      "format"?: "int32" | "int64";
-      "nullable"?: boolean;
-      "title"?: string;
-      "description"?: string;
-      "enum"?: string[];
-    } | {
-      "type": "number";
-      "format"?: "float" | "double";
-      "nullable"?: boolean;
-      "title"?: string;
-      "description"?: string;
-      "enum"?: string[];
-    } | {
-      "type": "string";
-      "format"?: "email" | "password" | string;
-      "nullable"?: boolean;
-      "title"?: string;
-      "description"?: string;
-      "enum"?: string[];
-    } | {
-      "type": string;
-      "format"?: string;
-      "nullable"?: boolean;
-      "title"?: string;
-      "description"?: string;
-      "enum"?: string[];
-    }
-  }
+  type: string;
+  enum?: string[];
+  required?: string[];
+  properties: {
+    [x: string]:
+      | {
+          type: "integer";
+          format?: "int32" | "int64";
+          nullable?: boolean;
+          title?: string;
+          description?: string;
+          enum?: string[];
+        }
+      | {
+          type: "number";
+          format?: "float" | "double";
+          nullable?: boolean;
+          title?: string;
+          description?: string;
+          enum?: string[];
+        }
+      | {
+          type: "string";
+          format?: "email" | "password" | string;
+          nullable?: boolean;
+          title?: string;
+          description?: string;
+          enum?: string[];
+        }
+      | {
+          type: string;
+          format?: string;
+          nullable?: boolean;
+          title?: string;
+          description?: string;
+          enum?: string[];
+        };
+  };
 }
 
 export const camelCaseToTitleCase = (str: string) => {
@@ -86,14 +94,17 @@ export const camelCaseToTitleCase = (str: string) => {
 };
 
 export interface BasicTypeForGeneric {
-  "id"?: number;
-  "createdAt"?: string | null;
-  "updatedAt"?: string | null;
+  id?: number;
+  createdAt?: string | null;
+  updatedAt?: string | null;
 }
 
-export const getBreadcrumbLinks = (moduleName: string, modulePath: CoreModule): BreadcrumbLink[] => {
+export const getBreadcrumbLinks = (
+  moduleName: string,
+  modulePath: CoreModule
+): BreadcrumbLink[] => {
   return [
     ...dataListBreadcrumbLinks,
-    {linkText: moduleName, toRoute: getCoreModuleRoute(modulePath)},
-  ]
+    { linkText: moduleName, toRoute: getCoreModuleRoute(modulePath) },
+  ];
 };

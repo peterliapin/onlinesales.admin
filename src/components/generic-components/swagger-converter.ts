@@ -1,6 +1,9 @@
-import {DtoSchema, DtoSchemaSource} from "@components/generic-components/common";
+import { DtoSchema, DtoSchemaSource } from "@components/generic-components/common";
 
-const convertSchemaToDtoSchema = (schema: DtoSchemaSource, allSchemas: { [x: string]: DtoSchemaSource }): DtoSchema => {
+const convertSchemaToDtoSchema = (
+  schema: DtoSchemaSource,
+  allSchemas: { [x: string]: DtoSchemaSource }
+): DtoSchema => {
   const dtoSchema: DtoSchema = {
     type: schema.type,
     enum: schema.enum,
@@ -12,15 +15,15 @@ const convertSchemaToDtoSchema = (schema: DtoSchemaSource, allSchemas: { [x: str
   if (schema.properties && dtoSchema.properties) {
     for (const [key, value] of Object.entries(schema.properties)) {
       if (value.$ref) {
-        const refName = value.$ref.replace('#/components/schemas/', '');
+        const refName = value.$ref.replace("#/components/schemas/", "");
         const refSchema = allSchemas[refName];
         const refDtoSchema = convertSchemaToDtoSchema(refSchema, allSchemas);
         if (refDtoSchema.type === "string") {
           dtoSchema.properties[key] = {
-            "type": "string",
-            "enum": refDtoSchema.enum,
-            "title": value.title
-          }
+            type: "string",
+            enum: refDtoSchema.enum,
+            title: value.title,
+          };
         }
       } else {
         dtoSchema.properties[key] = {
@@ -46,11 +49,13 @@ const convertSchemaToDtoSchema = (schema: DtoSchemaSource, allSchemas: { [x: str
     }
   }
   return dtoSchema;
-}
+};
 
-export const getSchemaDto = (name: string, allSchemas: { [x: string]: DtoSchemaSource; }): DtoSchema => {
+export const getSchemaDto = (
+  name: string,
+  allSchemas: { [x: string]: DtoSchemaSource }
+): DtoSchema => {
   if (name in allSchemas) {
-    // @ts-ignore
     const schema = allSchemas[name];
     const result = convertSchemaToDtoSchema(schema, allSchemas);
     console.log([name, schema]);
