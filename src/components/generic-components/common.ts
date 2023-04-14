@@ -14,6 +14,7 @@ export interface DtoSchema {
       "type"?: "integer";
       "format"?: "int32" | "int64";
       "nullable"?: boolean;
+      "title"?: string;
       "description"?: string;
       "enum"?: string[];
     } | {
@@ -21,6 +22,7 @@ export interface DtoSchema {
       "type"?: "number";
       "format"?: "float" | "double";
       "nullable"?: boolean;
+      "title"?: string;
       "description"?: string;
       "enum"?: string[];
     } | {
@@ -28,6 +30,7 @@ export interface DtoSchema {
       "type"?: "string";
       "format"?: "email" | "password" | string;
       "nullable"?: boolean;
+      "title"?: string;
       "description"?: string;
       "enum"?: string[];
     } | {
@@ -35,6 +38,7 @@ export interface DtoSchema {
       "type"?: string;
       "format"?: string;
       "nullable"?: boolean;
+      "title"?: string;
       "description"?: string;
       "enum"?: string[];
     }

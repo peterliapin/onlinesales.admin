@@ -79,7 +79,8 @@ export function GenericForm<
       .map((key) => {
         return {
           name: key,
-          label: camelCaseToTitleCase(key),
+          // @ts-ignore
+          label: updateSchema.properties[key].title || camelCaseToTitleCase(key),
           // @ts-ignore
           type: updateSchema.properties[key].type,
           // @ts-ignore
@@ -100,7 +101,8 @@ export function GenericForm<
       .map((key) => {
         return {
           name: key,
-          label: camelCaseToTitleCase(key),
+          // @ts-ignore
+          label: createSchema.properties[key].title || camelCaseToTitleCase(key),
           // @ts-ignore
           type: createSchema.properties[key].type,
           // @ts-ignore
@@ -122,7 +124,8 @@ export function GenericForm<
       .map((key) => {
         return {
           name: key,
-          label: camelCaseToTitleCase(key),
+          // @ts-ignore
+          label: detailsSchema.properties[key].title || camelCaseToTitleCase(key),
           // @ts-ignore
           type: detailsSchema.properties[key].type,
           // @ts-ignore

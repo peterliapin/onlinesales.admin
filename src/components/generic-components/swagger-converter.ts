@@ -21,7 +21,8 @@ const convertSchemaToDtoSchema = (schema: DtoSchema, allSchemas: { [x: string]: 
           } else if (refDtoSchema.type === "string") {
             dtoSchema.properties[key] = {
               "type": "string",
-              "enum": refDtoSchema.enum
+              "enum": refDtoSchema.enum,
+              "title": value.title
             }
           }
         }
@@ -29,12 +30,19 @@ const convertSchemaToDtoSchema = (schema: DtoSchema, allSchemas: { [x: string]: 
         dtoSchema.properties[key] = {
           type: value.type,
         };
+
         if (value.format) {
           dtoSchema.properties[key].format = value.format;
         }
+
         if (value.nullable) {
           dtoSchema.properties[key].nullable = value.nullable;
         }
+
+        if (value.title) {
+          dtoSchema.properties[key].title = value.title;
+        }
+
         if (value.description) {
           dtoSchema.properties[key].description = value.description;
         }
@@ -45,10 +53,10 @@ const convertSchemaToDtoSchema = (schema: DtoSchema, allSchemas: { [x: string]: 
 }
 
 export const getSchemaDto = (name: string, allSchemas: { [x: string]: DtoSchema; }): DtoSchema => {
-  if(name in allSchemas){
+  if (name in allSchemas) {
     // @ts-ignore
     const schema = allSchemas[name];
     return convertSchemaToDtoSchema(schema, allSchemas);
   }
-  throw `${name} schema not found.`
+  throw `${name} schema not found.`;
 };
