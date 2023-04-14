@@ -22,12 +22,12 @@ import {Button, CircularProgress, Grid, Typography} from "@mui/material";
 import {SearchBar} from "@components/search-bar";
 import {GhostLink} from "@components/ghost-link";
 
-interface GenericModuleProps<TView extends BasicTypeForGeneric, TCreate, TUpdate> extends PropsWithChildren {
+interface GenericModuleProps<TView extends BasicTypeForGeneric, TCreate, TUpdate> {
   moduleName: string;
   modulePath: CoreModule;
   tableProps?: GenericDataGridProps<TView>;
-  editFormProps?: GenericFormProps<TView, TCreate, TUpdate>
-  viewFormProps?: GenericFormProps<TView, TCreate, TUpdate>
+  editFormProps?: GenericFormProps<TView, TCreate, TUpdate>;
+  viewFormProps?: GenericFormProps<TView, TCreate, TUpdate>;
 }
 
 export function GenericModule<
@@ -39,8 +39,7 @@ export function GenericModule<
     modulePath,
     tableProps,
     editFormProps,
-    viewFormProps,
-    children
+    viewFormProps
   }: GenericModuleProps<TView, TCreate, TUpdate>): ReactNode {
   const [searchText, setSearchText] = useState("");
 
@@ -121,7 +120,6 @@ export function GenericModule<
         <Route path={addFormRoute.template} element={genericCreateForm}/>
         <Route path={editFormRoute.template} element={genericEditForm}/>
         <Route path={viewFormRoute.template} element={genericViewForm}/>
-        {children}
       </Routes>
       <Outlet/>
     </>

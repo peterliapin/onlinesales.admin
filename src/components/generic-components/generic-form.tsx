@@ -27,7 +27,7 @@ import {
 export interface DtoField<TView> {
   "name": string;
   "label": string;
-  "type": string;
+  "type"?: string;
   "format"?: string;
   "nullable"?: boolean;
   "description"?: string;
@@ -73,44 +73,71 @@ export function GenericForm<
   const params = useParams();
   const itemId = Number(params && params["*"] && params["*"].match(/^\d+?/)?.[0]);
 
-  const detailsFields: DtoField<TUpdate>[] = Object.keys(detailsSchema.properties)
-    .map((key) => {
-      return {
-        name: key,
-        label: camelCaseToTitleCase(key),
-        type: detailsSchema.properties[key].type,
-        format: detailsSchema.properties[key].format,
-        nullable: detailsSchema.properties[key].nullable,
-        description: detailsSchema.properties[key].description,
-        editable: key in updateSchema.properties
-      };
-    });
 
-  const updateFields: DtoField<TUpdate>[] = Object.keys(updateSchema.properties)
-    .map((key) => {
-      return {
-        name: key,
-        label: camelCaseToTitleCase(key),
-        type: detailsSchema.properties[key].type,
-        format: detailsSchema.properties[key].format,
-        nullable: detailsSchema.properties[key].nullable,
-        description: detailsSchema.properties[key].description,
-        editable: true
-      };
-    });
+  const updateFields: DtoField<TUpdate>[] = updateSchema.properties
+    ? Object.keys(updateSchema.properties)
+      .map((key) => {
+        return {
+          name: key,
+          label: camelCaseToTitleCase(key),
+          // @ts-ignore
+          type: updateSchema.properties[key].type,
+          // @ts-ignore
+          format: updateSchema.properties[key].format,
+          // @ts-ignore
+          nullable: updateSchema.properties[key].nullable,
+          // @ts-ignore
+          description: updateSchema.properties[key].description,
+          // @ts-ignore
+          enum: updateSchema.properties[key].enum,
+          editable: true,
+        };
+      })
+    : [];
 
-  const createFields: DtoField<TUpdate>[] = Object.keys(createSchema.properties)
-    .map((key) => {
-      return {
-        name: key,
-        label: camelCaseToTitleCase(key),
-        type: detailsSchema.properties[key].type,
-        format: detailsSchema.properties[key].format,
-        nullable: detailsSchema.properties[key].nullable,
-        description: detailsSchema.properties[key].description,
-        editable: true
-      };
-    });
+  const createFields: DtoField<TUpdate>[] = createSchema.properties
+    ? Object.keys(createSchema.properties)
+      .map((key) => {
+        return {
+          name: key,
+          label: camelCaseToTitleCase(key),
+          // @ts-ignore
+          type: createSchema.properties[key].type,
+          // @ts-ignore
+          format: createSchema.properties[key].format,
+          // @ts-ignore
+          nullable: createSchema.properties[key].nullable,
+          // @ts-ignore
+          description: createSchema.properties[key].description,
+          // @ts-ignore
+          enum: createSchema.properties[key].enum,
+          editable: true
+        };
+      })
+    : [];
+
+  // @ts-ignore
+  const detailsFields: DtoField<TUpdate>[] = detailsSchema.properties
+    ? Object.keys(detailsSchema.properties)
+      .map((key) => {
+        return {
+          name: key,
+          label: camelCaseToTitleCase(key),
+          // @ts-ignore
+          type: detailsSchema.properties[key].type,
+          // @ts-ignore
+          format: detailsSchema.properties.format,
+          // @ts-ignore
+          nullable: detailsSchema.properties.nullable,
+          // @ts-ignore
+          description: detailsSchema.properties.description,
+          // @ts-ignore
+          enum: detailsSchema.properties[key].enum,
+          // @ts-ignore
+          editable: key in updateSchema.properties,
+        };
+      })
+    : [];
 
   const [values, setValues] = useState<any>(() => {
     const initValues: any = {};

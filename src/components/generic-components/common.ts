@@ -3,28 +3,40 @@ import {dataListBreadcrumbLinks} from "../../utils/constants";
 import {CoreModule, getCoreModuleRoute} from "@lib/router";
 
 export interface DtoSchema {
+
+  "type": string,
+
+  "enum"?: string[];
   "required"?: string[];
-  "properties": {
+  "properties"?: {
     [x: string]: {
-      "type": "integer";
+      "$ref"?: string;
+      "type"?: "integer";
       "format"?: "int32" | "int64";
       "nullable"?: boolean;
       "description"?: string;
+      "enum"?: string[];
     } | {
-      "type": "number";
+      "$ref"?: string;
+      "type"?: "number";
       "format"?: "float" | "double";
       "nullable"?: boolean;
       "description"?: string;
+      "enum"?: string[];
     } | {
-      "type": "string";
+      "$ref"?: string;
+      "type"?: "string";
       "format"?: "email" | "password" | string;
       "nullable"?: boolean;
       "description"?: string;
+      "enum"?: string[];
     } | {
-      "type": string;
+      "$ref"?: string;
+      "type"?: string;
       "format"?: string;
       "nullable"?: boolean;
       "description"?: string;
+      "enum"?: string[];
     }
   }
 }

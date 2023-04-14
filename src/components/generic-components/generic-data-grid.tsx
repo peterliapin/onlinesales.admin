@@ -1,4 +1,4 @@
-import {ChangeEventHandler, EventHandler, ReactNode, useEffect, useState} from "react";
+import {ReactNode, useEffect, useState} from "react";
 import {
   HttpResponse,
   ProblemDetails,
@@ -60,17 +60,20 @@ export function GenericDataGrid<T extends BasicTypeForGeneric>({
 
   const columns: GridColDef[] = [actionsColumn]
     .concat([
-      ...(Object.keys(schema.properties)
-        .map((key) => {
-          const column: GridColDef = {
-            field: key,
-            type: schema.properties[key].type,
-            width: 200,
-            description: schema.properties[key]["description"],
-            headerName: camelCaseToTitleCase(key)
-          };
-          return column;
-        }))
+      ...(schema.properties
+        ? Object.keys(schema.properties)
+          .map((key) => {
+            const column: GridColDef = {
+              field: key,
+              type: (schema.properties || {})[key].type,
+              width: 200,
+              description: (schema.properties || {})[key].description,
+              headerName: camelCaseToTitleCase(key)
+            };
+            return column;
+          })
+          .filter(i => i)
+        : [])
     ]);
 
   const [items, setItems] = useState<T[] | undefined>();
