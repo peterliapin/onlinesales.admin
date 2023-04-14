@@ -1,6 +1,6 @@
-import {DtoSchema} from "@components/generic-components/common";
+import {DtoSchema, DtoSchemaSource} from "@components/generic-components/common";
 
-const convertSchemaToDtoSchema = (schema: DtoSchema, allSchemas: { [x: string]: DtoSchema }): DtoSchema => {
+const convertSchemaToDtoSchema = (schema: DtoSchemaSource, allSchemas: { [x: string]: DtoSchemaSource }): DtoSchema => {
   const dtoSchema: DtoSchema = {
     type: schema.type,
     enum: schema.enum,
@@ -15,20 +15,16 @@ const convertSchemaToDtoSchema = (schema: DtoSchema, allSchemas: { [x: string]: 
         const refName = value.$ref.replace('#/components/schemas/', '');
         const refSchema = allSchemas[refName];
         const refDtoSchema = convertSchemaToDtoSchema(refSchema, allSchemas);
-        if (dtoSchema.properties) {
-          if (refDtoSchema.type === "object" && refDtoSchema.properties) {
-            dtoSchema.properties[key] = refDtoSchema.properties;
-          } else if (refDtoSchema.type === "string") {
-            dtoSchema.properties[key] = {
-              "type": "string",
-              "enum": refDtoSchema.enum,
-              "title": value.title
-            }
+        if (refDtoSchema.type === "string") {
+          dtoSchema.properties[key] = {
+            "type": "string",
+            "enum": refDtoSchema.enum,
+            "title": value.title
           }
         }
       } else {
         dtoSchema.properties[key] = {
-          type: value.type,
+          type: value.type || "unknown",
         };
 
         if (value.format) {
@@ -52,11 +48,13 @@ const convertSchemaToDtoSchema = (schema: DtoSchema, allSchemas: { [x: string]: 
   return dtoSchema;
 }
 
-export const getSchemaDto = (name: string, allSchemas: { [x: string]: DtoSchema; }): DtoSchema => {
+export const getSchemaDto = (name: string, allSchemas: { [x: string]: DtoSchemaSource; }): DtoSchema => {
   if (name in allSchemas) {
     // @ts-ignore
     const schema = allSchemas[name];
-    return convertSchemaToDtoSchema(schema, allSchemas);
+    const result = convertSchemaToDtoSchema(schema, allSchemas);
+    console.log([name, schema]);
+    return result;
   }
   throw `${name} schema not found.`;
 };

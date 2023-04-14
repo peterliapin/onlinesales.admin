@@ -79,17 +79,11 @@ export function GenericForm<
       .map((key) => {
         return {
           name: key,
-          // @ts-ignore
           label: updateSchema.properties[key].title || camelCaseToTitleCase(key),
-          // @ts-ignore
           type: updateSchema.properties[key].type,
-          // @ts-ignore
           format: updateSchema.properties[key].format,
-          // @ts-ignore
           nullable: updateSchema.properties[key].nullable,
-          // @ts-ignore
           description: updateSchema.properties[key].description,
-          // @ts-ignore
           enum: updateSchema.properties[key].enum,
           editable: true,
         };
@@ -101,17 +95,11 @@ export function GenericForm<
       .map((key) => {
         return {
           name: key,
-          // @ts-ignore
           label: createSchema.properties[key].title || camelCaseToTitleCase(key),
-          // @ts-ignore
           type: createSchema.properties[key].type,
-          // @ts-ignore
           format: createSchema.properties[key].format,
-          // @ts-ignore
           nullable: createSchema.properties[key].nullable,
-          // @ts-ignore
           description: createSchema.properties[key].description,
-          // @ts-ignore
           enum: createSchema.properties[key].enum,
           editable: true
         };
@@ -124,19 +112,12 @@ export function GenericForm<
       .map((key) => {
         return {
           name: key,
-          // @ts-ignore
           label: detailsSchema.properties[key].title || camelCaseToTitleCase(key),
-          // @ts-ignore
           type: detailsSchema.properties[key].type,
-          // @ts-ignore
-          format: detailsSchema.properties.format,
-          // @ts-ignore
-          nullable: detailsSchema.properties.nullable,
-          // @ts-ignore
-          description: detailsSchema.properties.description,
-          // @ts-ignore
+          format: detailsSchema.properties[key].format,
+          nullable: detailsSchema.properties[key].nullable,
+          description: detailsSchema.properties[key].description,
           enum: detailsSchema.properties[key].enum,
-          // @ts-ignore
           editable: key in updateSchema.properties,
         };
       })
