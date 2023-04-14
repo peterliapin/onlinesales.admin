@@ -1,13 +1,13 @@
-import { HttpResponse, ProblemDetails, RequestParams } from "@lib/network/swagger-client";
+import {HttpResponse, ProblemDetails, RequestParams} from "@lib/network/swagger-client";
 import {
   DtoSchema,
   camelCaseToTitleCase,
   BasicTypeForGeneric,
 } from "@components/generic-components/common";
-import { ReactNode, useEffect, useState } from "react";
-import { useModuleWrapperContext } from "@providers/module-wrapper-provider";
-import { Button, Card, CardContent, Grid } from "@mui/material";
-import { useParams } from "react-router-dom";
+import {ReactNode, useEffect, useState} from "react";
+import {useModuleWrapperContext} from "@providers/module-wrapper-provider";
+import {Button, Card, CardContent, Grid} from "@mui/material";
+import {useParams} from "react-router-dom";
 import {
   NumberEdit,
   TextEdit,
@@ -61,7 +61,7 @@ export function GenericForm<TView extends BasicTypeForGeneric, TCreate, TUpdate>
   createSchema,
   mode,
 }: GenericFormProps<TView, TCreate, TUpdate>): ReactNode {
-  const { setBusy, isBusy, setSaving, isSaving } = useModuleWrapperContext();
+  const {setBusy, isBusy, setSaving, isSaving} = useModuleWrapperContext();
   const params = useParams();
   const itemId = Number(params && params["*"] && params["*"].match(/^\d+?/)?.[0]);
 
@@ -123,8 +123,8 @@ export function GenericForm<TView extends BasicTypeForGeneric, TCreate, TUpdate>
     if (itemId) {
       setBusy(async () => {
         try {
-          const { data } = await getItemFn(itemId);
-          setValues((values) => ({ ...values, ...data }));
+          const {data} = await getItemFn(itemId);
+          setValues((values) => ({...values, ...data}));
         } catch (e) {
           console.log(e);
         }
@@ -134,7 +134,7 @@ export function GenericForm<TView extends BasicTypeForGeneric, TCreate, TUpdate>
       detailsFields.forEach((field) => {
         initValues[field.name] = "";
       });
-      setValues({ ...initValues });
+      setValues({...initValues});
     }
     return () => {
       abortController.abort("cancelled");
@@ -151,11 +151,11 @@ export function GenericForm<TView extends BasicTypeForGeneric, TCreate, TUpdate>
       });
 
       if (itemId) {
-        const { data } = await updateItemFn(itemId, saveData, {});
-        setValues((values) => ({ ...values, ...data }));
+        const {data} = await updateItemFn(itemId, saveData, {});
+        setValues((values) => ({...values, ...data}));
       } else {
-        const { data } = await createItemFn(saveData, {});
-        setValues((values) => ({ ...values, ...data }));
+        const {data} = await createItemFn(saveData, {});
+        setValues((values) => ({...values, ...data}));
       }
     });
   };
@@ -233,18 +233,18 @@ export function GenericForm<TView extends BasicTypeForGeneric, TCreate, TUpdate>
               </Grid>
             ))}
             <Grid item xs={12} sm={12}>
-              {editable && (
-                <Button
-                  type="submit"
-                  disabled={isBusy || isSaving}
-                  variant="contained"
-                  fullWidth
-                  onClick={save}
-                  size="large"
-                >
-                  Save
-                </Button>
-              )}
+              {
+                editable && (
+                  <Button
+                    type="submit"
+                    disabled={isBusy || isSaving}
+                    variant="contained"
+                    fullWidth
+                    onClick={save}
+                    size="large">
+                    Save
+                  </Button>
+                )}
             </Grid>
           </Grid>
         </CardContent>

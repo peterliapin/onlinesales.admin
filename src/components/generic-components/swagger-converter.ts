@@ -57,9 +57,7 @@ export const getSchemaDto = (
 ): DtoSchema => {
   if (name in allSchemas) {
     const schema = allSchemas[name];
-    const result = convertSchemaToDtoSchema(schema, allSchemas);
-    console.log([name, schema]);
-    return result;
+    return  convertSchemaToDtoSchema(schema, allSchemas);
   }
   throw `${name} schema not found.`;
 };
