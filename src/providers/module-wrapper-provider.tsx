@@ -1,4 +1,4 @@
-import { createContext, memo, PropsWithChildren, useContext, useState } from "react";
+import {createContext, memo, PropsWithChildren, useContext, useState} from "react";
 
 interface ModuleWrapperContextType {
   isSaving: boolean;
@@ -21,8 +21,8 @@ const ModuleWrapperContext = createContext<ModuleWrapperContextType>({
 });
 
 export const ModuleWrapperProvider = memo(function ModuleWrapperProvider({
-  children,
-}: PropsWithChildren) {
+                                                                           children,
+                                                                         }: PropsWithChildren) {
   const [isBusy, setIsBusy] = useState<number>(0);
   const setBusy = async (fn: () => Promise<void>) => {
     setIsBusy((prev) => prev + 1);
@@ -39,9 +39,7 @@ export const ModuleWrapperProvider = memo(function ModuleWrapperProvider({
     try {
       await fn();
     } finally {
-      setTimeout(() => {
-        setIsSaving((prev) => prev - 1);
-      }, 3000);
+      setIsSaving((prev) => prev - 1);
     }
   };
 
