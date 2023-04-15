@@ -31,12 +31,17 @@ export interface AccountCreateDto {
   cityName?: string | null;
   /**
    * Site Url
-   * @example "string"
+   * @example "https://example.com"
    */
   siteUrl?: string | null;
   /**
+   * Logo Url
+   * @example "https://example.com/logo.png"
+   */
+  logoUrl?: string | null;
+  /**
    * Employees Range
-   * @example "string"
+   * @example "50K-100K"
    */
   employeesRange?: string | null;
   /**
@@ -89,12 +94,17 @@ export interface AccountDetailsDto {
   cityName?: string | null;
   /**
    * Site Url
-   * @example "string"
+   * @example "https://example.com"
    */
   siteUrl?: string | null;
   /**
+   * Logo Url
+   * @example "https://example.com/logo.png"
+   */
+  logoUrl?: string | null;
+  /**
    * Employees Range
-   * @example "string"
+   * @example "50K-100K"
    */
   employeesRange?: string | null;
   /**
@@ -133,14 +143,14 @@ export interface AccountDetailsDto {
    * Created At
    * @format date-time
    * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
-   * @example "2023-04-15T07:41:28Z"
+   * @example "2023-04-15T14:11:33Z"
    */
   createdAt?: string;
   /**
    * Updated At
    * @format date-time
    * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
-   * @example "2023-04-15T07:41:28Z"
+   * @example "2023-04-15T14:11:33Z"
    */
   updatedAt?: string | null;
 }
@@ -161,14 +171,14 @@ export interface AccountImportDto {
    * Created At
    * @format date-time
    * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
-   * @example "2023-04-15T07:41:28Z"
+   * @example "2023-04-15T14:11:33Z"
    */
   createdAt?: string | null;
   /**
    * Updated At
    * @format date-time
    * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
-   * @example "2023-04-15T07:41:28Z"
+   * @example "2023-04-15T14:11:33Z"
    */
   updatedAt?: string | null;
   /**
@@ -213,6 +223,11 @@ export interface AccountImportDto {
    */
   siteUrl?: string | null;
   /**
+   * Logo Url
+   * @example "string"
+   */
+  logoUrl?: string | null;
+  /**
    * Employees Range
    * @example "string"
    */
@@ -246,6 +261,16 @@ export interface AccountUpdateDto {
    * @example "string"
    */
   name?: string | null;
+  /**
+   * Site Url
+   * @example "string"
+   */
+  siteUrl?: string | null;
+  /**
+   * Logo Url
+   * @example "string"
+   */
+  logoUrl?: string | null;
   /**
    * City
    * @example "string"
@@ -376,14 +401,14 @@ export interface CommentDetailsDto {
    * Created At
    * @format date-time
    * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
-   * @example "2023-04-15T07:41:28Z"
+   * @example "2023-04-15T14:11:33Z"
    */
   createdAt?: string;
   /**
    * Updated At
    * @format date-time
    * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
-   * @example "2023-04-15T07:41:28Z"
+   * @example "2023-04-15T14:11:33Z"
    */
   updatedAt?: string | null;
 }
@@ -404,14 +429,14 @@ export interface CommentImportDto {
    * Created At
    * @format date-time
    * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
-   * @example "2023-04-15T07:41:28Z"
+   * @example "2023-04-15T14:11:33Z"
    */
   createdAt?: string | null;
   /**
    * Updated At
    * @format date-time
    * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
-   * @example "2023-04-15T07:41:28Z"
+   * @example "2023-04-15T14:11:33Z"
    */
   updatedAt?: string | null;
   /**
@@ -655,14 +680,14 @@ export interface ContactDetailsDto {
    * Created At
    * @format date-time
    * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
-   * @example "2023-04-15T07:41:28Z"
+   * @example "2023-04-15T14:11:33Z"
    */
   createdAt?: string;
   /**
    * Updated At
    * @format date-time
    * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
-   * @example "2023-04-15T07:41:28Z"
+   * @example "2023-04-15T14:11:33Z"
    */
   updatedAt?: string | null;
   /**
@@ -689,14 +714,14 @@ export interface ContactImportDto {
    * Created At
    * @format date-time
    * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
-   * @example "2023-04-15T07:41:28Z"
+   * @example "2023-04-15T14:11:33Z"
    */
   createdAt?: string | null;
   /**
    * Updated At
    * @format date-time
    * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
-   * @example "2023-04-15T07:41:28Z"
+   * @example "2023-04-15T14:11:33Z"
    */
   updatedAt?: string | null;
   /**
@@ -1050,14 +1075,14 @@ export interface ContentDetailsDto {
    * Created At
    * @format date-time
    * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
-   * @example "2023-04-15T07:41:28Z"
+   * @example "2023-04-15T14:11:33Z"
    */
   createdAt?: string;
   /**
    * Updated At
    * @format date-time
    * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
-   * @example "2023-04-15T07:41:28Z"
+   * @example "2023-04-15T14:11:33Z"
    */
   updatedAt?: string | null;
 }
@@ -1078,14 +1103,14 @@ export interface ContentImportDto {
    * Created At
    * @format date-time
    * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
-   * @example "2023-04-15T07:41:28Z"
+   * @example "2023-04-15T14:11:33Z"
    */
   createdAt?: string | null;
   /**
    * Updated At
    * @format date-time
    * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
-   * @example "2023-04-15T07:41:28Z"
+   * @example "2023-04-15T14:11:33Z"
    */
   updatedAt?: string | null;
   /**
@@ -1550,7 +1575,7 @@ export interface DomainCreateDto {
    * Name
    * @minLength 1
    * @pattern ^.{1,}$
-   * @example "string"
+   * @example "example.com"
    */
   name: string;
   /**
@@ -1565,9 +1590,14 @@ export interface DomainCreateDto {
   description?: string | null;
   /**
    * Url
-   * @example "string"
+   * @example "https://example.com"
    */
   url?: string | null;
+  /**
+   * Favicon Url
+   * @example "https://example.com/favicon.ico"
+   */
+  faviconUrl?: string | null;
   /**
    * Http Check
    * @example true
@@ -1607,7 +1637,7 @@ export interface DomainDetailsDto {
    * Name
    * @minLength 1
    * @pattern ^.{1,}$
-   * @example "string"
+   * @example "example.com"
    */
   name: string;
   /**
@@ -1622,9 +1652,14 @@ export interface DomainDetailsDto {
   description?: string | null;
   /**
    * Url
-   * @example "string"
+   * @example "https://example.com"
    */
   url?: string | null;
+  /**
+   * Favicon Url
+   * @example "https://example.com/favicon.ico"
+   */
+  faviconUrl?: string | null;
   /**
    * Http Check
    * @example true
@@ -1667,14 +1702,14 @@ export interface DomainDetailsDto {
    * Created At
    * @format date-time
    * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
-   * @example "2023-04-15T07:41:28Z"
+   * @example "2023-04-15T14:11:33Z"
    */
   createdAt?: string;
   /**
    * Updated At
    * @format date-time
    * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
-   * @example "2023-04-15T07:41:28Z"
+   * @example "2023-04-15T14:11:33Z"
    */
   updatedAt?: string | null;
 }
@@ -1695,14 +1730,14 @@ export interface DomainImportDto {
    * Created At
    * @format date-time
    * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
-   * @example "2023-04-15T07:41:28Z"
+   * @example "2023-04-15T14:11:33Z"
    */
   createdAt?: string | null;
   /**
    * Updated At
    * @format date-time
    * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
-   * @example "2023-04-15T07:41:28Z"
+   * @example "2023-04-15T14:11:33Z"
    */
   updatedAt?: string | null;
   /**
@@ -1724,9 +1759,14 @@ export interface DomainImportDto {
   description?: string | null;
   /**
    * Url
-   * @example "string"
+   * @example "https://example.com"
    */
   url?: string | null;
+  /**
+   * Favicon Url
+   * @example "https://example.com/favicon.ico"
+   */
+  faviconUrl?: string | null;
   /**
    * Http Check
    * @example true
@@ -1769,9 +1809,14 @@ export interface DomainUpdateDto {
   description?: string | null;
   /**
    * Url
-   * @example "string"
+   * @example "https://example.com"
    */
   url?: string | null;
+  /**
+   * Favicon Url
+   * @example "https://example.com/favicon.ico"
+   */
+  faviconUrl?: string | null;
   /**
    * Http Check
    * @example true
@@ -1829,14 +1874,14 @@ export interface EmailGroupDetailsDto {
    * Created At
    * @format date-time
    * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
-   * @example "2023-04-15T07:41:28Z"
+   * @example "2023-04-15T14:11:33Z"
    */
   createdAt?: string;
   /**
    * Updated At
    * @format date-time
    * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
-   * @example "2023-04-15T07:41:28Z"
+   * @example "2023-04-15T14:11:33Z"
    */
   updatedAt?: string | null;
 }
@@ -1963,14 +2008,14 @@ export interface EmailTemplateDetailsDto {
    * Created At
    * @format date-time
    * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
-   * @example "2023-04-15T07:41:28Z"
+   * @example "2023-04-15T14:11:33Z"
    */
   createdAt?: string;
   /**
    * Updated At
    * @format date-time
    * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
-   * @example "2023-04-15T07:41:28Z"
+   * @example "2023-04-15T14:11:33Z"
    */
   updatedAt?: string | null;
 }
@@ -2124,14 +2169,14 @@ export interface LinkDetailsDto {
    * Created At
    * @format date-time
    * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
-   * @example "2023-04-15T07:41:28Z"
+   * @example "2023-04-15T14:11:33Z"
    */
   createdAt?: string;
   /**
    * Updated At
    * @format date-time
    * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
-   * @example "2023-04-15T07:41:28Z"
+   * @example "2023-04-15T14:11:33Z"
    */
   updatedAt?: string | null;
 }
@@ -2174,7 +2219,7 @@ export interface LogRecord {
    * Date Time
    * @format date-time
    * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
-   * @example "2023-04-15T07:41:28Z"
+   * @example "2023-04-15T14:11:33Z"
    */
   dateTime?: string;
   logLevel?: LogLevel;
@@ -2309,14 +2354,14 @@ export interface OrderDetailsDto {
    * Created At
    * @format date-time
    * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
-   * @example "2023-04-15T07:41:28Z"
+   * @example "2023-04-15T14:11:33Z"
    */
   createdAt?: string;
   /**
    * Updated At
    * @format date-time
    * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
-   * @example "2023-04-15T07:41:28Z"
+   * @example "2023-04-15T14:11:33Z"
    */
   updatedAt?: string | null;
   /**
@@ -2349,14 +2394,14 @@ export interface OrderImportDto {
    * Created At
    * @format date-time
    * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
-   * @example "2023-04-15T07:41:28Z"
+   * @example "2023-04-15T14:11:33Z"
    */
   createdAt?: string | null;
   /**
    * Updated At
    * @format date-time
    * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
-   * @example "2023-04-15T07:41:28Z"
+   * @example "2023-04-15T14:11:33Z"
    */
   updatedAt?: string | null;
   /**
@@ -2536,14 +2581,14 @@ export interface OrderItemDetailsDto {
    * Created At
    * @format date-time
    * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
-   * @example "2023-04-15T07:41:28Z"
+   * @example "2023-04-15T14:11:33Z"
    */
   createdAt?: string;
   /**
    * Updated At
    * @format date-time
    * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
-   * @example "2023-04-15T07:41:28Z"
+   * @example "2023-04-15T14:11:33Z"
    */
   updatedAt?: string | null;
   /**
@@ -2576,14 +2621,14 @@ export interface OrderItemImportDto {
    * Created At
    * @format date-time
    * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
-   * @example "2023-04-15T07:41:28Z"
+   * @example "2023-04-15T14:11:33Z"
    */
   createdAt?: string | null;
   /**
    * Updated At
    * @format date-time
    * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
-   * @example "2023-04-15T07:41:28Z"
+   * @example "2023-04-15T14:11:33Z"
    */
   updatedAt?: string | null;
   /**
@@ -2772,7 +2817,7 @@ export interface Unsubscribe {
    * Created At
    * @format date-time
    * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
-   * @example "2023-04-15T07:41:28Z"
+   * @example "2023-04-15T14:11:33Z"
    */
   createdAt: string;
   /**
@@ -3018,7 +3063,7 @@ export class HttpClient<SecurityDataType = unknown> {
 
 /**
  * @title OnlineSales API
- * @version 1.2.1.0
+ * @version 1.2.2.0
  */
 export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
   microsoftIdentity = {

@@ -2,7 +2,7 @@
     "openapi": "3.0.1",
     "info": {
         "title": "OnlineSales API",
-        "version": "1.2.1.0"
+        "version": "1.2.2.0"
     },
     "paths": {
         "/microsoft-identity/account/sign-in/{scheme}": {
@@ -745,6 +745,11 @@
                         "description": "Server Error",
                         "content": {
                             "text/csv": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ProblemDetails"
+                                }
+                            },
+                            "text/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/ProblemDetails"
                                 }
@@ -1623,6 +1628,11 @@
                                 "schema": {
                                     "$ref": "#/components/schemas/ProblemDetails"
                                 }
+                            },
+                            "text/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ProblemDetails"
+                                }
                             }
                         }
                     }
@@ -2360,6 +2370,11 @@
                         "description": "Server Error",
                         "content": {
                             "text/csv": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ProblemDetails"
+                                }
+                            },
+                            "text/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/ProblemDetails"
                                 }
@@ -3239,6 +3254,11 @@
                         "description": "Server Error",
                         "content": {
                             "text/csv": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ProblemDetails"
+                                }
+                            },
+                            "text/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/ProblemDetails"
                                 }
@@ -4155,6 +4175,11 @@
                                 "schema": {
                                     "$ref": "#/components/schemas/ProblemDetails"
                                 }
+                            },
+                            "text/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ProblemDetails"
+                                }
                             }
                         }
                     }
@@ -4774,6 +4799,11 @@
                                 "schema": {
                                     "$ref": "#/components/schemas/ProblemDetails"
                                 }
+                            },
+                            "text/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ProblemDetails"
+                                }
                             }
                         }
                     }
@@ -5314,6 +5344,11 @@
                         "description": "Server Error",
                         "content": {
                             "text/csv": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ProblemDetails"
+                                }
+                            },
+                            "text/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/ProblemDetails"
                                 }
@@ -5879,6 +5914,11 @@
                         "description": "Server Error",
                         "content": {
                             "text/csv": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ProblemDetails"
+                                }
+                            },
+                            "text/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/ProblemDetails"
                                 }
@@ -7007,6 +7047,11 @@
                                 "schema": {
                                     "$ref": "#/components/schemas/ProblemDetails"
                                 }
+                            },
+                            "text/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ProblemDetails"
+                                }
                             }
                         }
                     }
@@ -7697,6 +7742,11 @@
                                 "schema": {
                                     "$ref": "#/components/schemas/ProblemDetails"
                                 }
+                            },
+                            "text/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ProblemDetails"
+                                }
                             }
                         }
                     }
@@ -8168,13 +8218,19 @@
                         "title": "Site Url",
                         "type": "string",
                         "nullable": true,
-                        "example": "string"
+                        "example": "https://example.com"
+                    },
+                    "logoUrl": {
+                        "title": "Logo Url",
+                        "type": "string",
+                        "nullable": true,
+                        "example": "https://example.com/logo.png"
                     },
                     "employeesRange": {
                         "title": "Employees Range",
                         "type": "string",
                         "nullable": true,
-                        "example": "string"
+                        "example": "50K-100K"
                     },
                     "revenue": {
                         "title": "Revenue",
@@ -8257,13 +8313,19 @@
                         "title": "Site Url",
                         "type": "string",
                         "nullable": true,
-                        "example": "string"
+                        "example": "https://example.com"
+                    },
+                    "logoUrl": {
+                        "title": "Logo Url",
+                        "type": "string",
+                        "nullable": true,
+                        "example": "https://example.com/logo.png"
                     },
                     "employeesRange": {
                         "title": "Employees Range",
                         "type": "string",
                         "nullable": true,
-                        "example": "string"
+                        "example": "50K-100K"
                     },
                     "revenue": {
                         "title": "Revenue",
@@ -8319,7 +8381,7 @@
                         "pattern": "^(\\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$",
                         "type": "string",
                         "format": "date-time",
-                        "example": "2023-04-15T07:41:29Z"
+                        "example": "2023-04-15T14:11:34Z"
                     },
                     "updatedAt": {
                         "title": "Updated At",
@@ -8327,7 +8389,7 @@
                         "type": "string",
                         "format": "date-time",
                         "nullable": true,
-                        "example": "2023-04-15T07:41:29Z"
+                        "example": "2023-04-15T14:11:34Z"
                     }
                 },
                 "additionalProperties": false
@@ -8354,7 +8416,7 @@
                         "type": "string",
                         "format": "date-time",
                         "nullable": true,
-                        "example": "2023-04-15T07:41:29Z"
+                        "example": "2023-04-15T14:11:34Z"
                     },
                     "updatedAt": {
                         "title": "Updated At",
@@ -8362,7 +8424,7 @@
                         "type": "string",
                         "format": "date-time",
                         "nullable": true,
-                        "example": "2023-04-15T07:41:29Z"
+                        "example": "2023-04-15T14:11:34Z"
                     },
                     "createdByIp": {
                         "title": "Created By Ip",
@@ -8410,6 +8472,12 @@
                     },
                     "siteUrl": {
                         "title": "Site Url",
+                        "type": "string",
+                        "nullable": true,
+                        "example": "string"
+                    },
+                    "logoUrl": {
+                        "title": "Logo Url",
                         "type": "string",
                         "nullable": true,
                         "example": "string"
@@ -8465,6 +8533,18 @@
                 "properties": {
                     "name": {
                         "title": "Name",
+                        "type": "string",
+                        "nullable": true,
+                        "example": "string"
+                    },
+                    "siteUrl": {
+                        "title": "Site Url",
+                        "type": "string",
+                        "nullable": true,
+                        "example": "string"
+                    },
+                    "logoUrl": {
+                        "title": "Logo Url",
                         "type": "string",
                         "nullable": true,
                         "example": "string"
@@ -8640,7 +8720,7 @@
                         "pattern": "^(\\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$",
                         "type": "string",
                         "format": "date-time",
-                        "example": "2023-04-15T07:41:29Z"
+                        "example": "2023-04-15T14:11:34Z"
                     },
                     "updatedAt": {
                         "title": "Updated At",
@@ -8648,7 +8728,7 @@
                         "type": "string",
                         "format": "date-time",
                         "nullable": true,
-                        "example": "2023-04-15T07:41:29Z"
+                        "example": "2023-04-15T14:11:34Z"
                     }
                 },
                 "additionalProperties": false
@@ -8678,7 +8758,7 @@
                         "type": "string",
                         "format": "date-time",
                         "nullable": true,
-                        "example": "2023-04-15T07:41:29Z"
+                        "example": "2023-04-15T14:11:34Z"
                     },
                     "updatedAt": {
                         "title": "Updated At",
@@ -8686,7 +8766,7 @@
                         "type": "string",
                         "format": "date-time",
                         "nullable": true,
-                        "example": "2023-04-15T07:41:29Z"
+                        "example": "2023-04-15T14:11:34Z"
                     },
                     "createdByIp": {
                         "title": "Created By Ip",
@@ -8991,7 +9071,7 @@
                         "pattern": "^(\\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$",
                         "type": "string",
                         "format": "date-time",
-                        "example": "2023-04-15T07:41:29Z"
+                        "example": "2023-04-15T14:11:34Z"
                     },
                     "updatedAt": {
                         "title": "Updated At",
@@ -8999,7 +9079,7 @@
                         "type": "string",
                         "format": "date-time",
                         "nullable": true,
-                        "example": "2023-04-15T07:41:29Z"
+                        "example": "2023-04-15T14:11:34Z"
                     },
                     "domainId": {
                         "title": "Domain Id",
@@ -9032,7 +9112,7 @@
                         "type": "string",
                         "format": "date-time",
                         "nullable": true,
-                        "example": "2023-04-15T07:41:29Z"
+                        "example": "2023-04-15T14:11:34Z"
                     },
                     "updatedAt": {
                         "title": "Updated At",
@@ -9040,7 +9120,7 @@
                         "type": "string",
                         "format": "date-time",
                         "nullable": true,
-                        "example": "2023-04-15T07:41:29Z"
+                        "example": "2023-04-15T14:11:34Z"
                     },
                     "createdByIp": {
                         "title": "Created By Ip",
@@ -9480,7 +9560,7 @@
                         "pattern": "^(\\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$",
                         "type": "string",
                         "format": "date-time",
-                        "example": "2023-04-15T07:41:29Z"
+                        "example": "2023-04-15T14:11:34Z"
                     },
                     "updatedAt": {
                         "title": "Updated At",
@@ -9488,7 +9568,7 @@
                         "type": "string",
                         "format": "date-time",
                         "nullable": true,
-                        "example": "2023-04-15T07:41:29Z"
+                        "example": "2023-04-15T14:11:34Z"
                     }
                 },
                 "additionalProperties": false
@@ -9515,7 +9595,7 @@
                         "type": "string",
                         "format": "date-time",
                         "nullable": true,
-                        "example": "2023-04-15T07:41:29Z"
+                        "example": "2023-04-15T14:11:34Z"
                     },
                     "updatedAt": {
                         "title": "Updated At",
@@ -9523,7 +9603,7 @@
                         "type": "string",
                         "format": "date-time",
                         "nullable": true,
-                        "example": "2023-04-15T07:41:29Z"
+                        "example": "2023-04-15T14:11:34Z"
                     },
                     "createdByIp": {
                         "title": "Created By Ip",
@@ -10039,7 +10119,7 @@
                         "minLength": 1,
                         "pattern": "^.{1,}$",
                         "type": "string",
-                        "example": "string"
+                        "example": "example.com"
                     },
                     "title": {
                         "title": "Title",
@@ -10057,7 +10137,13 @@
                         "title": "Url",
                         "type": "string",
                         "nullable": true,
-                        "example": "string"
+                        "example": "https://example.com"
+                    },
+                    "faviconUrl": {
+                        "title": "Favicon Url",
+                        "type": "string",
+                        "nullable": true,
+                        "example": "https://example.com/favicon.ico"
                     },
                     "httpCheck": {
                         "title": "Http Check",
@@ -10117,7 +10203,7 @@
                         "minLength": 1,
                         "pattern": "^.{1,}$",
                         "type": "string",
-                        "example": "string"
+                        "example": "example.com"
                     },
                     "title": {
                         "title": "Title",
@@ -10135,7 +10221,13 @@
                         "title": "Url",
                         "type": "string",
                         "nullable": true,
-                        "example": "string"
+                        "example": "https://example.com"
+                    },
+                    "faviconUrl": {
+                        "title": "Favicon Url",
+                        "type": "string",
+                        "nullable": true,
+                        "example": "https://example.com/favicon.ico"
                     },
                     "httpCheck": {
                         "title": "Http Check",
@@ -10192,7 +10284,7 @@
                         "pattern": "^(\\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$",
                         "type": "string",
                         "format": "date-time",
-                        "example": "2023-04-15T07:41:29Z"
+                        "example": "2023-04-15T14:11:34Z"
                     },
                     "updatedAt": {
                         "title": "Updated At",
@@ -10200,7 +10292,7 @@
                         "type": "string",
                         "format": "date-time",
                         "nullable": true,
-                        "example": "2023-04-15T07:41:29Z"
+                        "example": "2023-04-15T14:11:34Z"
                     }
                 },
                 "additionalProperties": false
@@ -10230,7 +10322,7 @@
                         "type": "string",
                         "format": "date-time",
                         "nullable": true,
-                        "example": "2023-04-15T07:41:29Z"
+                        "example": "2023-04-15T14:11:34Z"
                     },
                     "updatedAt": {
                         "title": "Updated At",
@@ -10238,7 +10330,7 @@
                         "type": "string",
                         "format": "date-time",
                         "nullable": true,
-                        "example": "2023-04-15T07:41:29Z"
+                        "example": "2023-04-15T14:11:34Z"
                     },
                     "name": {
                         "title": "Name",
@@ -10263,7 +10355,13 @@
                         "title": "Url",
                         "type": "string",
                         "nullable": true,
-                        "example": "string"
+                        "example": "https://example.com"
+                    },
+                    "faviconUrl": {
+                        "title": "Favicon Url",
+                        "type": "string",
+                        "nullable": true,
+                        "example": "https://example.com/favicon.ico"
                     },
                     "httpCheck": {
                         "title": "Http Check",
@@ -10325,7 +10423,13 @@
                         "title": "Url",
                         "type": "string",
                         "nullable": true,
-                        "example": "string"
+                        "example": "https://example.com"
+                    },
+                    "faviconUrl": {
+                        "title": "Favicon Url",
+                        "type": "string",
+                        "nullable": true,
+                        "example": "https://example.com/favicon.ico"
                     },
                     "httpCheck": {
                         "title": "Http Check",
@@ -10408,7 +10512,7 @@
                         "pattern": "^(\\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$",
                         "type": "string",
                         "format": "date-time",
-                        "example": "2023-04-15T07:41:29Z"
+                        "example": "2023-04-15T14:11:34Z"
                     },
                     "updatedAt": {
                         "title": "Updated At",
@@ -10416,7 +10520,7 @@
                         "type": "string",
                         "format": "date-time",
                         "nullable": true,
-                        "example": "2023-04-15T07:41:29Z"
+                        "example": "2023-04-15T14:11:34Z"
                     }
                 },
                 "additionalProperties": false
@@ -10571,7 +10675,7 @@
                         "pattern": "^(\\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$",
                         "type": "string",
                         "format": "date-time",
-                        "example": "2023-04-15T07:41:29Z"
+                        "example": "2023-04-15T14:11:34Z"
                     },
                     "updatedAt": {
                         "title": "Updated At",
@@ -10579,7 +10683,7 @@
                         "type": "string",
                         "format": "date-time",
                         "nullable": true,
-                        "example": "2023-04-15T07:41:29Z"
+                        "example": "2023-04-15T14:11:34Z"
                     }
                 },
                 "additionalProperties": false
@@ -10772,7 +10876,7 @@
                         "pattern": "^(\\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$",
                         "type": "string",
                         "format": "date-time",
-                        "example": "2023-04-15T07:41:29Z"
+                        "example": "2023-04-15T14:11:34Z"
                     },
                     "updatedAt": {
                         "title": "Updated At",
@@ -10780,7 +10884,7 @@
                         "type": "string",
                         "format": "date-time",
                         "nullable": true,
-                        "example": "2023-04-15T07:41:29Z"
+                        "example": "2023-04-15T14:11:34Z"
                     }
                 },
                 "additionalProperties": false
@@ -10835,7 +10939,7 @@
                         "pattern": "^(\\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$",
                         "type": "string",
                         "format": "date-time",
-                        "example": "2023-04-15T07:41:29Z"
+                        "example": "2023-04-15T14:11:34Z"
                     },
                     "logLevel": {
                         "$ref": "#/components/schemas/LogLevel"
@@ -11001,7 +11105,7 @@
                         "pattern": "^(\\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$",
                         "type": "string",
                         "format": "date-time",
-                        "example": "2023-04-15T07:41:29Z"
+                        "example": "2023-04-15T14:11:34Z"
                     },
                     "updatedAt": {
                         "title": "Updated At",
@@ -11009,7 +11113,7 @@
                         "type": "string",
                         "format": "date-time",
                         "nullable": true,
-                        "example": "2023-04-15T07:41:29Z"
+                        "example": "2023-04-15T14:11:34Z"
                     },
                     "quantity": {
                         "title": "Quantity",
@@ -11051,7 +11155,7 @@
                         "type": "string",
                         "format": "date-time",
                         "nullable": true,
-                        "example": "2023-04-15T07:41:29Z"
+                        "example": "2023-04-15T14:11:34Z"
                     },
                     "updatedAt": {
                         "title": "Updated At",
@@ -11059,7 +11163,7 @@
                         "type": "string",
                         "format": "date-time",
                         "nullable": true,
-                        "example": "2023-04-15T07:41:29Z"
+                        "example": "2023-04-15T14:11:34Z"
                     },
                     "createdByIp": {
                         "title": "Created By Ip",
@@ -11275,7 +11379,7 @@
                         "pattern": "^(\\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$",
                         "type": "string",
                         "format": "date-time",
-                        "example": "2023-04-15T07:41:29Z"
+                        "example": "2023-04-15T14:11:34Z"
                     },
                     "updatedAt": {
                         "title": "Updated At",
@@ -11283,7 +11387,7 @@
                         "type": "string",
                         "format": "date-time",
                         "nullable": true,
-                        "example": "2023-04-15T07:41:29Z"
+                        "example": "2023-04-15T14:11:34Z"
                     },
                     "currencyTotal": {
                         "title": "Currency Total",
@@ -11322,7 +11426,7 @@
                         "type": "string",
                         "format": "date-time",
                         "nullable": true,
-                        "example": "2023-04-15T07:41:29Z"
+                        "example": "2023-04-15T14:11:34Z"
                     },
                     "updatedAt": {
                         "title": "Updated At",
@@ -11330,7 +11434,7 @@
                         "type": "string",
                         "format": "date-time",
                         "nullable": true,
-                        "example": "2023-04-15T07:41:29Z"
+                        "example": "2023-04-15T14:11:34Z"
                     },
                     "createdByIp": {
                         "title": "Created By Ip",
@@ -11576,7 +11680,7 @@
                         "pattern": "^(\\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$",
                         "type": "string",
                         "format": "date-time",
-                        "example": "2023-04-15T07:41:29Z"
+                        "example": "2023-04-15T14:11:34Z"
                     },
                     "createdByIp": {
                         "title": "Created By Ip",

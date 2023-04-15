@@ -1,5 +1,7 @@
+import { Avatar, ListItemAvatar } from "@mui/material";
 import { AccountDetailsDto, AccountImportDto } from "lib/network/swagger-client";
 import { useRequestContext } from "providers/request-provider";
+import { AccountListItem, AccountListItemText } from "./index.styled";
 import {
   accountListBreadcrumbLinks,
   accountListCurrentBreadcrumb,
@@ -42,8 +44,19 @@ export const Accounts = () => {
   const columns: GridColDef<AccountDetailsDto>[] = [
     {
       field: "name",
-      headerName: "Account Name",
-      flex: 2,
+      headerName: "Name",
+      flex: 4,
+      renderCell: ({ row }) => (
+        <AccountListItem>
+          <ListItemAvatar>
+            <Avatar src={row.logoUrl || "" }></Avatar>
+          </ListItemAvatar>
+          <AccountListItemText
+            primary={`${row.name || ""}`}
+            secondary={row.siteUrl}
+          />
+        </AccountListItem>
+      ),
     },
     {
       field: "state",
