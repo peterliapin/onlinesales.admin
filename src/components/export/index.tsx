@@ -2,13 +2,13 @@ import { useEffect, useRef } from "react";
 import { downloadFile } from "components/download";
 import { useNotificationsService } from "@hooks";
 
-interface csvExportPorps {
-  getExportUrlAsync: () => Promise<string>;
+interface ExportPorps {
+  exportAsync: (accept: string) => Promise<string>;
   closeExport: () => void;
-  endRoute: string;
+  fileName: string;
 }
 
-export const CsvExport = ({ getExportUrlAsync, closeExport, endRoute }: csvExportPorps) => {
+export const CsvExport = ({ exportAsync, closeExport, fileName }: ExportPorps) => {
   const didExportRef = useRef(false);
   const { notificationsService } = useNotificationsService();
 
@@ -16,8 +16,8 @@ export const CsvExport = ({ getExportUrlAsync, closeExport, endRoute }: csvExpor
     if (!didExportRef.current) {
       const exportFile = async () => {
         try {
-          const url = await getExportUrlAsync();
-          downloadFile(url);
+          const response = await exportAsync("text/csv");
+          downloadFile(response, "text/csv", `${fileName}.csv`);
           closeExport();
         } catch (error) {
           notificationsService.error("Server error occurred.");

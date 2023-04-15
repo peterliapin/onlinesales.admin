@@ -27,11 +27,12 @@ export const Accounts = () => {
     }
   };
 
-  const getAccountExportUrlAsync = async (query: string) => {
-    const { url } = await client.api.accountsExportList({
-      query: query,
+  const exportAccountsAsync = async (query: string, accept: string) => {
+    const response = await client.api.accountsExportList({
+      query: query
     });
-    return url;
+
+    return response.text();
   };
 
   const handleAccountImport = async (data: AccountImportDto[]) => {
@@ -87,8 +88,9 @@ export const Accounts = () => {
       searchBarLabel={searchLabel}
       endRoute={CoreModule.accounts}
       getModelDataList={getAccountList}
-      getExportUrl={getAccountExportUrlAsync}
+      exportAsync={exportAccountsAsync}
       dataImportCreate={handleAccountImport}
+      exportFileName="accounts"
       initialGridState={{
         columns: { columnVisibilityModel: { continentCode: false } },
         sorting: {

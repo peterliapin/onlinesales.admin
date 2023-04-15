@@ -27,11 +27,12 @@ export const Orders = () => {
     }
   };
 
-  const getOrderExportUrlAsync = async (query: string) => {
-    const { url } = await client.api.ordersExportList({
-      query: query,
+  const exportOrdersAsync = async (query: string) => {
+    const response = await client.api.ordersExportList({
+      query: query
     });
-    return url;
+
+    return response.text();        
   };
 
   const handleOrderImport = async (data: OrderImportDto[]) => {
@@ -97,7 +98,8 @@ export const Orders = () => {
       searchBarLabel={searchLabel}
       endRoute={CoreModule.orders}
       getModelDataList={getOrderList}
-      getExportUrl={getOrderExportUrlAsync}
+      exportAsync={exportOrdersAsync}
+      exportFileName="orders"
       dataImportCreate={handleOrderImport}
       initialGridState={{
         columns: { columnVisibilityModel: { currency: false, exchangeRate: false } },
