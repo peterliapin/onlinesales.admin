@@ -26,12 +26,12 @@ export interface GenericDataGridProps<T extends BasicTypeForGeneric> {
 }
 
 export function GenericDataGrid<T extends BasicTypeForGeneric>({
-  getItemsFn,
-  schema,
-  detailsNavigate,
-  editNavigate,
-  searchText,
-}: GenericDataGridProps<T>) {
+                                                                 getItemsFn,
+                                                                 schema,
+                                                                 detailsNavigate,
+                                                                 editNavigate,
+                                                                 searchText,
+                                                               }: GenericDataGridProps<T>) {
   const {setBusy} = useModuleWrapperContext();
 
   const actionsColumn: GridColDef = {
@@ -140,7 +140,7 @@ export function GenericDataGrid<T extends BasicTypeForGeneric>({
       checkboxSelection={false}
       autoHeight={false}
       rowCount={totalItemsCount}
-      rowsPerPageOptions={[2, 10, 25, 50, 100]}
+      rowsPerPageOptions={[10, 25, 50, 100]}
       pagination
       page={pageNumber}
       pageSize={pageSize}
