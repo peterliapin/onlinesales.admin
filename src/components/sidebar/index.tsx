@@ -52,6 +52,14 @@ export const Sidebar = () => {
             selected={moduleName === CoreModule.domains}
           />
         </ListItem>
+        <ListItem>
+          <SidebarLinkButton
+            title="Links"
+            to={getCoreModuleRoute(CoreModule.links)}
+            Icon={Web}
+            selected={moduleName === CoreModule.links}
+          />
+        </ListItem>
       </List>
     </SidebarStyled>
   );
