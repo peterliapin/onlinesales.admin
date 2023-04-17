@@ -27,11 +27,12 @@ export const Domains = () => {
     }
   };
 
-  const getDomainExportUrlAsync = async (query: string) => {
-    const { url } = await client.api.domainsExportList({
-      query: query,
+  const exportDomainsAsync = async (query: string) => {
+    const response = await client.api.domainsExportList({
+      query: query
     });
-    return url;
+
+    return response.text();    
   };
 
   const handleDomainImport = async (data: DomainImportDto[]) => {
@@ -92,7 +93,8 @@ export const Domains = () => {
       searchBarLabel={searchLabel}
       endRoute={CoreModule.orders}
       getModelDataList={getDomainList}
-      getExportUrl={getDomainExportUrlAsync}
+      exportAsync={exportDomainsAsync}
+      exportFileName="domains"
       dataImportCreate={handleDomainImport}
       initialGridState={{
         columns: { columnVisibilityModel: { dnsCheck: false, free: false } },

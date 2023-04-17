@@ -1,4 +1,4 @@
-import { Button, CardHeader, Grid, ListItem, ListItemText, Paper, styled } from "@mui/material";
+import { CardHeader, Grid, ListItem, ListItemText, Paper, styled } from "@mui/material";
 
 export const ActionsContainer = styled("div")`
   display: flex;
