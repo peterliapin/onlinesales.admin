@@ -1,4 +1,4 @@
-import { Outlet, Route, Routes } from "react-router-dom";
+import {Outlet, Route, Routes} from "react-router-dom";
 import {
   addFormRoute,
   CoreModule,
@@ -6,23 +6,24 @@ import {
   getAddFormRoute,
   viewFormRoute,
 } from "@lib/router";
-import { BasicTypeForGeneric, getBreadcrumbLinks } from "@components/generic-components/common";
-import { ReactNode, useState } from "react";
+import {BasicTypeForGeneric, getBreadcrumbLinks} from "@components/generic-components/common";
+import { useState} from "react";
 import {
   GenericDataGrid,
   GenericDataGridProps,
 } from "@components/generic-components/generic-data-grid";
-import { ModuleWrapper } from "@components/module-wrapper";
-import { dataListBreadcrumbLinks } from "../../utils/constants";
-import { GenericForm, GenericFormProps } from "@components/generic-components/generic-form";
-import { Button, CircularProgress, Grid, Typography } from "@mui/material";
-import { SearchBar } from "@components/search-bar";
-import { GhostLink } from "@components/ghost-link";
+import {ModuleWrapper} from "@components/module-wrapper";
+import {dataListBreadcrumbLinks} from "../../utils/constants";
+import {GenericForm, GenericFormProps} from "@components/generic-components/generic-form";
+import {Button, CircularProgress, Grid, Typography} from "@mui/material";
+import {SearchBar} from "@components/search-bar";
+import {GhostLink} from "@components/ghost-link";
 
 interface GenericModuleProps<TView extends BasicTypeForGeneric, TCreate, TUpdate> {
   moduleName: string;
   modulePath: CoreModule;
   tableProps?: GenericDataGridProps<TView>;
+  createFormProps?: GenericFormProps<TView, TCreate, TUpdate>;
   editFormProps?: GenericFormProps<TView, TCreate, TUpdate>;
   viewFormProps?: GenericFormProps<TView, TCreate, TUpdate>;
 }
@@ -31,9 +32,10 @@ export function GenericModule<TView extends BasicTypeForGeneric, TCreate, TUpdat
   moduleName,
   modulePath,
   tableProps,
+  createFormProps,
   editFormProps,
   viewFormProps,
-}: GenericModuleProps<TView, TCreate, TUpdate>): ReactNode {
+}: GenericModuleProps<TView, TCreate, TUpdate>): JSX.Element {
   const [searchText, setSearchText] = useState("");
 
   const getGenericTable = (key: string, tableProps: GenericDataGridProps<TView>) => {
@@ -69,11 +71,7 @@ export function GenericModule<TView extends BasicTypeForGeneric, TCreate, TUpdat
     );
   };
 
-  const genericTable = tableProps ? (
-    getGenericTable("table", tableProps)
-  ) : (
-    <div key={"table"}></div>
-  );
+  const genericTable = tableProps && getGenericTable("table", tableProps);
 
   const getForm = (
     key: string,
@@ -86,7 +84,7 @@ export function GenericModule<TView extends BasicTypeForGeneric, TCreate, TUpdat
       <>
         <Grid container item spacing={3} sm="auto" xs="auto">
           <Grid item>
-            <CircularProgress size={14} />
+            <CircularProgress size={14}/>
           </Grid>
           <Grid item>
             <Typography>Saving...</Typography>
@@ -107,33 +105,19 @@ export function GenericModule<TView extends BasicTypeForGeneric, TCreate, TUpdat
     );
   };
 
-  const genericCreateForm = editFormProps ? (
-    getForm("create", "Create", { ...editFormProps, mode: "create" })
-  ) : (
-    <div key={"create"}>editFormProps is empty</div>
-  );
-
-  const genericEditForm = editFormProps ? (
-    getForm("edit", "Edit", { ...editFormProps, mode: "update" })
-  ) : (
-    <div key={"edit"}>editFormProps is empty</div>
-  );
-
-  const genericViewForm = viewFormProps ? (
-    getForm("view", "View", { ...viewFormProps, mode: "details" })
-  ) : (
-    <div key={"view"}>viewFormProps is empty</div>
-  );
+  const genericCreateForm = createFormProps && getForm("create", "Create", createFormProps);
+  const genericEditForm = editFormProps && getForm("edit", "Edit", editFormProps);
+  const genericViewForm = viewFormProps && getForm("view", "View", viewFormProps);
 
   return (
     <>
       <Routes>
-        <Route index element={genericTable} />
-        <Route path={addFormRoute.template} element={genericCreateForm} />
-        <Route path={editFormRoute.template} element={genericEditForm} />
-        <Route path={viewFormRoute.template} element={genericViewForm} />
+        <Route index element={genericTable}/>
+        <Route path={addFormRoute.template} element={genericCreateForm}/>
+        <Route path={editFormRoute.template} element={genericEditForm}/>
+        <Route path={viewFormRoute.template} element={genericViewForm}/>
       </Routes>
-      <Outlet />
+      <Outlet/>
     </>
   );
 }

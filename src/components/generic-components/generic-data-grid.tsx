@@ -1,15 +1,15 @@
-import { ReactNode, useEffect, useState } from "react";
-import { HttpResponse, ProblemDetails, RequestParams } from "@lib/network/swagger-client";
-import { useModuleWrapperContext } from "@providers/module-wrapper-provider";
-import { DataGrid, GridColDef, GridSortModel } from "@mui/x-data-grid";
-import { totalCountHeaderName } from "@lib/query";
+import {ReactNode, useEffect, useState} from "react";
+import {HttpResponse, ProblemDetails, RequestParams} from "@lib/network/swagger-client";
+import {useModuleWrapperContext} from "@providers/module-wrapper-provider";
+import {DataGrid, GridColDef, GridSortModel} from "@mui/x-data-grid";
+import {totalCountHeaderName} from "@lib/query";
 import {
   DtoSchema,
   camelCaseToTitleCase,
   BasicTypeForGeneric,
 } from "@components/generic-components/common";
-import { ActionButtonContainer } from "@components/data-table/index.styled";
-import { IconButton } from "@mui/material";
+import {ActionButtonContainer} from "@components/data-table/index.styled";
+import {IconButton} from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
@@ -31,7 +31,7 @@ export function GenericDataGrid<T extends BasicTypeForGeneric>({
   editNavigate,
   searchText,
 }: GenericDataGridProps<T>): ReactNode {
-  const { setBusy } = useModuleWrapperContext();
+  const {setBusy} = useModuleWrapperContext();
 
   const actionsColumn: GridColDef = {
     field: "_actions",
@@ -42,17 +42,17 @@ export function GenericDataGrid<T extends BasicTypeForGeneric>({
     filterable: false,
     sortable: false,
     disableColumnMenu: true,
-    renderCell: ({ row }: any) => {
+    renderCell: ({row}: any) => {
       return (
         <ActionButtonContainer>
           {editNavigate && (
             <IconButton onClick={() => editNavigate(row)}>
-              <EditIcon fontSize="small" />
+              <EditIcon fontSize="small"/>
             </IconButton>
           )}
           {detailsNavigate && (
             <IconButton onClick={() => detailsNavigate(row)}>
-              <ArrowForwardIcon fontSize="small" />
+              <ArrowForwardIcon fontSize="small"/>
             </IconButton>
           )}
         </ActionButtonContainer>
@@ -101,11 +101,13 @@ export function GenericDataGrid<T extends BasicTypeForGeneric>({
             query["query"] = searchText;
           }
 
-          const { data, headers } = await getItemsFn(query as any, {
+          const {data, headers} = await getItemsFn(query as any, {
             signal: abortController.signal,
           });
+
           setTotalItemsCount(() => parseInt(headers.get(totalCountHeaderName) || "0"));
           setItems(() => data);
+
         } catch (e) {
           console.log(e);
         }

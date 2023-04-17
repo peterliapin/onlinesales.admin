@@ -4,10 +4,9 @@ import {
   camelCaseToTitleCase,
   BasicTypeForGeneric,
 } from "@components/generic-components/common";
-import {ReactNode, useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import {useModuleWrapperContext} from "@providers/module-wrapper-provider";
 import {Button, Card, CardContent, Grid} from "@mui/material";
-import {useParams} from "react-router-dom";
 import {
   NumberEdit,
   TextEdit,
@@ -49,6 +48,7 @@ export interface GenericFormProps<TView extends BasicTypeForGeneric, TCreate, TU
   updateSchema: DtoSchema;
   createSchema: DtoSchema;
   mode?: "create" | "update" | "details";
+  getItemId: () => number | undefined;
 }
 
 export function GenericForm<TView extends BasicTypeForGeneric, TCreate, TUpdate>({
@@ -60,10 +60,10 @@ export function GenericForm<TView extends BasicTypeForGeneric, TCreate, TUpdate>
   updateSchema,
   createSchema,
   mode,
-}: GenericFormProps<TView, TCreate, TUpdate>): ReactNode {
+  getItemId
+}: GenericFormProps<TView, TCreate, TUpdate>): JSX.Element {
   const {setBusy, isBusy, setSaving, isSaving} = useModuleWrapperContext();
-  const params = useParams();
-  const itemId = Number(params && params["*"] && params["*"].match(/^\d+?/)?.[0]);
+  const itemId = getItemId(); // Number(params && params["*"] && params["*"].match(/^\d+?/)?.[0]);
 
   const updateFields: DtoField[] = updateSchema.properties
     ? Object.keys(updateSchema.properties).map((key) => {
