@@ -42,9 +42,10 @@ type dataListProps = {
   defaultFilterOrderColumn: string;
   defaultFilterOrderDirection: string;
   initialGridState: GridInitialStateCommunity | undefined;
+  exportFileName: string;
   endRoute: string;
   getModelDataList: (query: string) => any;
-  getExportUrl: (query: string) => Promise<string>;
+  exportAsync: (query: string, accept: string) => Promise<string>;
   dataImportCreate: (data: any) => void;
 };
 
@@ -71,7 +72,8 @@ export const DataList = ({
   initialGridState,
   endRoute,
   getModelDataList,
-  getExportUrl,
+  exportAsync: exportAsync,
+  exportFileName,
   dataImportCreate,
 }: dataListProps) => {
   const [modelData, setModelData] = useState<any[] | undefined>([]);
@@ -213,9 +215,8 @@ export const DataList = ({
     else setTotalRowCount(-1);
   };
 
-  const getExportUrlAsync = async () => {
-    const url = await getExportUrl(`${searchTerm}&${basicExportFilterQuery}${whereFilterQuery}`);
-    return url;
+  const exportWithParamsAsync = async (accept: string) => {
+    return await exportAsync(`${searchTerm}&${basicExportFilterQuery}${whereFilterQuery}`, accept);
   };
 
   const onExportClick = () => {
@@ -278,10 +279,12 @@ export const DataList = ({
       <DataTableGrid
         columns={columns}
         data={modelData}
+        autoHeight={false}
         pageSize={filterLimit}
         totalRowCount={totalRowCount}
         rowsPerPageOptions={[10, 30, 50, 100]}
         pageNumber={pageNumber}
+        dataViewMode="server"
         setSortColumn={setSortColumn}
         setSortOrder={setSortOrder}
         setPageSize={setFilterLimit}
@@ -291,6 +294,8 @@ export const DataList = ({
         setPageNumber={setPageNumber}
         handleColumnVisibilityModel={setColumnVisibilityModel}
         initialState={initialGridState}
+        disableColumnFilter={false}
+        disablePagination={false}
         showActionsColumn={true}
         disableEditRoute={false}
         disableViewRoute={false}
@@ -306,9 +311,9 @@ export const DataList = ({
       )}
       {openExport && (
         <CsvExport
-          getExportUrlAsync={getExportUrlAsync}
+          exportAsync={exportWithParamsAsync}
           closeExport={closeExport}
-          endRoute={endRoute as CoreModule}
+          fileName={exportFileName}
         ></CsvExport>
       )}
     </ModuleContainer>

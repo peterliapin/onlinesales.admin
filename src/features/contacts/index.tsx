@@ -29,11 +29,12 @@ export const Contacts = () => {
     }
   };
 
-  const getContactExportUrlAsync = async (query: string) => {
-    const { url } = await client.api.contactsExportList({
-      query: query,
+  const exportContactsAsync = async (query: string) => {
+    const response = await client.api.contactsExportList({
+      query: query
     });
-    return url;
+
+    return response.text();
   };
 
   const handleContactImport = async (data: ContactImportDto[]) => {
@@ -105,7 +106,8 @@ export const Contacts = () => {
       searchBarLabel={searchLabel}
       endRoute={CoreModule.contacts}
       getModelDataList={getContactList}
-      getExportUrl={getContactExportUrlAsync}
+      exportAsync={exportContactsAsync}
+      exportFileName="contacts"
       dataImportCreate={handleContactImport}
       initialGridState={{
         columns: { columnVisibilityModel: { lastName: false, email: false } },

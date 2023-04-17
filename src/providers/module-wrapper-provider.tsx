@@ -1,4 +1,4 @@
-import { createContext, memo, PropsWithChildren, useContext, useState } from "react";
+import {createContext, memo, PropsWithChildren, useContext, useState} from "react";
 
 interface ModuleWrapperContextType {
   isSaving: boolean;
@@ -39,9 +39,7 @@ export const ModuleWrapperProvider = memo(function ModuleWrapperProvider({
     try {
       await fn();
     } finally {
-      setTimeout(() => {
-        setIsSaving((prev) => prev - 1);
-      }, 3000);
+      setIsSaving((prev) => prev - 1);
     }
   };
 

@@ -1,4 +1,4 @@
-import { Button, CardHeader, Grid, ListItem, ListItemText, Paper, styled } from "@mui/material";
+import { CardHeader, Grid, ListItem, ListItemText, Paper, styled } from "@mui/material";
 
 export const ActionsContainer = styled("div")`
   display: flex;
@@ -47,7 +47,7 @@ export const ContactNameListItemText = styled(ListItemText)`
 `;
 
 export const ContactRowGrid = styled(Grid)({
-  height: 60,
+  minHeight: 60,
   alignItems: "center",
 });
 
