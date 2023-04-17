@@ -61,17 +61,17 @@ export interface GenericFormProps<TView extends BasicTypeForGeneric, TCreate, TU
 }
 
 export function GenericForm<TView extends BasicTypeForGeneric, TCreate, TUpdate>({
-                                                                                   editable,
-                                                                                   getItemFn,
-                                                                                   createItemFn,
-                                                                                   updateItemFn,
-                                                                                   detailsSchema,
-                                                                                   updateSchema,
-                                                                                   createSchema,
-                                                                                   mode,
-                                                                                   getItemId,
-                                                                                   onSaved
-                                                                                 }: GenericFormProps<TView, TCreate, TUpdate>) {
+  editable,
+  getItemFn,
+  createItemFn,
+  updateItemFn,
+  detailsSchema,
+  updateSchema,
+  createSchema,
+  mode,
+  getItemId,
+  onSaved
+}: GenericFormProps<TView, TCreate, TUpdate>) {
   const {setBusy, isBusy, setSaving, isSaving} = useModuleWrapperContext();
   const {notificationsService} = useNotificationsService();
   const [validationResult, setValidationResult] = useState<ValidationResult>();
@@ -220,12 +220,12 @@ export function GenericForm<TView extends BasicTypeForGeneric, TCreate, TUpdate>
 
   const fieldsSet = () => {
     switch (mode) {
-      case "create":
-        return createFields;
-      case "update":
-        return detailsFields;
-      default:
-        return detailsFields;
+    case "create":
+      return createFields;
+    case "update":
+      return detailsFields;
+    default:
+      return detailsFields;
     }
   };
 
@@ -247,44 +247,44 @@ export function GenericForm<TView extends BasicTypeForGeneric, TCreate, TUpdate>
       },
     };
     switch (field.type) {
-      case "integer":
-        return NumberEdit({
+    case "integer":
+      return NumberEdit({
+        ...commonProps,
+      });
+    case "number":
+      return NumberEdit({
+        ...commonProps,
+      });
+    case "string":
+      if (field.format === "date-time") {
+        return DatetimeEdit({
           ...commonProps,
+          value: values[field.name] ? new Date(values[field.name]) : null,
+          onChangeValue: (newValue: Date | null) => {
+            setValues((prevValues) => ({
+              ...prevValues,
+              [field.name]: newValue ? newValue.toISOString() : null,
+            }));
+          },
         });
-      case "number":
-        return NumberEdit({
+      } else if (field.enum && field.enum.length > 0) {
+        return EnumEdit({
           ...commonProps,
+          valueOptions: field.enum,
         });
-      case "string":
-        if (field.format === "date-time") {
-          return DatetimeEdit({
-            ...commonProps,
-            value: values[field.name] ? new Date(values[field.name]) : null,
-            onChangeValue: (newValue: Date | null) => {
-              setValues((prevValues) => ({
-                ...prevValues,
-                [field.name]: newValue ? newValue.toISOString() : null,
-              }));
-            },
-          });
-        } else if (field.enum && field.enum.length > 0) {
-          return EnumEdit({
-            ...commonProps,
-            valueOptions: field.enum,
-          });
-        } else {
-          return TextEdit({
-            ...commonProps,
-            minLength: field.minLength,
-            maxLength: field.maxLength,
-          });
-        }
-      default:
+      } else {
         return TextEdit({
           ...commonProps,
           minLength: field.minLength,
           maxLength: field.maxLength,
         });
+      }
+    default:
+      return TextEdit({
+        ...commonProps,
+        minLength: field.minLength,
+        maxLength: field.maxLength,
+      });
     }
   };
 
