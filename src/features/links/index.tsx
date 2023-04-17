@@ -72,6 +72,9 @@ export const LinksModule = () => {
       ...formProps,
       mode: "create",
       editable: true,
+      onSaved: (item) => {
+        navigate(getEditFormRoute(item.id!), {state: item});
+      }
     }
   });
 

@@ -1,4 +1,4 @@
-import { DtoSchema, DtoSchemaSource } from "@components/generic-components/common";
+import {DtoSchema, DtoSchemaSource} from "@components/generic-components/common";
 
 const convertSchemaToDtoSchema = (
   schema: DtoSchemaSource,
@@ -20,6 +20,7 @@ const convertSchemaToDtoSchema = (
         const refDtoSchema = convertSchemaToDtoSchema(refSchema, allSchemas);
         if (refDtoSchema.type === "string") {
           dtoSchema.properties[key] = {
+            hide: false,
             type: "string",
             enum: refDtoSchema.enum,
             title: value.title,
@@ -28,6 +29,7 @@ const convertSchemaToDtoSchema = (
       } else {
         dtoSchema.properties[key] = {
           type: value.type || "unknown",
+          hide: false
         };
 
         if (value.format) {
@@ -45,6 +47,26 @@ const convertSchemaToDtoSchema = (
         if (value.description) {
           dtoSchema.properties[key].description = value.description;
         }
+
+        if (value.pattern) {
+          dtoSchema.properties[key].pattern = value.pattern;
+        }
+
+        if (value.minLength) {
+          dtoSchema.properties[key].minLength = value.minLength;
+        }
+
+        if (value.maxLength) {
+          dtoSchema.properties[key].maxLength = value.maxLength;
+        }
+
+        if (value.example) {
+          dtoSchema.properties[key].example = value.example;
+        }
+
+        if (value["x-hide"]) {
+          dtoSchema.properties[key].hide = true;
+        }
       }
     }
   }
@@ -57,7 +79,7 @@ export const getSchemaDto = (
 ): DtoSchema => {
   if (name in allSchemas) {
     const schema = allSchemas[name];
-    return  convertSchemaToDtoSchema(schema, allSchemas);
+    return convertSchemaToDtoSchema(schema, allSchemas);
   }
   throw `${name} schema not found.`;
 };

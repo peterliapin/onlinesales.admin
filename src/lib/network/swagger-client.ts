@@ -10,355 +10,1272 @@
  */
 
 export interface AccountCreateDto {
-  /** @minLength 1 */
+  /**
+   * Name
+   * @minLength 1
+   * @pattern ^.{1,}$
+   * @example "string"
+   */
   name: string;
+  /**
+   * State
+   * @example "string"
+   */
   state?: string | null;
-  continentCode?: string | null;
-  countryCode?: string | null;
+  continentCode?: Continent;
+  countryCode?: Country;
+  /**
+   * City Name
+   * @example "Colombo"
+   */
   cityName?: string | null;
+  /**
+   * Site Url
+   * @example "https://example.com"
+   */
   siteUrl?: string | null;
+  /**
+   * Logo Url
+   * @example "https://example.com/logo.png"
+   */
+  logoUrl?: string | null;
+  /**
+   * Employees Range
+   * @example "50K-100K"
+   */
   employeesRange?: string | null;
-  /** @format double */
+  /**
+   * Revenue
+   * @format double
+   * @example 1
+   */
   revenue?: number | null;
+  /**
+   * Tags
+   * @example ["string1","string2"]
+   */
   tags?: string[] | null;
+  /**
+   * Social Media
+   * @example {"key1":"value1","key2":"value2"}
+   */
   socialMedia?: Record<string, string>;
+  /**
+   * Source
+   * @example "string"
+   */
   source?: string | null;
+  /**
+   * Data
+   * @example "string"
+   */
   data?: string | null;
 }
 
 export interface AccountDetailsDto {
-  /** @minLength 1 */
+  /**
+   * Name
+   * @minLength 1
+   * @pattern ^.{1,}$
+   * @example "string"
+   */
   name: string;
+  /**
+   * State
+   * @example "string"
+   */
   state?: string | null;
-  continentCode?: string | null;
-  countryCode?: string | null;
+  continentCode?: Continent;
+  countryCode?: Country;
+  /**
+   * City Name
+   * @example "Colombo"
+   */
   cityName?: string | null;
+  /**
+   * Site Url
+   * @example "https://example.com"
+   */
   siteUrl?: string | null;
+  /**
+   * Logo Url
+   * @example "https://example.com/logo.png"
+   */
+  logoUrl?: string | null;
+  /**
+   * Employees Range
+   * @example "50K-100K"
+   */
   employeesRange?: string | null;
-  /** @format double */
+  /**
+   * Revenue
+   * @format double
+   * @example 1
+   */
   revenue?: number | null;
+  /**
+   * Tags
+   * @example ["string1","string2"]
+   */
   tags?: string[] | null;
+  /**
+   * Social Media
+   * @example {"key1":"value1","key2":"value2"}
+   */
   socialMedia?: Record<string, string>;
+  /**
+   * Source
+   * @example "string"
+   */
   source?: string | null;
+  /**
+   * Data
+   * @example "string"
+   */
   data?: string | null;
-  /** @format int32 */
+  /**
+   * Id
+   * @format int32
+   * @example 1
+   */
   id?: number;
-  /** @format date-time */
+  /**
+   * Created At
+   * @format date-time
+   * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
+   * @example "2023-04-17T09:46:51Z"
+   */
   createdAt?: string;
-  /** @format date-time */
+  /**
+   * Updated At
+   * @format date-time
+   * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
+   * @example "2023-04-17T09:46:51Z"
+   */
   updatedAt?: string | null;
 }
 
 export interface AccountImportDto {
-  /** @format int32 */
+  /**
+   * Id
+   * @format int32
+   * @example 1
+   */
   id?: number | null;
+  /**
+   * Source
+   * @example "string"
+   */
   source?: string | null;
-  /** @format date-time */
+  /**
+   * Created At
+   * @format date-time
+   * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
+   * @example "2023-04-17T09:46:51Z"
+   */
   createdAt?: string | null;
-  /** @format date-time */
+  /**
+   * Updated At
+   * @format date-time
+   * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
+   * @example "2023-04-17T09:46:51Z"
+   */
   updatedAt?: string | null;
+  /**
+   * Created By Ip
+   * @example "string"
+   */
   createdByIp?: string | null;
+  /**
+   * Created By User Agent
+   * @example "string"
+   */
   createdByUserAgent?: string | null;
+  /**
+   * Updated By Ip
+   * @example "string"
+   */
   updatedByIp?: string | null;
+  /**
+   * Updated By User Agent
+   * @example "string"
+   */
   updatedByUserAgent?: string | null;
-  name?: string | null;
+  /**
+   * Name
+   * @example "string"
+   */
+  name?: string;
+  /**
+   * City
+   * @example "string"
+   */
   city?: string | null;
+  /**
+   * State Code
+   * @example "string"
+   */
   stateCode?: string | null;
-  countryCode?: string | null;
+  countryCode?: Country;
+  /**
+   * Site Url
+   * @example "string"
+   */
   siteUrl?: string | null;
+  /**
+   * Logo Url
+   * @example "string"
+   */
+  logoUrl?: string | null;
+  /**
+   * Employees Range
+   * @example "string"
+   */
   employeesRange?: string | null;
-  /** @format double */
+  /**
+   * Revenue
+   * @format double
+   * @example 1
+   */
   revenue?: number | null;
+  /**
+   * Tags
+   * @example ["string1","string2"]
+   */
   tags?: string[] | null;
+  /**
+   * Social Media
+   * @example {"key1":"value1","key2":"value2"}
+   */
   socialMedia?: Record<string, string>;
+  /**
+   * Data
+   * @example "string"
+   */
   data?: string | null;
 }
 
 export interface AccountUpdateDto {
+  /**
+   * Name
+   * @example "string"
+   */
   name?: string | null;
+  /**
+   * Site Url
+   * @example "string"
+   */
+  siteUrl?: string | null;
+  /**
+   * Logo Url
+   * @example "string"
+   */
+  logoUrl?: string | null;
+  /**
+   * City
+   * @example "string"
+   */
   city?: string | null;
+  /**
+   * State Code
+   * @example "string"
+   */
   stateCode?: string | null;
-  countryCode?: string | null;
+  countryCode?: Country;
+  /**
+   * Employees Range
+   * @example "string"
+   */
   employeesRange?: string | null;
-  /** @format double */
+  /**
+   * Revenue
+   * @format double
+   * @example 1
+   */
   revenue?: number | null;
+  /**
+   * Tags
+   * @example ["string1","string2"]
+   */
   tags?: string[] | null;
+  /**
+   * Social Media
+   * @example {"key1":"value1","key2":"value2"}
+   */
   socialMedia?: Record<string, string>;
+  /**
+   * Source
+   * @example "string"
+   */
   source?: string | null;
+  /**
+   * Data
+   * @example "string"
+   */
   data?: string | null;
 }
 
 export interface CommentCreateDto {
-  authorName?: string | null;
-  /** @format email */
-  authorEmail?: string | null;
-  /** @minLength 1 */
+  /**
+   * Author Name
+   * @example "string"
+   */
+  authorName?: string;
+  /**
+   * Author Email
+   * @format email
+   * @pattern ([\w\.\-] +)@([\w\-] +)((\.(\w){ 2,3})+)$
+   * @example "example@example.com"
+   */
+  authorEmail?: string;
+  /**
+   * Body
+   * @minLength 1
+   * @pattern ^.{1,}$
+   * @example "string"
+   */
   body: string;
-  /** @format int32 */
+  /**
+   * Content Id
+   * @format int32
+   * @example 1
+   */
   contentId: number;
-  /** @format int32 */
+  /**
+   * Parent Id
+   * @format int32
+   * @example 1
+   */
   parentId?: number | null;
+  /**
+   * Source
+   * @example "string"
+   */
   source?: string | null;
 }
 
 export interface CommentDetailsDto {
-  authorName?: string | null;
-  /** @format email */
-  authorEmail?: string | null;
-  /** @minLength 1 */
+  /**
+   * Author Name
+   * @example "string"
+   */
+  authorName?: string;
+  /**
+   * Author Email
+   * @format email
+   * @pattern ([\w\.\-] +)@([\w\-] +)((\.(\w){ 2,3})+)$
+   * @example "example@example.com"
+   */
+  authorEmail?: string;
+  /**
+   * Body
+   * @minLength 1
+   * @pattern ^.{1,}$
+   * @example "string"
+   */
   body: string;
-  /** @format int32 */
+  /**
+   * Content Id
+   * @format int32
+   * @example 1
+   */
   contentId: number;
-  /** @format int32 */
+  /**
+   * Parent Id
+   * @format int32
+   * @example 1
+   */
   parentId?: number | null;
+  /**
+   * Source
+   * @example "string"
+   */
   source?: string | null;
-  /** @format int32 */
+  /**
+   * Id
+   * @format int32
+   * @example 1
+   */
   id?: number;
-  /** @format date-time */
+  /**
+   * Created At
+   * @format date-time
+   * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
+   * @example "2023-04-17T09:46:51Z"
+   */
   createdAt?: string;
-  /** @format date-time */
+  /**
+   * Updated At
+   * @format date-time
+   * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
+   * @example "2023-04-17T09:46:51Z"
+   */
   updatedAt?: string | null;
 }
 
 export interface CommentImportDto {
-  /** @format int32 */
+  /**
+   * Id
+   * @format int32
+   * @example 1
+   */
   id?: number | null;
+  /**
+   * Source
+   * @example "string"
+   */
   source?: string | null;
-  /** @format date-time */
+  /**
+   * Created At
+   * @format date-time
+   * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
+   * @example "2023-04-17T09:46:51Z"
+   */
   createdAt?: string | null;
-  /** @format date-time */
+  /**
+   * Updated At
+   * @format date-time
+   * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
+   * @example "2023-04-17T09:46:51Z"
+   */
   updatedAt?: string | null;
+  /**
+   * Created By Ip
+   * @example "string"
+   */
   createdByIp?: string | null;
+  /**
+   * Created By User Agent
+   * @example "string"
+   */
   createdByUserAgent?: string | null;
+  /**
+   * Updated By Ip
+   * @example "string"
+   */
   updatedByIp?: string | null;
+  /**
+   * Updated By User Agent
+   * @example "string"
+   */
   updatedByUserAgent?: string | null;
-  authorName?: string | null;
-  /** @format email */
-  authorEmail?: string | null;
-  /** @minLength 1 */
+  /**
+   * Author Name
+   * @example "string"
+   */
+  authorName?: string;
+  /**
+   * Author Email
+   * @format email
+   * @pattern ([\w\.\-] +)@([\w\-] +)((\.(\w){ 2,3})+)$
+   * @example "example@example.com"
+   */
+  authorEmail?: string;
+  /**
+   * Body
+   * @minLength 1
+   * @pattern ^.{1,}$
+   * @example "string"
+   */
   body: string;
-  /** @format int32 */
+  /**
+   * Content Id
+   * @format int32
+   * @example 1
+   */
   contentId?: number | null;
+  /**
+   * Content Slug
+   * @example "string"
+   */
   contentSlug?: string | null;
-  /** @format int32 */
+  /**
+   * Parent Id
+   * @format int32
+   * @example 1
+   */
   parentId?: number | null;
+  /**
+   * Key
+   * @example "string"
+   */
   key?: string | null;
+  /**
+   * Parent Key
+   * @example "string"
+   */
   parentKey?: string | null;
 }
 
 export interface CommentUpdateDto {
-  /** @minLength 1 */
+  /**
+   * Body
+   * @minLength 1
+   * @pattern ^.{1,}$
+   * @example "string"
+   */
   body: string;
 }
 
 export interface ContactCreateDto {
+  /**
+   * Last Name
+   * @example "string"
+   */
   lastName?: string | null;
+  /**
+   * First Name
+   * @example "string"
+   */
   firstName?: string | null;
   continentCode?: Continent;
   countryCode?: Country;
+  /**
+   * City Name
+   * @example "string"
+   */
   cityName?: string | null;
+  /**
+   * Address1
+   * @example "string"
+   */
   address1?: string | null;
+  /**
+   * Address2
+   * @example "string"
+   */
   address2?: string | null;
+  /**
+   * State
+   * @example "string"
+   */
   state?: string | null;
+  /**
+   * Zip
+   * @example "string"
+   */
   zip?: string | null;
+  /**
+   * Phone
+   * @example "string"
+   */
   phone?: string | null;
-  /** @format int32 */
+  /**
+   * Timezone
+   * @format int32
+   * @example 1
+   */
   timezone?: number | null;
+  /**
+   * Language
+   * @example "string"
+   */
   language?: string | null;
-  /** @format int32 */
+  /**
+   * Unsubscribe Id
+   * @format int32
+   * @example 1
+   */
   unsubscribeId?: number | null;
+  /**
+   * Source
+   * @example "string"
+   */
   source?: string | null;
   /**
+   * Email
    * @format email
    * @minLength 1
+   * @pattern ([\w\.\-] +)@([\w\-] +)((\.(\w){ 2,3})+)$
+   * @example "example@example.com"
    */
   email: string;
 }
 
 export interface ContactDetailsDto {
+  /**
+   * Last Name
+   * @example "string"
+   */
   lastName?: string | null;
+  /**
+   * First Name
+   * @example "string"
+   */
   firstName?: string | null;
   continentCode?: Continent;
   countryCode?: Country;
+  /**
+   * City Name
+   * @example "string"
+   */
   cityName?: string | null;
+  /**
+   * Address1
+   * @example "string"
+   */
   address1?: string | null;
+  /**
+   * Address2
+   * @example "string"
+   */
   address2?: string | null;
+  /**
+   * State
+   * @example "string"
+   */
   state?: string | null;
+  /**
+   * Zip
+   * @example "string"
+   */
   zip?: string | null;
+  /**
+   * Phone
+   * @example "string"
+   */
   phone?: string | null;
-  /** @format int32 */
+  /**
+   * Timezone
+   * @format int32
+   * @example 1
+   */
   timezone?: number | null;
+  /**
+   * Language
+   * @example "string"
+   */
   language?: string | null;
-  /** @format int32 */
+  /**
+   * Unsubscribe Id
+   * @format int32
+   * @example 1
+   */
   unsubscribeId?: number | null;
+  /**
+   * Source
+   * @example "string"
+   */
   source?: string | null;
   /**
+   * Email
    * @format email
    * @minLength 1
+   * @pattern ([\w\.\-] +)@([\w\-] +)((\.(\w){ 2,3})+)$
+   * @example "example@example.com"
    */
   email: string;
-  /** @format int32 */
+  /**
+   * Id
+   * @format int32
+   * @example 1
+   */
   id?: number;
-  avatarUrl?: string | null;
-  /** @format date-time */
+  /**
+   * Avatar Url
+   * @example "string"
+   */
+  avatarUrl?: string;
+  /**
+   * Created At
+   * @format date-time
+   * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
+   * @example "2023-04-17T09:46:51Z"
+   */
   createdAt?: string;
-  /** @format date-time */
+  /**
+   * Updated At
+   * @format date-time
+   * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
+   * @example "2023-04-17T09:46:51Z"
+   */
   updatedAt?: string | null;
-  /** @format int32 */
+  /**
+   * Domain Id
+   * @format int32
+   * @example 1
+   */
   domainId?: number;
 }
 
 export interface ContactImportDto {
-  /** @format int32 */
+  /**
+   * Id
+   * @format int32
+   * @example 1
+   */
   id?: number | null;
+  /**
+   * Source
+   * @example "string"
+   */
   source?: string | null;
-  /** @format date-time */
+  /**
+   * Created At
+   * @format date-time
+   * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
+   * @example "2023-04-17T09:46:51Z"
+   */
   createdAt?: string | null;
-  /** @format date-time */
+  /**
+   * Updated At
+   * @format date-time
+   * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
+   * @example "2023-04-17T09:46:51Z"
+   */
   updatedAt?: string | null;
+  /**
+   * Created By Ip
+   * @example "string"
+   */
   createdByIp?: string | null;
+  /**
+   * Created By User Agent
+   * @example "string"
+   */
   createdByUserAgent?: string | null;
+  /**
+   * Updated By Ip
+   * @example "string"
+   */
   updatedByIp?: string | null;
+  /**
+   * Updated By User Agent
+   * @example "string"
+   */
   updatedByUserAgent?: string | null;
-  /** @format email */
+  /**
+   * Email
+   * @format email
+   * @pattern ([\w\.\-] +)@([\w\-] +)((\.(\w){ 2,3})+)$
+   * @example "example@example.com"
+   */
   email?: string | null;
+  /**
+   * Last Name
+   * @example "string"
+   */
   lastName?: string | null;
+  /**
+   * First Name
+   * @example "string"
+   */
   firstName?: string | null;
   continentCode?: Continent;
   countryCode?: Country;
+  /**
+   * City Name
+   * @example "string"
+   */
   cityName?: string | null;
+  /**
+   * Address1
+   * @example "string"
+   */
   address1?: string | null;
+  /**
+   * Address2
+   * @example "string"
+   */
   address2?: string | null;
+  /**
+   * State
+   * @example "string"
+   */
   state?: string | null;
+  /**
+   * Zip
+   * @example "string"
+   */
   zip?: string | null;
+  /**
+   * Phone
+   * @example "string"
+   */
   phone?: string | null;
-  /** @format int32 */
+  /**
+   * Timezone
+   * @format int32
+   * @example 1
+   */
   timezone?: number | null;
+  /**
+   * Language
+   * @example "string"
+   */
   language?: string | null;
-  /** @format int32 */
+  /**
+   * Unsubscribe Id
+   * @format int32
+   * @example 1
+   */
   unsubscribeId?: number | null;
-  /** @format int32 */
+  /**
+   * Account Id
+   * @format int32
+   * @example 1
+   */
   accountId?: number | null;
+  /**
+   * Account Name
+   * @example "string"
+   */
   accountName?: string | null;
-  /** @format int32 */
+  /**
+   * Domain Id
+   * @format int32
+   * @example 1
+   */
   domainId?: number | null;
 }
 
 export interface ContactUpdateDto {
+  /**
+   * Last Name
+   * @example "string"
+   */
   lastName?: string | null;
+  /**
+   * First Name
+   * @example "string"
+   */
   firstName?: string | null;
   continentCode?: Continent;
   countryCode?: Country;
+  /**
+   * City Name
+   * @example "string"
+   */
   cityName?: string | null;
+  /**
+   * Address1
+   * @example "string"
+   */
   address1?: string | null;
+  /**
+   * Address2
+   * @example "string"
+   */
   address2?: string | null;
+  /**
+   * State
+   * @example "string"
+   */
   state?: string | null;
+  /**
+   * Zip
+   * @example "string"
+   */
   zip?: string | null;
+  /**
+   * Phone
+   * @example "string"
+   */
   phone?: string | null;
-  /** @format int32 */
+  /**
+   * Timezone
+   * @format int32
+   * @example 1
+   */
   timezone?: number | null;
+  /**
+   * Language
+   * @example "string"
+   */
   language?: string | null;
-  /** @format int32 */
+  /**
+   * Unsubscribe Id
+   * @format int32
+   * @example 1
+   */
   unsubscribeId?: number | null;
+  /**
+   * Source
+   * @example "string"
+   */
   source?: string | null;
-  /** @format email */
+  /**
+   * Email
+   * @format email
+   * @pattern ([\w\.\-] +)@([\w\-] +)((\.(\w){ 2,3})+)$
+   * @example "example@example.com"
+   */
   email?: string | null;
 }
 
 export interface ContentCreateDto {
-  /** @minLength 1 */
+  /**
+   * Title
+   * @minLength 1
+   * @pattern ^.{1,}$
+   * @example "string"
+   */
   title: string;
-  /** @minLength 1 */
+  /**
+   * Description
+   * @minLength 1
+   * @pattern ^.{1,}$
+   * @example "string"
+   */
   description: string;
-  /** @minLength 1 */
+  /**
+   * Body
+   * @minLength 1
+   * @pattern ^.{1,}$
+   * @example "string"
+   */
   body: string;
+  /**
+   * Cover Image Url
+   * @example "string"
+   */
   coverImageUrl?: string | null;
+  /**
+   * Cover Image Alt
+   * @example "string"
+   */
   coverImageAlt?: string | null;
-  /** @minLength 1 */
+  /**
+   * Slug
+   * @minLength 1
+   * @pattern ^.{1,}$
+   * @example "string"
+   */
   slug: string;
-  /** @minLength 1 */
+  /**
+   * Type
+   * @minLength 1
+   * @pattern ^.{1,}$
+   * @example "string"
+   */
   type: string;
-  /** @minLength 1 */
+  /**
+   * Author
+   * @minLength 1
+   * @pattern ^.{1,}$
+   * @example "string"
+   */
   author: string;
-  /** @minLength 1 */
+  /**
+   * Language
+   * @minLength 1
+   * @pattern ^.{1,}$
+   * @example "string"
+   */
   language: string;
-  category?: string | null;
-  tags?: string[] | null;
+  /**
+   * Category
+   * @example "string"
+   */
+  category?: string;
+  /**
+   * Tags
+   * @example ["string1","string2"]
+   */
+  tags?: string[];
+  /**
+   * Allow Comments
+   * @example true
+   */
   allowComments?: boolean;
+  /**
+   * Source
+   * @example "string"
+   */
   source?: string | null;
 }
 
 export interface ContentDetailsDto {
-  /** @minLength 1 */
+  /**
+   * Title
+   * @minLength 1
+   * @pattern ^.{1,}$
+   * @example "string"
+   */
   title: string;
-  /** @minLength 1 */
+  /**
+   * Description
+   * @minLength 1
+   * @pattern ^.{1,}$
+   * @example "string"
+   */
   description: string;
-  /** @minLength 1 */
+  /**
+   * Body
+   * @minLength 1
+   * @pattern ^.{1,}$
+   * @example "string"
+   */
   body: string;
+  /**
+   * Cover Image Url
+   * @example "string"
+   */
   coverImageUrl?: string | null;
+  /**
+   * Cover Image Alt
+   * @example "string"
+   */
   coverImageAlt?: string | null;
-  /** @minLength 1 */
+  /**
+   * Slug
+   * @minLength 1
+   * @pattern ^.{1,}$
+   * @example "string"
+   */
   slug: string;
-  /** @minLength 1 */
+  /**
+   * Type
+   * @minLength 1
+   * @pattern ^.{1,}$
+   * @example "string"
+   */
   type: string;
-  /** @minLength 1 */
+  /**
+   * Author
+   * @minLength 1
+   * @pattern ^.{1,}$
+   * @example "string"
+   */
   author: string;
-  /** @minLength 1 */
+  /**
+   * Language
+   * @minLength 1
+   * @pattern ^.{1,}$
+   * @example "string"
+   */
   language: string;
-  category?: string | null;
-  tags?: string[] | null;
+  /**
+   * Category
+   * @example "string"
+   */
+  category?: string;
+  /**
+   * Tags
+   * @example ["string1","string2"]
+   */
+  tags?: string[];
+  /**
+   * Allow Comments
+   * @example true
+   */
   allowComments?: boolean;
+  /**
+   * Source
+   * @example "string"
+   */
   source?: string | null;
-  /** @format int32 */
+  /**
+   * Id
+   * @format int32
+   * @example 1
+   */
   id?: number;
-  /** @format date-time */
+  /**
+   * Created At
+   * @format date-time
+   * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
+   * @example "2023-04-17T09:46:51Z"
+   */
   createdAt?: string;
-  /** @format date-time */
+  /**
+   * Updated At
+   * @format date-time
+   * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
+   * @example "2023-04-17T09:46:51Z"
+   */
   updatedAt?: string | null;
 }
 
 export interface ContentImportDto {
-  /** @format int32 */
+  /**
+   * Id
+   * @format int32
+   * @example 1
+   */
   id?: number | null;
+  /**
+   * Source
+   * @example "string"
+   */
   source?: string | null;
-  /** @format date-time */
+  /**
+   * Created At
+   * @format date-time
+   * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
+   * @example "2023-04-17T09:46:51Z"
+   */
   createdAt?: string | null;
-  /** @format date-time */
+  /**
+   * Updated At
+   * @format date-time
+   * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
+   * @example "2023-04-17T09:46:51Z"
+   */
   updatedAt?: string | null;
+  /**
+   * Created By Ip
+   * @example "string"
+   */
   createdByIp?: string | null;
+  /**
+   * Created By User Agent
+   * @example "string"
+   */
   createdByUserAgent?: string | null;
+  /**
+   * Updated By Ip
+   * @example "string"
+   */
   updatedByIp?: string | null;
+  /**
+   * Updated By User Agent
+   * @example "string"
+   */
   updatedByUserAgent?: string | null;
+  /**
+   * Title
+   * @example "string"
+   */
   title?: string | null;
+  /**
+   * Description
+   * @example "string"
+   */
   description?: string | null;
+  /**
+   * Body
+   * @example "string"
+   */
   body?: string | null;
+  /**
+   * Cover Image Url
+   * @example "string"
+   */
   coverImageUrl?: string | null;
+  /**
+   * Cover Image Alt
+   * @example "string"
+   */
   coverImageAlt?: string | null;
+  /**
+   * Slug
+   * @example "string"
+   */
   slug?: string | null;
+  /**
+   * Type
+   * @example "string"
+   */
   type?: string | null;
+  /**
+   * Author
+   * @example "string"
+   */
   author?: string | null;
+  /**
+   * Language
+   * @example "string"
+   */
   language?: string | null;
+  /**
+   * Category
+   * @example "string"
+   */
   category?: string | null;
+  /**
+   * Tags
+   * @example "string"
+   */
   tags?: string | null;
+  /**
+   * Allow Comments
+   * @example true
+   */
   allowComments?: boolean | null;
 }
 
 export interface ContentUpdateDto {
+  /**
+   * Title
+   * @minLength 1
+   * @pattern ^.{1,}$
+   * @example "string"
+   */
   title?: string | null;
+  /**
+   * Description
+   * @minLength 1
+   * @pattern ^.{1,}$
+   * @example "string"
+   */
   description?: string | null;
+  /**
+   * Body
+   * @minLength 1
+   * @pattern ^.{1,}$
+   * @example "string"
+   */
   body?: string | null;
+  /**
+   * Cover Image Url
+   * @example "string"
+   */
   coverImageUrl?: string | null;
+  /**
+   * Cover Image Alt
+   * @example "string"
+   */
   coverImageAlt?: string | null;
+  /**
+   * Slug
+   * @minLength 1
+   * @pattern ^.{1,}$
+   * @example "string"
+   */
   slug?: string | null;
+  /**
+   * Type
+   * @minLength 1
+   * @pattern ^.{1,}$
+   * @example "string"
+   */
   type?: string | null;
+  /**
+   * Author
+   * @example "string"
+   */
   author?: string | null;
+  /**
+   * Language
+   * @minLength 1
+   * @pattern ^.{1,}$
+   * @example "string"
+   */
   language?: string | null;
+  /**
+   * Category
+   * @example "string"
+   */
   category?: string | null;
+  /**
+   * Tags
+   * @example ["string1","string2"]
+   */
   tags?: string[] | null;
+  /**
+   * Allow Comments
+   * @example true
+   */
   allowComments?: boolean | null;
+  /**
+   * Source
+   * @example "string"
+   */
   source?: string | null;
 }
 
+/** Continent */
 export enum Continent {
   ZZ = "ZZ",
   AF = "AF",
@@ -370,6 +1287,7 @@ export enum Continent {
   SA = "SA",
 }
 
+/** Country */
 export enum Country {
   ZZ = "ZZ",
   AF = "AF",
@@ -624,207 +1542,665 @@ export enum Country {
 }
 
 export interface DnsRecord {
-  domainName?: string | null;
-  recordClass?: string | null;
-  recordType?: string | null;
-  /** @format int32 */
+  /**
+   * Domain Name
+   * @example "string"
+   */
+  domainName?: string;
+  /**
+   * Record Class
+   * @example "string"
+   */
+  recordClass?: string;
+  /**
+   * Record Type
+   * @example "string"
+   */
+  recordType?: string;
+  /**
+   * Time To Live
+   * @format int32
+   * @example 1
+   */
   timeToLive?: number;
-  value?: string | null;
+  /**
+   * Value
+   * @example "string"
+   */
+  value?: string;
 }
 
 export interface DomainCreateDto {
-  /** @minLength 1 */
+  /**
+   * Name
+   * @minLength 1
+   * @pattern ^.{1,}$
+   * @example "example.com"
+   */
   name: string;
+  /**
+   * Title
+   * @example "string"
+   */
   title?: string | null;
+  /**
+   * Description
+   * @example "string"
+   */
   description?: string | null;
+  /**
+   * Url
+   * @example "https://example.com"
+   */
   url?: string | null;
+  /**
+   * Favicon Url
+   * @example "https://example.com/favicon.ico"
+   */
+  faviconUrl?: string | null;
+  /**
+   * Http Check
+   * @example true
+   */
   httpCheck?: boolean | null;
+  /**
+   * Free
+   * @example true
+   */
   free?: boolean | null;
+  /**
+   * Disposable
+   * @example true
+   */
   disposable?: boolean | null;
+  /**
+   * Catch All
+   * @example true
+   */
   catchAll?: boolean | null;
+  /** Dns Records */
   dnsRecords?: DnsRecord[] | null;
+  /**
+   * Dns Check
+   * @example true
+   */
   dnsCheck?: boolean | null;
+  /**
+   * Source
+   * @example "string"
+   */
   source?: string | null;
 }
 
 export interface DomainDetailsDto {
-  /** @minLength 1 */
+  /**
+   * Name
+   * @minLength 1
+   * @pattern ^.{1,}$
+   * @example "example.com"
+   */
   name: string;
+  /**
+   * Title
+   * @example "string"
+   */
   title?: string | null;
+  /**
+   * Description
+   * @example "string"
+   */
   description?: string | null;
+  /**
+   * Url
+   * @example "https://example.com"
+   */
   url?: string | null;
+  /**
+   * Favicon Url
+   * @example "https://example.com/favicon.ico"
+   */
+  faviconUrl?: string | null;
+  /**
+   * Http Check
+   * @example true
+   */
   httpCheck?: boolean | null;
+  /**
+   * Free
+   * @example true
+   */
   free?: boolean | null;
+  /**
+   * Disposable
+   * @example true
+   */
   disposable?: boolean | null;
+  /**
+   * Catch All
+   * @example true
+   */
   catchAll?: boolean | null;
+  /** Dns Records */
   dnsRecords?: DnsRecord[] | null;
+  /**
+   * Dns Check
+   * @example true
+   */
   dnsCheck?: boolean | null;
+  /**
+   * Source
+   * @example "string"
+   */
   source?: string | null;
-  /** @format int32 */
+  /**
+   * Id
+   * @format int32
+   * @example 1
+   */
   id?: number;
-  /** @format date-time */
+  /**
+   * Created At
+   * @format date-time
+   * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
+   * @example "2023-04-17T09:46:51Z"
+   */
   createdAt?: string;
-  /** @format date-time */
+  /**
+   * Updated At
+   * @format date-time
+   * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
+   * @example "2023-04-17T09:46:51Z"
+   */
   updatedAt?: string | null;
 }
 
 export interface DomainImportDto {
-  /** @format int32 */
+  /**
+   * Id
+   * @format int32
+   * @example 1
+   */
   id?: number | null;
+  /**
+   * Source
+   * @example "string"
+   */
   source?: string | null;
-  /** @format date-time */
+  /**
+   * Created At
+   * @format date-time
+   * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
+   * @example "2023-04-17T09:46:51Z"
+   */
   createdAt?: string | null;
-  /** @format date-time */
+  /**
+   * Updated At
+   * @format date-time
+   * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
+   * @example "2023-04-17T09:46:51Z"
+   */
   updatedAt?: string | null;
-  /** @minLength 1 */
+  /**
+   * Name
+   * @minLength 1
+   * @pattern ^.{1,}$
+   * @example "string"
+   */
   name: string;
+  /**
+   * Title
+   * @example "string"
+   */
   title?: string | null;
+  /**
+   * Description
+   * @example "string"
+   */
   description?: string | null;
+  /**
+   * Url
+   * @example "https://example.com"
+   */
   url?: string | null;
+  /**
+   * Favicon Url
+   * @example "https://example.com/favicon.ico"
+   */
+  faviconUrl?: string | null;
+  /**
+   * Http Check
+   * @example true
+   */
   httpCheck?: boolean | null;
+  /**
+   * Free
+   * @example true
+   */
   free?: boolean | null;
+  /**
+   * Disposable
+   * @example true
+   */
   disposable?: boolean | null;
+  /**
+   * Catch All
+   * @example true
+   */
   catchAll?: boolean | null;
+  /** Dns Records */
   dnsRecords?: DnsRecord[] | null;
+  /**
+   * Dns Check
+   * @example true
+   */
   dnsCheck?: boolean | null;
 }
 
 export interface DomainUpdateDto {
-  name?: string | null;
+  /**
+   * Title
+   * @example "string"
+   */
   title?: string | null;
+  /**
+   * Description
+   * @example "string"
+   */
   description?: string | null;
+  /**
+   * Url
+   * @example "https://example.com"
+   */
   url?: string | null;
+  /**
+   * Favicon Url
+   * @example "https://example.com/favicon.ico"
+   */
+  faviconUrl?: string | null;
+  /**
+   * Http Check
+   * @example true
+   */
   httpCheck?: boolean | null;
+  /**
+   * Free
+   * @example true
+   */
   free?: boolean | null;
+  /**
+   * Disposable
+   * @example true
+   */
   disposable?: boolean | null;
+  /**
+   * Catch All
+   * @example true
+   */
   catchAll?: boolean | null;
+  /** Dns Records */
   dnsRecords?: DnsRecord[] | null;
+  /**
+   * Dns Check
+   * @example true
+   */
   dnsCheck?: boolean | null;
 }
 
 export interface EmailGroupCreateDto {
-  /** @minLength 1 */
+  /**
+   * Name
+   * @minLength 1
+   * @pattern ^.{1,}$
+   * @example "string"
+   */
   name: string;
 }
 
 export interface EmailGroupDetailsDto {
-  /** @minLength 1 */
+  /**
+   * Name
+   * @minLength 1
+   * @pattern ^.{1,}$
+   * @example "string"
+   */
   name: string;
-  /** @format int32 */
+  /**
+   * Id
+   * @format int32
+   * @example 1
+   */
   id?: number;
-  /** @format date-time */
+  /**
+   * Created At
+   * @format date-time
+   * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
+   * @example "2023-04-17T09:46:51Z"
+   */
   createdAt?: string;
-  /** @format date-time */
+  /**
+   * Updated At
+   * @format date-time
+   * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
+   * @example "2023-04-17T09:46:51Z"
+   */
   updatedAt?: string | null;
 }
 
 export interface EmailGroupUpdateDto {
+  /**
+   * Name
+   * @minLength 1
+   * @pattern ^.{1,}$
+   * @example "string"
+   */
   name?: string | null;
 }
 
 export interface EmailTemplateCreateDto {
-  /** @minLength 1 */
+  /**
+   * Name
+   * @minLength 1
+   * @pattern ^.{1,}$
+   * @example "string"
+   */
   name: string;
-  /** @minLength 1 */
+  /**
+   * Subject
+   * @minLength 1
+   * @pattern ^.{1,}$
+   * @example "string"
+   */
   subject: string;
-  /** @minLength 1 */
+  /**
+   * Body Template
+   * @minLength 1
+   * @pattern ^.{1,}$
+   * @example "string"
+   */
   bodyTemplate: string;
   /**
+   * From Email
    * @format email
    * @minLength 1
+   * @pattern ([\w\.\-] +)@([\w\-] +)((\.(\w){ 2,3})+)$
+   * @example "example@example.com"
    */
   fromEmail: string;
-  /** @minLength 1 */
+  /**
+   * From Name
+   * @minLength 1
+   * @pattern ^.{1,}$
+   * @example "string"
+   */
   fromName: string;
-  /** @minLength 1 */
+  /**
+   * Language
+   * @minLength 1
+   * @pattern ^.{1,}$
+   * @example "string"
+   */
   language: string;
-  /** @format int32 */
+  /**
+   * Group Id
+   * @format int32
+   * @example 1
+   */
   groupId: number;
 }
 
 export interface EmailTemplateDetailsDto {
-  /** @minLength 1 */
+  /**
+   * Name
+   * @minLength 1
+   * @pattern ^.{1,}$
+   * @example "string"
+   */
   name: string;
-  /** @minLength 1 */
+  /**
+   * Subject
+   * @minLength 1
+   * @pattern ^.{1,}$
+   * @example "string"
+   */
   subject: string;
-  /** @minLength 1 */
+  /**
+   * Body Template
+   * @minLength 1
+   * @pattern ^.{1,}$
+   * @example "string"
+   */
   bodyTemplate: string;
   /**
+   * From Email
    * @format email
    * @minLength 1
+   * @pattern ([\w\.\-] +)@([\w\-] +)((\.(\w){ 2,3})+)$
+   * @example "example@example.com"
    */
   fromEmail: string;
-  /** @minLength 1 */
+  /**
+   * From Name
+   * @minLength 1
+   * @pattern ^.{1,}$
+   * @example "string"
+   */
   fromName: string;
-  /** @minLength 1 */
+  /**
+   * Language
+   * @minLength 1
+   * @pattern ^.{1,}$
+   * @example "string"
+   */
   language: string;
-  /** @format int32 */
+  /**
+   * Group Id
+   * @format int32
+   * @example 1
+   */
   groupId: number;
-  /** @format int32 */
+  /**
+   * Id
+   * @format int32
+   * @example 1
+   */
   id?: number;
-  /** @format date-time */
+  /**
+   * Created At
+   * @format date-time
+   * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
+   * @example "2023-04-17T09:46:51Z"
+   */
   createdAt?: string;
-  /** @format date-time */
+  /**
+   * Updated At
+   * @format date-time
+   * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
+   * @example "2023-04-17T09:46:51Z"
+   */
   updatedAt?: string | null;
 }
 
 export interface EmailTemplateUpdateDto {
+  /**
+   * Name
+   * @minLength 1
+   * @pattern ^.{1,}$
+   * @example "string"
+   */
   name?: string | null;
+  /**
+   * Subject
+   * @minLength 1
+   * @pattern ^.{1,}$
+   * @example "string"
+   */
   subject?: string | null;
+  /**
+   * Body Template
+   * @minLength 1
+   * @pattern ^.{1,}$
+   * @example "string"
+   */
   bodyTemplate?: string | null;
-  /** @format email */
+  /**
+   * From Email
+   * @format email
+   * @pattern ([\w\.\-] +)@([\w\-] +)((\.(\w){ 2,3})+)$
+   * @example "example@example.com"
+   */
   fromEmail?: string | null;
+  /**
+   * From Name
+   * @minLength 1
+   * @pattern ^.{1,}$
+   * @example "string"
+   */
   fromName?: string | null;
-  /** @format int32 */
+  /**
+   * Group Id
+   * @format int32
+   * @example 1
+   */
   groupId?: number | null;
 }
 
 export interface ImportError {
-  /** @format int32 */
+  /**
+   * Row
+   * @format int32
+   * @example 1
+   */
   row?: number;
-  message?: string | null;
+  /**
+   * Message
+   * @example "string"
+   */
+  message?: string;
 }
 
 export interface ImportResult {
-  /** @format int32 */
+  /**
+   * Added
+   * @format int32
+   * @example 1
+   */
   added?: number;
-  /** @format int32 */
+  /**
+   * Updated
+   * @format int32
+   * @example 1
+   */
   updated?: number;
-  /** @format int32 */
+  /**
+   * Failed
+   * @format int32
+   * @example 1
+   */
   failed?: number;
-  /** @format int32 */
+  /**
+   * Skipped
+   * @format int32
+   * @example 1
+   */
   skipped?: number;
+  /** Errors */
   errors?: ImportError[] | null;
 }
 
 export interface LinkCreateDto {
+  /**
+   * Uid
+   * @example "string"
+   */
   uid?: string | null;
-  /** @minLength 1 */
+  /**
+   * Destination
+   * @minLength 1
+   * @pattern ^.{1,}$
+   * @example "string"
+   */
   destination: string;
-  /** @minLength 1 */
+  /**
+   * Name
+   * @minLength 1
+   * @pattern ^.{1,}$
+   * @example "string"
+   */
   name: string;
+  /**
+   * Source
+   * @example "string"
+   */
   source?: string | null;
 }
 
 export interface LinkDetailsDto {
+  /**
+   * Uid
+   * @example "string"
+   */
   uid?: string | null;
-  /** @minLength 1 */
+  /**
+   * Destination
+   * @minLength 1
+   * @pattern ^.{1,}$
+   * @example "string"
+   */
   destination: string;
-  /** @minLength 1 */
+  /**
+   * Name
+   * @minLength 1
+   * @pattern ^.{1,}$
+   * @example "string"
+   */
   name: string;
+  /**
+   * Source
+   * @example "string"
+   */
   source?: string | null;
-  /** @format int32 */
+  /**
+   * Id
+   * @format int32
+   * @example 1
+   */
   id?: number;
-  /** @format date-time */
+  /**
+   * Created At
+   * @format date-time
+   * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
+   * @example "2023-04-17T09:46:51Z"
+   */
   createdAt?: string;
-  /** @format date-time */
+  /**
+   * Updated At
+   * @format date-time
+   * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
+   * @example "2023-04-17T09:46:51Z"
+   */
   updatedAt?: string | null;
 }
 
 export interface LinkUpdateDto {
+  /**
+   * Uid
+   * @example "string"
+   */
   uid?: string | null;
+  /**
+   * Destination
+   * @example "string"
+   */
   destination?: string | null;
+  /**
+   * Name
+   * @example "string"
+   */
   name?: string | null;
+  /**
+   * Source
+   * @example "string"
+   */
   source?: string | null;
 }
 
@@ -839,186 +2215,536 @@ export enum LogLevel {
 }
 
 export interface LogRecord {
-  /** @format date-time */
+  /**
+   * Date Time
+   * @format date-time
+   * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
+   * @example "2023-04-17T09:46:51Z"
+   */
   dateTime?: string;
   logLevel?: LogLevel;
-  message?: string | null;
+  /**
+   * Message
+   * @example "string"
+   */
+  message?: string;
 }
 
 export interface MediaDetailsDto {
-  location?: string | null;
-}
-
-export interface MessageEventDto {
-  email?: string | null;
-  processed?: string | null;
-  sendGridMessageId?: string | null;
-  event?: string | null;
-  type?: string | null;
-  reason?: string | null;
-  originatingIp?: string | null;
+  /**
+   * Location
+   * @example "string"
+   */
+  location?: string;
 }
 
 export interface OrderCreateDto {
-  /** @format int32 */
+  /**
+   * Contact Id
+   * @format int32
+   * @example 1
+   */
   contactId: number;
-  /** @minLength 1 */
+  /**
+   * Ref No
+   * @minLength 1
+   * @pattern ^.{1,}$
+   * @example "string"
+   */
   refNo: string;
+  /**
+   * Order Number
+   * @example "string"
+   */
   orderNumber?: string | null;
+  /**
+   * Affiliate Name
+   * @example "string"
+   */
   affiliateName?: string | null;
-  /** @format double */
+  /**
+   * Exchange Rate
+   * @format double
+   * @example 1
+   */
   exchangeRate: number;
-  /** @minLength 1 */
+  /**
+   * Currency
+   * @minLength 1
+   * @pattern ^.{1,}$
+   * @example "string"
+   */
   currency: string;
+  /**
+   * Test Order
+   * @example true
+   */
   testOrder?: boolean;
+  /**
+   * Data
+   * @example "string"
+   */
   data?: string | null;
+  /**
+   * Source
+   * @example "string"
+   */
   source?: string | null;
 }
 
 export interface OrderDetailsDto {
-  /** @format int32 */
+  /**
+   * Contact Id
+   * @format int32
+   * @example 1
+   */
   contactId: number;
-  /** @minLength 1 */
+  /**
+   * Ref No
+   * @minLength 1
+   * @pattern ^.{1,}$
+   * @example "string"
+   */
   refNo: string;
+  /**
+   * Order Number
+   * @example "string"
+   */
   orderNumber?: string | null;
+  /**
+   * Affiliate Name
+   * @example "string"
+   */
   affiliateName?: string | null;
-  /** @format double */
+  /**
+   * Exchange Rate
+   * @format double
+   * @example 1
+   */
   exchangeRate: number;
-  /** @minLength 1 */
+  /**
+   * Currency
+   * @minLength 1
+   * @pattern ^.{1,}$
+   * @example "string"
+   */
   currency: string;
+  /**
+   * Test Order
+   * @example true
+   */
   testOrder?: boolean;
+  /**
+   * Data
+   * @example "string"
+   */
   data?: string | null;
+  /**
+   * Source
+   * @example "string"
+   */
   source?: string | null;
-  /** @format int32 */
+  /**
+   * Id
+   * @format int32
+   * @example 1
+   */
   id?: number;
-  /** @format date-time */
+  /**
+   * Created At
+   * @format date-time
+   * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
+   * @example "2023-04-17T09:46:51Z"
+   */
   createdAt?: string;
-  /** @format date-time */
+  /**
+   * Updated At
+   * @format date-time
+   * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
+   * @example "2023-04-17T09:46:51Z"
+   */
   updatedAt?: string | null;
-  /** @format int32 */
+  /**
+   * Quantity
+   * @format int32
+   * @example 1
+   */
   quantity?: number;
-  /** @format double */
+  /**
+   * Total
+   * @format double
+   * @example 1
+   */
   total?: number;
 }
 
 export interface OrderImportDto {
-  /** @format int32 */
+  /**
+   * Id
+   * @format int32
+   * @example 1
+   */
   id?: number | null;
+  /**
+   * Source
+   * @example "string"
+   */
   source?: string | null;
-  /** @format date-time */
+  /**
+   * Created At
+   * @format date-time
+   * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
+   * @example "2023-04-17T09:46:51Z"
+   */
   createdAt?: string | null;
-  /** @format date-time */
+  /**
+   * Updated At
+   * @format date-time
+   * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
+   * @example "2023-04-17T09:46:51Z"
+   */
   updatedAt?: string | null;
+  /**
+   * Created By Ip
+   * @example "string"
+   */
   createdByIp?: string | null;
+  /**
+   * Created By User Agent
+   * @example "string"
+   */
   createdByUserAgent?: string | null;
+  /**
+   * Updated By Ip
+   * @example "string"
+   */
   updatedByIp?: string | null;
+  /**
+   * Updated By User Agent
+   * @example "string"
+   */
   updatedByUserAgent?: string | null;
+  /**
+   * Ref No
+   * @example "string"
+   */
   refNo?: string | null;
+  /**
+   * Order Number
+   * @example "string"
+   */
   orderNumber?: string | null;
+  /**
+   * Affiliate Name
+   * @example "string"
+   */
   affiliateName?: string | null;
-  /** @format double */
+  /**
+   * Exchange Rate
+   * @format double
+   * @example 1
+   */
   exchangeRate?: number | null;
-  /** @minLength 1 */
+  /**
+   * Currency
+   * @minLength 1
+   * @pattern ^.{1,}$
+   * @example "string"
+   */
   currency: string;
-  /** @format int32 */
+  /**
+   * Contact Id
+   * @format int32
+   * @example 1
+   */
   contactId?: number | null;
+  /**
+   * Contact Email
+   * @example "string"
+   */
   contactEmail?: string | null;
+  /**
+   * Test Order
+   * @example true
+   */
   testOrder?: boolean | null;
+  /**
+   * Data
+   * @example "string"
+   */
   data?: string | null;
 }
 
 export interface OrderItemCreateDto {
-  /** @format int32 */
+  /**
+   * Order Id
+   * @format int32
+   * @example 1
+   */
   orderId: number;
-  /** @minLength 1 */
+  /**
+   * Product Name
+   * @minLength 1
+   * @pattern ^.{1,}$
+   * @example "string"
+   */
   productName: string;
-  /** @minLength 1 */
+  /**
+   * License Code
+   * @minLength 1
+   * @pattern ^.{1,}$
+   * @example "string"
+   */
   licenseCode: string;
-  /** @format double */
+  /**
+   * Unit Price
+   * @format double
+   * @example 1
+   */
   unitPrice: number;
-  /** @minLength 1 */
+  /**
+   * Currency
+   * @minLength 1
+   * @pattern ^(NAD|ZAR|XAF|JPY|GHS|ETB|USD|¤¤|AED|BHD|DJF|DZD|EGP|MAD|ERN|ILS|IQD|JOD|KMF|KWD|LBP|LYD|MAD|MRU|OMR|ILS|QAR|SAR|SDG|SOS|SSP|SYP|XAF|TND|YER|CLP|INR|TZS|EUR|AZN|AZN|RUB|XAF|BYN|ZMW|TZS|BGN|XOF|BDT|INR|CNY|INR|EUR|INR|BAM|BAM|ERN|EUR|EUR|EUR|EUR|BDT|INR|RUB|PHP|UGX|USD|USD|USD|IQD|IRR|EUR|CZK|RUB|GBP|DKK|DKK|KES|EUR|EUR|CHF|EUR|EUR|CHF|EUR|XOF|INR|EUR|XAF|MVR|XOF|BTN|KES|GHS|XOF|EUR|EUR|¤¤|¤¤|AED|XCD|XCD|ALL|ARS|USD|EUR|AUD|BBD|BDT|EUR|BGN|BIF|BMD|BND|BRL|BSD|BWP|BZD|CAD|AUD|CHF|NZD|CLP|XAF|CNY|COP|CVE|AUD|EUR|CZK|EUR|USD|DKK|XCD|EUR|ERN|EUR|FJD|FKP|USD|EUR|GBP|XCD|GBP|GHS|GIP|GMD|EUR|USD|GYD|HKD|HUF|IDR|EUR|ILS|GBP|INR|USD|GBP|JMD|JPY|KES|AUD|XCD|KRW|KYD|XCD|LRD|ZAR|EUR|EUR|MGA|USD|MMK|MOP|USD|XCD|EUR|MUR|MVR|MWK|MXN|MYR|NAD|AUD|NGN|EUR|NOK|AUD|NZD|NZD|PGK|PHP|PKR|PLN|NZD|USD|EUR|USD|RUB|RWF|SAR|SBD|SCR|SDG|SEK|SGD|SHP|EUR|EUR|SLL|SSP|ANG|SZL|USD|THB|NZD|TOP|TRY|TTD|AUD|TWD|TZS|UAH|UGX|USD|USD|USD|XCD|USD|USD|VUV|WST|ZAR|ZMW|USD|¤¤|¤¤|¤¤|XCD|ARS|BBD|BMD|BOB|USD|BRL|BSD|BZD|CAD|CLP|COP|CRC|CUP|ANG|XCD|DOP|EUR|USD|EUR|XCD|XAF|GTQ|GYD|HNL|HTG|EUR|XCD|KYD|XCD|MXN|NIO|PAB|PEN|PHP|USD|PYG|USD|USD|TTD|USD|UYU|XCD|VES|USD|USD|EUR|EUR|XAF|AFN|IRR|XOF|XAF|GHS|GMD|GNF|XOF|LRD|MRU|XOF|NGN|SLL|XOF|XOF|XAF|GHS|GMD|GNF|XOF|LRD|MRU|XOF|NGN|SLL|XOF|EUR|PHP|DKK|DKK|EUR|XOF|BIF|XOF|EUR|CAD|CDF|XAF|XAF|CHF|XOF|XAF|DJF|DZD|EUR|XAF|EUR|GNF|EUR|XAF|HTG|KMF|EUR|MAD|EUR|EUR|MGA|XOF|EUR|MRU|MUR|XPF|XOF|XPF|EUR|EUR|RWF|SCR|XOF|SYP|XAF|XOF|TND|VUV|XPF|EUR|EUR|EUR|GBP|EUR|GHS|GBP|ERN|ETB|EUR|PYG|CHF|EUR|CHF|INR|KES|GBP|GHS|XOF|NGN|USD|ILS|INR|INR|BAM|EUR|EUR|HUF|AMD|¤¤|IDR|NGN|CNY|¤¤|ISK|CHF|EUR|EUR|EUR|CAD|JPY|¤¤|XAF|TZS|IDR|GEL|DZD|NGN|KES|NGN|TZS|CVE|XOF|KES|KZT|XAF|DKK|KES|KHR|INR|KPW|KRW|INR|GNF|LRD|INR|INR|INR|TZS|XAF|EUR|TRY|GBP|KGS|TZS|EUR|UGX|USD|AOA|CDF|XAF|XAF|LAK|IQD|IRR|EUR|CDF|KES|KES|EUR|INR|KES|TZS|KES|MUR|MGA|MZN|XAF|NZD|MKD|INR|MNT|INR|INR|CAD|INR|BND|MYR|BND|IDR|MYR|SGD|EUR|XAF|MMK|RUB|IRR|NAD|NOK|NOK|USD|EUR|EUR|INR|NPR|AWG|EUR|USD|ANG|EUR|SRD|ANG|XAF|NOK|XAF|GNF|ZAR|ZAR|SSP|USD|MWK|UGX|EUR|ETB|KES|INR|GEL|RUB|PKR|PKR|INR|NGN|PLN|AFN|PKR|AOA|BRL|CHF|CVE|EUR|XAF|XOF|EUR|MOP|MZN|EUR|STN|USD|BOB|USD|PEN|BDT|MMK|CHF|BIF|MDL|RON|TZS|BYN|KGS|KZT|MDL|RUB|UAH|RWF|TZS|INR|RUB|KES|INR|INR|TZS|EUR|EUR|PKR|INR|EUR|NOK|SEK|MZN|XOF|XAF|MAD|MAD|LKR|EUR|EUR|USD|WST|EUR|USD|DJF|ETB|KES|SOS|ALL|MKD|EUR|BAM|EUR|RSD|EUR|BAM|EUR|RSD|EUR|SZL|ZAR|ZAR|ZAR|IDR|EUR|EUR|SEK|CDF|KES|TZS|UGX|IQD|SYP|INR|LKR|MYR|SGD|INR|KES|UGX|TJS|THB|ERN|ETB|ERN|TMT|BWP|ZAR|TOP|EUR|TRY|TWD|ZAR|RUB|XOF|MAD|CNY|UAH|INR|PKR|PKR|AFN|UZS|UZS|LRD|LRD|ZAR|VND|TZS|EUR|CHF|ETB|XOF|ZAR|UGX|XAF|¤¤|XOF|NGN|CNY|HKD|MAD|CNY|HKD|JPY|MOP|SGD|CNY|HKD|MOP|TWD|ZAR)$
+   * @example "USD"
+   */
   currency: string;
   /**
+   * Quantity
    * @format int32
    * @min 1
    * @max 2147483647
+   * @example 1
    */
   quantity: number;
+  /**
+   * Source
+   * @example "string"
+   */
   source?: string | null;
 }
 
 export interface OrderItemDetailsDto {
-  /** @format int32 */
+  /**
+   * Order Id
+   * @format int32
+   * @example 1
+   */
   orderId: number;
-  /** @minLength 1 */
+  /**
+   * Product Name
+   * @minLength 1
+   * @pattern ^.{1,}$
+   * @example "string"
+   */
   productName: string;
-  /** @minLength 1 */
+  /**
+   * License Code
+   * @minLength 1
+   * @pattern ^.{1,}$
+   * @example "string"
+   */
   licenseCode: string;
-  /** @format double */
+  /**
+   * Unit Price
+   * @format double
+   * @example 1
+   */
   unitPrice: number;
-  /** @minLength 1 */
+  /**
+   * Currency
+   * @minLength 1
+   * @pattern ^(NAD|ZAR|XAF|JPY|GHS|ETB|USD|¤¤|AED|BHD|DJF|DZD|EGP|MAD|ERN|ILS|IQD|JOD|KMF|KWD|LBP|LYD|MAD|MRU|OMR|ILS|QAR|SAR|SDG|SOS|SSP|SYP|XAF|TND|YER|CLP|INR|TZS|EUR|AZN|AZN|RUB|XAF|BYN|ZMW|TZS|BGN|XOF|BDT|INR|CNY|INR|EUR|INR|BAM|BAM|ERN|EUR|EUR|EUR|EUR|BDT|INR|RUB|PHP|UGX|USD|USD|USD|IQD|IRR|EUR|CZK|RUB|GBP|DKK|DKK|KES|EUR|EUR|CHF|EUR|EUR|CHF|EUR|XOF|INR|EUR|XAF|MVR|XOF|BTN|KES|GHS|XOF|EUR|EUR|¤¤|¤¤|AED|XCD|XCD|ALL|ARS|USD|EUR|AUD|BBD|BDT|EUR|BGN|BIF|BMD|BND|BRL|BSD|BWP|BZD|CAD|AUD|CHF|NZD|CLP|XAF|CNY|COP|CVE|AUD|EUR|CZK|EUR|USD|DKK|XCD|EUR|ERN|EUR|FJD|FKP|USD|EUR|GBP|XCD|GBP|GHS|GIP|GMD|EUR|USD|GYD|HKD|HUF|IDR|EUR|ILS|GBP|INR|USD|GBP|JMD|JPY|KES|AUD|XCD|KRW|KYD|XCD|LRD|ZAR|EUR|EUR|MGA|USD|MMK|MOP|USD|XCD|EUR|MUR|MVR|MWK|MXN|MYR|NAD|AUD|NGN|EUR|NOK|AUD|NZD|NZD|PGK|PHP|PKR|PLN|NZD|USD|EUR|USD|RUB|RWF|SAR|SBD|SCR|SDG|SEK|SGD|SHP|EUR|EUR|SLL|SSP|ANG|SZL|USD|THB|NZD|TOP|TRY|TTD|AUD|TWD|TZS|UAH|UGX|USD|USD|USD|XCD|USD|USD|VUV|WST|ZAR|ZMW|USD|¤¤|¤¤|¤¤|XCD|ARS|BBD|BMD|BOB|USD|BRL|BSD|BZD|CAD|CLP|COP|CRC|CUP|ANG|XCD|DOP|EUR|USD|EUR|XCD|XAF|GTQ|GYD|HNL|HTG|EUR|XCD|KYD|XCD|MXN|NIO|PAB|PEN|PHP|USD|PYG|USD|USD|TTD|USD|UYU|XCD|VES|USD|USD|EUR|EUR|XAF|AFN|IRR|XOF|XAF|GHS|GMD|GNF|XOF|LRD|MRU|XOF|NGN|SLL|XOF|XOF|XAF|GHS|GMD|GNF|XOF|LRD|MRU|XOF|NGN|SLL|XOF|EUR|PHP|DKK|DKK|EUR|XOF|BIF|XOF|EUR|CAD|CDF|XAF|XAF|CHF|XOF|XAF|DJF|DZD|EUR|XAF|EUR|GNF|EUR|XAF|HTG|KMF|EUR|MAD|EUR|EUR|MGA|XOF|EUR|MRU|MUR|XPF|XOF|XPF|EUR|EUR|RWF|SCR|XOF|SYP|XAF|XOF|TND|VUV|XPF|EUR|EUR|EUR|GBP|EUR|GHS|GBP|ERN|ETB|EUR|PYG|CHF|EUR|CHF|INR|KES|GBP|GHS|XOF|NGN|USD|ILS|INR|INR|BAM|EUR|EUR|HUF|AMD|¤¤|IDR|NGN|CNY|¤¤|ISK|CHF|EUR|EUR|EUR|CAD|JPY|¤¤|XAF|TZS|IDR|GEL|DZD|NGN|KES|NGN|TZS|CVE|XOF|KES|KZT|XAF|DKK|KES|KHR|INR|KPW|KRW|INR|GNF|LRD|INR|INR|INR|TZS|XAF|EUR|TRY|GBP|KGS|TZS|EUR|UGX|USD|AOA|CDF|XAF|XAF|LAK|IQD|IRR|EUR|CDF|KES|KES|EUR|INR|KES|TZS|KES|MUR|MGA|MZN|XAF|NZD|MKD|INR|MNT|INR|INR|CAD|INR|BND|MYR|BND|IDR|MYR|SGD|EUR|XAF|MMK|RUB|IRR|NAD|NOK|NOK|USD|EUR|EUR|INR|NPR|AWG|EUR|USD|ANG|EUR|SRD|ANG|XAF|NOK|XAF|GNF|ZAR|ZAR|SSP|USD|MWK|UGX|EUR|ETB|KES|INR|GEL|RUB|PKR|PKR|INR|NGN|PLN|AFN|PKR|AOA|BRL|CHF|CVE|EUR|XAF|XOF|EUR|MOP|MZN|EUR|STN|USD|BOB|USD|PEN|BDT|MMK|CHF|BIF|MDL|RON|TZS|BYN|KGS|KZT|MDL|RUB|UAH|RWF|TZS|INR|RUB|KES|INR|INR|TZS|EUR|EUR|PKR|INR|EUR|NOK|SEK|MZN|XOF|XAF|MAD|MAD|LKR|EUR|EUR|USD|WST|EUR|USD|DJF|ETB|KES|SOS|ALL|MKD|EUR|BAM|EUR|RSD|EUR|BAM|EUR|RSD|EUR|SZL|ZAR|ZAR|ZAR|IDR|EUR|EUR|SEK|CDF|KES|TZS|UGX|IQD|SYP|INR|LKR|MYR|SGD|INR|KES|UGX|TJS|THB|ERN|ETB|ERN|TMT|BWP|ZAR|TOP|EUR|TRY|TWD|ZAR|RUB|XOF|MAD|CNY|UAH|INR|PKR|PKR|AFN|UZS|UZS|LRD|LRD|ZAR|VND|TZS|EUR|CHF|ETB|XOF|ZAR|UGX|XAF|¤¤|XOF|NGN|CNY|HKD|MAD|CNY|HKD|JPY|MOP|SGD|CNY|HKD|MOP|TWD|ZAR)$
+   * @example "USD"
+   */
   currency: string;
   /**
+   * Quantity
    * @format int32
    * @min 1
    * @max 2147483647
+   * @example 1
    */
   quantity: number;
+  /**
+   * Source
+   * @example "string"
+   */
   source?: string | null;
-  /** @format int32 */
+  /**
+   * Id
+   * @format int32
+   * @example 1
+   */
   id?: number;
-  /** @format date-time */
+  /**
+   * Created At
+   * @format date-time
+   * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
+   * @example "2023-04-17T09:46:51Z"
+   */
   createdAt?: string;
-  /** @format date-time */
+  /**
+   * Updated At
+   * @format date-time
+   * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
+   * @example "2023-04-17T09:46:51Z"
+   */
   updatedAt?: string | null;
-  /** @format double */
+  /**
+   * Currency Total
+   * @format double
+   * @example 1
+   */
   currencyTotal?: number;
-  /** @format double */
+  /**
+   * Total
+   * @format double
+   * @example 1
+   */
   total?: number;
 }
 
 export interface OrderItemImportDto {
-  /** @format int32 */
+  /**
+   * Id
+   * @format int32
+   * @example 1
+   */
   id?: number | null;
+  /**
+   * Source
+   * @example "string"
+   */
   source?: string | null;
-  /** @format date-time */
+  /**
+   * Created At
+   * @format date-time
+   * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
+   * @example "2023-04-17T09:46:51Z"
+   */
   createdAt?: string | null;
-  /** @format date-time */
+  /**
+   * Updated At
+   * @format date-time
+   * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
+   * @example "2023-04-17T09:46:51Z"
+   */
   updatedAt?: string | null;
+  /**
+   * Created By Ip
+   * @example "string"
+   */
   createdByIp?: string | null;
+  /**
+   * Created By User Agent
+   * @example "string"
+   */
   createdByUserAgent?: string | null;
+  /**
+   * Updated By Ip
+   * @example "string"
+   */
   updatedByIp?: string | null;
+  /**
+   * Updated By User Agent
+   * @example "string"
+   */
   updatedByUserAgent?: string | null;
-  /** @format int32 */
+  /**
+   * Order Id
+   * @format int32
+   * @example 1
+   */
   orderId?: number | null;
+  /**
+   * Order Ref No
+   * @example "string"
+   */
   orderRefNo?: string | null;
+  /**
+   * Product Name
+   * @example "string"
+   */
   productName?: string | null;
+  /**
+   * License Code
+   * @example "string"
+   */
   licenseCode?: string | null;
-  /** @format double */
+  /**
+   * Unit Price
+   * @format double
+   * @example 1
+   */
   unitPrice?: number | null;
+  /**
+   * Currency
+   * @pattern ^(NAD|ZAR|XAF|JPY|GHS|ETB|USD|¤¤|AED|BHD|DJF|DZD|EGP|MAD|ERN|ILS|IQD|JOD|KMF|KWD|LBP|LYD|MAD|MRU|OMR|ILS|QAR|SAR|SDG|SOS|SSP|SYP|XAF|TND|YER|CLP|INR|TZS|EUR|AZN|AZN|RUB|XAF|BYN|ZMW|TZS|BGN|XOF|BDT|INR|CNY|INR|EUR|INR|BAM|BAM|ERN|EUR|EUR|EUR|EUR|BDT|INR|RUB|PHP|UGX|USD|USD|USD|IQD|IRR|EUR|CZK|RUB|GBP|DKK|DKK|KES|EUR|EUR|CHF|EUR|EUR|CHF|EUR|XOF|INR|EUR|XAF|MVR|XOF|BTN|KES|GHS|XOF|EUR|EUR|¤¤|¤¤|AED|XCD|XCD|ALL|ARS|USD|EUR|AUD|BBD|BDT|EUR|BGN|BIF|BMD|BND|BRL|BSD|BWP|BZD|CAD|AUD|CHF|NZD|CLP|XAF|CNY|COP|CVE|AUD|EUR|CZK|EUR|USD|DKK|XCD|EUR|ERN|EUR|FJD|FKP|USD|EUR|GBP|XCD|GBP|GHS|GIP|GMD|EUR|USD|GYD|HKD|HUF|IDR|EUR|ILS|GBP|INR|USD|GBP|JMD|JPY|KES|AUD|XCD|KRW|KYD|XCD|LRD|ZAR|EUR|EUR|MGA|USD|MMK|MOP|USD|XCD|EUR|MUR|MVR|MWK|MXN|MYR|NAD|AUD|NGN|EUR|NOK|AUD|NZD|NZD|PGK|PHP|PKR|PLN|NZD|USD|EUR|USD|RUB|RWF|SAR|SBD|SCR|SDG|SEK|SGD|SHP|EUR|EUR|SLL|SSP|ANG|SZL|USD|THB|NZD|TOP|TRY|TTD|AUD|TWD|TZS|UAH|UGX|USD|USD|USD|XCD|USD|USD|VUV|WST|ZAR|ZMW|USD|¤¤|¤¤|¤¤|XCD|ARS|BBD|BMD|BOB|USD|BRL|BSD|BZD|CAD|CLP|COP|CRC|CUP|ANG|XCD|DOP|EUR|USD|EUR|XCD|XAF|GTQ|GYD|HNL|HTG|EUR|XCD|KYD|XCD|MXN|NIO|PAB|PEN|PHP|USD|PYG|USD|USD|TTD|USD|UYU|XCD|VES|USD|USD|EUR|EUR|XAF|AFN|IRR|XOF|XAF|GHS|GMD|GNF|XOF|LRD|MRU|XOF|NGN|SLL|XOF|XOF|XAF|GHS|GMD|GNF|XOF|LRD|MRU|XOF|NGN|SLL|XOF|EUR|PHP|DKK|DKK|EUR|XOF|BIF|XOF|EUR|CAD|CDF|XAF|XAF|CHF|XOF|XAF|DJF|DZD|EUR|XAF|EUR|GNF|EUR|XAF|HTG|KMF|EUR|MAD|EUR|EUR|MGA|XOF|EUR|MRU|MUR|XPF|XOF|XPF|EUR|EUR|RWF|SCR|XOF|SYP|XAF|XOF|TND|VUV|XPF|EUR|EUR|EUR|GBP|EUR|GHS|GBP|ERN|ETB|EUR|PYG|CHF|EUR|CHF|INR|KES|GBP|GHS|XOF|NGN|USD|ILS|INR|INR|BAM|EUR|EUR|HUF|AMD|¤¤|IDR|NGN|CNY|¤¤|ISK|CHF|EUR|EUR|EUR|CAD|JPY|¤¤|XAF|TZS|IDR|GEL|DZD|NGN|KES|NGN|TZS|CVE|XOF|KES|KZT|XAF|DKK|KES|KHR|INR|KPW|KRW|INR|GNF|LRD|INR|INR|INR|TZS|XAF|EUR|TRY|GBP|KGS|TZS|EUR|UGX|USD|AOA|CDF|XAF|XAF|LAK|IQD|IRR|EUR|CDF|KES|KES|EUR|INR|KES|TZS|KES|MUR|MGA|MZN|XAF|NZD|MKD|INR|MNT|INR|INR|CAD|INR|BND|MYR|BND|IDR|MYR|SGD|EUR|XAF|MMK|RUB|IRR|NAD|NOK|NOK|USD|EUR|EUR|INR|NPR|AWG|EUR|USD|ANG|EUR|SRD|ANG|XAF|NOK|XAF|GNF|ZAR|ZAR|SSP|USD|MWK|UGX|EUR|ETB|KES|INR|GEL|RUB|PKR|PKR|INR|NGN|PLN|AFN|PKR|AOA|BRL|CHF|CVE|EUR|XAF|XOF|EUR|MOP|MZN|EUR|STN|USD|BOB|USD|PEN|BDT|MMK|CHF|BIF|MDL|RON|TZS|BYN|KGS|KZT|MDL|RUB|UAH|RWF|TZS|INR|RUB|KES|INR|INR|TZS|EUR|EUR|PKR|INR|EUR|NOK|SEK|MZN|XOF|XAF|MAD|MAD|LKR|EUR|EUR|USD|WST|EUR|USD|DJF|ETB|KES|SOS|ALL|MKD|EUR|BAM|EUR|RSD|EUR|BAM|EUR|RSD|EUR|SZL|ZAR|ZAR|ZAR|IDR|EUR|EUR|SEK|CDF|KES|TZS|UGX|IQD|SYP|INR|LKR|MYR|SGD|INR|KES|UGX|TJS|THB|ERN|ETB|ERN|TMT|BWP|ZAR|TOP|EUR|TRY|TWD|ZAR|RUB|XOF|MAD|CNY|UAH|INR|PKR|PKR|AFN|UZS|UZS|LRD|LRD|ZAR|VND|TZS|EUR|CHF|ETB|XOF|ZAR|UGX|XAF|¤¤|XOF|NGN|CNY|HKD|MAD|CNY|HKD|JPY|MOP|SGD|CNY|HKD|MOP|TWD|ZAR)$
+   * @example "USD"
+   */
   currency?: string | null;
-  /** @format int32 */
+  /**
+   * Quantity
+   * @format int32
+   * @example 1
+   */
   quantity?: number | null;
 }
 
 export interface OrderItemUpdateDto {
+  /**
+   * Product Name
+   * @minLength 1
+   * @pattern ^.{1,}$
+   * @example "string"
+   */
   productName?: string | null;
+  /**
+   * License Code
+   * @minLength 1
+   * @pattern ^.{1,}$
+   * @example "string"
+   */
   licenseCode?: string | null;
-  /** @format double */
+  /**
+   * Unit Price
+   * @format double
+   * @example 1
+   */
   unitPrice?: number | null;
   /**
+   * Quantity
    * @format int32
    * @min 1
    * @max 2147483647
+   * @example 1
    */
   quantity?: number | null;
+  /**
+   * Data
+   * @example "string"
+   */
   data?: string | null;
 }
 
 export interface OrderUpdateDto {
-  /** @minLength 1 */
+  /**
+   * Ref No
+   * @minLength 1
+   * @pattern ^.{1,}$
+   * @example "string"
+   */
   refNo: string;
+  /**
+   * Affiliate Name
+   * @example "string"
+   */
   affiliateName?: string | null;
+  /**
+   * Data
+   * @example "string"
+   */
   data?: string | null;
 }
 
@@ -1032,43 +2758,97 @@ export interface ProblemDetails {
   [key: string]: any;
 }
 
-export interface SmsDetailsDto {
-  /** @minLength 1 */
-  recipient: string;
-  /** @minLength 1 */
-  message: string;
-}
-
 export interface TaskDetailsDto {
-  name?: string | null;
-  cronSchedule?: string | null;
-  /** @format int32 */
+  /**
+   * Name
+   * @example "string"
+   */
+  name?: string;
+  /**
+   * Cron Schedule
+   * @example "string"
+   */
+  cronSchedule?: string;
+  /**
+   * Retry Count
+   * @format int32
+   * @example 1
+   */
   retryCount?: number;
-  /** @format int32 */
+  /**
+   * Retry Interval
+   * @format int32
+   * @example 1
+   */
   retryInterval?: number;
+  /**
+   * Is Running
+   * @example true
+   */
   isRunning?: boolean;
 }
 
 export interface TaskExecutionDto {
-  name?: string | null;
+  /**
+   * Name
+   * @example "string"
+   */
+  name?: string;
+  /**
+   * Completed
+   * @example true
+   */
   completed?: boolean;
 }
 
 export interface Unsubscribe {
-  /** @format int32 */
+  /**
+   * Id
+   * @format int32
+   * @example 1
+   */
   id?: number;
+  /**
+   * Source
+   * @example "string"
+   */
   source?: string | null;
-  /** @format date-time */
+  /**
+   * Created At
+   * @format date-time
+   * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
+   * @example "2023-04-17T09:46:51Z"
+   */
   createdAt: string;
+  /**
+   * Created By Ip
+   * @example "string"
+   */
   createdByIp?: string | null;
+  /**
+   * Created By User Agent
+   * @example "string"
+   */
   createdByUserAgent?: string | null;
-  reason?: string | null;
-  /** @format int32 */
+  /**
+   * Reason
+   * @example "string"
+   */
+  reason?: string;
+  /**
+   * Contact Id
+   * @format int32
+   * @example 1
+   */
   contactId?: number | null;
 }
 
 export interface User {
-  name?: string | null;
+  /**
+   * Name
+   * @example "string"
+   */
+  name?: string;
 }
 
 export type QueryParamsType = Record<string | number, any>;
@@ -1283,7 +3063,7 @@ export class HttpClient<SecurityDataType = unknown> {
 
 /**
  * @title OnlineSales API
- * @version 1.2.1.0
+ * @version 1.2.2.0
  */
 export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
   microsoftIdentity = {
@@ -2666,24 +4446,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
-     * @tags Messages
-     * @name MessagesSmsCreate
-     * @request POST:/api/messages/sms
-     * @secure
-     */
-    messagesSmsCreate: (data: SmsDetailsDto, params: RequestParams = {}) =>
-      this.request<void, ProblemDetails>({
-        path: `/api/messages/sms`,
-        method: "POST",
-        body: data,
-        secure: true,
-        type: ContentType.Json,
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
      * @tags OrderItems
      * @name OrderItemsCreate
      * @request POST:/api/order-items
@@ -2947,40 +4709,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/api/orders/export`,
         method: "GET",
         query: query,
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @tags Sendgrid
-     * @name SendgridImportCreate
-     * @request POST:/api/sendgrid/import
-     * @secure
-     */
-    sendgridImportCreate: (data: MessageEventDto[], params: RequestParams = {}) =>
-      this.request<void, void | ProblemDetails>({
-        path: `/api/sendgrid/import`,
-        method: "POST",
-        body: data,
-        secure: true,
-        type: ContentType.Json,
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @tags Sendgrid
-     * @name SendgridWebhookCreate
-     * @request POST:/api/sendgrid/webhook
-     * @secure
-     */
-    sendgridWebhookCreate: (params: RequestParams = {}) =>
-      this.request<void, void | ProblemDetails>({
-        path: `/api/sendgrid/webhook`,
-        method: "POST",
         secure: true,
         ...params,
       }),

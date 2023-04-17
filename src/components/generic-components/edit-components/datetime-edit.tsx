@@ -6,21 +6,30 @@ import dayjs from "dayjs";
 export const DatetimeEdit = ({
   key,
   label,
+  example,
+  required,
   value,
   onChangeValue,
   disabled,
 }: EditProps<Date>): ReactNode => {
   return (
-    <DateTimePicker
-      key={key}
-      label={label}
-      disabled={disabled}
-      value={dayjs(value)}
-      format="L HH:mm"
-      sx={{ width: "100%" }}
-      onChange={(newValue) => {
-        onChangeValue && onChangeValue(newValue ? newValue.toDate() : null);
-      }}
-    />
+    <div title={example}>
+      <DateTimePicker
+        key={key}
+        label={label}
+        disabled={disabled}
+        value={dayjs(value)}
+        format="L HH:mm"
+        sx={{ width: "100%" }}
+        slotProps={{
+          textField: {
+            required: required,
+          },
+        }}
+        onChange={(newValue) => {
+          onChangeValue && onChangeValue(newValue ? newValue.toDate() : null);
+        }}
+      />
+    </div>
   );
 };

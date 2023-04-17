@@ -13,16 +13,23 @@ import {
   DatetimeEdit,
   EnumEdit,
 } from "@components/generic-components/edit-components";
+import {useNotificationsService} from "@hooks";
 
 export interface DtoField {
+  editable: boolean;
+  required: boolean | undefined;
+  hide: boolean;
   name: string;
   label: string;
   type?: string;
   format?: string;
   nullable?: boolean;
   description?: string;
-  editable: boolean;
   enum?: string[];
+  minLength?: number;
+  maxLength?: number;
+  pattern?: string;
+  example?: any;
 }
 
 interface DynamicValues {
@@ -49,6 +56,7 @@ export interface GenericFormProps<TView extends BasicTypeForGeneric, TCreate, TU
   createSchema: DtoSchema;
   mode?: "create" | "update" | "details";
   getItemId: () => number | undefined;
+  onSaved?: (item: TView) => void;
 }
 
 export function GenericForm<TView extends BasicTypeForGeneric, TCreate, TUpdate>({
@@ -60,9 +68,11 @@ export function GenericForm<TView extends BasicTypeForGeneric, TCreate, TUpdate>
   updateSchema,
   createSchema,
   mode,
-  getItemId
-}: GenericFormProps<TView, TCreate, TUpdate>): JSX.Element {
+  getItemId,
+  onSaved
+}: GenericFormProps<TView, TCreate, TUpdate>) {
   const {setBusy, isBusy, setSaving, isSaving} = useModuleWrapperContext();
+  const {notificationsService} = useNotificationsService();
   const itemId = getItemId();
 
   const updateFields: DtoField[] = Object.keys(updateSchema.properties)
@@ -75,7 +85,13 @@ export function GenericForm<TView extends BasicTypeForGeneric, TCreate, TUpdate>
         nullable: updateSchema.properties[key].nullable,
         description: updateSchema.properties[key].description,
         enum: updateSchema.properties[key].enum,
+        example: updateSchema.properties[key].example,
+        pattern: updateSchema.properties[key].pattern,
+        minLength: updateSchema.properties[key].minLength,
+        maxLength: updateSchema.properties[key].maxLength,
+        required: updateSchema.required && updateSchema.required.indexOf(key) > -1,
         editable: true,
+        hide: updateSchema.properties[key].hide
       };
     });
 
@@ -89,7 +105,13 @@ export function GenericForm<TView extends BasicTypeForGeneric, TCreate, TUpdate>
         nullable: createSchema.properties[key].nullable,
         description: createSchema.properties[key].description,
         enum: createSchema.properties[key].enum,
+        example: createSchema.properties[key].example,
+        pattern: createSchema.properties[key].pattern,
+        minLength: createSchema.properties[key].minLength,
+        maxLength: createSchema.properties[key].maxLength,
+        required: createSchema.required && createSchema.required.indexOf(key) > -1,
         editable: true,
+        hide: createSchema.properties[key].hide
       };
     });
 
@@ -103,7 +125,13 @@ export function GenericForm<TView extends BasicTypeForGeneric, TCreate, TUpdate>
         nullable: detailsSchema.properties[key].nullable,
         description: detailsSchema.properties[key].description,
         enum: detailsSchema.properties[key].enum,
+        example: detailsSchema.properties[key].example,
+        pattern: detailsSchema.properties[key].pattern,
+        minLength: detailsSchema.properties[key].minLength,
+        maxLength: detailsSchema.properties[key].maxLength,
+        required: detailsSchema.required && detailsSchema.required.indexOf(key) > -1,
         editable: key in updateSchema.properties,
+        hide: detailsSchema.properties[key].hide
       };
     });
 
@@ -144,15 +172,19 @@ export function GenericForm<TView extends BasicTypeForGeneric, TCreate, TUpdate>
       (itemId ? updateFields : createFields).forEach((field) => {
         if (values[field.name]) {
           saveData[field.name] = values[field.name];
+        } else if (field.required) {
+          notificationsService.error(`Field ${field.name} is empty!`);
         }
       });
 
       if (itemId) {
         const {data} = await updateItemFn(itemId, saveData, {});
         setValues((values) => ({...values, ...data}));
+        onSaved && onSaved(data);
       } else {
         const {data} = await createItemFn(saveData, {});
         setValues((values) => ({...values, ...data}));
+        onSaved && onSaved(data);
       }
     });
   };
@@ -170,8 +202,11 @@ export function GenericForm<TView extends BasicTypeForGeneric, TCreate, TUpdate>
 
   const getEdit = (field: DtoField) => {
     const commonProps = {
+      required: field.required,
+      pattern: field.pattern,
       key: field.name,
       label: field.label,
+      example: field.example && `Value examples: ${field.example}`,
       value: values[field.name],
       disabled: !editable || !field.editable,
       onChangeValue: (newValue: any) => {
@@ -210,11 +245,15 @@ export function GenericForm<TView extends BasicTypeForGeneric, TCreate, TUpdate>
       } else {
         return TextEdit({
           ...commonProps,
+          minLength: field.minLength,
+          maxLength: field.maxLength,
         });
       }
     default:
       return TextEdit({
         ...commonProps,
+        minLength: field.minLength,
+        maxLength: field.maxLength,
       });
     }
   };
@@ -224,11 +263,13 @@ export function GenericForm<TView extends BasicTypeForGeneric, TCreate, TUpdate>
       <Card>
         <CardContent>
           <Grid container spacing={3}>
-            {fieldsSet().map((field) => (
-              <Grid key={field.name} item xs={6} sm={6}>
-                {getEdit(field)}
-              </Grid>
-            ))}
+            {fieldsSet()
+              .filter((field) => !field.hide)
+              .map((field) => (
+                <Grid key={field.name} item xs={6} sm={6}>
+                  {getEdit(field)}
+                </Grid>
+              ))}
             <Grid item xs={12} sm={12}>
               {
                 editable && (

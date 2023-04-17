@@ -1,98 +1,52 @@
-import { BreadcrumbLink } from "../../utils/types";
-import { dataListBreadcrumbLinks } from "../../utils/constants";
-import { CoreModule, getCoreModuleRoute } from "@lib/router";
+import {BreadcrumbLink} from "../../utils/types";
+import {dataListBreadcrumbLinks} from "../../utils/constants";
+import {CoreModule, getCoreModuleRoute} from "@lib/router";
+
+export interface DtoSourceProperty {
+  $ref?: string;
+  type?: "integer" | "number" | "string" | string;
+  format?: "int32" | "int64" | "float" | "double" | "date-time" | "email" | "password" | string;
+  nullable?: boolean;
+  title?: string;
+  description?: string;
+  "x-hide"?: boolean;
+  enum?: string[];
+  minLength?: number;
+  maxLength?: number;
+  pattern?: string;
+  example?: any;
+}
 
 export interface DtoSchemaSource {
   type: string;
   enum?: string[];
   required?: string[];
   properties?: {
-    [x: string]:
-      | {
-          $ref?: string;
-          type?: "integer";
-          format?: "int32" | "int64";
-          nullable?: boolean;
-          title?: string;
-          description?: string;
-          enum?: string[];
-        }
-      | {
-          $ref?: string;
-          type?: "number";
-          format?: "float" | "double";
-          nullable?: boolean;
-          title?: string;
-          description?: string;
-          enum?: string[];
-        }
-      | {
-          $ref?: string;
-          type?: "string";
-          format?: "email" | "password" | string;
-          nullable?: boolean;
-          title?: string;
-          description?: string;
-          enum?: string[];
-        }
-      | {
-          $ref?: string;
-          type?: string;
-          format?: string;
-          nullable?: boolean;
-          title?: string;
-          description?: string;
-          enum?: string[];
-        };
+    [x: string]: DtoSourceProperty;
   };
 }
+
+export interface DtoProperty {
+  hide: boolean;
+  type: "integer" | "number" | "string" | string;
+  format?: "int32" | "int64" | "float" | "double" | "date-time" | "email" | "password" | string;
+  nullable?: boolean;
+  title?: string;
+  description?: string;
+  enum?: string[];
+  minLength?: number;
+  maxLength?: number;
+  pattern?: string;
+  example?: any;
+}
+
 
 export interface DtoSchema {
   type: string;
   enum?: string[];
   required?: string[];
   properties: {
-    [x: string]:
-      | {
-          type: "integer";
-          format?: "int32" | "int64";
-          nullable?: boolean;
-          title?: string;
-          description?: string;
-          enum?: string[];
-        }
-      | {
-          type: "number";
-          format?: "float" | "double";
-          nullable?: boolean;
-          title?: string;
-          description?: string;
-          enum?: string[];
-        }
-      | {
-          type: "string";
-          format?: "date-time";
-          nullable?: boolean;
-          title?: string;
-          description?: string;
-          enum?: string[];
-        }
-      | {
-          type: "string";
-          format?: "email" | "password" | string;
-          nullable?: boolean;
-          title?: string;
-          description?: string;
-          enum?: string[];
-        }
-      | {
-          type: string;
-          format?: string;
-          nullable?: boolean;
-          title?: string;
-          description?: string;
-          enum?: string[];
-        };
+    [x: string]: DtoProperty;
   };
 }
 
@@ -113,6 +67,6 @@ export const getBreadcrumbLinks = (
 ): BreadcrumbLink[] => {
   return [
     ...dataListBreadcrumbLinks,
-    { linkText: moduleName, toRoute: getCoreModuleRoute(modulePath) },
+    {linkText: moduleName, toRoute: getCoreModuleRoute(modulePath)},
   ];
 };

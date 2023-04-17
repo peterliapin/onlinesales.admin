@@ -1,4 +1,4 @@
-import {ReactNode, useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import {HttpResponse, ProblemDetails, RequestParams} from "@lib/network/swagger-client";
 import {useModuleWrapperContext} from "@providers/module-wrapper-provider";
 import {DataGrid, GridColDef, GridSortModel} from "@mui/x-data-grid";
@@ -31,7 +31,7 @@ export function GenericDataGrid<T extends BasicTypeForGeneric>({
   detailsNavigate,
   editNavigate,
   searchText,
-}: GenericDataGridProps<T>): ReactNode {
+}: GenericDataGridProps<T>) {
   const {setBusy} = useModuleWrapperContext();
 
   const actionsColumn: GridColDef = {
@@ -63,10 +63,11 @@ export function GenericDataGrid<T extends BasicTypeForGeneric>({
 
   const columns: GridColDef[] = [actionsColumn].concat([
     ...(Object.keys(schema.properties)
+      .filter((key) => !schema.properties[key].hide)
       .map((key) => {
         const column: GridColDef = {
           field: key,
-          type: (schema.properties)[key].type,
+          type: schema.properties[key].type,
           width: 200,
           description: schema.properties[key].description,
           headerName: camelCaseToTitleCase(key),
