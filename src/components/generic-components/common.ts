@@ -71,6 +71,14 @@ export interface DtoSchema {
         }
       | {
           type: "string";
+          format?: "date-time";
+          nullable?: boolean;
+          title?: string;
+          description?: string;
+          enum?: string[];
+        }
+      | {
+          type: "string";
           format?: "email" | "password" | string;
           nullable?: boolean;
           title?: string;

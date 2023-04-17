@@ -52,21 +52,21 @@ export interface GenericFormProps<TView extends BasicTypeForGeneric, TCreate, TU
 }
 
 export function GenericForm<TView extends BasicTypeForGeneric, TCreate, TUpdate>({
-  editable,
-  getItemFn,
-  createItemFn,
-  updateItemFn,
-  detailsSchema,
-  updateSchema,
-  createSchema,
-  mode,
-  getItemId
-}: GenericFormProps<TView, TCreate, TUpdate>): JSX.Element {
+                                                                                   editable,
+                                                                                   getItemFn,
+                                                                                   createItemFn,
+                                                                                   updateItemFn,
+                                                                                   detailsSchema,
+                                                                                   updateSchema,
+                                                                                   createSchema,
+                                                                                   mode,
+                                                                                   getItemId
+                                                                                 }: GenericFormProps<TView, TCreate, TUpdate>): JSX.Element {
   const {setBusy, isBusy, setSaving, isSaving} = useModuleWrapperContext();
-  const itemId = getItemId(); // Number(params && params["*"] && params["*"].match(/^\d+?/)?.[0]);
+  const itemId = getItemId();
 
-  const updateFields: DtoField[] = updateSchema.properties
-    ? Object.keys(updateSchema.properties).map((key) => {
+  const updateFields: DtoField[] = Object.keys(updateSchema.properties)
+    .map((key) => {
       return {
         name: key,
         label: updateSchema.properties[key].title || camelCaseToTitleCase(key),
@@ -77,11 +77,10 @@ export function GenericForm<TView extends BasicTypeForGeneric, TCreate, TUpdate>
         enum: updateSchema.properties[key].enum,
         editable: true,
       };
-    })
-    : [];
+    });
 
-  const createFields: DtoField[] = createSchema.properties
-    ? Object.keys(createSchema.properties).map((key) => {
+  const createFields: DtoField[] = Object.keys(createSchema.properties)
+    .map((key) => {
       return {
         name: key,
         label: createSchema.properties[key].title || camelCaseToTitleCase(key),
@@ -92,11 +91,10 @@ export function GenericForm<TView extends BasicTypeForGeneric, TCreate, TUpdate>
         enum: createSchema.properties[key].enum,
         editable: true,
       };
-    })
-    : [];
+    });
 
-  const detailsFields: DtoField[] = detailsSchema.properties
-    ? Object.keys(detailsSchema.properties).map((key) => {
+  const detailsFields: DtoField[] = Object.keys(detailsSchema.properties)
+    .map((key) => {
       return {
         name: key,
         label: detailsSchema.properties[key].title || camelCaseToTitleCase(key),
@@ -107,8 +105,7 @@ export function GenericForm<TView extends BasicTypeForGeneric, TCreate, TUpdate>
         enum: detailsSchema.properties[key].enum,
         editable: key in updateSchema.properties,
       };
-    })
-    : [];
+    });
 
   const [values, setValues] = useState<DynamicValues>(() => {
     const initValues: DynamicValues = {};
@@ -162,12 +159,12 @@ export function GenericForm<TView extends BasicTypeForGeneric, TCreate, TUpdate>
 
   const fieldsSet = () => {
     switch (mode) {
-    case "create":
-      return createFields;
-    case "update":
-      return detailsFields;
-    default:
-      return detailsFields;
+      case "create":
+        return createFields;
+      case "update":
+        return detailsFields;
+      default:
+        return detailsFields;
     }
   };
 
@@ -185,40 +182,40 @@ export function GenericForm<TView extends BasicTypeForGeneric, TCreate, TUpdate>
       },
     };
     switch (field.type) {
-    case "integer":
-      return NumberEdit({
-        ...commonProps,
-      });
-    case "number":
-      return NumberEdit({
-        ...commonProps,
-      });
-    case "string":
-      if (field.format === "date-time") {
-        return DatetimeEdit({
+      case "integer":
+        return NumberEdit({
           ...commonProps,
-          value: values[field.name] ? new Date(values[field.name]) : null,
-          onChangeValue: (newValue: Date | null) => {
-            setValues((prevValues) => ({
-              ...prevValues,
-              [field.name]: newValue ? newValue.toISOString() : null,
-            }));
-          },
         });
-      } else if (field.enum && field.enum.length > 0) {
-        return EnumEdit({
+      case "number":
+        return NumberEdit({
           ...commonProps,
-          valueOptions: field.enum,
         });
-      } else {
+      case "string":
+        if (field.format === "date-time") {
+          return DatetimeEdit({
+            ...commonProps,
+            value: values[field.name] ? new Date(values[field.name]) : null,
+            onChangeValue: (newValue: Date | null) => {
+              setValues((prevValues) => ({
+                ...prevValues,
+                [field.name]: newValue ? newValue.toISOString() : null,
+              }));
+            },
+          });
+        } else if (field.enum && field.enum.length > 0) {
+          return EnumEdit({
+            ...commonProps,
+            valueOptions: field.enum,
+          });
+        } else {
+          return TextEdit({
+            ...commonProps,
+          });
+        }
+      default:
         return TextEdit({
           ...commonProps,
         });
-      }
-    default:
-      return TextEdit({
-        ...commonProps,
-      });
     }
   };
 

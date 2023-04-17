@@ -12,6 +12,7 @@ import {ActionButtonContainer} from "@components/data-table/index.styled";
 import {IconButton} from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import dayjs from "dayjs";
 
 export interface GenericDataGridProps<T extends BasicTypeForGeneric> {
   getItemsFn: (
@@ -25,12 +26,12 @@ export interface GenericDataGridProps<T extends BasicTypeForGeneric> {
 }
 
 export function GenericDataGrid<T extends BasicTypeForGeneric>({
-  getItemsFn,
-  schema,
-  detailsNavigate,
-  editNavigate,
-  searchText,
-}: GenericDataGridProps<T>): ReactNode {
+                                                                 getItemsFn,
+                                                                 schema,
+                                                                 detailsNavigate,
+                                                                 editNavigate,
+                                                                 searchText,
+                                                               }: GenericDataGridProps<T>): ReactNode {
   const {setBusy} = useModuleWrapperContext();
 
   const actionsColumn: GridColDef = {
@@ -61,20 +62,24 @@ export function GenericDataGrid<T extends BasicTypeForGeneric>({
   };
 
   const columns: GridColDef[] = [actionsColumn].concat([
-    ...(schema.properties
-      ? Object.keys(schema.properties)
-        .map((key) => {
-          const column: GridColDef = {
-            field: key,
-            type: (schema.properties || {})[key].type,
-            width: 200,
-            description: (schema.properties || {})[key].description,
-            headerName: camelCaseToTitleCase(key),
-          };
-          return column;
-        })
-        .filter((i) => i)
-      : []),
+    ...(Object.keys(schema.properties)
+      .map((key) => {
+        const column: GridColDef = {
+          field: key,
+          type: (schema.properties)[key].type,
+          width: 200,
+          description: schema.properties[key].description,
+          headerName: camelCaseToTitleCase(key),
+          valueFormatter: schema.properties[key].format === "date-time"
+            ? (params) => {
+              return params.value
+                ? dayjs(params.value).format("L HH:mm")
+                : undefined;
+            }
+            : undefined
+        };
+        return column;
+      })),
   ]);
 
   const [items, setItems] = useState<T[] | undefined>();
