@@ -1,6 +1,7 @@
 import {BreadcrumbLink} from "../../utils/types";
 import {dataListBreadcrumbLinks} from "../../utils/constants";
 import {CoreModule, getCoreModuleRoute} from "@lib/router";
+import {GridColumnVisibilityModel} from "@mui/x-data-grid";
 
 export interface DtoSourceProperty {
   $ref?: string;
@@ -69,4 +70,19 @@ export const getBreadcrumbLinks = (
     ...dataListBreadcrumbLinks,
     {linkText: moduleName, toRoute: getCoreModuleRoute(modulePath)},
   ];
+};
+
+export interface GenericDataGridSettings {
+  sortColumn: string;
+  sortDirection: string;
+  columnVisibilityModel: GridColumnVisibilityModel;
+}
+
+export const saveSettings = (key: string, value: GenericDataGridSettings) => {
+  localStorage.setItem(`data-grid-${key}`, JSON.stringify(value));
+};
+
+export const getSettings = (key: string): GenericDataGridSettings | null => {
+  const value = localStorage.getItem(`data-grid-${key}`);
+  return value ? JSON.parse(value) : null;
 };

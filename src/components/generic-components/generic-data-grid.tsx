@@ -1,12 +1,12 @@
 import {useEffect, useState} from "react";
 import {HttpResponse, ProblemDetails, RequestParams} from "@lib/network/swagger-client";
 import {useModuleWrapperContext} from "@providers/module-wrapper-provider";
-import {DataGrid, GridColDef, GridSortModel} from "@mui/x-data-grid";
+import {DataGrid, GridColDef, GridColumnVisibilityModel, GridSortModel} from "@mui/x-data-grid";
 import {totalCountHeaderName} from "@lib/query";
 import {
   DtoSchema,
   camelCaseToTitleCase,
-  BasicTypeForGeneric,
+  BasicTypeForGeneric, getSettings, saveSettings,
 } from "@components/generic-components/common";
 import {ActionButtonContainer} from "@components/data-table/index.styled";
 import {IconButton} from "@mui/material";
@@ -15,6 +15,7 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import dayjs from "dayjs";
 
 export interface GenericDataGridProps<T extends BasicTypeForGeneric> {
+  key: string;
   getItemsFn: (
     query?: { query?: string },
     params?: RequestParams
@@ -26,12 +27,13 @@ export interface GenericDataGridProps<T extends BasicTypeForGeneric> {
 }
 
 export function GenericDataGrid<T extends BasicTypeForGeneric>({
-                                                                 getItemsFn,
-                                                                 schema,
-                                                                 detailsNavigate,
-                                                                 editNavigate,
-                                                                 searchText,
-                                                               }: GenericDataGridProps<T>) {
+  key,
+  getItemsFn,
+  schema,
+  detailsNavigate,
+  editNavigate,
+  searchText,
+}: GenericDataGridProps<T>) {
   const {setBusy} = useModuleWrapperContext();
 
   const actionsColumn: GridColDef = {
@@ -132,6 +134,42 @@ export function GenericDataGrid<T extends BasicTypeForGeneric>({
     } else setSortDirection("asc");
   };
 
+  const [settingsInitialized, setSettingsInitialized] = useState<boolean>(false);
+  const [columnVisibilityModel, setColumnVisibilityModel] = useState<GridColumnVisibilityModel>({});
+
+  useEffect(() => {
+    if (settingsInitialized) {
+      saveSettings(key, {
+        sortDirection: sortDirection,
+        sortColumn: sortColumn,
+        columnVisibilityModel: columnVisibilityModel
+      });
+    }
+  }, [
+    sortDirection,
+    sortColumn,
+    columnVisibilityModel
+  ]);
+
+  useEffect(() => {
+    if (!settingsInitialized) {
+      const settings = getSettings(key);
+      if (settings) {
+        if (settings.sortDirection) {
+          setSortDirection(settings.sortDirection);
+        }
+        if (settings.sortColumn) {
+          setSortColumn(settings.sortColumn);
+        }
+        if (settings.columnVisibilityModel) {
+          setColumnVisibilityModel(settings.columnVisibilityModel);
+        }
+      }
+      setSettingsInitialized(true);
+    }
+
+  }, [settingsInitialized]);
+
   return (
     <DataGrid
       columns={columns || []}
@@ -150,7 +188,10 @@ export function GenericDataGrid<T extends BasicTypeForGeneric>({
       sortingMode="server"
       onSortModelChange={(newSortModel) => handleSortChange(newSortModel)}
       filterMode="server"
-      initialState={{}}
+      onColumnVisibilityModelChange={(newModel) => {
+        settingsInitialized && setColumnVisibilityModel(newModel);
+      }}
+      columnVisibilityModel={columnVisibilityModel}
     />
   );
 }

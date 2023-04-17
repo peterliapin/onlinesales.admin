@@ -36,13 +36,14 @@ export const CommentsModule = () => {
   };
 
   const tableProps: GenericDataGridProps<CommentDetailsDto> = {
+    key: "comments-table",
     schema: getSchemaDto("CommentDetailsDto", swaggerJson.components.schemas),
     getItemsFn: client.api.commentsList,
     detailsNavigate: (item) => {
-      navigate(getViewFormRoute(item.id!), {state: item});
+      item.id && navigate(getViewFormRoute(item.id), {state: item});
     },
     editNavigate: (item) => {
-      navigate(getEditFormRoute(item.id!), {state: item});
+      item.id && navigate(getEditFormRoute(item.id), {state: item});
     }
   };
 
@@ -73,7 +74,7 @@ export const CommentsModule = () => {
       mode: "create",
       editable: true,
       onSaved: (item) => {
-        navigate(getEditFormRoute(item.id!), {state: item});
+        item.id && navigate(getEditFormRoute(item.id), {state: item});
       }
     }
   });

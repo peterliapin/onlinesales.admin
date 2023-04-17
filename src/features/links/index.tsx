@@ -36,13 +36,14 @@ export const LinksModule = () => {
   };
 
   const tableProps: GenericDataGridProps<LinkDetailsDto> = {
+    key: "links-table",
     schema: getSchemaDto("LinkDetailsDto", swaggerJson.components.schemas),
     getItemsFn: client.api.linksList,
     detailsNavigate: (item) => {
-      navigate(getViewFormRoute(item.id!), {state: item});
+      item.id && navigate(getViewFormRoute(item.id), {state: item});
     },
     editNavigate: (item) => {
-      navigate(getEditFormRoute(item.id!), {state: item});
+      item.id && navigate(getEditFormRoute(item.id), {state: item});
     }
   };
 
@@ -73,7 +74,7 @@ export const LinksModule = () => {
       mode: "create",
       editable: true,
       onSaved: (item) => {
-        navigate(getEditFormRoute(item.id!), {state: item});
+        item.id && navigate(getEditFormRoute(item.id), {state: item});
       }
     }
   });
