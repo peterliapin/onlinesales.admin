@@ -14,6 +14,8 @@ import {
   EnumEdit,
 } from "@components/generic-components/edit-components";
 import {useNotificationsService} from "@hooks";
+import {getValidator} from "@components/generic-components/edit-components/validator";
+import {z} from "zod";
 
 export interface DtoField {
   editable: boolean;
@@ -21,8 +23,8 @@ export interface DtoField {
   hide: boolean;
   name: string;
   label: string;
-  type?: string;
-  format?: string;
+  type: "integer" | "number" | "string" | string;
+  format?: "int32" | "int64" | "float" | "double" | "date-time" | "email" | "password" | string;
   nullable?: boolean;
   description?: string;
   enum?: string[];
@@ -172,19 +174,37 @@ export function GenericForm<TView extends BasicTypeForGeneric, TCreate, TUpdate>
       (itemId ? updateFields : createFields).forEach((field) => {
         if (values[field.name]) {
           saveData[field.name] = values[field.name];
-        } else if (field.required) {
-          notificationsService.error(`Field ${field.name} is empty!`);
         }
       });
 
-      if (itemId) {
-        const {data} = await updateItemFn(itemId, saveData, {});
-        setValues((values) => ({...values, ...data}));
-        onSaved && onSaved(data);
-      } else {
-        const {data} = await createItemFn(saveData, {});
-        setValues((values) => ({...values, ...data}));
-        onSaved && onSaved(data);
+      try {
+        if (itemId) {
+          const validator = getValidator(updateFields);
+          validator.parse(saveData);
+          const {data} = await updateItemFn(itemId, saveData, {});
+          setValues((values) => ({...values, ...data}));
+          onSaved && onSaved(data);
+        } else {
+          const validator = getValidator(createFields);
+          validator.parse(saveData);
+          const {data} = await createItemFn(saveData, {});
+          setValues((values) => ({...values, ...data}));
+          onSaved && onSaved(data);
+        }
+      } catch (error) {
+        if (error instanceof z.ZodError) {
+          const issues = [];
+          for (const issue of error.errors) {
+            const propertyName = detailsSchema.properties[issue.path[0]].title
+              || camelCaseToTitleCase(issue.path[0].toString());
+            issues.push(`${propertyName}: ${issue.message}`);
+          }
+          notificationsService
+            .errorWithContent(<div>{issues.map((issue, index) => <div
+              key={index}>{issue}</div>)}</div>);
+        } else {
+          throw error;
+        }
       }
     });
   };
