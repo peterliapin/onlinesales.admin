@@ -8,13 +8,16 @@ import {ModuleLoader} from "@features/module-loader";
 import {RequestProvider} from "@providers/request-provider";
 import {AuthProvider} from "@providers/auth-provider";
 import {ToastContainer} from "react-toastify";
+import {LocalizationProvider} from "@mui/x-date-pickers";
+import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 
 export const App = () => {
   return (
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
       <ThemeProvider>
         <AuthProvider>
           <RequestProvider>
-            <ToastContainer />
+            <ToastContainer/>
             <BrowserRouter>
               <Routes>
                 <Route
@@ -29,13 +32,14 @@ export const App = () => {
                     </AppLayoutContainer>
                   }
                 >
-                  <Route index element="Index page"/>
-                  <Route path={`${coreModuleRoute.template}/*`} element={<ModuleLoader/>}/>
+                    <Route index element="Index page"/>
+                    <Route path={`${coreModuleRoute.template}/*`} element={<ModuleLoader/>}/>
                 </Route>
               </Routes>
             </BrowserRouter>
           </RequestProvider>
         </AuthProvider>
       </ThemeProvider>
+    </LocalizationProvider>
   );
 };
