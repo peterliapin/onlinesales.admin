@@ -9,6 +9,7 @@ import {OrdersModule} from "features/orders/orders-module";
 import {DomainsModule} from "features/domains/domains-module";
 import {LinksModule} from "@features/links";
 import {ModuleWrapperProvider} from "@providers/module-wrapper-provider";
+import {CommentsModule} from "@features/comments";
 
 export const ModuleLoader = () => {
   const {moduleName} = useRouteParams(coreModuleRoute);
@@ -20,6 +21,7 @@ export const ModuleLoader = () => {
           {moduleName === CoreModule.blog && <BlogModule/>}
           {moduleName === CoreModule.contacts && <ContactsModule/>}
           {moduleName === CoreModule.links && <LinksModule/>}
+          {moduleName === CoreModule.comments && <CommentsModule/>}
           {moduleName === CoreModule.accounts && <AccountsModule/>}
           {moduleName === CoreModule.orders && <OrdersModule/>}
           {moduleName === CoreModule.domains && <DomainsModule/>}
