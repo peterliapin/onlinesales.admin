@@ -12,9 +12,11 @@ import {
   TextEdit,
   DatetimeEdit,
   EnumEdit,
+  DynamicValues,
+  ValidationResult,
 } from "@components/generic-components/edit-components";
 import {useNotificationsService} from "@hooks";
-import {getValidator} from "@components/generic-components/edit-components/validator";
+import {validate} from "@components/generic-components/edit-components/validator";
 import {z} from "zod";
 
 export interface DtoField {
@@ -34,9 +36,6 @@ export interface DtoField {
   example?: any;
 }
 
-interface DynamicValues {
-  [x: string]: any;
-}
 
 export interface GenericFormProps<TView extends BasicTypeForGeneric, TCreate, TUpdate> {
   editable: boolean;
@@ -62,19 +61,21 @@ export interface GenericFormProps<TView extends BasicTypeForGeneric, TCreate, TU
 }
 
 export function GenericForm<TView extends BasicTypeForGeneric, TCreate, TUpdate>({
-  editable,
-  getItemFn,
-  createItemFn,
-  updateItemFn,
-  detailsSchema,
-  updateSchema,
-  createSchema,
-  mode,
-  getItemId,
-  onSaved
-}: GenericFormProps<TView, TCreate, TUpdate>) {
+                                                                                   editable,
+                                                                                   getItemFn,
+                                                                                   createItemFn,
+                                                                                   updateItemFn,
+                                                                                   detailsSchema,
+                                                                                   updateSchema,
+                                                                                   createSchema,
+                                                                                   mode,
+                                                                                   getItemId,
+                                                                                   onSaved
+                                                                                 }: GenericFormProps<TView, TCreate, TUpdate>) {
   const {setBusy, isBusy, setSaving, isSaving} = useModuleWrapperContext();
   const {notificationsService} = useNotificationsService();
+  const [validationResult, setValidationResult] = useState<ValidationResult>();
+
   const itemId = getItemId();
 
   const updateFields: DtoField[] = Object.keys(updateSchema.properties)
@@ -168,6 +169,14 @@ export function GenericForm<TView extends BasicTypeForGeneric, TCreate, TUpdate>
     };
   }, [itemId, getItemFn]);
 
+  useEffect(() => {
+    if (mode === "update") {
+      setValidationResult(validate(updateFields, values));
+    } else if (mode === "create") {
+      setValidationResult(validate(createFields, values));
+    }
+  }, [values]);
+
   const save = () => {
     setSaving(async () => {
       const saveData: any = {};
@@ -179,17 +188,17 @@ export function GenericForm<TView extends BasicTypeForGeneric, TCreate, TUpdate>
 
       try {
         if (itemId) {
-          const validator = getValidator(updateFields);
-          validator.parse(saveData);
-          const {data} = await updateItemFn(itemId, saveData, {});
-          setValues((values) => ({...values, ...data}));
-          onSaved && onSaved(data);
+          if (!validationResult || !validationResult.errors) {
+            const {data} = await updateItemFn(itemId, saveData, {});
+            setValues((values) => ({...values, ...data}));
+            onSaved && onSaved(data);
+          }
         } else {
-          const validator = getValidator(createFields);
-          validator.parse(saveData);
-          const {data} = await createItemFn(saveData, {});
-          setValues((values) => ({...values, ...data}));
-          onSaved && onSaved(data);
+          if (!validationResult || !validationResult.errors) {
+            const {data} = await createItemFn(saveData, {});
+            setValues((values) => ({...values, ...data}));
+            onSaved && onSaved(data);
+          }
         }
       } catch (error) {
         if (error instanceof z.ZodError) {
@@ -211,17 +220,18 @@ export function GenericForm<TView extends BasicTypeForGeneric, TCreate, TUpdate>
 
   const fieldsSet = () => {
     switch (mode) {
-    case "create":
-      return createFields;
-    case "update":
-      return detailsFields;
-    default:
-      return detailsFields;
+      case "create":
+        return createFields;
+      case "update":
+        return detailsFields;
+      default:
+        return detailsFields;
     }
   };
 
   const getEdit = (field: DtoField) => {
     const commonProps = {
+      error: (validationResult && validationResult.errors && validationResult.errors[field.name]),
       required: field.required,
       pattern: field.pattern,
       key: field.name,
@@ -237,44 +247,44 @@ export function GenericForm<TView extends BasicTypeForGeneric, TCreate, TUpdate>
       },
     };
     switch (field.type) {
-    case "integer":
-      return NumberEdit({
-        ...commonProps,
-      });
-    case "number":
-      return NumberEdit({
-        ...commonProps,
-      });
-    case "string":
-      if (field.format === "date-time") {
-        return DatetimeEdit({
+      case "integer":
+        return NumberEdit({
           ...commonProps,
-          value: values[field.name] ? new Date(values[field.name]) : null,
-          onChangeValue: (newValue: Date | null) => {
-            setValues((prevValues) => ({
-              ...prevValues,
-              [field.name]: newValue ? newValue.toISOString() : null,
-            }));
-          },
         });
-      } else if (field.enum && field.enum.length > 0) {
-        return EnumEdit({
+      case "number":
+        return NumberEdit({
           ...commonProps,
-          valueOptions: field.enum,
         });
-      } else {
+      case "string":
+        if (field.format === "date-time") {
+          return DatetimeEdit({
+            ...commonProps,
+            value: values[field.name] ? new Date(values[field.name]) : null,
+            onChangeValue: (newValue: Date | null) => {
+              setValues((prevValues) => ({
+                ...prevValues,
+                [field.name]: newValue ? newValue.toISOString() : null,
+              }));
+            },
+          });
+        } else if (field.enum && field.enum.length > 0) {
+          return EnumEdit({
+            ...commonProps,
+            valueOptions: field.enum,
+          });
+        } else {
+          return TextEdit({
+            ...commonProps,
+            minLength: field.minLength,
+            maxLength: field.maxLength,
+          });
+        }
+      default:
         return TextEdit({
           ...commonProps,
           minLength: field.minLength,
           maxLength: field.maxLength,
         });
-      }
-    default:
-      return TextEdit({
-        ...commonProps,
-        minLength: field.minLength,
-        maxLength: field.maxLength,
-      });
     }
   };
 

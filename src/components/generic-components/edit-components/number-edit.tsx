@@ -3,15 +3,16 @@ import {EditProps} from "@components/generic-components/edit-components/common";
 import {TextField} from "@mui/material";
 
 export const NumberEdit = ({
-  key,
-  label,
-  example,
-  value,
-  onChangeValue,
-  disabled,
-  required,
-  pattern
-}: EditProps<number>): ReactNode => {
+                             key,
+                             label,
+                             example,
+                             value,
+                             onChangeValue,
+                             disabled,
+                             required,
+                             pattern,
+                             error
+                           }: EditProps<number>): ReactNode => {
   return (
     <TextField
       key={key}
@@ -24,6 +25,8 @@ export const NumberEdit = ({
       inputProps={{
         pattern: pattern
       }}
+      error={!!error}
+      helperText={error}
       onChange={(e) => {
         onChangeValue && onChangeValue(Number(e.target.value || "0"));
       }}

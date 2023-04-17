@@ -1,17 +1,18 @@
-import { ReactNode } from "react";
-import { EditProps } from "@components/generic-components/edit-components/common";
-import { DateTimePicker } from "@mui/x-date-pickers";
+import {ReactNode} from "react";
+import {EditProps} from "@components/generic-components/edit-components/common";
+import {DateTimePicker} from "@mui/x-date-pickers";
 import dayjs from "dayjs";
 
 export const DatetimeEdit = ({
-  key,
-  label,
-  example,
-  required,
-  value,
-  onChangeValue,
-  disabled,
-}: EditProps<Date>): ReactNode => {
+                               key,
+                               label,
+                               example,
+                               required,
+                               value,
+                               onChangeValue,
+                               disabled,
+                               error
+                             }: EditProps<Date>): ReactNode => {
   return (
     <div title={example}>
       <DateTimePicker
@@ -20,10 +21,12 @@ export const DatetimeEdit = ({
         disabled={disabled}
         value={dayjs(value)}
         format="L HH:mm"
-        sx={{ width: "100%" }}
+        sx={{width: "100%"}}
         slotProps={{
           textField: {
             required: required,
+            error: !!error,
+            helperText: error
           },
         }}
         onChange={(newValue) => {

@@ -3,17 +3,18 @@ import {EditProps} from "@components/generic-components/edit-components/common";
 import {TextField} from "@mui/material";
 
 export const TextEdit = ({
-  key,
-  label,
-  example,
-  required,
-  value,
-  onChangeValue,
-  disabled,
-  minLength,
-  maxLength,
-  pattern
-}: EditProps<string>): ReactNode => {
+                           key,
+                           label,
+                           example,
+                           required,
+                           value,
+                           onChangeValue,
+                           disabled,
+                           minLength,
+                           maxLength,
+                           pattern,
+                           error
+                         }: EditProps<string>): ReactNode => {
   return (
     <TextField
       key={key}
@@ -27,6 +28,8 @@ export const TextEdit = ({
         maxLength,
         pattern
       }}
+      error={!!error}
+      helperText={error}
       value={value}
       onChange={(e) => {
         onChangeValue && onChangeValue(e.target.value);
