@@ -21,8 +21,8 @@ const ModuleWrapperContext = createContext<ModuleWrapperContextType>({
 });
 
 export const ModuleWrapperProvider = memo(function ModuleWrapperProvider({
-                                                                           children,
-                                                                         }: PropsWithChildren) {
+  children,
+}: PropsWithChildren) {
   const [isBusy, setIsBusy] = useState<number>(0);
   const setBusy = async (fn: () => Promise<void>) => {
     setIsBusy((prev) => prev + 1);

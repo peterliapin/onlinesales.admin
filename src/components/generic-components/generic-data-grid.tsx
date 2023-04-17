@@ -26,12 +26,12 @@ export interface GenericDataGridProps<T extends BasicTypeForGeneric> {
 }
 
 export function GenericDataGrid<T extends BasicTypeForGeneric>({
-                                                                 getItemsFn,
-                                                                 schema,
-                                                                 detailsNavigate,
-                                                                 editNavigate,
-                                                                 searchText,
-                                                               }: GenericDataGridProps<T>): ReactNode {
+  getItemsFn,
+  schema,
+  detailsNavigate,
+  editNavigate,
+  searchText,
+}: GenericDataGridProps<T>): ReactNode {
   const {setBusy} = useModuleWrapperContext();
 
   const actionsColumn: GridColDef = {
