@@ -137,14 +137,25 @@ export function GenericForm<TView extends BasicTypeForGeneric, TCreate, TUpdate>
         hide: detailsSchema.properties[key].hide
       };
     });
-
-  const [values, setValues] = useState<DynamicValues>(() => {
+  const initValues = () => {
     const initValues: DynamicValues = {};
-    detailsFields.forEach((field) => {
-      initValues[field.name] = "";
-    });
+    for (const field of detailsFields) {
+      switch (field.type) {
+      case "integer":
+        initValues[field.name] = 0;
+        break;
+      case "number":
+        initValues[field.name] = 0;
+        break;
+      default:
+        initValues[field.name] = "";
+        break;
+      }
+    }
     return initValues;
-  });
+  };
+
+  const [values, setValues] = useState<DynamicValues>(initValues);
 
   useEffect(() => {
     const abortController = new AbortController();
@@ -158,11 +169,7 @@ export function GenericForm<TView extends BasicTypeForGeneric, TCreate, TUpdate>
         }
       });
     } else {
-      const initValues: DynamicValues = {};
-      detailsFields.forEach((field) => {
-        initValues[field.name] = "";
-      });
-      setValues({...initValues});
+      setValues(initValues);
     }
     return () => {
       abortController.abort("cancelled");
