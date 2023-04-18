@@ -37,6 +37,7 @@ export const LinksModule = () => {
 
   const tableProps: GenericDataGridProps<LinkDetailsDto> = {
     key: "links-table",
+    initiallyShownColumns: ["name", "source", "destination"],
     schema: getSchemaDto("LinkDetailsDto", swaggerJson.components.schemas),
     getItemsFn: client.api.linksList,
     detailsNavigate: (item) => {
@@ -50,6 +51,7 @@ export const LinksModule = () => {
   const module = GenericModule({
     moduleName: "Links",
     modulePath: CoreModule.links,
+    addButtonContent: "Add link",
     tableProps: tableProps,
     viewFormProps: {
       ...formProps,

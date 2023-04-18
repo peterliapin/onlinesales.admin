@@ -10,4 +10,13 @@ export interface EditProps<T> {
   value: T | null;
   valueOptions?: T[] | null;
   onChangeValue: (newValue: T | null) => void;
+  error?: string | undefined;
+}
+
+export interface DynamicValues {
+  [x: string]: any;
+}
+
+export interface ValidationResult {
+  errors: { [x: string]: string; };
 }

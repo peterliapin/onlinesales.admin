@@ -7,7 +7,7 @@ import {
   viewFormRoute,
 } from "@lib/router";
 import {BasicTypeForGeneric, getBreadcrumbLinks} from "@components/generic-components/common";
-import { useState} from "react";
+import {ReactNode, useState} from "react";
 import {
   GenericDataGrid,
   GenericDataGridProps,
@@ -22,6 +22,7 @@ import {GhostLink} from "@components/ghost-link";
 interface GenericModuleProps<TView extends BasicTypeForGeneric, TCreate, TUpdate> {
   moduleName: string;
   modulePath: CoreModule;
+  addButtonContent?: string | ReactNode | undefined;
   tableProps?: GenericDataGridProps<TView>;
   createFormProps?: GenericFormProps<TView, TCreate, TUpdate>;
   editFormProps?: GenericFormProps<TView, TCreate, TUpdate>;
@@ -31,6 +32,7 @@ interface GenericModuleProps<TView extends BasicTypeForGeneric, TCreate, TUpdate
 export function GenericModule<TView extends BasicTypeForGeneric, TCreate, TUpdate>({
   moduleName,
   modulePath,
+  addButtonContent,
   tableProps,
   createFormProps,
   editFormProps,
@@ -54,7 +56,7 @@ export function GenericModule<TView extends BasicTypeForGeneric, TCreate, TUpdat
 
     const addButton = (
       <Button to={getAddFormRoute()} component={GhostLink} variant="contained">
-        Add
+        {addButtonContent || "Add"}
       </Button>
     );
 

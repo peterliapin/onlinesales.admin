@@ -23,6 +23,12 @@ class NotificationsService {
     });
   }
 
+  errorWithContent(content: JSX.Element, options: NotificationOptions = {}) {
+    toast.error(content, {
+      autoClose: options.autoClose ?? this.defaultAutoClose,
+    });
+  }
+
   warning(msg: string, options: NotificationOptions = {}) {
     toast.warn(msg, {
       autoClose: options.autoClose ?? this.defaultAutoClose,
