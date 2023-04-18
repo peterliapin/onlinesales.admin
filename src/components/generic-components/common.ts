@@ -41,7 +41,6 @@ export interface DtoProperty {
   example?: any;
 }
 
-
 export interface DtoSchema {
   type: string;
   enum?: string[];

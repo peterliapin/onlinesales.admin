@@ -20,8 +20,16 @@ import {Button, CircularProgress, Grid, Typography} from "@mui/material";
 import {SearchBar} from "@components/search-bar";
 import {GhostLink} from "@components/ghost-link";
 import {Download, Upload} from "@mui/icons-material";
-import {HttpResponse, ProblemDetails, RequestParams} from "@lib/network/swagger-client";
+import {
+  CommentImportDto,
+  HttpResponse,
+  ImportResult,
+  ProblemDetails,
+  RequestParams
+} from "@lib/network/swagger-client";
 import {CsvExport} from "@components/export";
+import {CsvImport} from "@components/spreadsheet-import";
+import {Result} from "@wavepoint/react-spreadsheet-import/types/types";
 
 interface GenericModuleProps<TView extends BasicTypeForGeneric, TCreate, TUpdate> {
   moduleName: string;
@@ -38,6 +46,10 @@ interface GenericModuleProps<TView extends BasicTypeForGeneric, TCreate, TUpdate
     params?: RequestParams
   ) => Promise<HttpResponse<any, void | ProblemDetails>>;
   showImport?: boolean;
+  importItemsFn?: (
+    data: CommentImportDto[],
+    params: RequestParams
+  ) => Promise<HttpResponse<ImportResult, void | ProblemDetails>>;
 }
 
 export function GenericModule<TView extends BasicTypeForGeneric, TCreate, TUpdate>({
@@ -50,10 +62,12 @@ export function GenericModule<TView extends BasicTypeForGeneric, TCreate, TUpdat
   viewFormProps,
   showExport,
   exportItemsFn,
-  showImport
+  showImport,
+  importItemsFn
 }: GenericModuleProps<TView, TCreate, TUpdate>): JSX.Element {
   const [searchText, setSearchText] = useState("");
-  const [openExport, setOpenExport] = useState(false);
+  const [exportIsOpen, setExportIsOpen] = useState(false);
+  const [importIsOpen, setImportIsOpen] = useState(false);
   const genericDataGridRef = useRef<GenericDataGridRef>(null);
 
   const getGenericTable = (key: string, tableProps: GenericDataGridProps<TView>) => {
@@ -79,9 +93,9 @@ export function GenericModule<TView extends BasicTypeForGeneric, TCreate, TUpdat
     const extraActions = (
       <>
         {showImport && <Button key={"import-btn"}
-          disabled={true}
+          disabled={!importItemsFn}
           onClick={() => {
-            console.log(["import executed"]);
+            setImportIsOpen(true);
           }}
           startIcon={<Upload/>}>
           Import
@@ -89,7 +103,7 @@ export function GenericModule<TView extends BasicTypeForGeneric, TCreate, TUpdat
         {showExport && <Button key={"export-btn"}
           disabled={!exportItemsFn}
           onClick={() => {
-            setOpenExport(true);
+            setExportIsOpen(true);
           }}
           startIcon={<Download/>}>
           Export
@@ -107,7 +121,19 @@ export function GenericModule<TView extends BasicTypeForGeneric, TCreate, TUpdat
         addButtonContainerChildren={addButton}
       >
         {genericDataGrid}
-        {openExport && exportItemsFn && (
+        {importIsOpen && tableProps.schema && (
+          <CsvImport
+            isOpen={importIsOpen}
+            onClose={() => {
+              setImportIsOpen(false);
+            }}
+            onUpload={async (data: Result<string>) => {
+              importItemsFn && await importItemsFn(data.validData as any[], {});
+            }}
+            object={tableProps.schema.properties}
+            endRoute={modulePath as CoreModule}/>
+        )}
+        {exportIsOpen && exportItemsFn && (
           <CsvExport
             exportAsync={async () => {
               const filters = genericDataGridRef.current
@@ -116,10 +142,9 @@ export function GenericModule<TView extends BasicTypeForGeneric, TCreate, TUpdat
               return response?.text();
             }}
             closeExport={() => {
-              setOpenExport(false);
+              setExportIsOpen(false);
             }}
-            fileName={moduleName}
-          ></CsvExport>
+            fileName={moduleName}/>
         )}
       </ModuleWrapper>
     );

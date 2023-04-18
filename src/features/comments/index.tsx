@@ -56,6 +56,7 @@ export const CommentsModule = () => {
     showExport: true,
     exportItemsFn: client.api.commentsExportList,
     showImport: true,
+    importItemsFn: client.api.commentsImportCreate,
     viewFormProps: {
       ...formProps,
       mode: "details",
