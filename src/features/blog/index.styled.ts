@@ -2,6 +2,7 @@ import { styled } from "@mui/material";
 
 export const ContentListContainer = styled("div")`
   flex-grow: 1;
+  height: 100%;
 `;
 
 export const ContentEditContainer = styled("div")`
@@ -60,4 +61,11 @@ export const CommentContainer = styled("div")`
 
 export const CommentDateContainer = styled("span")`
   font-size: 80%;
+`;
+
+export const ContentListWrapper = styled("div")`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f8f8f0;
 `;
