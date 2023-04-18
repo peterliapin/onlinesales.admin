@@ -12,8 +12,12 @@ import {
   TextEdit,
   DatetimeEdit,
   EnumEdit,
+  DynamicValues,
+  ValidationResult,
 } from "@components/generic-components/edit-components";
 import {useNotificationsService} from "@hooks";
+import {validate} from "@components/generic-components/edit-components/validator";
+import {z} from "zod";
 
 export interface DtoField {
   editable: boolean;
@@ -21,8 +25,8 @@ export interface DtoField {
   hide: boolean;
   name: string;
   label: string;
-  type?: string;
-  format?: string;
+  type: "integer" | "number" | "string" | string;
+  format?: "int32" | "int64" | "float" | "double" | "date-time" | "email" | "password" | string;
   nullable?: boolean;
   description?: string;
   enum?: string[];
@@ -32,9 +36,6 @@ export interface DtoField {
   example?: any;
 }
 
-interface DynamicValues {
-  [x: string]: any;
-}
 
 export interface GenericFormProps<TView extends BasicTypeForGeneric, TCreate, TUpdate> {
   editable: boolean;
@@ -73,6 +74,8 @@ export function GenericForm<TView extends BasicTypeForGeneric, TCreate, TUpdate>
 }: GenericFormProps<TView, TCreate, TUpdate>) {
   const {setBusy, isBusy, setSaving, isSaving} = useModuleWrapperContext();
   const {notificationsService} = useNotificationsService();
+  const [validationResult, setValidationResult] = useState<ValidationResult>();
+
   const itemId = getItemId();
 
   const updateFields: DtoField[] = Object.keys(updateSchema.properties)
@@ -166,25 +169,51 @@ export function GenericForm<TView extends BasicTypeForGeneric, TCreate, TUpdate>
     };
   }, [itemId, getItemFn]);
 
+  useEffect(() => {
+    if (mode === "update") {
+      setValidationResult(validate(updateFields, values));
+    } else if (mode === "create") {
+      setValidationResult(validate(createFields, values));
+    }
+  }, [values]);
+
   const save = () => {
     setSaving(async () => {
       const saveData: any = {};
       (itemId ? updateFields : createFields).forEach((field) => {
         if (values[field.name]) {
           saveData[field.name] = values[field.name];
-        } else if (field.required) {
-          notificationsService.error(`Field ${field.name} is empty!`);
         }
       });
 
-      if (itemId) {
-        const {data} = await updateItemFn(itemId, saveData, {});
-        setValues((values) => ({...values, ...data}));
-        onSaved && onSaved(data);
-      } else {
-        const {data} = await createItemFn(saveData, {});
-        setValues((values) => ({...values, ...data}));
-        onSaved && onSaved(data);
+      try {
+        if (itemId) {
+          if (!validationResult || !validationResult.errors) {
+            const {data} = await updateItemFn(itemId, saveData, {});
+            setValues((values) => ({...values, ...data}));
+            onSaved && onSaved(data);
+          }
+        } else {
+          if (!validationResult || !validationResult.errors) {
+            const {data} = await createItemFn(saveData, {});
+            setValues((values) => ({...values, ...data}));
+            onSaved && onSaved(data);
+          }
+        }
+      } catch (error) {
+        if (error instanceof z.ZodError) {
+          const issues = [];
+          for (const issue of error.errors) {
+            const propertyName = detailsSchema.properties[issue.path[0]].title
+              || camelCaseToTitleCase(issue.path[0].toString());
+            issues.push(`${propertyName}: ${issue.message}`);
+          }
+          notificationsService
+            .errorWithContent(<div>{issues.map((issue, index) => <div
+              key={index}>{issue}</div>)}</div>);
+        } else {
+          throw error;
+        }
       }
     });
   };
@@ -202,6 +231,7 @@ export function GenericForm<TView extends BasicTypeForGeneric, TCreate, TUpdate>
 
   const getEdit = (field: DtoField) => {
     const commonProps = {
+      error: (validationResult && validationResult.errors && validationResult.errors[field.name]),
       required: field.required,
       pattern: field.pattern,
       key: field.name,

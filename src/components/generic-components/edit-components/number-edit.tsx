@@ -10,7 +10,8 @@ export const NumberEdit = ({
   onChangeValue,
   disabled,
   required,
-  pattern
+  pattern,
+  error
 }: EditProps<number>): ReactNode => {
   return (
     <TextField
@@ -24,6 +25,8 @@ export const NumberEdit = ({
       inputProps={{
         pattern: pattern
       }}
+      error={!!error}
+      helperText={error}
       onChange={(e) => {
         onChangeValue && onChangeValue(Number(e.target.value || "0"));
       }}
