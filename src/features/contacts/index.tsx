@@ -19,6 +19,7 @@ import { SearchBar } from "@components/search-bar";
 import { useEffect, useState } from "react";
 import { Add, Download, Upload } from "@mui/icons-material";
 import { GhostLink } from "@components/ghost-link";
+import { getLocalStorageSavedPropertyValue } from "utils/helper";
 
 export const Contacts = () => {
   const { client } = useRequestContext();
@@ -108,14 +109,6 @@ export const Contacts = () => {
       flex: 1,
     },
   ];
-
-  const getLocalStorageSavedPropertyValue = (storageKey: string, propertyToRetrieve: string) => {
-    const settingsState = localStorage.getItem(storageKey);
-    if (settingsState) {
-      const { [propertyToRetrieve]: value } = JSON.parse(settingsState);
-      return value;
-    } else return "";
-  };
 
   const handleImport = () => {
     openImport ? setOpenImport(false) : setOpenImport(true);

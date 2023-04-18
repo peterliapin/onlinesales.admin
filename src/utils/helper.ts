@@ -59,3 +59,14 @@ export const getFormattedDateTime = (dateToConvert: string) => {
   const formattedDateTime = `${formattedDate}  ${formattedTime}`;
   return formattedDateTime;
 };
+
+export const getLocalStorageSavedPropertyValue = (
+  storageKey: string,
+  propertyToRetrieve: string
+) => {
+  const settingsState = localStorage.getItem(storageKey);
+  if (settingsState) {
+    const { [propertyToRetrieve]: value } = JSON.parse(settingsState);
+    return value;
+  } else return "";
+};
