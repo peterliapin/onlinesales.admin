@@ -63,7 +63,7 @@ export function GenericDataGrid<T extends BasicTypeForGeneric>({
     },
   };
 
-  const columns: GridColDef[] = [actionsColumn].concat([
+  const columns: GridColDef[] = [
     ...(Object.keys(schema.properties)
       .filter((key) => !schema.properties[key].hide)
       .map((key) => {
@@ -83,7 +83,7 @@ export function GenericDataGrid<T extends BasicTypeForGeneric>({
         };
         return column;
       })),
-  ]);
+  ].concat([actionsColumn]);
 
   const [items, setItems] = useState<T[] | undefined>();
 
