@@ -11,6 +11,7 @@ export const EnumEdit = ({
   onChangeValue,
   disabled,
   valueOptions,
+  error
 }: EditProps<string>): ReactNode => {
   return (
     <Autocomplete
@@ -29,6 +30,8 @@ export const EnumEdit = ({
           {...params}
           label={label}
           required={required}
+          error={!!error}
+          helperText={error}
           placeholder="Select option"
           variant="outlined"
           fullWidth

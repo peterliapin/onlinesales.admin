@@ -24,6 +24,7 @@ export interface GenericDataGridProps<T extends BasicTypeForGeneric> {
   detailsNavigate?: (item: T) => void;
   editNavigate?: (item: T) => void;
   searchText?: string;
+  initiallyShownColumns?: string[]
 }
 
 export function GenericDataGrid<T extends BasicTypeForGeneric>({
@@ -33,6 +34,7 @@ export function GenericDataGrid<T extends BasicTypeForGeneric>({
   detailsNavigate,
   editNavigate,
   searchText,
+  initiallyShownColumns
 }: GenericDataGridProps<T>) {
   const {setBusy} = useModuleWrapperContext();
 
@@ -63,7 +65,7 @@ export function GenericDataGrid<T extends BasicTypeForGeneric>({
     },
   };
 
-  const columns: GridColDef[] = [actionsColumn].concat([
+  const columns: GridColDef[] = [
     ...(Object.keys(schema.properties)
       .filter((key) => !schema.properties[key].hide)
       .map((key) => {
@@ -83,7 +85,7 @@ export function GenericDataGrid<T extends BasicTypeForGeneric>({
         };
         return column;
       })),
-  ]);
+  ].concat([actionsColumn]);
 
   const [items, setItems] = useState<T[] | undefined>();
 
@@ -135,7 +137,23 @@ export function GenericDataGrid<T extends BasicTypeForGeneric>({
   };
 
   const [settingsInitialized, setSettingsInitialized] = useState<boolean>(false);
-  const [columnVisibilityModel, setColumnVisibilityModel] = useState<GridColumnVisibilityModel>({});
+  const [columnVisibilityModel, setColumnVisibilityModel] =
+    useState<GridColumnVisibilityModel>(() => {
+      const initialValue: GridColumnVisibilityModel = {};
+
+      const availableColumns = Object.keys(schema.properties)
+        .filter((key) => !schema.properties[key].hide);
+
+      for (const columnName of availableColumns) {
+        initialValue[columnName] = (!initiallyShownColumns
+          || initiallyShownColumns.length === 0
+          || initiallyShownColumns.indexOf(columnName) > -1);
+      }
+
+      console.log(initiallyShownColumns);
+
+      return initialValue;
+    });
 
   useEffect(() => {
     if (settingsInitialized) {

@@ -12,7 +12,8 @@ export const TextEdit = ({
   disabled,
   minLength,
   maxLength,
-  pattern
+  pattern,
+  error
 }: EditProps<string>): ReactNode => {
   return (
     <TextField
@@ -27,6 +28,8 @@ export const TextEdit = ({
         maxLength,
         pattern
       }}
+      error={!!error}
+      helperText={error}
       value={value}
       onChange={(e) => {
         onChangeValue && onChangeValue(e.target.value);
