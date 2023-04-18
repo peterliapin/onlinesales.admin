@@ -21,7 +21,7 @@ import { FixedSizeGrid as VirtualizedGrid } from "react-window";
 import AutoSizer from "react-virtualized-auto-sizer";
 
 const coreApi = process.env.CORE_API;
-const GUTTER_SIZE = 15;
+const PADDING_SIZE = 15;
 
 export const ContentList = () => {
   const { setBusy } = useModuleWrapperContext();
@@ -90,13 +90,13 @@ export const ContentList = () => {
         {contentItems.length > 0 &&
           <AutoSizer>
             {({ height, width }) => {
-              const columnsCount = Math.floor(width! / (345 + GUTTER_SIZE));
+              const columnsCount = Math.floor(width! / (345 + PADDING_SIZE));
               return (
                 <VirtualizedGrid
                   columnCount={columnsCount}
                   rowCount={contentItems.length / columnsCount}
-                  columnWidth={345 + GUTTER_SIZE}
-                  rowHeight={500 + GUTTER_SIZE}
+                  columnWidth={345 + PADDING_SIZE}
+                  rowHeight={500 + PADDING_SIZE}
                   height={height!}
                   width={width!}
                 >
@@ -105,10 +105,10 @@ export const ContentList = () => {
                       <ContentListWrapper
                         style={{
                           ...style,
-                          left: style.left as number + GUTTER_SIZE,
-                          top: style.top as number + GUTTER_SIZE,
-                          width: style.width as number - GUTTER_SIZE,
-                          height: style.height as number - GUTTER_SIZE
+                          left: style.left as number + PADDING_SIZE,
+                          top: style.top as number + PADDING_SIZE,
+                          width: style.width as number - PADDING_SIZE,
+                          height: style.height as number - PADDING_SIZE
                         }}
                       >
                         <ItemCard
@@ -146,8 +146,8 @@ const innerElementType = React.forwardRef(function innerFunc(props: InnerFuncPro
     ref={ref}
     style={{
       ...props.style,
-      paddingLeft: GUTTER_SIZE,
-      paddingTop: GUTTER_SIZE
+      paddingLeft: PADDING_SIZE,
+      paddingTop: PADDING_SIZE
     }}
     {...props.rest}
   />
