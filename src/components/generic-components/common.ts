@@ -76,3 +76,18 @@ export interface GenericDataGridSettings {
   sortDirection: string;
   columnVisibilityModel: GridColumnVisibilityModel;
 }
+
+export interface DictItem {
+  value: number;
+  displayText: string;
+}
+
+export interface CustomFieldSourceDictionary {
+  label?: string;
+  items: DictItem[];
+  onSelect?: (itemId: number) => void;
+}
+
+export interface CustomFieldSourceDictionaries {
+  [x: string]: CustomFieldSourceDictionary | undefined;
+}

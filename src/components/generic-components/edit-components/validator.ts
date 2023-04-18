@@ -63,7 +63,6 @@ const getValidator = (fields: DtoField[]) => {
 
 export const validate = (fields: DtoField[], values: DynamicValues): ValidationResult => {
   const res: ValidationResult = {
-    errors: {}
   };
 
   const validator = getValidator(fields);
@@ -72,6 +71,7 @@ export const validate = (fields: DtoField[], values: DynamicValues): ValidationR
     validator.parse(values);
   } catch (error) {
     if (error instanceof z.ZodError) {
+      res.errors = {};
       for (const issue of error.issues) {
         if (res.errors[issue.path[0]]) {
           res.errors[issue.path[0]] += `, ${issue.message}`;

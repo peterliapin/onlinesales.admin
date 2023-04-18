@@ -1,7 +1,7 @@
 export interface EditProps<T> {
   key: string;
   label: string;
-  example: string;
+  example?: string;
   pattern?: string;
   disabled: boolean;
   required: boolean | undefined;
@@ -18,5 +18,5 @@ export interface DynamicValues {
 }
 
 export interface ValidationResult {
-  errors: { [x: string]: string; };
+  errors?: { [x: string]: string; };
 }
