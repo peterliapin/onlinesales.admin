@@ -37,6 +37,7 @@ export const CommentsModule = () => {
 
   const tableProps: GenericDataGridProps<CommentDetailsDto> = {
     key: "comments-table",
+    initiallyShownColumns: ["authorName", "authorEmail", "source"],
     schema: getSchemaDto("CommentDetailsDto", swaggerJson.components.schemas),
     getItemsFn: client.api.commentsList,
     detailsNavigate: (item) => {
@@ -50,6 +51,7 @@ export const CommentsModule = () => {
   const module = GenericModule({
     moduleName: "Comments",
     modulePath: CoreModule.comments,
+    addButtonContent: "Add comment",
     tableProps: tableProps,
     viewFormProps: {
       ...formProps,
