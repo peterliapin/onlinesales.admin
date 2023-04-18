@@ -7,10 +7,11 @@ import {
   viewFormRoute,
 } from "@lib/router";
 import {BasicTypeForGeneric, getBreadcrumbLinks} from "@components/generic-components/common";
-import {ReactNode, useState} from "react";
+import {ReactNode, useRef, useState} from "react";
 import {
   GenericDataGrid,
   GenericDataGridProps,
+  GenericDataGridRef,
 } from "@components/generic-components/generic-data-grid";
 import {ModuleWrapper} from "@components/module-wrapper";
 import {dataListBreadcrumbLinks} from "../../utils/constants";
@@ -18,6 +19,17 @@ import {GenericForm, GenericFormProps} from "@components/generic-components/gene
 import {Button, CircularProgress, Grid, Typography} from "@mui/material";
 import {SearchBar} from "@components/search-bar";
 import {GhostLink} from "@components/ghost-link";
+import {Download, Upload} from "@mui/icons-material";
+import {
+  CommentImportDto,
+  HttpResponse,
+  ImportResult,
+  ProblemDetails,
+  RequestParams
+} from "@lib/network/swagger-client";
+import {CsvExport} from "@components/export";
+import {CsvImport} from "@components/spreadsheet-import";
+import {Result} from "@wavepoint/react-spreadsheet-import/types/types";
 
 interface GenericModuleProps<TView extends BasicTypeForGeneric, TCreate, TUpdate> {
   moduleName: string;
@@ -27,6 +39,17 @@ interface GenericModuleProps<TView extends BasicTypeForGeneric, TCreate, TUpdate
   createFormProps?: GenericFormProps<TView, TCreate, TUpdate>;
   editFormProps?: GenericFormProps<TView, TCreate, TUpdate>;
   viewFormProps?: GenericFormProps<TView, TCreate, TUpdate>;
+  showExport?: boolean;
+
+  exportItemsFn?: (
+    query?: { query?: string },
+    params?: RequestParams
+  ) => Promise<HttpResponse<any, void | ProblemDetails>>;
+  showImport?: boolean;
+  importItemsFn?: (
+    data: CommentImportDto[],
+    params: RequestParams
+  ) => Promise<HttpResponse<ImportResult, void | ProblemDetails>>;
 }
 
 export function GenericModule<TView extends BasicTypeForGeneric, TCreate, TUpdate>({
@@ -37,14 +60,21 @@ export function GenericModule<TView extends BasicTypeForGeneric, TCreate, TUpdat
   createFormProps,
   editFormProps,
   viewFormProps,
+  showExport,
+  exportItemsFn,
+  showImport,
+  importItemsFn
 }: GenericModuleProps<TView, TCreate, TUpdate>): JSX.Element {
   const [searchText, setSearchText] = useState("");
+  const [exportIsOpen, setExportIsOpen] = useState(false);
+  const [importIsOpen, setImportIsOpen] = useState(false);
+  const genericDataGridRef = useRef<GenericDataGridRef>(null);
 
   const getGenericTable = (key: string, tableProps: GenericDataGridProps<TView>) => {
     const genericDataGrid = GenericDataGrid<TView>({
       ...tableProps,
-      searchText: searchText,
-    });
+      searchText: searchText
+    }, genericDataGridRef);
 
     const searchBox = (
       <SearchBar
@@ -60,15 +90,62 @@ export function GenericModule<TView extends BasicTypeForGeneric, TCreate, TUpdat
       </Button>
     );
 
+    const extraActions = (
+      <>
+        {showImport && <Button key={"import-btn"}
+          disabled={!importItemsFn}
+          onClick={() => {
+            setImportIsOpen(true);
+          }}
+          startIcon={<Upload/>}>
+          Import
+        </Button>}
+        {showExport && <Button key={"export-btn"}
+          disabled={!exportItemsFn}
+          onClick={() => {
+            setExportIsOpen(true);
+          }}
+          startIcon={<Download/>}>
+          Export
+        </Button>}
+      </>
+    );
+
     return (
       <ModuleWrapper
         key={key}
         breadcrumbs={dataListBreadcrumbLinks}
-        leftContainerChildren={searchBox}
-        addButtonContainerChildren={addButton}
         currentBreadcrumb={moduleName}
+        leftContainerChildren={searchBox}
+        extraActionsContainerChildren={extraActions}
+        addButtonContainerChildren={addButton}
       >
         {genericDataGrid}
+        {importIsOpen && tableProps.schema && (
+          <CsvImport
+            isOpen={importIsOpen}
+            onClose={() => {
+              setImportIsOpen(false);
+            }}
+            onUpload={async (data: Result<string>) => {
+              importItemsFn && await importItemsFn(data.validData as any[], {});
+            }}
+            object={tableProps.schema.properties}
+            endRoute={modulePath as CoreModule}/>
+        )}
+        {exportIsOpen && exportItemsFn && (
+          <CsvExport
+            exportAsync={async () => {
+              const filters = genericDataGridRef.current
+                && genericDataGridRef.current.getExportFilters();
+              const response = await exportItemsFn!(filters || {});
+              return response?.text();
+            }}
+            closeExport={() => {
+              setExportIsOpen(false);
+            }}
+            fileName={moduleName}/>
+        )}
       </ModuleWrapper>
     );
   };

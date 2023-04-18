@@ -32,7 +32,7 @@ export const LinksModule = () => {
     getItemFn: client.api.linksDetail,
     updateItemFn: client.api.linksPartialUpdate,
     createItemFn: client.api.linksCreate,
-    getItemId: () => undefined
+    getItemId: () => undefined,
   };
 
   const tableProps: GenericDataGridProps<LinkDetailsDto> = {
@@ -53,6 +53,9 @@ export const LinksModule = () => {
     modulePath: CoreModule.links,
     addButtonContent: "Add link",
     tableProps: tableProps,
+    showExport: true,
+    exportItemsFn: client.api.linksExportList,
+    showImport: true,
     viewFormProps: {
       ...formProps,
       mode: "details",

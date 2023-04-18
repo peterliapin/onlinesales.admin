@@ -41,7 +41,6 @@ export interface DtoProperty {
   example?: any;
 }
 
-
 export interface DtoSchema {
   type: string;
   enum?: string[];
@@ -77,12 +76,3 @@ export interface GenericDataGridSettings {
   sortDirection: string;
   columnVisibilityModel: GridColumnVisibilityModel;
 }
-
-export const saveSettings = (key: string, value: GenericDataGridSettings) => {
-  localStorage.setItem(`data-grid-${key}`, JSON.stringify(value));
-};
-
-export const getSettings = (key: string): GenericDataGridSettings | null => {
-  const value = localStorage.getItem(`data-grid-${key}`);
-  return value ? JSON.parse(value) : null;
-};
