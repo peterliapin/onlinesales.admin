@@ -53,6 +53,9 @@ export const CommentsModule = () => {
     modulePath: CoreModule.comments,
     addButtonContent: "Add comment",
     tableProps: tableProps,
+    showExport: true,
+    exportItemsFn: client.api.commentsExportList,
+    showImport: true,
     viewFormProps: {
       ...formProps,
       mode: "details",

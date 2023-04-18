@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {Ref, useEffect, useImperativeHandle, useState} from "react";
 import {HttpResponse, ProblemDetails, RequestParams} from "@lib/network/swagger-client";
 import {useModuleWrapperContext} from "@providers/module-wrapper-provider";
 import {DataGrid, GridColDef, GridColumnVisibilityModel, GridSortModel} from "@mui/x-data-grid";
@@ -24,7 +24,11 @@ export interface GenericDataGridProps<T extends BasicTypeForGeneric> {
   detailsNavigate?: (item: T) => void;
   editNavigate?: (item: T) => void;
   searchText?: string;
-  initiallyShownColumns?: string[]
+  initiallyShownColumns?: string[];
+}
+
+export interface GenericDataGridRef {
+  getExportFilters: () => any;
 }
 
 export function GenericDataGrid<T extends BasicTypeForGeneric>({
@@ -35,7 +39,7 @@ export function GenericDataGrid<T extends BasicTypeForGeneric>({
   editNavigate,
   searchText,
   initiallyShownColumns
-}: GenericDataGridProps<T>) {
+}: GenericDataGridProps<T>, ref: Ref<GenericDataGridRef>) {
   const {setBusy} = useModuleWrapperContext();
 
   const actionsColumn: GridColDef = {
@@ -95,23 +99,36 @@ export function GenericDataGrid<T extends BasicTypeForGeneric>({
   const [sortColumn, setSortColumn] = useState<string>("id");
   const [sortDirection, setSortDirection] = useState<string>("asc");
 
+  const getFilters = () => {
+    const query: any = {
+      "filter[limit]": pageSize,
+      "filter[order]": sortColumn ? `${sortColumn} ${sortDirection}` : undefined,
+      "filter[skip]": pageSize * pageNumber,
+    };
+
+    if (searchText) {
+      query["query"] = searchText;
+    }
+
+    return query;
+  };
+
+  useImperativeHandle(ref, () => ({
+    getExportFilters: () => {
+      const filters = getFilters();
+      delete filters["filter[limit]"];
+      delete filters["filter[skip]"];
+      return filters;
+    }
+  }));
+
   useEffect(() => {
     const abortController = new AbortController();
 
     if (getItemsFn) {
       setBusy(async () => {
         try {
-          const query: any = {
-            "filter[limit]": pageSize,
-            "filter[order]": sortColumn ? `${sortColumn} ${sortDirection}` : undefined,
-            "filter[skip]": pageSize * pageNumber,
-          };
-
-          if (searchText) {
-            query["query"] = searchText;
-          }
-
-          const {data, headers} = await getItemsFn(query as any, {
+          const {data, headers} = await getItemsFn(getFilters(), {
             signal: abortController.signal,
           });
 
@@ -149,8 +166,6 @@ export function GenericDataGrid<T extends BasicTypeForGeneric>({
           || initiallyShownColumns.length === 0
           || initiallyShownColumns.indexOf(columnName) > -1);
       }
-
-      console.log(initiallyShownColumns);
 
       return initialValue;
     });
@@ -213,3 +228,4 @@ export function GenericDataGrid<T extends BasicTypeForGeneric>({
     />
   );
 }
+
