@@ -22,3 +22,5 @@ export const contactEditHeader = "Edit Contact";
 export const contactAddHeader = "Add Contact";
 
 export const contactViewHeader = "View Contact";
+
+export const contactGridSettingsStorageKey = "contactDataListSettings";

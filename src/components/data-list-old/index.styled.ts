@@ -53,10 +53,3 @@ export const ContactRowGrid = styled(Grid)({
 export const ContactCardHeader = styled(CardHeader)({
   paddingLeft: 0,
 });
-
-export const DataListContainer = styled("div")`
-  display: flex;
-  flex-flow: column;
-  height: 100%;
-  gap: ${({ theme }) => theme.spacing(6)};
-`;

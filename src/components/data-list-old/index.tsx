@@ -1,5 +1,21 @@
+//Old implementation - this file will be updated
 import { useEffect, useState } from "react";
-import { CoreModule } from "lib/router";
+import { Button } from "@mui/material";
+import { Download, Upload } from "@mui/icons-material";
+import {
+  ModuleContainer,
+  ModuleHeaderContainer,
+  ModuleHeaderSubtitleContainer,
+} from "components/module";
+import { CoreModule, getAddFormRoute } from "lib/router";
+import { GhostLink } from "components/ghost-link";
+import {
+  ActionsContainer,
+  AddButtonContainer,
+  ExtraActionsContainer,
+  LeftContainer,
+  RightContainer,
+} from "./index.styled";
 import {
   defaultFilterLimit,
   getBasicExportFilterQuery,
@@ -7,29 +23,28 @@ import {
   getWhereFilterQuery,
   totalCountHeaderName,
 } from "lib/query";
+import { BreadCrumbNavigation } from "components/breadcrumbs";
 import { CsvImport } from "components/spreadsheet-import";
 import { Result } from "@wavepoint/react-spreadsheet-import/types/types";
 import { CsvExport } from "components/export";
+import { SearchBar } from "components/search-bar";
 import { DataTableGrid } from "components/data-table";
 import { GridColDef, GridColumnVisibilityModel, GridSortDirection } from "@mui/x-data-grid";
 import { GridInitialStateCommunity } from "@mui/x-data-grid/models/gridStateCommunity";
 import { getModelByName } from "lib/network/swagger-models";
-import { DataListContainer } from "./index.styled";
+import { BreadcrumbLink } from "utils/types";
 
 type dataListProps = {
   modelName: string;
   columns: GridColDef<any>[];
-  gridSettingsStorageKey: string;
-  searchText: string;
+  dataListBreadcrumbLinks: BreadcrumbLink[];
+  currentBreadcrumb: string;
+  searchBarLabel: string;
   defaultFilterOrderColumn: string;
   defaultFilterOrderDirection: string;
   initialGridState: GridInitialStateCommunity | undefined;
   exportFileName: string;
   endRoute: string;
-  openImport: boolean;
-  openExport: boolean;
-  handleExport: () => void;
-  handleImport: () => void;
   getModelDataList: (query: string) => any;
   exportAsync: (query: string, accept: string) => Promise<string>;
   dataImportCreate: (data: any) => void;
@@ -50,16 +65,13 @@ type dataListSettings = {
 export const DataList = ({
   modelName,
   columns,
-  gridSettingsStorageKey,
-  searchText,
+  dataListBreadcrumbLinks,
+  currentBreadcrumb,
+  searchBarLabel,
   defaultFilterOrderColumn,
   defaultFilterOrderDirection,
   initialGridState,
   endRoute,
-  openImport,
-  openExport,
-  handleImport,
-  handleExport,
   getModelDataList,
   exportAsync: exportAsync,
   exportFileName,
@@ -76,28 +88,17 @@ export const DataList = ({
   const [totalRowCount, setTotalRowCount] = useState(0);
   const [pageNumber, setPageNumber] = useState(0);
   const [isImportWindowOpen, setIsImportWindowOpen] = useState(false);
-  const [openExportFile, setOpenExportFile] = useState(false);
+  const [openExport, setOpenExport] = useState(false);
   const [columnVisibilityModel, setColumnVisibilityModel] = useState(
     initialGridState?.columns?.columnVisibilityModel
   );
   const [gridSettingsLoaded, setGridSettingsLoaded] = useState(false);
-  const [gridState, setGridState] = useState(initialGridState);
 
   const whereFilterQuery = getWhereFilterQuery(whereField, whereFieldValue);
   const basicFilterQuery = getBasicFilterQuery(filterLimit, sortColumn, sortOrder, skipLimit);
   const basicExportFilterQuery = getBasicExportFilterQuery(sortColumn, sortOrder);
 
-  useEffect(() => {
-    setSearchTerm(searchText);
-  }, [searchText]);
-
-  useEffect(() => {
-    setIsImportWindowOpen(openImport);
-  }, [openImport]);
-
-  useEffect(() => {
-    setOpenExportFile(openExport);
-  }, [openExport]);
+  const gridSettingsStorageName = `${modelName}DataListSettings`;
 
   useEffect(() => {
     if (gridSettingsLoaded) {
@@ -116,7 +117,7 @@ export const DataList = ({
   ]);
 
   useEffect(() => {
-    const settingsState = localStorage.getItem(gridSettingsStorageKey);
+    const settingsState = localStorage.getItem(gridSettingsStorageName);
     if (settingsState) {
       const settings = JSON.parse(settingsState) as dataListSettings;
       const {
@@ -158,7 +159,7 @@ export const DataList = ({
 
   const saveGridStateInLocalStorage = () => {
     localStorage.setItem(
-      gridSettingsStorageKey,
+      gridSettingsStorageName,
       JSON.stringify({
         searchTerm,
         filterLimit,
@@ -208,7 +209,6 @@ export const DataList = ({
       pageSize: gridSettings.filterLimit,
     };
     initialGridState!.columns = { columnVisibilityModel: gridSettings.columnVisibilityModel };
-    setGridState(initialGridState);
   };
 
   const setTotalResultsCount = (headerCount: string | null) => {
@@ -220,14 +220,16 @@ export const DataList = ({
     return await exportAsync(`${searchTerm}&${basicExportFilterQuery}${whereFilterQuery}`, accept);
   };
 
+  const onExportClick = () => {
+    setOpenExport(true);
+  };
+
   const closeExport = () => {
-    setOpenExportFile(false);
-    handleExport();
+    setOpenExport(false);
   };
 
   const onImportWindowClose = () => {
     setIsImportWindowOpen(false);
-    handleImport();
   };
 
   const handleFileUpload = async (data: Result<string>) => {
@@ -235,10 +237,46 @@ export const DataList = ({
     await dataImportCreate(importDtoCollection);
   };
 
+  const openImportPage = () => {
+    setIsImportWindowOpen(true);
+  };
+
   const importFieldsObject = getModelByName(modelName);
 
   return gridSettingsLoaded ? (
-    <DataListContainer>
+    <ModuleContainer>
+      <ModuleHeaderContainer>
+        <ModuleHeaderSubtitleContainer>
+          <BreadCrumbNavigation
+            links={dataListBreadcrumbLinks}
+            current={currentBreadcrumb}
+          ></BreadCrumbNavigation>
+        </ModuleHeaderSubtitleContainer>
+      </ModuleHeaderContainer>
+      <ActionsContainer>
+        <LeftContainer>
+          <SearchBar
+            setSearchTermOnChange={setSearchTerm}
+            searchBoxLabel={searchBarLabel}
+            initialValue={searchTerm}
+          ></SearchBar>
+        </LeftContainer>
+        <RightContainer>
+          <ExtraActionsContainer>
+            <Button startIcon={<Upload />} onClick={openImportPage}>
+              Import
+            </Button>
+            <Button startIcon={<Download />} onClick={onExportClick}>
+              Export
+            </Button>
+          </ExtraActionsContainer>
+          <AddButtonContainer>
+            <Button to={getAddFormRoute()} component={GhostLink} variant="contained">
+              {`Add ${modelName}`}
+            </Button>
+          </AddButtonContainer>
+        </RightContainer>
+      </ActionsContainer>
       <DataTableGrid
         columns={columns}
         data={modelData}
@@ -256,7 +294,7 @@ export const DataList = ({
         setFilterFieldValue={setWhereFieldValue}
         setPageNumber={setPageNumber}
         handleColumnVisibilityModel={setColumnVisibilityModel}
-        initialState={gridState}
+        initialState={initialGridState}
         disableColumnFilter={false}
         disablePagination={false}
         showActionsColumn={true}
@@ -272,13 +310,13 @@ export const DataList = ({
           endRoute={endRoute as CoreModule}
         ></CsvImport>
       )}
-      {openExportFile && (
+      {openExport && (
         <CsvExport
           exportAsync={exportWithParamsAsync}
           closeExport={closeExport}
           fileName={exportFileName}
         ></CsvExport>
       )}
-    </DataListContainer>
+    </ModuleContainer>
   ) : null;
 };
