@@ -6,9 +6,6 @@ import {
   CardContent,
   CardMedia,
   Grid,
-  List,
-  ListItem,
-  Box,
   Typography,
 } from "@mui/material";
 import { ContentDetailsDto } from "@lib/network/swagger-client";
@@ -22,15 +19,12 @@ import { blogBreadcrumbLinks } from "@features/blog/constants";
 import { ModuleWrapper } from "@components/module-wrapper";
 import { FixedSizeGrid as VirtualizedGrid } from "react-window";
 import AutoSizer from "react-virtualized-auto-sizer";
-import useMediaQuery from "@mui/material/useMediaQuery";
 
 const coreApi = process.env.CORE_API;
 const GUTTER_SIZE = 15;
 
 export const ContentList = () => {
   const { setBusy } = useModuleWrapperContext();
-  const contentListMediumBreakpoint = useMediaQuery("(max-width: 1050px)");
-
   const { client } = useRequestContext();
   const [contentItems, setContentItems] = useState<ContentDetailsDto[]>([]);
   const [searchText, setSearchText] = useState<string>("");
@@ -96,10 +90,11 @@ export const ContentList = () => {
         {contentItems.length > 0 &&
           <AutoSizer>
             {({ height, width }) => {
+              const columnsCount = Math.floor(width! / (345 + GUTTER_SIZE));
               return (
                 <VirtualizedGrid
-                  columnCount={contentListMediumBreakpoint ? 2 : 4}
-                  rowCount={contentItems.length / (contentListMediumBreakpoint ? 2 : 4)}
+                  columnCount={columnsCount}
+                  rowCount={contentItems.length / columnsCount}
                   columnWidth={345 + GUTTER_SIZE}
                   rowHeight={500 + GUTTER_SIZE}
                   height={height!}
