@@ -1,7 +1,14 @@
 import {Ref, useEffect, useImperativeHandle, useState} from "react";
 import {HttpResponse, ProblemDetails, RequestParams} from "@lib/network/swagger-client";
 import {useModuleWrapperContext} from "@providers/module-wrapper-provider";
-import {DataGrid, GridColDef, GridColumnVisibilityModel, GridSortModel} from "@mui/x-data-grid";
+import {
+  DataGrid,
+  getGridStringOperators,
+  GridColDef,
+  GridColumnVisibilityModel,
+  GridFilterModel,
+  GridSortModel
+} from "@mui/x-data-grid";
 import {totalCountHeaderName} from "@lib/query";
 import {
   DtoSchema,
@@ -85,7 +92,10 @@ export function GenericDataGrid<T extends BasicTypeForGeneric>({
                 ? dayjs(params.value).format("L HH:mm")
                 : undefined;
             }
-            : undefined
+            : undefined,
+          filterOperators: getGridStringOperators().filter(
+            (operator) => operator.value === "contains"
+          ),
         };
         return column;
       })),
@@ -98,9 +108,11 @@ export function GenericDataGrid<T extends BasicTypeForGeneric>({
   const [pageSize, setPageSize] = useState<number>(10);
   const [sortColumn, setSortColumn] = useState<string>("id");
   const [sortDirection, setSortDirection] = useState<string>("asc");
+  const [whereFilters, setWhereFilters] = useState<{ [x: string]: string; }>({});
 
   const getFilters = () => {
     const query: any = {
+      ...whereFilters,
       "filter[limit]": pageSize,
       "filter[order]": sortColumn ? `${sortColumn} ${sortDirection}` : undefined,
       "filter[skip]": pageSize * pageNumber,
@@ -144,13 +156,27 @@ export function GenericDataGrid<T extends BasicTypeForGeneric>({
     return () => {
       abortController.abort("canceled");
     };
-  }, [getItemsFn, pageSize, pageNumber, sortColumn, sortDirection, searchText]);
+  }, [getItemsFn, pageSize, pageNumber, sortColumn, sortDirection, searchText, whereFilters]);
 
   const handleSortChange = (sortModel: GridSortModel) => {
     if (sortModel.length > 0) {
       setSortColumn(sortModel[sortModel.length - 1].field);
       setSortDirection(sortModel[sortModel.length - 1].sort || "asc");
     } else setSortDirection("asc");
+  };
+
+  const handleFilterChange = (filterModel: GridFilterModel) => {
+    if (filterModel.items.length === 0) {
+      return;
+    }
+
+    const newWhereFilters: { [x: string]: string; } = {};
+
+    for (const item of filterModel.items) {
+      newWhereFilters[`filter[where][${item.columnField}][like]`] = item.value;
+    }
+
+    setWhereFilters(newWhereFilters);
   };
 
   const [settingsInitialized, setSettingsInitialized] = useState<boolean>(false);
@@ -221,6 +247,7 @@ export function GenericDataGrid<T extends BasicTypeForGeneric>({
       sortingMode="server"
       onSortModelChange={(newSortModel) => handleSortChange(newSortModel)}
       filterMode="server"
+      onFilterModelChange={(newFilterModel) => handleFilterChange(newFilterModel)}
       onColumnVisibilityModelChange={(newModel) => {
         settingsInitialized && setColumnVisibilityModel(newModel);
       }}
