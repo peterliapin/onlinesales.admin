@@ -49,6 +49,10 @@ export const UnsubscribesModule = () => {
     moduleName: "Unsubscribes",
     modulePath: CoreModule.unsubscribes,
     tableProps: tableProps,
+    showExport: true,
+    exportItemsFn: client.api.unsubscribesExportList,
+    showImport: true,
+    importItemsFn: client.api.unsubscribesImportCreate,
     viewFormProps: {
       ...formProps,
       mode: "details",
