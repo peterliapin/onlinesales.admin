@@ -50,6 +50,7 @@ export const CommentsModule = () => {
   const module = GenericModule({
     moduleName: "Comments",
     modulePath: CoreModule.comments,
+    addButtonContent: "Add comment",
     tableProps: tableProps,
     viewFormProps: {
       ...formProps,

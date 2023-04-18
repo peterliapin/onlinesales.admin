@@ -50,6 +50,7 @@ export const LinksModule = () => {
   const module = GenericModule({
     moduleName: "Links",
     modulePath: CoreModule.links,
+    addButtonContent: "Add link",
     tableProps: tableProps,
     viewFormProps: {
       ...formProps,
