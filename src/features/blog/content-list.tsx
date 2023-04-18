@@ -30,7 +30,6 @@ const GUTTER_SIZE = 15;
 export const ContentList = () => {
   const { setBusy } = useModuleWrapperContext();
   const contentListMediumBreakpoint = useMediaQuery("(max-width: 1050px)");
-  console.log(contentListMediumBreakpoint);
 
   const { client } = useRequestContext();
   const [contentItems, setContentItems] = useState<ContentDetailsDto[]>([]);
@@ -69,21 +68,12 @@ export const ContentList = () => {
         // const filter = searchText
         //   ? { "filter[where][title][like]=": searchText }
         //   : {}
-        const filter = searchText ? { query: searchText } : undefined;
+        const filter = searchText ? { query: searchText } : { "filter[order]" : "createdAt desc"};
         const { data } = await client.api.contentList(filter, {
           signal: controller.signal,
+          
         });
-        setContentItems(data.sort((a, b) => {
-          const a_date = Date.parse(a.createdAt!);
-          const b_date = Date.parse(b.createdAt!);
-          if (a_date < b_date){
-            return 1;
-          }else if (a_date > b_date) {
-            return -1;
-          }else{
-            return 0;
-          }
-        }));
+        setContentItems(data);
       } catch (e) {
         console.log(e);
       }
