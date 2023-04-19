@@ -16,10 +16,14 @@ import { CoreModule, getAddFormRoute } from "lib/router";
 import { dataListBreadcrumbLinks } from "utils/constants";
 import { ModuleWrapper } from "@components/module-wrapper";
 import { SearchBar } from "@components/search-bar";
-import { useEffect, useState } from "react";
+import { Fragment, useRef, useState } from "react";
 import { Add, Download, Upload } from "@mui/icons-material";
 import { GhostLink } from "@components/ghost-link";
 import { getLocalStorageSavedPropertyValue } from "utils/helper";
+import { CsvImport } from "@components/spreadsheet-import";
+import { getModelByName } from "lib/network/swagger-models";
+import { Result } from "@wavepoint/react-spreadsheet-import/types/types";
+import { CsvExport } from "@components/export";
 
 export const Contacts = () => {
   const { client } = useRequestContext();
@@ -27,15 +31,14 @@ export const Contacts = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [openImport, setOpenImport] = useState(false);
   const [openExport, setOpenExport] = useState(false);
+  const [importFieldsObject, setImportFieldsObject] = useState<any>();
+  const dataExportQuery = useRef("");
 
-  useEffect(() => {
-    setSearchTerm(getLocalStorageSavedPropertyValue(contactGridSettingsStorageKey, "searchTerm"));
-  }, []);
-
-  const getContactList = async (query: string) => {
+  const getContactList = async (mainQuery: string, exportQuery?: string) => {
     try {
+      dataExportQuery.current = exportQuery || "";
       const result = await client.api.contactsList({
-        query: query,
+        query: mainQuery,
       });
       return result;
     } catch (error) {
@@ -44,16 +47,30 @@ export const Contacts = () => {
     }
   };
 
-  const exportContactsAsync = async (query: string) => {
+  const exportContactsAsync = async () => {
     const response = await client.api.contactsExportList({
-      query: query,
+      query: dataExportQuery.current,
     });
 
     return response.text();
   };
 
-  const handleContactImport = async (data: ContactImportDto[]) => {
-    await client.api.contactsImportCreate(data);
+  const handleImportOpen = () => {
+    !importFieldsObject && setImportFieldsObject(getModelByName(modelName));
+    setOpenImport(true);
+  };
+
+  const handleImportClose = () => {
+    setOpenImport(false);
+  };
+
+  const handleExportOpen = () => {
+    openExport ? setOpenExport(false) : setOpenExport(true);
+  };
+
+  const handleFileUpload = async (data: Result<string>) => {
+    const importDtoCollection: ContactImportDto[] = data.validData;
+    await client.api.contactsImportCreate(importDtoCollection);
   };
 
   const columns: GridColDef<ContactDetailsDto>[] = [
@@ -110,14 +127,6 @@ export const Contacts = () => {
     },
   ];
 
-  const handleImport = () => {
-    openImport ? setOpenImport(false) : setOpenImport(true);
-  };
-
-  const handleExport = () => {
-    openExport ? setOpenExport(false) : setOpenExport(true);
-  };
-
   const searchBar = (
     <SearchBar
       setSearchTermOnChange={setSearchTerm}
@@ -127,12 +136,32 @@ export const Contacts = () => {
   );
 
   const extraActions = [
-    <Button key={"import-btn"} startIcon={<Upload />} onClick={handleImport}>
-      Import
-    </Button>,
-    <Button key={"export-btn"} startIcon={<Download />} onClick={handleExport}>
-      Export
-    </Button>,
+    <Fragment key={"import-action"}>
+      <Button key={"import-btn"} startIcon={<Upload />} onClick={handleImportOpen}>
+        Import
+      </Button>
+      {importFieldsObject && (
+        <CsvImport
+          isOpen={openImport}
+          onClose={handleImportClose}
+          onUpload={handleFileUpload}
+          object={importFieldsObject}
+          endRoute={CoreModule.contacts}
+        ></CsvImport>
+      )}
+    </Fragment>,
+    <Fragment key={"export-action"}>
+      <Button key={"export-btn"} startIcon={<Download />} onClick={handleExportOpen}>
+        Export
+      </Button>
+      {openExport && (
+        <CsvExport
+          exportAsync={exportContactsAsync}
+          closeExport={handleExportOpen}
+          fileName={"contacts"}
+        ></CsvExport>
+      )}
+    </Fragment>,
   ];
 
   const addButton = (
@@ -150,21 +179,12 @@ export const Contacts = () => {
       addButtonContainerChildren={addButton}
     >
       <DataList
-        modelName={modelName}
         columns={columns}
         gridSettingsStorageKey={contactGridSettingsStorageKey}
         defaultFilterOrderColumn={defaultFilterOrderColumn}
         defaultFilterOrderDirection={defaultFilterOrderDirection}
         searchText={searchTerm}
-        endRoute={CoreModule.contacts}
-        openImport={openImport}
-        openExport={openExport}
-        handleExport={handleExport}
-        handleImport={handleImport}
         getModelDataList={getContactList}
-        exportAsync={exportContactsAsync}
-        exportFileName="contacts"
-        dataImportCreate={handleContactImport}
         initialGridState={{
           columns: { columnVisibilityModel: { lastName: false, email: false } },
           sorting: {

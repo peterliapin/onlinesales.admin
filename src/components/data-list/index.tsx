@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { CoreModule } from "lib/router";
 import {
   defaultFilterLimit,
   getBasicExportFilterQuery,
@@ -7,32 +6,19 @@ import {
   getWhereFilterQuery,
   totalCountHeaderName,
 } from "lib/query";
-import { CsvImport } from "components/spreadsheet-import";
-import { Result } from "@wavepoint/react-spreadsheet-import/types/types";
-import { CsvExport } from "components/export";
-import { DataTableGrid } from "components/data-table";
 import { GridColDef, GridColumnVisibilityModel, GridSortDirection } from "@mui/x-data-grid";
 import { GridInitialStateCommunity } from "@mui/x-data-grid/models/gridStateCommunity";
-import { getModelByName } from "lib/network/swagger-models";
 import { DataListContainer } from "./index.styled";
+import { DataTableGrid } from "@components/data-table";
 
 type dataListProps = {
-  modelName: string;
   columns: GridColDef<any>[];
   gridSettingsStorageKey: string;
   searchText: string;
   defaultFilterOrderColumn: string;
   defaultFilterOrderDirection: string;
   initialGridState: GridInitialStateCommunity | undefined;
-  exportFileName: string;
-  endRoute: string;
-  openImport: boolean;
-  openExport: boolean;
-  handleExport: () => void;
-  handleImport: () => void;
-  getModelDataList: (query: string) => any;
-  exportAsync: (query: string, accept: string) => Promise<string>;
-  dataImportCreate: (data: any) => void;
+  getModelDataList: (mainQuery: string, exportQuery?: string) => any;
 };
 
 type dataListSettings = {
@@ -48,22 +34,13 @@ type dataListSettings = {
 };
 
 export const DataList = ({
-  modelName,
   columns,
   gridSettingsStorageKey,
   searchText,
   defaultFilterOrderColumn,
   defaultFilterOrderDirection,
   initialGridState,
-  endRoute,
-  openImport,
-  openExport,
-  handleImport,
-  handleExport,
   getModelDataList,
-  exportAsync: exportAsync,
-  exportFileName,
-  dataImportCreate,
 }: dataListProps) => {
   const [modelData, setModelData] = useState<any[] | undefined>([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -75,8 +52,6 @@ export const DataList = ({
   const [skipLimit, setSkipLimit] = useState(0);
   const [totalRowCount, setTotalRowCount] = useState(0);
   const [pageNumber, setPageNumber] = useState(0);
-  const [isImportWindowOpen, setIsImportWindowOpen] = useState(false);
-  const [openExportFile, setOpenExportFile] = useState(false);
   const [columnVisibilityModel, setColumnVisibilityModel] = useState(
     initialGridState?.columns?.columnVisibilityModel
   );
@@ -90,14 +65,6 @@ export const DataList = ({
   useEffect(() => {
     setSearchTerm(searchText);
   }, [searchText]);
-
-  useEffect(() => {
-    setIsImportWindowOpen(openImport);
-  }, [openImport]);
-
-  useEffect(() => {
-    setOpenExportFile(openExport);
-  }, [openExport]);
 
   useEffect(() => {
     if (gridSettingsLoaded) {
@@ -175,7 +142,10 @@ export const DataList = ({
 
   const getDataListAsync = () => {
     (async () => {
-      const result = await getModelDataList(`${searchTerm}&${basicFilterQuery}${whereFilterQuery}`);
+      const result = await getModelDataList(
+        `${searchTerm}&${basicFilterQuery}${whereFilterQuery}`,
+        `${searchTerm}&${basicExportFilterQuery}${whereFilterQuery}`
+      );
       if (result) {
         const { data, headers } = result;
         setTotalResultsCount(headers.get(totalCountHeaderName));
@@ -216,27 +186,6 @@ export const DataList = ({
     else setTotalRowCount(-1);
   };
 
-  const exportWithParamsAsync = async (accept: string) => {
-    return await exportAsync(`${searchTerm}&${basicExportFilterQuery}${whereFilterQuery}`, accept);
-  };
-
-  const closeExport = () => {
-    setOpenExportFile(false);
-    handleExport();
-  };
-
-  const onImportWindowClose = () => {
-    setIsImportWindowOpen(false);
-    handleImport();
-  };
-
-  const handleFileUpload = async (data: Result<string>) => {
-    const importDtoCollection: any[] = data.validData;
-    await dataImportCreate(importDtoCollection);
-  };
-
-  const importFieldsObject = getModelByName(modelName);
-
   return gridSettingsLoaded ? (
     <DataListContainer>
       <DataTableGrid
@@ -263,22 +212,6 @@ export const DataList = ({
         disableEditRoute={false}
         disableViewRoute={false}
       />
-      {importFieldsObject && (
-        <CsvImport
-          isOpen={isImportWindowOpen}
-          onClose={onImportWindowClose}
-          onUpload={handleFileUpload}
-          object={importFieldsObject}
-          endRoute={endRoute as CoreModule}
-        ></CsvImport>
-      )}
-      {openExportFile && (
-        <CsvExport
-          exportAsync={exportWithParamsAsync}
-          closeExport={closeExport}
-          fileName={exportFileName}
-        ></CsvExport>
-      )}
     </DataListContainer>
   ) : null;
 };
