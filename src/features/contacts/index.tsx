@@ -19,16 +19,21 @@ import { SearchBar } from "@components/search-bar";
 import { Fragment, useRef, useState } from "react";
 import { Add, Download, Upload } from "@mui/icons-material";
 import { GhostLink } from "@components/ghost-link";
-import { getLocalStorageSavedPropertyValue } from "utils/helper";
 import { CsvImport } from "@components/spreadsheet-import";
 import { getModelByName } from "lib/network/swagger-models";
 import { Result } from "@wavepoint/react-spreadsheet-import/types/types";
 import { CsvExport } from "@components/export";
+import useLocalStorage from "use-local-storage";
+import { dataListSettings } from "utils/types";
 
 export const Contacts = () => {
   const { client } = useRequestContext();
+  const [gridSettings, setGridSettings] = useLocalStorage<dataListSettings | undefined>(
+    contactGridSettingsStorageKey,
+    undefined
+  );
 
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState(gridSettings?.searchTerm ?? "");
   const [openImport, setOpenImport] = useState(false);
   const [openExport, setOpenExport] = useState(false);
   const [importFieldsObject, setImportFieldsObject] = useState<any>();
@@ -131,7 +136,7 @@ export const Contacts = () => {
     <SearchBar
       setSearchTermOnChange={setSearchTerm}
       searchBoxLabel={searchLabel}
-      initialValue={getLocalStorageSavedPropertyValue(contactGridSettingsStorageKey, "searchTerm")}
+      initialValue={gridSettings?.searchTerm ?? ""}
     ></SearchBar>
   );
 

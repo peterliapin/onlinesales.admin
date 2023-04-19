@@ -6,10 +6,12 @@ import {
   getWhereFilterQuery,
   totalCountHeaderName,
 } from "lib/query";
-import { GridColDef, GridColumnVisibilityModel, GridSortDirection } from "@mui/x-data-grid";
+import { GridColDef, GridSortDirection } from "@mui/x-data-grid";
 import { GridInitialStateCommunity } from "@mui/x-data-grid/models/gridStateCommunity";
 import { DataListContainer } from "./index.styled";
 import { DataTableGrid } from "@components/data-table";
+import useLocalStorage from "use-local-storage";
+import { dataListSettings } from "utils/types";
 
 type dataListProps = {
   columns: GridColDef<any>[];
@@ -19,18 +21,6 @@ type dataListProps = {
   defaultFilterOrderDirection: string;
   initialGridState: GridInitialStateCommunity | undefined;
   getModelDataList: (mainQuery: string, exportQuery?: string) => any;
-};
-
-type dataListSettings = {
-  searchTerm: string;
-  filterLimit: number;
-  skipLimit: number;
-  sortColumn: string;
-  sortOrder: string;
-  whereField: string;
-  whereFieldValue: string;
-  pageNumber: number;
-  columnVisibilityModel: GridColumnVisibilityModel;
 };
 
 export const DataList = ({
@@ -62,6 +52,11 @@ export const DataList = ({
   const basicFilterQuery = getBasicFilterQuery(filterLimit, sortColumn, sortOrder, skipLimit);
   const basicExportFilterQuery = getBasicExportFilterQuery(sortColumn, sortOrder);
 
+  const [gridSettings, setGridSettings] = useLocalStorage<dataListSettings | undefined>(
+    gridSettingsStorageKey,
+    undefined
+  );
+
   useEffect(() => {
     setSearchTerm(searchText);
   }, [searchText]);
@@ -83,20 +78,18 @@ export const DataList = ({
   ]);
 
   useEffect(() => {
-    const settingsState = localStorage.getItem(gridSettingsStorageKey);
-    if (settingsState) {
-      const settings = JSON.parse(settingsState) as dataListSettings;
+    if (gridSettings) {
       const {
-        searchTerm: searchTerm,
-        filterLimit: filterLimit,
-        skipLimit: skipLimit,
-        sortColumn: sortColumn,
-        sortOrder: sortOrder,
-        whereField: whereField,
-        whereFieldValue: whereFieldValue,
-        pageNumber: pageNumber,
-        columnVisibilityModel: columnVisibilityModel,
-      } = settings;
+        searchTerm,
+        filterLimit,
+        skipLimit,
+        sortColumn,
+        sortOrder,
+        whereField,
+        whereFieldValue,
+        pageNumber,
+        columnVisibilityModel,
+      } = gridSettings;
       setSearchTerm(searchTerm);
       setFilterLimit(filterLimit);
       setSkipLimit(skipLimit);
@@ -106,7 +99,7 @@ export const DataList = ({
       setWhereFieldValue(whereFieldValue);
       setPageNumber(pageNumber);
       setColumnVisibilityModel(columnVisibilityModel);
-      updateGridSettings(settings);
+      updateGridSettings(gridSettings);
     }
     setGridSettingsLoaded(true);
   }, []);
@@ -124,20 +117,17 @@ export const DataList = ({
   }, [modelData]);
 
   const saveGridStateInLocalStorage = () => {
-    localStorage.setItem(
-      gridSettingsStorageKey,
-      JSON.stringify({
-        searchTerm,
-        filterLimit,
-        skipLimit,
-        sortColumn,
-        sortOrder,
-        whereField,
-        whereFieldValue,
-        pageNumber,
-        columnVisibilityModel,
-      } as dataListSettings)
-    );
+    setGridSettings({
+      searchTerm,
+      filterLimit,
+      skipLimit,
+      sortColumn,
+      sortOrder,
+      whereField,
+      whereFieldValue,
+      pageNumber,
+      columnVisibilityModel,
+    });
   };
 
   const getDataListAsync = () => {
