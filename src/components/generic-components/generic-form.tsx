@@ -256,6 +256,8 @@ export function GenericForm<TView extends BasicTypeForGeneric, TCreate, TUpdate>
               ...prevValues,
               [field.name]: newValue ? newValue.value : null,
             }));
+            customDictionary?.onSelect
+            && customDictionary?.onSelect(newValue ? newValue.value : null);
           }
         });
       }
