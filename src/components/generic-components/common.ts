@@ -85,7 +85,7 @@ export interface DictItem {
 export interface CustomFieldSourceDictionary {
   label?: string;
   items: DictItem[];
-  onSelect?: (itemId: number) => void;
+  onSelect?: (itemId: number | null) => void;
 }
 
 export interface CustomFieldSourceDictionaries {

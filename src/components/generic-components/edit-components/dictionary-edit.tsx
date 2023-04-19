@@ -4,16 +4,16 @@ import {Autocomplete, TextField} from "@mui/material";
 import {DictItem} from "@components/generic-components";
 
 export const DictionaryEdit = ({
-                                 key,
-                                 label,
-                                 example,
-                                 required,
-                                 value,
-                                 onChangeValue,
-                                 disabled,
-                                 valueOptions,
-                                 error
-                               }: EditProps<DictItem>): ReactNode => {
+  key,
+  label,
+  example,
+  required,
+  value,
+  onChangeValue,
+  disabled,
+  valueOptions,
+  error
+}: EditProps<DictItem>): ReactNode => {
   return (
     <Autocomplete
       key={key}
