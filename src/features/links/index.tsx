@@ -53,9 +53,15 @@ export const LinksModule = () => {
     modulePath: CoreModule.links,
     addButtonContent: "Add link",
     tableProps: tableProps,
-    showExport: true,
-    exportItemsFn: client.api.linksExportList,
-    showImport: true,
+    extraActions: {
+      export: {
+        showButton: true,
+        exportItemsFn: client.api.linksExportList,
+      },
+      import: {
+        showButton: true,
+      }
+    },
     viewFormProps: {
       ...formProps,
       mode: "details",

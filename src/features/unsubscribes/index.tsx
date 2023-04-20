@@ -49,10 +49,17 @@ export const UnsubscribesModule = () => {
     moduleName: "Unsubscribes",
     modulePath: CoreModule.unsubscribes,
     tableProps: tableProps,
-    showExport: true,
-    exportItemsFn: client.api.unsubscribesExportList,
-    showImport: true,
-    importItemsFn: client.api.unsubscribesImportCreate,
+    extraActions: {
+      export: {
+        showButton: true,
+        exportItemsFn: client.api.unsubscribesExportList,
+      },
+      import: {
+        showButton: true,
+        importItemsFn: client.api.unsubscribesImportCreate,
+        importSchema: getSchemaDto("UnsubscribeImportDto", swaggerJson.components.schemas)
+      }
+    },
     viewFormProps: {
       ...formProps,
       mode: "details",
