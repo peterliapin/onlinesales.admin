@@ -14,7 +14,8 @@ import {useNavigate, useParams} from "react-router-dom";
 import swaggerJson from "@lib/network/swagger.json";
 import {useRequestContext} from "@providers/request-provider";
 import {
-  UnsubscribeDto, UbsubscribeDetailsDto
+  UnsubscribeDto,
+  UnsubscribeDetailsDto
 } from "@lib/network/swagger-client";
 
 
@@ -22,8 +23,8 @@ export const UnsubscribesModule = () => {
   const {client} = useRequestContext();
   const navigate = useNavigate();
 
-  const formProps: GenericFormProps<UbsubscribeDetailsDto, UnsubscribeDto, UnsubscribeDto> = {
-    detailsSchema: getSchemaDto("UbsubscribeDetailsDto", swaggerJson.components.schemas),
+  const formProps: GenericFormProps<UnsubscribeDetailsDto, UnsubscribeDto, UnsubscribeDto> = {
+    detailsSchema: getSchemaDto("UnsubscribeDetailsDto", swaggerJson.components.schemas),
     updateSchema: getSchemaDto("UnsubscribeDto", swaggerJson.components.schemas),
     createSchema: getSchemaDto("UnsubscribeDto", swaggerJson.components.schemas),
     editable: false,
@@ -33,9 +34,9 @@ export const UnsubscribesModule = () => {
     getItemId: () => undefined
   };
 
-  const tableProps: GenericDataGridProps<UbsubscribeDetailsDto> = {
+  const tableProps: GenericDataGridProps<UnsubscribeDetailsDto> = {
     key: "unsubscribes-table",
-    schema: getSchemaDto("UbsubscribeDetailsDto", swaggerJson.components.schemas),
+    schema: getSchemaDto("UnsubscribeDetailsDto", swaggerJson.components.schemas),
     getItemsFn: client.api.unsubscribesList,
     detailsNavigate: (item) => {
       item.id && navigate(getViewFormRoute(item.id), {state: item});
