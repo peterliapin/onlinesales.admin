@@ -97,10 +97,17 @@ export const CommentsModule = () => {
     modulePath: CoreModule.comments,
     addButtonContent: "Add comment",
     tableProps: tableProps,
-    showExport: true,
-    exportItemsFn: client.api.commentsExportList,
-    showImport: true,
-    importItemsFn: client.api.commentsImportCreate,
+    extraActions: {
+      export: {
+        showButton: true,
+        exportItemsFn: client.api.commentsExportList,
+      },
+      import: {
+        showButton: true,
+        importItemsFn: client.api.commentsImportCreate,
+        importSchema: getSchemaDto("CommentImportDto", swaggerJson.components.schemas),
+      }
+    },
     viewFormProps: {
       ...formProps,
       mode: "details",
