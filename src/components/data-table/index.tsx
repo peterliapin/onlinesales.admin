@@ -14,6 +14,7 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { useNavigate } from "react-router-dom";
 import { getEditFormRoute, getViewFormRoute } from "lib/router";
 import { IconButton } from "@mui/material";
+import { GridDataFilterState } from "utils/types";
 
 type DataTableProps = {
   columns: GridColDef[];
@@ -24,14 +25,7 @@ type DataTableProps = {
   rowsPerPageOptions: number[] | undefined;
   pageNumber: number | undefined;
   dataViewMode: "client" | "server";
-  setSortColumn: ((sortColumn: string) => void) | undefined;
-  setSortOrder: ((sortOrder: string) => void) | undefined;
-  setPageSize: ((pageSize: number) => void) | undefined;
-  setSkipLimit: ((skipLimit: number) => void) | undefined;
-  setFilterField: ((filterField: string) => void) | undefined;
-  setFilterFieldValue: ((fieldValue: string) => void) | undefined;
-  setPageNumber: ((pageNumber: number) => void) | undefined;
-  handleColumnVisibilityModel: ((model: GridColumnVisibilityModel) => void) | undefined;
+  setFilterState: ((filterState: GridDataFilterState) => void) | undefined;
   initialState?: GridInitialStateCommunity | undefined;
   disablePagination: boolean;
   disableColumnFilter: boolean;
@@ -49,14 +43,7 @@ export const DataTableGrid = ({
   rowsPerPageOptions,
   pageNumber,
   dataViewMode,
-  setSortColumn,
-  setSortOrder,
-  setPageSize,
-  setSkipLimit,
-  setFilterField,
-  setFilterFieldValue,
-  setPageNumber,
-  handleColumnVisibilityModel,
+  setFilterState,
   initialState,
   disableColumnFilter,
   disablePagination,
@@ -113,18 +100,31 @@ export const DataTableGrid = ({
   );
 
   const handlePageChange = (page: number) => {
-    setPageNumber && setPageNumber(page);
-    setSkipLimit && setSkipLimit(page * pageSize!);
+    if (setFilterState) {
+      setFilterState({
+        pageNumber: page,
+        skipLimit: page * pageSize!,
+      });
+    }
   };
 
   const handleSortChange = (sortModel: GridSortModel) => {
     if (dataViewMode === "client") {
       return;
     }
-    if (sortModel.length > 0) {
-      setSortColumn && setSortColumn(sortModel[sortModel.length - 1].field);
-      setSortOrder && setSortOrder(sortModel[sortModel.length - 1].sort || "asc");
-    } else setSortOrder && setSortOrder("asc");
+
+    if (setFilterState) {
+      if (sortModel.length > 0) {
+        setFilterState({
+          sortColumn: sortModel[sortModel.length - 1].field,
+          sortOrder: sortModel[sortModel.length - 1].sort || "asc",
+        });
+      } else {
+        setFilterState({
+          sortOrder: "asc",
+        });
+      }
+    }
   };
 
   const handleFilterChange = (filterModel: GridFilterModel) => {
@@ -134,8 +134,28 @@ export const DataTableGrid = ({
     const columnValue = filterModel.items[0].value;
 
     if (column) {
-      setFilterFieldValue && setFilterFieldValue(columnValue ? columnValue : "");
-      setFilterField && setFilterField(column);
+      if (setFilterState) {
+        setFilterState({
+          whereFieldValue: columnValue ? columnValue : "",
+          whereField: column,
+        });
+      }
+    }
+  };
+
+  const handlePageSizeChange = (newPageSize: number) => {
+    if (setFilterState) {
+      setFilterState({
+        filterLimit: newPageSize,
+      });
+    }
+  };
+
+  const handleColumnVisibilityModelChange = (newModel: GridColumnVisibilityModel) => {
+    if (setFilterState) {
+      setFilterState({
+        columnVisibilityModel: newModel,
+      });
     }
   };
 
@@ -160,14 +180,12 @@ export const DataTableGrid = ({
         disableColumnFilter={disableColumnFilter}
         paginationMode={dataViewMode}
         onPageChange={(newPage) => handlePageChange(newPage)}
-        onPageSizeChange={(newPageSize) => setPageSize && setPageSize(newPageSize)}
+        onPageSizeChange={(newPageSize) => handlePageSizeChange(newPageSize)}
         sortingMode={dataViewMode}
         onSortModelChange={(newSortModel) => handleSortChange(newSortModel)}
         filterMode={dataViewMode}
         onFilterModelChange={(newFilterModel) => handleFilterChange(newFilterModel)}
-        onColumnVisibilityModelChange={(newModel) =>
-          handleColumnVisibilityModel && handleColumnVisibilityModel(newModel)
-        }
+        onColumnVisibilityModelChange={(newModel) => handleColumnVisibilityModelChange(newModel)}
         initialState={initialState}
       />
     </DataTableContainer>

@@ -6,12 +6,12 @@ import {
   getWhereFilterQuery,
   totalCountHeaderName,
 } from "lib/query";
-import { GridColDef, GridSortDirection } from "@mui/x-data-grid";
+import { GridColDef, GridColumnVisibilityModel, GridSortDirection } from "@mui/x-data-grid";
 import { GridInitialStateCommunity } from "@mui/x-data-grid/models/gridStateCommunity";
 import { DataListContainer } from "./index.styled";
 import { DataTableGrid } from "@components/data-table";
 import useLocalStorage from "use-local-storage";
-import { dataListSettings } from "utils/types";
+import { dataListSettings, GridDataFilterState } from "utils/types";
 
 type dataListProps = {
   columns: GridColDef<any>[];
@@ -34,23 +34,36 @@ export const DataList = ({
 }: dataListProps) => {
   const [modelData, setModelData] = useState<any[] | undefined>([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [filterLimit, setFilterLimit] = useState(defaultFilterLimit);
-  const [sortColumn, setSortColumn] = useState(defaultFilterOrderColumn);
-  const [sortOrder, setSortOrder] = useState(defaultFilterOrderDirection);
-  const [whereField, setWhereField] = useState("");
-  const [whereFieldValue, setWhereFieldValue] = useState("");
-  const [skipLimit, setSkipLimit] = useState(0);
   const [totalRowCount, setTotalRowCount] = useState(0);
-  const [pageNumber, setPageNumber] = useState(0);
-  const [columnVisibilityModel, setColumnVisibilityModel] = useState(
-    initialGridState?.columns?.columnVisibilityModel
-  );
+
+  const [filterState, setFilterState] = useState<GridDataFilterState>({
+    filterLimit: defaultFilterLimit,
+    sortColumn: defaultFilterOrderColumn,
+    sortOrder: defaultFilterOrderDirection,
+    whereField: "",
+    whereFieldValue: "",
+    skipLimit: 0,
+    pageNumber: 0,
+    columnVisibilityModel: initialGridState?.columns?.columnVisibilityModel,
+  });
+
   const [gridSettingsLoaded, setGridSettingsLoaded] = useState(false);
   const [gridState, setGridState] = useState(initialGridState);
 
-  const whereFilterQuery = getWhereFilterQuery(whereField, whereFieldValue);
-  const basicFilterQuery = getBasicFilterQuery(filterLimit, sortColumn, sortOrder, skipLimit);
-  const basicExportFilterQuery = getBasicExportFilterQuery(sortColumn, sortOrder);
+  const whereFilterQuery = getWhereFilterQuery(
+    filterState.whereField!,
+    filterState.whereFieldValue!
+  );
+  const basicFilterQuery = getBasicFilterQuery(
+    filterState.filterLimit!,
+    filterState.sortColumn!,
+    filterState.sortOrder!,
+    filterState.skipLimit!
+  );
+  const basicExportFilterQuery = getBasicExportFilterQuery(
+    filterState.sortColumn!,
+    filterState.sortOrder!
+  );
 
   const [gridSettings, setGridSettings] = useLocalStorage<dataListSettings | undefined>(
     gridSettingsStorageKey,
@@ -66,16 +79,7 @@ export const DataList = ({
       saveGridStateInLocalStorage();
       getDataListAsync();
     }
-  }, [
-    searchTerm,
-    filterLimit,
-    skipLimit,
-    sortColumn,
-    sortOrder,
-    whereFieldValue,
-    columnVisibilityModel,
-    gridSettingsLoaded,
-  ]);
+  }, [searchTerm, filterState, gridSettingsLoaded]);
 
   useEffect(() => {
     if (gridSettings) {
@@ -90,15 +94,17 @@ export const DataList = ({
         pageNumber,
         columnVisibilityModel,
       } = gridSettings;
+      setFilterState({
+        filterLimit: filterLimit,
+        skipLimit: skipLimit,
+        sortColumn: sortColumn,
+        sortOrder: sortOrder,
+        whereField: whereField,
+        whereFieldValue: whereFieldValue,
+        pageNumber: pageNumber,
+        columnVisibilityModel: columnVisibilityModel,
+      });
       setSearchTerm(searchTerm);
-      setFilterLimit(filterLimit);
-      setSkipLimit(skipLimit);
-      setSortColumn(sortColumn);
-      setSortOrder(sortOrder);
-      setWhereField(whereField);
-      setWhereFieldValue(whereFieldValue);
-      setPageNumber(pageNumber);
-      setColumnVisibilityModel(columnVisibilityModel);
       updateGridSettings(gridSettings);
     }
     setGridSettingsLoaded(true);
@@ -119,15 +125,23 @@ export const DataList = ({
   const saveGridStateInLocalStorage = () => {
     setGridSettings({
       searchTerm,
-      filterLimit,
-      skipLimit,
-      sortColumn,
-      sortOrder,
-      whereField,
-      whereFieldValue,
-      pageNumber,
-      columnVisibilityModel,
+      filterLimit: filterState.filterLimit!,
+      skipLimit: filterState.skipLimit!,
+      sortColumn: filterState.sortColumn!,
+      sortOrder: filterState.sortOrder!,
+      whereField: filterState.whereField!,
+      whereFieldValue: filterState.whereFieldValue!,
+      pageNumber: filterState.pageNumber!,
+      columnVisibilityModel: initialGridState?.columns?.columnVisibilityModel,
     });
+  };
+
+  const updateFilterState = (state: GridDataFilterState) => {
+    const updatedFilterState = {
+      ...filterState,
+      ...state,
+    };
+    setFilterState(updatedFilterState);
   };
 
   const getDataListAsync = () => {
@@ -182,19 +196,12 @@ export const DataList = ({
         columns={columns}
         data={modelData}
         autoHeight={false}
-        pageSize={filterLimit}
+        pageSize={filterState.filterLimit}
         totalRowCount={totalRowCount}
         rowsPerPageOptions={[10, 30, 50, 100]}
-        pageNumber={pageNumber}
+        pageNumber={filterState.pageNumber}
         dataViewMode="server"
-        setSortColumn={setSortColumn}
-        setSortOrder={setSortOrder}
-        setPageSize={setFilterLimit}
-        setSkipLimit={setSkipLimit}
-        setFilterField={setWhereField}
-        setFilterFieldValue={setWhereFieldValue}
-        setPageNumber={setPageNumber}
-        handleColumnVisibilityModel={setColumnVisibilityModel}
+        setFilterState={updateFilterState}
         initialState={gridState}
         disableColumnFilter={false}
         disablePagination={false}
