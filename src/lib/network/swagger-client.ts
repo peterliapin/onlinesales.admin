@@ -13,7 +13,6 @@ export interface AccountCreateDto {
   /**
    * Name
    * @minLength 1
-   * @pattern ^.{1,}$
    * @example "string"
    */
   name: string;
@@ -76,7 +75,6 @@ export interface AccountDetailsDto {
   /**
    * Name
    * @minLength 1
-   * @pattern ^.{1,}$
    * @example "string"
    */
   name: string;
@@ -142,15 +140,15 @@ export interface AccountDetailsDto {
   /**
    * Created At
    * @format date-time
-   * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
-   * @example "2023-04-17T14:33:22Z"
+   * @pattern ^(\d{4})-(1[0-2]|0[1-9])-(3[01]|[12][0-9]|0[1-9])T(2[0-4]|1[0-9]|0[1-9]):(2[0-4]|1[0-9]|0[1-9]):([1-5]?0[0-9]).(\d{7})Z$
+   * @example "2023-04-18T12:00:00.0000000Z"
    */
   createdAt?: string;
   /**
    * Updated At
    * @format date-time
-   * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
-   * @example "2023-04-17T14:33:22Z"
+   * @pattern ^(\d{4})-(1[0-2]|0[1-9])-(3[01]|[12][0-9]|0[1-9])T(2[0-4]|1[0-9]|0[1-9]):(2[0-4]|1[0-9]|0[1-9]):([1-5]?0[0-9]).(\d{7})Z$
+   * @example "2023-04-18T12:00:00.0000000Z"
    */
   updatedAt?: string | null;
 }
@@ -170,15 +168,15 @@ export interface AccountImportDto {
   /**
    * Created At
    * @format date-time
-   * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
-   * @example "2023-04-17T14:33:22Z"
+   * @pattern ^(\d{4})-(1[0-2]|0[1-9])-(3[01]|[12][0-9]|0[1-9])T(2[0-4]|1[0-9]|0[1-9]):(2[0-4]|1[0-9]|0[1-9]):([1-5]?0[0-9]).(\d{7})Z$
+   * @example "2023-04-18T12:00:00.0000000Z"
    */
   createdAt?: string | null;
   /**
    * Updated At
    * @format date-time
-   * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
-   * @example "2023-04-17T14:33:22Z"
+   * @pattern ^(\d{4})-(1[0-2]|0[1-9])-(3[01]|[12][0-9]|0[1-9])T(2[0-4]|1[0-9]|0[1-9]):(2[0-4]|1[0-9]|0[1-9]):([1-5]?0[0-9]).(\d{7})Z$
+   * @example "2023-04-18T12:00:00.0000000Z"
    */
   updatedAt?: string | null;
   /**
@@ -324,14 +322,13 @@ export interface CommentCreateDto {
   /**
    * Author Email
    * @format email
-   * @pattern ([\w\.\-] +)@([\w\-] +)((\.(\w){ 2,3})+)$
+   * @pattern ^([\w\.\-]+)@([\w\-]+)((\.(\w){1,63})+)$
    * @example "example@example.com"
    */
   authorEmail?: string;
   /**
    * Body
    * @minLength 1
-   * @pattern ^.{1,}$
    * @example "string"
    */
   body: string;
@@ -363,14 +360,13 @@ export interface CommentDetailsDto {
   /**
    * Author Email
    * @format email
-   * @pattern ([\w\.\-] +)@([\w\-] +)((\.(\w){ 2,3})+)$
+   * @pattern ^([\w\.\-]+)@([\w\-]+)((\.(\w){1,63})+)$
    * @example "example@example.com"
    */
   authorEmail?: string;
   /**
    * Body
    * @minLength 1
-   * @pattern ^.{1,}$
    * @example "string"
    */
   body: string;
@@ -400,15 +396,15 @@ export interface CommentDetailsDto {
   /**
    * Created At
    * @format date-time
-   * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
-   * @example "2023-04-17T14:33:22Z"
+   * @pattern ^(\d{4})-(1[0-2]|0[1-9])-(3[01]|[12][0-9]|0[1-9])T(2[0-4]|1[0-9]|0[1-9]):(2[0-4]|1[0-9]|0[1-9]):([1-5]?0[0-9]).(\d{7})Z$
+   * @example "2023-04-18T12:00:00.0000000Z"
    */
   createdAt?: string;
   /**
    * Updated At
    * @format date-time
-   * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
-   * @example "2023-04-17T14:33:22Z"
+   * @pattern ^(\d{4})-(1[0-2]|0[1-9])-(3[01]|[12][0-9]|0[1-9])T(2[0-4]|1[0-9]|0[1-9]):(2[0-4]|1[0-9]|0[1-9]):([1-5]?0[0-9]).(\d{7})Z$
+   * @example "2023-04-18T12:00:00.0000000Z"
    */
   updatedAt?: string | null;
 }
@@ -428,15 +424,15 @@ export interface CommentImportDto {
   /**
    * Created At
    * @format date-time
-   * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
-   * @example "2023-04-17T14:33:22Z"
+   * @pattern ^(\d{4})-(1[0-2]|0[1-9])-(3[01]|[12][0-9]|0[1-9])T(2[0-4]|1[0-9]|0[1-9]):(2[0-4]|1[0-9]|0[1-9]):([1-5]?0[0-9]).(\d{7})Z$
+   * @example "2023-04-18T12:00:00.0000000Z"
    */
   createdAt?: string | null;
   /**
    * Updated At
    * @format date-time
-   * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
-   * @example "2023-04-17T14:33:22Z"
+   * @pattern ^(\d{4})-(1[0-2]|0[1-9])-(3[01]|[12][0-9]|0[1-9])T(2[0-4]|1[0-9]|0[1-9]):(2[0-4]|1[0-9]|0[1-9]):([1-5]?0[0-9]).(\d{7})Z$
+   * @example "2023-04-18T12:00:00.0000000Z"
    */
   updatedAt?: string | null;
   /**
@@ -467,14 +463,13 @@ export interface CommentImportDto {
   /**
    * Author Email
    * @format email
-   * @pattern ([\w\.\-] +)@([\w\-] +)((\.(\w){ 2,3})+)$
+   * @pattern ^([\w\.\-]+)@([\w\-]+)((\.(\w){1,63})+)$
    * @example "example@example.com"
    */
   authorEmail?: string;
   /**
    * Body
    * @minLength 1
-   * @pattern ^.{1,}$
    * @example "string"
    */
   body: string;
@@ -511,7 +506,6 @@ export interface CommentUpdateDto {
   /**
    * Body
    * @minLength 1
-   * @pattern ^.{1,}$
    * @example "string"
    */
   body: string;
@@ -586,7 +580,7 @@ export interface ContactCreateDto {
    * Email
    * @format email
    * @minLength 1
-   * @pattern ([\w\.\-] +)@([\w\-] +)((\.(\w){ 2,3})+)$
+   * @pattern ^([\w\.\-]+)@([\w\-]+)((\.(\w){1,63})+)$
    * @example "example@example.com"
    */
   email: string;
@@ -661,7 +655,7 @@ export interface ContactDetailsDto {
    * Email
    * @format email
    * @minLength 1
-   * @pattern ([\w\.\-] +)@([\w\-] +)((\.(\w){ 2,3})+)$
+   * @pattern ^([\w\.\-]+)@([\w\-]+)((\.(\w){1,63})+)$
    * @example "example@example.com"
    */
   email: string;
@@ -679,15 +673,15 @@ export interface ContactDetailsDto {
   /**
    * Created At
    * @format date-time
-   * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
-   * @example "2023-04-17T14:33:22Z"
+   * @pattern ^(\d{4})-(1[0-2]|0[1-9])-(3[01]|[12][0-9]|0[1-9])T(2[0-4]|1[0-9]|0[1-9]):(2[0-4]|1[0-9]|0[1-9]):([1-5]?0[0-9]).(\d{7})Z$
+   * @example "2023-04-18T12:00:00.0000000Z"
    */
   createdAt?: string;
   /**
    * Updated At
    * @format date-time
-   * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
-   * @example "2023-04-17T14:33:22Z"
+   * @pattern ^(\d{4})-(1[0-2]|0[1-9])-(3[01]|[12][0-9]|0[1-9])T(2[0-4]|1[0-9]|0[1-9]):(2[0-4]|1[0-9]|0[1-9]):([1-5]?0[0-9]).(\d{7})Z$
+   * @example "2023-04-18T12:00:00.0000000Z"
    */
   updatedAt?: string | null;
   /**
@@ -713,15 +707,15 @@ export interface ContactImportDto {
   /**
    * Created At
    * @format date-time
-   * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
-   * @example "2023-04-17T14:33:22Z"
+   * @pattern ^(\d{4})-(1[0-2]|0[1-9])-(3[01]|[12][0-9]|0[1-9])T(2[0-4]|1[0-9]|0[1-9]):(2[0-4]|1[0-9]|0[1-9]):([1-5]?0[0-9]).(\d{7})Z$
+   * @example "2023-04-18T12:00:00.0000000Z"
    */
   createdAt?: string | null;
   /**
    * Updated At
    * @format date-time
-   * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
-   * @example "2023-04-17T14:33:22Z"
+   * @pattern ^(\d{4})-(1[0-2]|0[1-9])-(3[01]|[12][0-9]|0[1-9])T(2[0-4]|1[0-9]|0[1-9]):(2[0-4]|1[0-9]|0[1-9]):([1-5]?0[0-9]).(\d{7})Z$
+   * @example "2023-04-18T12:00:00.0000000Z"
    */
   updatedAt?: string | null;
   /**
@@ -747,7 +741,7 @@ export interface ContactImportDto {
   /**
    * Email
    * @format email
-   * @pattern ([\w\.\-] +)@([\w\-] +)((\.(\w){ 2,3})+)$
+   * @pattern ^([\w\.\-]+)@([\w\-]+)((\.(\w){1,63})+)$
    * @example "example@example.com"
    */
   email?: string | null;
@@ -897,7 +891,7 @@ export interface ContactUpdateDto {
   /**
    * Email
    * @format email
-   * @pattern ([\w\.\-] +)@([\w\-] +)((\.(\w){ 2,3})+)$
+   * @pattern ^([\w\.\-]+)@([\w\-]+)((\.(\w){1,63})+)$
    * @example "example@example.com"
    */
   email?: string | null;
@@ -907,21 +901,18 @@ export interface ContentCreateDto {
   /**
    * Title
    * @minLength 1
-   * @pattern ^.{1,}$
    * @example "string"
    */
   title: string;
   /**
    * Description
    * @minLength 1
-   * @pattern ^.{1,}$
    * @example "string"
    */
   description: string;
   /**
    * Body
    * @minLength 1
-   * @pattern ^.{1,}$
    * @example "string"
    */
   body: string;
@@ -938,28 +929,24 @@ export interface ContentCreateDto {
   /**
    * Slug
    * @minLength 1
-   * @pattern ^.{1,}$
    * @example "string"
    */
   slug: string;
   /**
    * Type
    * @minLength 1
-   * @pattern ^.{1,}$
    * @example "string"
    */
   type: string;
   /**
    * Author
    * @minLength 1
-   * @pattern ^.{1,}$
    * @example "string"
    */
   author: string;
   /**
    * Language
    * @minLength 1
-   * @pattern ^.{1,}$
    * @example "string"
    */
   language: string;
@@ -989,21 +976,18 @@ export interface ContentDetailsDto {
   /**
    * Title
    * @minLength 1
-   * @pattern ^.{1,}$
    * @example "string"
    */
   title: string;
   /**
    * Description
    * @minLength 1
-   * @pattern ^.{1,}$
    * @example "string"
    */
   description: string;
   /**
    * Body
    * @minLength 1
-   * @pattern ^.{1,}$
    * @example "string"
    */
   body: string;
@@ -1020,28 +1004,24 @@ export interface ContentDetailsDto {
   /**
    * Slug
    * @minLength 1
-   * @pattern ^.{1,}$
    * @example "string"
    */
   slug: string;
   /**
    * Type
    * @minLength 1
-   * @pattern ^.{1,}$
    * @example "string"
    */
   type: string;
   /**
    * Author
    * @minLength 1
-   * @pattern ^.{1,}$
    * @example "string"
    */
   author: string;
   /**
    * Language
    * @minLength 1
-   * @pattern ^.{1,}$
    * @example "string"
    */
   language: string;
@@ -1074,15 +1054,15 @@ export interface ContentDetailsDto {
   /**
    * Created At
    * @format date-time
-   * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
-   * @example "2023-04-17T14:33:22Z"
+   * @pattern ^(\d{4})-(1[0-2]|0[1-9])-(3[01]|[12][0-9]|0[1-9])T(2[0-4]|1[0-9]|0[1-9]):(2[0-4]|1[0-9]|0[1-9]):([1-5]?0[0-9]).(\d{7})Z$
+   * @example "2023-04-18T12:00:00.0000000Z"
    */
   createdAt?: string;
   /**
    * Updated At
    * @format date-time
-   * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
-   * @example "2023-04-17T14:33:22Z"
+   * @pattern ^(\d{4})-(1[0-2]|0[1-9])-(3[01]|[12][0-9]|0[1-9])T(2[0-4]|1[0-9]|0[1-9]):(2[0-4]|1[0-9]|0[1-9]):([1-5]?0[0-9]).(\d{7})Z$
+   * @example "2023-04-18T12:00:00.0000000Z"
    */
   updatedAt?: string | null;
 }
@@ -1102,15 +1082,15 @@ export interface ContentImportDto {
   /**
    * Created At
    * @format date-time
-   * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
-   * @example "2023-04-17T14:33:22Z"
+   * @pattern ^(\d{4})-(1[0-2]|0[1-9])-(3[01]|[12][0-9]|0[1-9])T(2[0-4]|1[0-9]|0[1-9]):(2[0-4]|1[0-9]|0[1-9]):([1-5]?0[0-9]).(\d{7})Z$
+   * @example "2023-04-18T12:00:00.0000000Z"
    */
   createdAt?: string | null;
   /**
    * Updated At
    * @format date-time
-   * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
-   * @example "2023-04-17T14:33:22Z"
+   * @pattern ^(\d{4})-(1[0-2]|0[1-9])-(3[01]|[12][0-9]|0[1-9])T(2[0-4]|1[0-9]|0[1-9]):(2[0-4]|1[0-9]|0[1-9]):([1-5]?0[0-9]).(\d{7})Z$
+   * @example "2023-04-18T12:00:00.0000000Z"
    */
   updatedAt?: string | null;
   /**
@@ -1199,21 +1179,18 @@ export interface ContentUpdateDto {
   /**
    * Title
    * @minLength 1
-   * @pattern ^.{1,}$
    * @example "string"
    */
   title?: string | null;
   /**
    * Description
    * @minLength 1
-   * @pattern ^.{1,}$
    * @example "string"
    */
   description?: string | null;
   /**
    * Body
    * @minLength 1
-   * @pattern ^.{1,}$
    * @example "string"
    */
   body?: string | null;
@@ -1230,14 +1207,12 @@ export interface ContentUpdateDto {
   /**
    * Slug
    * @minLength 1
-   * @pattern ^.{1,}$
    * @example "string"
    */
   slug?: string | null;
   /**
    * Type
    * @minLength 1
-   * @pattern ^.{1,}$
    * @example "string"
    */
   type?: string | null;
@@ -1249,7 +1224,6 @@ export interface ContentUpdateDto {
   /**
    * Language
    * @minLength 1
-   * @pattern ^.{1,}$
    * @example "string"
    */
   language?: string | null;
@@ -1574,7 +1548,6 @@ export interface DomainCreateDto {
   /**
    * Name
    * @minLength 1
-   * @pattern ^.{1,}$
    * @example "example.com"
    */
   name: string;
@@ -1636,7 +1609,6 @@ export interface DomainDetailsDto {
   /**
    * Name
    * @minLength 1
-   * @pattern ^.{1,}$
    * @example "example.com"
    */
   name: string;
@@ -1701,15 +1673,15 @@ export interface DomainDetailsDto {
   /**
    * Created At
    * @format date-time
-   * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
-   * @example "2023-04-17T14:33:22Z"
+   * @pattern ^(\d{4})-(1[0-2]|0[1-9])-(3[01]|[12][0-9]|0[1-9])T(2[0-4]|1[0-9]|0[1-9]):(2[0-4]|1[0-9]|0[1-9]):([1-5]?0[0-9]).(\d{7})Z$
+   * @example "2023-04-18T12:00:00.0000000Z"
    */
   createdAt?: string;
   /**
    * Updated At
    * @format date-time
-   * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
-   * @example "2023-04-17T14:33:22Z"
+   * @pattern ^(\d{4})-(1[0-2]|0[1-9])-(3[01]|[12][0-9]|0[1-9])T(2[0-4]|1[0-9]|0[1-9]):(2[0-4]|1[0-9]|0[1-9]):([1-5]?0[0-9]).(\d{7})Z$
+   * @example "2023-04-18T12:00:00.0000000Z"
    */
   updatedAt?: string | null;
 }
@@ -1729,21 +1701,20 @@ export interface DomainImportDto {
   /**
    * Created At
    * @format date-time
-   * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
-   * @example "2023-04-17T14:33:22Z"
+   * @pattern ^(\d{4})-(1[0-2]|0[1-9])-(3[01]|[12][0-9]|0[1-9])T(2[0-4]|1[0-9]|0[1-9]):(2[0-4]|1[0-9]|0[1-9]):([1-5]?0[0-9]).(\d{7})Z$
+   * @example "2023-04-18T12:00:00.0000000Z"
    */
   createdAt?: string | null;
   /**
    * Updated At
    * @format date-time
-   * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
-   * @example "2023-04-17T14:33:22Z"
+   * @pattern ^(\d{4})-(1[0-2]|0[1-9])-(3[01]|[12][0-9]|0[1-9])T(2[0-4]|1[0-9]|0[1-9]):(2[0-4]|1[0-9]|0[1-9]):([1-5]?0[0-9]).(\d{7})Z$
+   * @example "2023-04-18T12:00:00.0000000Z"
    */
   updatedAt?: string | null;
   /**
    * Name
    * @minLength 1
-   * @pattern ^.{1,}$
    * @example "string"
    */
   name: string;
@@ -1850,7 +1821,6 @@ export interface EmailGroupCreateDto {
   /**
    * Name
    * @minLength 1
-   * @pattern ^.{1,}$
    * @example "string"
    */
   name: string;
@@ -1860,7 +1830,6 @@ export interface EmailGroupDetailsDto {
   /**
    * Name
    * @minLength 1
-   * @pattern ^.{1,}$
    * @example "string"
    */
   name: string;
@@ -1873,15 +1842,15 @@ export interface EmailGroupDetailsDto {
   /**
    * Created At
    * @format date-time
-   * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
-   * @example "2023-04-17T14:33:22Z"
+   * @pattern ^(\d{4})-(1[0-2]|0[1-9])-(3[01]|[12][0-9]|0[1-9])T(2[0-4]|1[0-9]|0[1-9]):(2[0-4]|1[0-9]|0[1-9]):([1-5]?0[0-9]).(\d{7})Z$
+   * @example "2023-04-18T12:00:00.0000000Z"
    */
   createdAt?: string;
   /**
    * Updated At
    * @format date-time
-   * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
-   * @example "2023-04-17T14:33:22Z"
+   * @pattern ^(\d{4})-(1[0-2]|0[1-9])-(3[01]|[12][0-9]|0[1-9])T(2[0-4]|1[0-9]|0[1-9]):(2[0-4]|1[0-9]|0[1-9]):([1-5]?0[0-9]).(\d{7})Z$
+   * @example "2023-04-18T12:00:00.0000000Z"
    */
   updatedAt?: string | null;
 }
@@ -1890,7 +1859,6 @@ export interface EmailGroupUpdateDto {
   /**
    * Name
    * @minLength 1
-   * @pattern ^.{1,}$
    * @example "string"
    */
   name?: string | null;
@@ -1900,21 +1868,18 @@ export interface EmailTemplateCreateDto {
   /**
    * Name
    * @minLength 1
-   * @pattern ^.{1,}$
    * @example "string"
    */
   name: string;
   /**
    * Subject
    * @minLength 1
-   * @pattern ^.{1,}$
    * @example "string"
    */
   subject: string;
   /**
    * Body Template
    * @minLength 1
-   * @pattern ^.{1,}$
    * @example "string"
    */
   bodyTemplate: string;
@@ -1922,21 +1887,19 @@ export interface EmailTemplateCreateDto {
    * From Email
    * @format email
    * @minLength 1
-   * @pattern ([\w\.\-] +)@([\w\-] +)((\.(\w){ 2,3})+)$
+   * @pattern ^([\w\.\-]+)@([\w\-]+)((\.(\w){1,63})+)$
    * @example "example@example.com"
    */
   fromEmail: string;
   /**
    * From Name
    * @minLength 1
-   * @pattern ^.{1,}$
    * @example "string"
    */
   fromName: string;
   /**
    * Language
    * @minLength 1
-   * @pattern ^.{1,}$
    * @example "string"
    */
   language: string;
@@ -1952,21 +1915,18 @@ export interface EmailTemplateDetailsDto {
   /**
    * Name
    * @minLength 1
-   * @pattern ^.{1,}$
    * @example "string"
    */
   name: string;
   /**
    * Subject
    * @minLength 1
-   * @pattern ^.{1,}$
    * @example "string"
    */
   subject: string;
   /**
    * Body Template
    * @minLength 1
-   * @pattern ^.{1,}$
    * @example "string"
    */
   bodyTemplate: string;
@@ -1974,21 +1934,19 @@ export interface EmailTemplateDetailsDto {
    * From Email
    * @format email
    * @minLength 1
-   * @pattern ([\w\.\-] +)@([\w\-] +)((\.(\w){ 2,3})+)$
+   * @pattern ^([\w\.\-]+)@([\w\-]+)((\.(\w){1,63})+)$
    * @example "example@example.com"
    */
   fromEmail: string;
   /**
    * From Name
    * @minLength 1
-   * @pattern ^.{1,}$
    * @example "string"
    */
   fromName: string;
   /**
    * Language
    * @minLength 1
-   * @pattern ^.{1,}$
    * @example "string"
    */
   language: string;
@@ -2007,15 +1965,15 @@ export interface EmailTemplateDetailsDto {
   /**
    * Created At
    * @format date-time
-   * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
-   * @example "2023-04-17T14:33:22Z"
+   * @pattern ^(\d{4})-(1[0-2]|0[1-9])-(3[01]|[12][0-9]|0[1-9])T(2[0-4]|1[0-9]|0[1-9]):(2[0-4]|1[0-9]|0[1-9]):([1-5]?0[0-9]).(\d{7})Z$
+   * @example "2023-04-18T12:00:00.0000000Z"
    */
   createdAt?: string;
   /**
    * Updated At
    * @format date-time
-   * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
-   * @example "2023-04-17T14:33:22Z"
+   * @pattern ^(\d{4})-(1[0-2]|0[1-9])-(3[01]|[12][0-9]|0[1-9])T(2[0-4]|1[0-9]|0[1-9]):(2[0-4]|1[0-9]|0[1-9]):([1-5]?0[0-9]).(\d{7})Z$
+   * @example "2023-04-18T12:00:00.0000000Z"
    */
   updatedAt?: string | null;
 }
@@ -2024,35 +1982,31 @@ export interface EmailTemplateUpdateDto {
   /**
    * Name
    * @minLength 1
-   * @pattern ^.{1,}$
    * @example "string"
    */
   name?: string | null;
   /**
    * Subject
    * @minLength 1
-   * @pattern ^.{1,}$
    * @example "string"
    */
   subject?: string | null;
   /**
    * Body Template
    * @minLength 1
-   * @pattern ^.{1,}$
    * @example "string"
    */
   bodyTemplate?: string | null;
   /**
    * From Email
    * @format email
-   * @pattern ([\w\.\-] +)@([\w\-] +)((\.(\w){ 2,3})+)$
+   * @pattern ^([\w\.\-]+)@([\w\-]+)((\.(\w){1,63})+)$
    * @example "example@example.com"
    */
   fromEmail?: string | null;
   /**
    * From Name
    * @minLength 1
-   * @pattern ^.{1,}$
    * @example "string"
    */
   fromName?: string | null;
@@ -2116,14 +2070,12 @@ export interface LinkCreateDto {
   /**
    * Destination
    * @minLength 1
-   * @pattern ^.{1,}$
    * @example "string"
    */
   destination: string;
   /**
    * Name
    * @minLength 1
-   * @pattern ^.{1,}$
    * @example "string"
    */
   name: string;
@@ -2143,14 +2095,12 @@ export interface LinkDetailsDto {
   /**
    * Destination
    * @minLength 1
-   * @pattern ^.{1,}$
    * @example "string"
    */
   destination: string;
   /**
    * Name
    * @minLength 1
-   * @pattern ^.{1,}$
    * @example "string"
    */
   name: string;
@@ -2168,15 +2118,15 @@ export interface LinkDetailsDto {
   /**
    * Created At
    * @format date-time
-   * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
-   * @example "2023-04-17T14:33:22Z"
+   * @pattern ^(\d{4})-(1[0-2]|0[1-9])-(3[01]|[12][0-9]|0[1-9])T(2[0-4]|1[0-9]|0[1-9]):(2[0-4]|1[0-9]|0[1-9]):([1-5]?0[0-9]).(\d{7})Z$
+   * @example "2023-04-18T12:00:00.0000000Z"
    */
   createdAt?: string;
   /**
    * Updated At
    * @format date-time
-   * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
-   * @example "2023-04-17T14:33:22Z"
+   * @pattern ^(\d{4})-(1[0-2]|0[1-9])-(3[01]|[12][0-9]|0[1-9])T(2[0-4]|1[0-9]|0[1-9]):(2[0-4]|1[0-9]|0[1-9]):([1-5]?0[0-9]).(\d{7})Z$
+   * @example "2023-04-18T12:00:00.0000000Z"
    */
   updatedAt?: string | null;
 }
@@ -2218,8 +2168,8 @@ export interface LogRecord {
   /**
    * Date Time
    * @format date-time
-   * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
-   * @example "2023-04-17T14:33:23Z"
+   * @pattern ^(\d{4})-(1[0-2]|0[1-9])-(3[01]|[12][0-9]|0[1-9])T(2[0-4]|1[0-9]|0[1-9]):(2[0-4]|1[0-9]|0[1-9]):([1-5]?0[0-9]).(\d{7})Z$
+   * @example "2023-04-18T12:00:00.0000000Z"
    */
   dateTime?: string;
   logLevel?: LogLevel;
@@ -2238,44 +2188,6 @@ export interface MediaDetailsDto {
   location?: string;
 }
 
-export interface MessageEventDto {
-  /**
-   * Email
-   * @example "string"
-   */
-  email?: string;
-  /**
-   * Processed
-   * @example "string"
-   */
-  processed?: string;
-  /**
-   * Send Grid Message Id
-   * @example "string"
-   */
-  sendGridMessageId?: string;
-  /**
-   * Event
-   * @example "string"
-   */
-  event?: string;
-  /**
-   * Type
-   * @example "string"
-   */
-  type?: string | null;
-  /**
-   * Reason
-   * @example "string"
-   */
-  reason?: string | null;
-  /**
-   * Originating Ip
-   * @example "string"
-   */
-  originatingIp?: string | null;
-}
-
 export interface OrderCreateDto {
   /**
    * Contact Id
@@ -2286,7 +2198,6 @@ export interface OrderCreateDto {
   /**
    * Ref No
    * @minLength 1
-   * @pattern ^.{1,}$
    * @example "string"
    */
   refNo: string;
@@ -2309,7 +2220,6 @@ export interface OrderCreateDto {
   /**
    * Currency
    * @minLength 1
-   * @pattern ^.{1,}$
    * @example "string"
    */
   currency: string;
@@ -2340,7 +2250,6 @@ export interface OrderDetailsDto {
   /**
    * Ref No
    * @minLength 1
-   * @pattern ^.{1,}$
    * @example "string"
    */
   refNo: string;
@@ -2363,7 +2272,6 @@ export interface OrderDetailsDto {
   /**
    * Currency
    * @minLength 1
-   * @pattern ^.{1,}$
    * @example "string"
    */
   currency: string;
@@ -2391,15 +2299,15 @@ export interface OrderDetailsDto {
   /**
    * Created At
    * @format date-time
-   * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
-   * @example "2023-04-17T14:33:23Z"
+   * @pattern ^(\d{4})-(1[0-2]|0[1-9])-(3[01]|[12][0-9]|0[1-9])T(2[0-4]|1[0-9]|0[1-9]):(2[0-4]|1[0-9]|0[1-9]):([1-5]?0[0-9]).(\d{7})Z$
+   * @example "2023-04-18T12:00:00.0000000Z"
    */
   createdAt?: string;
   /**
    * Updated At
    * @format date-time
-   * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
-   * @example "2023-04-17T14:33:23Z"
+   * @pattern ^(\d{4})-(1[0-2]|0[1-9])-(3[01]|[12][0-9]|0[1-9])T(2[0-4]|1[0-9]|0[1-9]):(2[0-4]|1[0-9]|0[1-9]):([1-5]?0[0-9]).(\d{7})Z$
+   * @example "2023-04-18T12:00:00.0000000Z"
    */
   updatedAt?: string | null;
   /**
@@ -2431,15 +2339,15 @@ export interface OrderImportDto {
   /**
    * Created At
    * @format date-time
-   * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
-   * @example "2023-04-17T14:33:23Z"
+   * @pattern ^(\d{4})-(1[0-2]|0[1-9])-(3[01]|[12][0-9]|0[1-9])T(2[0-4]|1[0-9]|0[1-9]):(2[0-4]|1[0-9]|0[1-9]):([1-5]?0[0-9]).(\d{7})Z$
+   * @example "2023-04-18T12:00:00.0000000Z"
    */
   createdAt?: string | null;
   /**
    * Updated At
    * @format date-time
-   * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
-   * @example "2023-04-17T14:33:23Z"
+   * @pattern ^(\d{4})-(1[0-2]|0[1-9])-(3[01]|[12][0-9]|0[1-9])T(2[0-4]|1[0-9]|0[1-9]):(2[0-4]|1[0-9]|0[1-9]):([1-5]?0[0-9]).(\d{7})Z$
+   * @example "2023-04-18T12:00:00.0000000Z"
    */
   updatedAt?: string | null;
   /**
@@ -2486,7 +2394,6 @@ export interface OrderImportDto {
   /**
    * Currency
    * @minLength 1
-   * @pattern ^.{1,}$
    * @example "string"
    */
   currency: string;
@@ -2523,14 +2430,12 @@ export interface OrderItemCreateDto {
   /**
    * Product Name
    * @minLength 1
-   * @pattern ^.{1,}$
    * @example "string"
    */
   productName: string;
   /**
    * License Code
    * @minLength 1
-   * @pattern ^.{1,}$
    * @example "string"
    */
   licenseCode: string;
@@ -2543,7 +2448,7 @@ export interface OrderItemCreateDto {
   /**
    * Currency
    * @minLength 1
-   * @pattern ^(NAD|ZAR|XAF|JPY|GHS|ETB|USD|¤¤|AED|BHD|DJF|DZD|EGP|MAD|ERN|ILS|IQD|JOD|KMF|KWD|LBP|LYD|MAD|MRU|OMR|ILS|QAR|SAR|SDG|SOS|SSP|SYP|XAF|TND|YER|CLP|INR|TZS|EUR|AZN|AZN|RUB|XAF|BYN|ZMW|TZS|BGN|XOF|BDT|INR|CNY|INR|EUR|INR|BAM|BAM|ERN|EUR|EUR|EUR|EUR|BDT|INR|RUB|PHP|UGX|USD|IQD|IRR|EUR|CZK|RUB|GBP|DKK|DKK|KES|EUR|EUR|CHF|EUR|EUR|CHF|EUR|XOF|INR|EUR|XAF|MVR|XOF|BTN|KES|GHS|XOF|EUR|EUR|¤¤|¤¤|AED|XCD|XCD|ALL|ARS|USD|EUR|AUD|BBD|BDT|EUR|BGN|BIF|BMD|BND|BRL|BSD|BWP|BZD|CAD|AUD|CHF|NZD|CLP|XAF|CNY|COP|CVE|AUD|EUR|CZK|EUR|USD|DKK|XCD|EUR|ERN|EUR|FJD|FKP|USD|EUR|GBP|XCD|GBP|GHS|GIP|GMD|EUR|USD|GYD|HKD|HUF|IDR|EUR|ILS|GBP|INR|USD|GBP|JMD|JPY|KES|AUD|XCD|KRW|KYD|XCD|LRD|ZAR|EUR|EUR|MGA|USD|MMK|MOP|USD|XCD|EUR|MUR|MVR|MWK|MXN|MYR|NAD|AUD|NGN|EUR|NOK|AUD|NZD|NZD|PGK|PHP|PKR|PLN|NZD|USD|EUR|USD|RUB|RWF|SAR|SBD|SCR|SDG|SEK|SGD|SHP|EUR|EUR|SLL|SSP|ANG|SZL|USD|THB|NZD|TOP|TRY|TTD|AUD|TWD|TZS|UAH|UGX|USD|USD|USD|XCD|USD|USD|VUV|WST|ZAR|ZMW|USD|¤¤|¤¤|¤¤|XCD|ARS|BBD|BMD|BOB|USD|BRL|BSD|BZD|CAD|CLP|COP|CRC|CUP|ANG|XCD|DOP|EUR|USD|EUR|XCD|XAF|GTQ|GYD|HNL|HTG|EUR|XCD|KYD|XCD|MXN|NIO|PAB|PEN|PHP|USD|PYG|USD|USD|TTD|USD|UYU|XCD|VES|USD|USD|EUR|EUR|XAF|AFN|IRR|XOF|XAF|GHS|GMD|GNF|XOF|LRD|MRU|XOF|NGN|SLL|XOF|XOF|XAF|GHS|GMD|GNF|XOF|LRD|MRU|XOF|NGN|SLL|XOF|EUR|PHP|DKK|DKK|EUR|XOF|BIF|XOF|EUR|CAD|CDF|XAF|XAF|CHF|XOF|XAF|DJF|DZD|EUR|XAF|EUR|GNF|EUR|XAF|HTG|KMF|EUR|MAD|EUR|EUR|MGA|XOF|EUR|MRU|MUR|XPF|XOF|XPF|EUR|EUR|RWF|SCR|XOF|SYP|XAF|XOF|TND|VUV|XPF|EUR|EUR|EUR|GBP|EUR|GHS|GBP|ERN|ETB|EUR|PYG|CHF|EUR|CHF|INR|KES|GBP|GHS|XOF|NGN|USD|ILS|INR|INR|BAM|HRK|EUR|HUF|AMD|¤¤|IDR|NGN|CNY|¤¤|ISK|CHF|EUR|EUR|EUR|CAD|JPY|¤¤|XAF|TZS|IDR|GEL|DZD|NGN|KES|NGN|TZS|CVE|XOF|KES|KZT|XAF|DKK|KES|KHR|INR|KPW|KRW|INR|GNF|LRD|INR|INR|INR|TZS|XAF|EUR|TRY|GBP|KGS|TZS|EUR|UGX|USD|AOA|CDF|XAF|XAF|LAK|IQD|IRR|EUR|CDF|KES|KES|EUR|INR|KES|TZS|KES|MUR|MGA|MZN|XAF|NZD|MKD|INR|MNT|INR|INR|CAD|INR|BND|MYR|BND|IDR|MYR|SGD|EUR|XAF|MMK|RUB|IRR|NAD|NOK|NOK|USD|EUR|EUR|INR|NPR|AWG|EUR|USD|ANG|EUR|SRD|ANG|XAF|NOK|XAF|GNF|ZAR|ZAR|SSP|USD|MWK|UGX|EUR|ETB|KES|INR|GEL|RUB|PKR|PKR|INR|NGN|PLN|AFN|PKR|AOA|BRL|CHF|CVE|EUR|XAF|XOF|EUR|MOP|MZN|EUR|STN|USD|BOB|USD|PEN|BDT|MMK|CHF|BIF|MDL|RON|TZS|BYN|KGS|KZT|MDL|RUB|UAH|RWF|TZS|INR|RUB|KES|INR|INR|TZS|EUR|EUR|PKR|INR|EUR|NOK|SEK|MZN|XOF|XAF|MAD|MAD|LKR|EUR|EUR|USD|WST|EUR|USD|DJF|ETB|KES|SOS|ALL|MKD|EUR|BAM|EUR|RSD|EUR|BAM|EUR|RSD|EUR|SZL|ZAR|ZAR|ZAR|IDR|EUR|EUR|SEK|CDF|KES|TZS|UGX|IQD|SYP|INR|LKR|MYR|SGD|INR|KES|UGX|TJS|THB|ERN|ETB|ERN|TMT|BWP|ZAR|TOP|EUR|TRY|TWD|ZAR|RUB|XOF|MAD|CNY|UAH|INR|PKR|PKR|AFN|UZS|UZS|LRD|LRD|ZAR|VND|TZS|EUR|CHF|ETB|XOF|ZAR|UGX|XAF|¤¤|XOF|NGN|CNY|HKD|MAD|CNY|HKD|JPY|MOP|SGD|CNY|HKD|MOP|TWD|ZAR)$
+   * @pattern ^(NAD|ZAR|XAF|JPY|GHS|ETB|USD||AED|BHD|DJF|DZD|EGP|MAD|ERN|ILS|IQD|JOD|KMF|KWD|LBP|LYD|MAD|MRU|OMR|ILS|QAR|SAR|SDG|SOS|SSP|SYP|XAF|TND|YER|CLP|INR|TZS|EUR|AZN|AZN|RUB|XAF|BYN|ZMW|TZS|BGN|XOF|BDT|INR|CNY|INR|EUR|INR|BAM|BAM|ERN|EUR|EUR|EUR|EUR|BDT|INR|RUB|PHP|UGX|USD|USD|USD|IQD|IRR|EUR|CZK|RUB|GBP|DKK|DKK|KES|EUR|EUR|CHF|EUR|EUR|CHF|EUR|XOF|INR|EUR|XAF|MVR|XOF|BTN|KES|GHS|XOF|EUR|EUR|||AED|XCD|XCD|ALL|ARS|USD|EUR|AUD|BBD|BDT|EUR|BGN|BIF|BMD|BND|BRL|BSD|BWP|BZD|CAD|AUD|CHF|NZD|CLP|XAF|CNY|COP|CVE|AUD|EUR|CZK|EUR|USD|DKK|XCD|EUR|ERN|EUR|FJD|FKP|USD|EUR|GBP|XCD|GBP|GHS|GIP|GMD|EUR|USD|GYD|HKD|HUF|IDR|EUR|ILS|GBP|INR|USD|GBP|JMD|JPY|KES|AUD|XCD|KRW|KYD|XCD|LRD|ZAR|EUR|EUR|MGA|USD|MMK|MOP|USD|XCD|EUR|MUR|MVR|MWK|MXN|MYR|NAD|AUD|NGN|EUR|NOK|AUD|NZD|NZD|PGK|PHP|PKR|PLN|NZD|USD|EUR|USD|RUB|RWF|SAR|SBD|SCR|SDG|SEK|SGD|SHP|EUR|EUR|SLL|SSP|ANG|SZL|USD|THB|NZD|TOP|TRY|TTD|AUD|TWD|TZS|UAH|UGX|USD|USD|USD|XCD|USD|USD|VUV|WST|ZAR|ZMW|USD||||XCD|ARS|BBD|BMD|BOB|USD|BRL|BSD|BZD|CAD|CLP|COP|CRC|CUP|ANG|XCD|DOP|EUR|USD|EUR|XCD|XAF|GTQ|GYD|HNL|HTG|EUR|XCD|KYD|XCD|MXN|NIO|PAB|PEN|PHP|USD|PYG|USD|USD|TTD|USD|UYU|XCD|VES|USD|USD|EUR|EUR|XAF|AFN|IRR|XOF|XAF|GHS|GMD|GNF|XOF|LRD|MRU|XOF|NGN|SLL|XOF|XOF|XAF|GHS|GMD|GNF|XOF|LRD|MRU|XOF|NGN|SLL|XOF|EUR|PHP|DKK|DKK|EUR|XOF|BIF|XOF|EUR|CAD|CDF|XAF|XAF|CHF|XOF|XAF|DJF|DZD|EUR|XAF|EUR|GNF|EUR|XAF|HTG|KMF|EUR|MAD|EUR|EUR|MGA|XOF|EUR|MRU|MUR|XPF|XOF|XPF|EUR|EUR|RWF|SCR|XOF|SYP|XAF|XOF|TND|VUV|XPF|EUR|EUR|EUR|GBP|EUR|GHS|GBP|ERN|ETB|EUR|PYG|CHF|EUR|CHF|INR|KES|GBP|GHS|XOF|NGN|USD|ILS|INR|INR|BAM|EUR|EUR|HUF|AMD||IDR|NGN|CNY||ISK|CHF|EUR|EUR|EUR|CAD|JPY||XAF|TZS|IDR|GEL|DZD|NGN|KES|NGN|TZS|CVE|XOF|KES|KZT|XAF|DKK|KES|KHR|INR|KPW|KRW|INR|GNF|LRD|INR|INR|INR|TZS|XAF|EUR|TRY|GBP|KGS|TZS|EUR|UGX|USD|AOA|CDF|XAF|XAF|LAK|IQD|IRR|EUR|CDF|KES|KES|EUR|INR|KES|TZS|KES|MUR|MGA|MZN|XAF|NZD|MKD|INR|MNT|INR|INR|CAD|INR|BND|MYR|BND|IDR|MYR|SGD|EUR|XAF|MMK|RUB|IRR|NAD|NOK|NOK|USD|EUR|EUR|INR|NPR|AWG|EUR|USD|ANG|EUR|SRD|ANG|XAF|NOK|XAF|GNF|ZAR|ZAR|SSP|USD|MWK|UGX|EUR|ETB|KES|INR|GEL|RUB|PKR|PKR|INR|NGN|PLN|AFN|PKR|AOA|BRL|CHF|CVE|EUR|XAF|XOF|EUR|MOP|MZN|EUR|STN|USD|BOB|USD|PEN|BDT|MMK|CHF|BIF|MDL|RON|TZS|BYN|KGS|KZT|MDL|RUB|UAH|RWF|TZS|INR|RUB|KES|INR|INR|TZS|EUR|EUR|PKR|INR|EUR|NOK|SEK|MZN|XOF|XAF|MAD|MAD|LKR|EUR|EUR|USD|WST|EUR|USD|DJF|ETB|KES|SOS|ALL|MKD|EUR|BAM|EUR|RSD|EUR|BAM|EUR|RSD|EUR|SZL|ZAR|ZAR|ZAR|IDR|EUR|EUR|SEK|CDF|KES|TZS|UGX|IQD|SYP|INR|LKR|MYR|SGD|INR|KES|UGX|TJS|THB|ERN|ETB|ERN|TMT|BWP|ZAR|TOP|EUR|TRY|TWD|ZAR|RUB|XOF|MAD|CNY|UAH|INR|PKR|PKR|AFN|UZS|UZS|LRD|LRD|ZAR|VND|TZS|EUR|CHF|ETB|XOF|ZAR|UGX|XAF||XOF|NGN|CNY|HKD|MAD|CNY|HKD|JPY|MOP|SGD|CNY|HKD|MOP|TWD|ZAR)$
    * @example "USD"
    */
   currency: string;
@@ -2572,14 +2477,12 @@ export interface OrderItemDetailsDto {
   /**
    * Product Name
    * @minLength 1
-   * @pattern ^.{1,}$
    * @example "string"
    */
   productName: string;
   /**
    * License Code
    * @minLength 1
-   * @pattern ^.{1,}$
    * @example "string"
    */
   licenseCode: string;
@@ -2592,7 +2495,7 @@ export interface OrderItemDetailsDto {
   /**
    * Currency
    * @minLength 1
-   * @pattern ^(NAD|ZAR|XAF|JPY|GHS|ETB|USD|¤¤|AED|BHD|DJF|DZD|EGP|MAD|ERN|ILS|IQD|JOD|KMF|KWD|LBP|LYD|MAD|MRU|OMR|ILS|QAR|SAR|SDG|SOS|SSP|SYP|XAF|TND|YER|CLP|INR|TZS|EUR|AZN|AZN|RUB|XAF|BYN|ZMW|TZS|BGN|XOF|BDT|INR|CNY|INR|EUR|INR|BAM|BAM|ERN|EUR|EUR|EUR|EUR|BDT|INR|RUB|PHP|UGX|USD|IQD|IRR|EUR|CZK|RUB|GBP|DKK|DKK|KES|EUR|EUR|CHF|EUR|EUR|CHF|EUR|XOF|INR|EUR|XAF|MVR|XOF|BTN|KES|GHS|XOF|EUR|EUR|¤¤|¤¤|AED|XCD|XCD|ALL|ARS|USD|EUR|AUD|BBD|BDT|EUR|BGN|BIF|BMD|BND|BRL|BSD|BWP|BZD|CAD|AUD|CHF|NZD|CLP|XAF|CNY|COP|CVE|AUD|EUR|CZK|EUR|USD|DKK|XCD|EUR|ERN|EUR|FJD|FKP|USD|EUR|GBP|XCD|GBP|GHS|GIP|GMD|EUR|USD|GYD|HKD|HUF|IDR|EUR|ILS|GBP|INR|USD|GBP|JMD|JPY|KES|AUD|XCD|KRW|KYD|XCD|LRD|ZAR|EUR|EUR|MGA|USD|MMK|MOP|USD|XCD|EUR|MUR|MVR|MWK|MXN|MYR|NAD|AUD|NGN|EUR|NOK|AUD|NZD|NZD|PGK|PHP|PKR|PLN|NZD|USD|EUR|USD|RUB|RWF|SAR|SBD|SCR|SDG|SEK|SGD|SHP|EUR|EUR|SLL|SSP|ANG|SZL|USD|THB|NZD|TOP|TRY|TTD|AUD|TWD|TZS|UAH|UGX|USD|USD|USD|XCD|USD|USD|VUV|WST|ZAR|ZMW|USD|¤¤|¤¤|¤¤|XCD|ARS|BBD|BMD|BOB|USD|BRL|BSD|BZD|CAD|CLP|COP|CRC|CUP|ANG|XCD|DOP|EUR|USD|EUR|XCD|XAF|GTQ|GYD|HNL|HTG|EUR|XCD|KYD|XCD|MXN|NIO|PAB|PEN|PHP|USD|PYG|USD|USD|TTD|USD|UYU|XCD|VES|USD|USD|EUR|EUR|XAF|AFN|IRR|XOF|XAF|GHS|GMD|GNF|XOF|LRD|MRU|XOF|NGN|SLL|XOF|XOF|XAF|GHS|GMD|GNF|XOF|LRD|MRU|XOF|NGN|SLL|XOF|EUR|PHP|DKK|DKK|EUR|XOF|BIF|XOF|EUR|CAD|CDF|XAF|XAF|CHF|XOF|XAF|DJF|DZD|EUR|XAF|EUR|GNF|EUR|XAF|HTG|KMF|EUR|MAD|EUR|EUR|MGA|XOF|EUR|MRU|MUR|XPF|XOF|XPF|EUR|EUR|RWF|SCR|XOF|SYP|XAF|XOF|TND|VUV|XPF|EUR|EUR|EUR|GBP|EUR|GHS|GBP|ERN|ETB|EUR|PYG|CHF|EUR|CHF|INR|KES|GBP|GHS|XOF|NGN|USD|ILS|INR|INR|BAM|HRK|EUR|HUF|AMD|¤¤|IDR|NGN|CNY|¤¤|ISK|CHF|EUR|EUR|EUR|CAD|JPY|¤¤|XAF|TZS|IDR|GEL|DZD|NGN|KES|NGN|TZS|CVE|XOF|KES|KZT|XAF|DKK|KES|KHR|INR|KPW|KRW|INR|GNF|LRD|INR|INR|INR|TZS|XAF|EUR|TRY|GBP|KGS|TZS|EUR|UGX|USD|AOA|CDF|XAF|XAF|LAK|IQD|IRR|EUR|CDF|KES|KES|EUR|INR|KES|TZS|KES|MUR|MGA|MZN|XAF|NZD|MKD|INR|MNT|INR|INR|CAD|INR|BND|MYR|BND|IDR|MYR|SGD|EUR|XAF|MMK|RUB|IRR|NAD|NOK|NOK|USD|EUR|EUR|INR|NPR|AWG|EUR|USD|ANG|EUR|SRD|ANG|XAF|NOK|XAF|GNF|ZAR|ZAR|SSP|USD|MWK|UGX|EUR|ETB|KES|INR|GEL|RUB|PKR|PKR|INR|NGN|PLN|AFN|PKR|AOA|BRL|CHF|CVE|EUR|XAF|XOF|EUR|MOP|MZN|EUR|STN|USD|BOB|USD|PEN|BDT|MMK|CHF|BIF|MDL|RON|TZS|BYN|KGS|KZT|MDL|RUB|UAH|RWF|TZS|INR|RUB|KES|INR|INR|TZS|EUR|EUR|PKR|INR|EUR|NOK|SEK|MZN|XOF|XAF|MAD|MAD|LKR|EUR|EUR|USD|WST|EUR|USD|DJF|ETB|KES|SOS|ALL|MKD|EUR|BAM|EUR|RSD|EUR|BAM|EUR|RSD|EUR|SZL|ZAR|ZAR|ZAR|IDR|EUR|EUR|SEK|CDF|KES|TZS|UGX|IQD|SYP|INR|LKR|MYR|SGD|INR|KES|UGX|TJS|THB|ERN|ETB|ERN|TMT|BWP|ZAR|TOP|EUR|TRY|TWD|ZAR|RUB|XOF|MAD|CNY|UAH|INR|PKR|PKR|AFN|UZS|UZS|LRD|LRD|ZAR|VND|TZS|EUR|CHF|ETB|XOF|ZAR|UGX|XAF|¤¤|XOF|NGN|CNY|HKD|MAD|CNY|HKD|JPY|MOP|SGD|CNY|HKD|MOP|TWD|ZAR)$
+   * @pattern ^(NAD|ZAR|XAF|JPY|GHS|ETB|USD||AED|BHD|DJF|DZD|EGP|MAD|ERN|ILS|IQD|JOD|KMF|KWD|LBP|LYD|MAD|MRU|OMR|ILS|QAR|SAR|SDG|SOS|SSP|SYP|XAF|TND|YER|CLP|INR|TZS|EUR|AZN|AZN|RUB|XAF|BYN|ZMW|TZS|BGN|XOF|BDT|INR|CNY|INR|EUR|INR|BAM|BAM|ERN|EUR|EUR|EUR|EUR|BDT|INR|RUB|PHP|UGX|USD|USD|USD|IQD|IRR|EUR|CZK|RUB|GBP|DKK|DKK|KES|EUR|EUR|CHF|EUR|EUR|CHF|EUR|XOF|INR|EUR|XAF|MVR|XOF|BTN|KES|GHS|XOF|EUR|EUR|||AED|XCD|XCD|ALL|ARS|USD|EUR|AUD|BBD|BDT|EUR|BGN|BIF|BMD|BND|BRL|BSD|BWP|BZD|CAD|AUD|CHF|NZD|CLP|XAF|CNY|COP|CVE|AUD|EUR|CZK|EUR|USD|DKK|XCD|EUR|ERN|EUR|FJD|FKP|USD|EUR|GBP|XCD|GBP|GHS|GIP|GMD|EUR|USD|GYD|HKD|HUF|IDR|EUR|ILS|GBP|INR|USD|GBP|JMD|JPY|KES|AUD|XCD|KRW|KYD|XCD|LRD|ZAR|EUR|EUR|MGA|USD|MMK|MOP|USD|XCD|EUR|MUR|MVR|MWK|MXN|MYR|NAD|AUD|NGN|EUR|NOK|AUD|NZD|NZD|PGK|PHP|PKR|PLN|NZD|USD|EUR|USD|RUB|RWF|SAR|SBD|SCR|SDG|SEK|SGD|SHP|EUR|EUR|SLL|SSP|ANG|SZL|USD|THB|NZD|TOP|TRY|TTD|AUD|TWD|TZS|UAH|UGX|USD|USD|USD|XCD|USD|USD|VUV|WST|ZAR|ZMW|USD||||XCD|ARS|BBD|BMD|BOB|USD|BRL|BSD|BZD|CAD|CLP|COP|CRC|CUP|ANG|XCD|DOP|EUR|USD|EUR|XCD|XAF|GTQ|GYD|HNL|HTG|EUR|XCD|KYD|XCD|MXN|NIO|PAB|PEN|PHP|USD|PYG|USD|USD|TTD|USD|UYU|XCD|VES|USD|USD|EUR|EUR|XAF|AFN|IRR|XOF|XAF|GHS|GMD|GNF|XOF|LRD|MRU|XOF|NGN|SLL|XOF|XOF|XAF|GHS|GMD|GNF|XOF|LRD|MRU|XOF|NGN|SLL|XOF|EUR|PHP|DKK|DKK|EUR|XOF|BIF|XOF|EUR|CAD|CDF|XAF|XAF|CHF|XOF|XAF|DJF|DZD|EUR|XAF|EUR|GNF|EUR|XAF|HTG|KMF|EUR|MAD|EUR|EUR|MGA|XOF|EUR|MRU|MUR|XPF|XOF|XPF|EUR|EUR|RWF|SCR|XOF|SYP|XAF|XOF|TND|VUV|XPF|EUR|EUR|EUR|GBP|EUR|GHS|GBP|ERN|ETB|EUR|PYG|CHF|EUR|CHF|INR|KES|GBP|GHS|XOF|NGN|USD|ILS|INR|INR|BAM|EUR|EUR|HUF|AMD||IDR|NGN|CNY||ISK|CHF|EUR|EUR|EUR|CAD|JPY||XAF|TZS|IDR|GEL|DZD|NGN|KES|NGN|TZS|CVE|XOF|KES|KZT|XAF|DKK|KES|KHR|INR|KPW|KRW|INR|GNF|LRD|INR|INR|INR|TZS|XAF|EUR|TRY|GBP|KGS|TZS|EUR|UGX|USD|AOA|CDF|XAF|XAF|LAK|IQD|IRR|EUR|CDF|KES|KES|EUR|INR|KES|TZS|KES|MUR|MGA|MZN|XAF|NZD|MKD|INR|MNT|INR|INR|CAD|INR|BND|MYR|BND|IDR|MYR|SGD|EUR|XAF|MMK|RUB|IRR|NAD|NOK|NOK|USD|EUR|EUR|INR|NPR|AWG|EUR|USD|ANG|EUR|SRD|ANG|XAF|NOK|XAF|GNF|ZAR|ZAR|SSP|USD|MWK|UGX|EUR|ETB|KES|INR|GEL|RUB|PKR|PKR|INR|NGN|PLN|AFN|PKR|AOA|BRL|CHF|CVE|EUR|XAF|XOF|EUR|MOP|MZN|EUR|STN|USD|BOB|USD|PEN|BDT|MMK|CHF|BIF|MDL|RON|TZS|BYN|KGS|KZT|MDL|RUB|UAH|RWF|TZS|INR|RUB|KES|INR|INR|TZS|EUR|EUR|PKR|INR|EUR|NOK|SEK|MZN|XOF|XAF|MAD|MAD|LKR|EUR|EUR|USD|WST|EUR|USD|DJF|ETB|KES|SOS|ALL|MKD|EUR|BAM|EUR|RSD|EUR|BAM|EUR|RSD|EUR|SZL|ZAR|ZAR|ZAR|IDR|EUR|EUR|SEK|CDF|KES|TZS|UGX|IQD|SYP|INR|LKR|MYR|SGD|INR|KES|UGX|TJS|THB|ERN|ETB|ERN|TMT|BWP|ZAR|TOP|EUR|TRY|TWD|ZAR|RUB|XOF|MAD|CNY|UAH|INR|PKR|PKR|AFN|UZS|UZS|LRD|LRD|ZAR|VND|TZS|EUR|CHF|ETB|XOF|ZAR|UGX|XAF||XOF|NGN|CNY|HKD|MAD|CNY|HKD|JPY|MOP|SGD|CNY|HKD|MOP|TWD|ZAR)$
    * @example "USD"
    */
   currency: string;
@@ -2618,15 +2521,15 @@ export interface OrderItemDetailsDto {
   /**
    * Created At
    * @format date-time
-   * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
-   * @example "2023-04-17T14:33:23Z"
+   * @pattern ^(\d{4})-(1[0-2]|0[1-9])-(3[01]|[12][0-9]|0[1-9])T(2[0-4]|1[0-9]|0[1-9]):(2[0-4]|1[0-9]|0[1-9]):([1-5]?0[0-9]).(\d{7})Z$
+   * @example "2023-04-18T12:00:00.0000000Z"
    */
   createdAt?: string;
   /**
    * Updated At
    * @format date-time
-   * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
-   * @example "2023-04-17T14:33:23Z"
+   * @pattern ^(\d{4})-(1[0-2]|0[1-9])-(3[01]|[12][0-9]|0[1-9])T(2[0-4]|1[0-9]|0[1-9]):(2[0-4]|1[0-9]|0[1-9]):([1-5]?0[0-9]).(\d{7})Z$
+   * @example "2023-04-18T12:00:00.0000000Z"
    */
   updatedAt?: string | null;
   /**
@@ -2658,15 +2561,15 @@ export interface OrderItemImportDto {
   /**
    * Created At
    * @format date-time
-   * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
-   * @example "2023-04-17T14:33:23Z"
+   * @pattern ^(\d{4})-(1[0-2]|0[1-9])-(3[01]|[12][0-9]|0[1-9])T(2[0-4]|1[0-9]|0[1-9]):(2[0-4]|1[0-9]|0[1-9]):([1-5]?0[0-9]).(\d{7})Z$
+   * @example "2023-04-18T12:00:00.0000000Z"
    */
   createdAt?: string | null;
   /**
    * Updated At
    * @format date-time
-   * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
-   * @example "2023-04-17T14:33:23Z"
+   * @pattern ^(\d{4})-(1[0-2]|0[1-9])-(3[01]|[12][0-9]|0[1-9])T(2[0-4]|1[0-9]|0[1-9]):(2[0-4]|1[0-9]|0[1-9]):([1-5]?0[0-9]).(\d{7})Z$
+   * @example "2023-04-18T12:00:00.0000000Z"
    */
   updatedAt?: string | null;
   /**
@@ -2718,7 +2621,7 @@ export interface OrderItemImportDto {
   unitPrice?: number | null;
   /**
    * Currency
-   * @pattern ^(NAD|ZAR|XAF|JPY|GHS|ETB|USD|¤¤|AED|BHD|DJF|DZD|EGP|MAD|ERN|ILS|IQD|JOD|KMF|KWD|LBP|LYD|MAD|MRU|OMR|ILS|QAR|SAR|SDG|SOS|SSP|SYP|XAF|TND|YER|CLP|INR|TZS|EUR|AZN|AZN|RUB|XAF|BYN|ZMW|TZS|BGN|XOF|BDT|INR|CNY|INR|EUR|INR|BAM|BAM|ERN|EUR|EUR|EUR|EUR|BDT|INR|RUB|PHP|UGX|USD|IQD|IRR|EUR|CZK|RUB|GBP|DKK|DKK|KES|EUR|EUR|CHF|EUR|EUR|CHF|EUR|XOF|INR|EUR|XAF|MVR|XOF|BTN|KES|GHS|XOF|EUR|EUR|¤¤|¤¤|AED|XCD|XCD|ALL|ARS|USD|EUR|AUD|BBD|BDT|EUR|BGN|BIF|BMD|BND|BRL|BSD|BWP|BZD|CAD|AUD|CHF|NZD|CLP|XAF|CNY|COP|CVE|AUD|EUR|CZK|EUR|USD|DKK|XCD|EUR|ERN|EUR|FJD|FKP|USD|EUR|GBP|XCD|GBP|GHS|GIP|GMD|EUR|USD|GYD|HKD|HUF|IDR|EUR|ILS|GBP|INR|USD|GBP|JMD|JPY|KES|AUD|XCD|KRW|KYD|XCD|LRD|ZAR|EUR|EUR|MGA|USD|MMK|MOP|USD|XCD|EUR|MUR|MVR|MWK|MXN|MYR|NAD|AUD|NGN|EUR|NOK|AUD|NZD|NZD|PGK|PHP|PKR|PLN|NZD|USD|EUR|USD|RUB|RWF|SAR|SBD|SCR|SDG|SEK|SGD|SHP|EUR|EUR|SLL|SSP|ANG|SZL|USD|THB|NZD|TOP|TRY|TTD|AUD|TWD|TZS|UAH|UGX|USD|USD|USD|XCD|USD|USD|VUV|WST|ZAR|ZMW|USD|¤¤|¤¤|¤¤|XCD|ARS|BBD|BMD|BOB|USD|BRL|BSD|BZD|CAD|CLP|COP|CRC|CUP|ANG|XCD|DOP|EUR|USD|EUR|XCD|XAF|GTQ|GYD|HNL|HTG|EUR|XCD|KYD|XCD|MXN|NIO|PAB|PEN|PHP|USD|PYG|USD|USD|TTD|USD|UYU|XCD|VES|USD|USD|EUR|EUR|XAF|AFN|IRR|XOF|XAF|GHS|GMD|GNF|XOF|LRD|MRU|XOF|NGN|SLL|XOF|XOF|XAF|GHS|GMD|GNF|XOF|LRD|MRU|XOF|NGN|SLL|XOF|EUR|PHP|DKK|DKK|EUR|XOF|BIF|XOF|EUR|CAD|CDF|XAF|XAF|CHF|XOF|XAF|DJF|DZD|EUR|XAF|EUR|GNF|EUR|XAF|HTG|KMF|EUR|MAD|EUR|EUR|MGA|XOF|EUR|MRU|MUR|XPF|XOF|XPF|EUR|EUR|RWF|SCR|XOF|SYP|XAF|XOF|TND|VUV|XPF|EUR|EUR|EUR|GBP|EUR|GHS|GBP|ERN|ETB|EUR|PYG|CHF|EUR|CHF|INR|KES|GBP|GHS|XOF|NGN|USD|ILS|INR|INR|BAM|HRK|EUR|HUF|AMD|¤¤|IDR|NGN|CNY|¤¤|ISK|CHF|EUR|EUR|EUR|CAD|JPY|¤¤|XAF|TZS|IDR|GEL|DZD|NGN|KES|NGN|TZS|CVE|XOF|KES|KZT|XAF|DKK|KES|KHR|INR|KPW|KRW|INR|GNF|LRD|INR|INR|INR|TZS|XAF|EUR|TRY|GBP|KGS|TZS|EUR|UGX|USD|AOA|CDF|XAF|XAF|LAK|IQD|IRR|EUR|CDF|KES|KES|EUR|INR|KES|TZS|KES|MUR|MGA|MZN|XAF|NZD|MKD|INR|MNT|INR|INR|CAD|INR|BND|MYR|BND|IDR|MYR|SGD|EUR|XAF|MMK|RUB|IRR|NAD|NOK|NOK|USD|EUR|EUR|INR|NPR|AWG|EUR|USD|ANG|EUR|SRD|ANG|XAF|NOK|XAF|GNF|ZAR|ZAR|SSP|USD|MWK|UGX|EUR|ETB|KES|INR|GEL|RUB|PKR|PKR|INR|NGN|PLN|AFN|PKR|AOA|BRL|CHF|CVE|EUR|XAF|XOF|EUR|MOP|MZN|EUR|STN|USD|BOB|USD|PEN|BDT|MMK|CHF|BIF|MDL|RON|TZS|BYN|KGS|KZT|MDL|RUB|UAH|RWF|TZS|INR|RUB|KES|INR|INR|TZS|EUR|EUR|PKR|INR|EUR|NOK|SEK|MZN|XOF|XAF|MAD|MAD|LKR|EUR|EUR|USD|WST|EUR|USD|DJF|ETB|KES|SOS|ALL|MKD|EUR|BAM|EUR|RSD|EUR|BAM|EUR|RSD|EUR|SZL|ZAR|ZAR|ZAR|IDR|EUR|EUR|SEK|CDF|KES|TZS|UGX|IQD|SYP|INR|LKR|MYR|SGD|INR|KES|UGX|TJS|THB|ERN|ETB|ERN|TMT|BWP|ZAR|TOP|EUR|TRY|TWD|ZAR|RUB|XOF|MAD|CNY|UAH|INR|PKR|PKR|AFN|UZS|UZS|LRD|LRD|ZAR|VND|TZS|EUR|CHF|ETB|XOF|ZAR|UGX|XAF|¤¤|XOF|NGN|CNY|HKD|MAD|CNY|HKD|JPY|MOP|SGD|CNY|HKD|MOP|TWD|ZAR)$
+   * @pattern ^(NAD|ZAR|XAF|JPY|GHS|ETB|USD||AED|BHD|DJF|DZD|EGP|MAD|ERN|ILS|IQD|JOD|KMF|KWD|LBP|LYD|MAD|MRU|OMR|ILS|QAR|SAR|SDG|SOS|SSP|SYP|XAF|TND|YER|CLP|INR|TZS|EUR|AZN|AZN|RUB|XAF|BYN|ZMW|TZS|BGN|XOF|BDT|INR|CNY|INR|EUR|INR|BAM|BAM|ERN|EUR|EUR|EUR|EUR|BDT|INR|RUB|PHP|UGX|USD|USD|USD|IQD|IRR|EUR|CZK|RUB|GBP|DKK|DKK|KES|EUR|EUR|CHF|EUR|EUR|CHF|EUR|XOF|INR|EUR|XAF|MVR|XOF|BTN|KES|GHS|XOF|EUR|EUR|||AED|XCD|XCD|ALL|ARS|USD|EUR|AUD|BBD|BDT|EUR|BGN|BIF|BMD|BND|BRL|BSD|BWP|BZD|CAD|AUD|CHF|NZD|CLP|XAF|CNY|COP|CVE|AUD|EUR|CZK|EUR|USD|DKK|XCD|EUR|ERN|EUR|FJD|FKP|USD|EUR|GBP|XCD|GBP|GHS|GIP|GMD|EUR|USD|GYD|HKD|HUF|IDR|EUR|ILS|GBP|INR|USD|GBP|JMD|JPY|KES|AUD|XCD|KRW|KYD|XCD|LRD|ZAR|EUR|EUR|MGA|USD|MMK|MOP|USD|XCD|EUR|MUR|MVR|MWK|MXN|MYR|NAD|AUD|NGN|EUR|NOK|AUD|NZD|NZD|PGK|PHP|PKR|PLN|NZD|USD|EUR|USD|RUB|RWF|SAR|SBD|SCR|SDG|SEK|SGD|SHP|EUR|EUR|SLL|SSP|ANG|SZL|USD|THB|NZD|TOP|TRY|TTD|AUD|TWD|TZS|UAH|UGX|USD|USD|USD|XCD|USD|USD|VUV|WST|ZAR|ZMW|USD||||XCD|ARS|BBD|BMD|BOB|USD|BRL|BSD|BZD|CAD|CLP|COP|CRC|CUP|ANG|XCD|DOP|EUR|USD|EUR|XCD|XAF|GTQ|GYD|HNL|HTG|EUR|XCD|KYD|XCD|MXN|NIO|PAB|PEN|PHP|USD|PYG|USD|USD|TTD|USD|UYU|XCD|VES|USD|USD|EUR|EUR|XAF|AFN|IRR|XOF|XAF|GHS|GMD|GNF|XOF|LRD|MRU|XOF|NGN|SLL|XOF|XOF|XAF|GHS|GMD|GNF|XOF|LRD|MRU|XOF|NGN|SLL|XOF|EUR|PHP|DKK|DKK|EUR|XOF|BIF|XOF|EUR|CAD|CDF|XAF|XAF|CHF|XOF|XAF|DJF|DZD|EUR|XAF|EUR|GNF|EUR|XAF|HTG|KMF|EUR|MAD|EUR|EUR|MGA|XOF|EUR|MRU|MUR|XPF|XOF|XPF|EUR|EUR|RWF|SCR|XOF|SYP|XAF|XOF|TND|VUV|XPF|EUR|EUR|EUR|GBP|EUR|GHS|GBP|ERN|ETB|EUR|PYG|CHF|EUR|CHF|INR|KES|GBP|GHS|XOF|NGN|USD|ILS|INR|INR|BAM|EUR|EUR|HUF|AMD||IDR|NGN|CNY||ISK|CHF|EUR|EUR|EUR|CAD|JPY||XAF|TZS|IDR|GEL|DZD|NGN|KES|NGN|TZS|CVE|XOF|KES|KZT|XAF|DKK|KES|KHR|INR|KPW|KRW|INR|GNF|LRD|INR|INR|INR|TZS|XAF|EUR|TRY|GBP|KGS|TZS|EUR|UGX|USD|AOA|CDF|XAF|XAF|LAK|IQD|IRR|EUR|CDF|KES|KES|EUR|INR|KES|TZS|KES|MUR|MGA|MZN|XAF|NZD|MKD|INR|MNT|INR|INR|CAD|INR|BND|MYR|BND|IDR|MYR|SGD|EUR|XAF|MMK|RUB|IRR|NAD|NOK|NOK|USD|EUR|EUR|INR|NPR|AWG|EUR|USD|ANG|EUR|SRD|ANG|XAF|NOK|XAF|GNF|ZAR|ZAR|SSP|USD|MWK|UGX|EUR|ETB|KES|INR|GEL|RUB|PKR|PKR|INR|NGN|PLN|AFN|PKR|AOA|BRL|CHF|CVE|EUR|XAF|XOF|EUR|MOP|MZN|EUR|STN|USD|BOB|USD|PEN|BDT|MMK|CHF|BIF|MDL|RON|TZS|BYN|KGS|KZT|MDL|RUB|UAH|RWF|TZS|INR|RUB|KES|INR|INR|TZS|EUR|EUR|PKR|INR|EUR|NOK|SEK|MZN|XOF|XAF|MAD|MAD|LKR|EUR|EUR|USD|WST|EUR|USD|DJF|ETB|KES|SOS|ALL|MKD|EUR|BAM|EUR|RSD|EUR|BAM|EUR|RSD|EUR|SZL|ZAR|ZAR|ZAR|IDR|EUR|EUR|SEK|CDF|KES|TZS|UGX|IQD|SYP|INR|LKR|MYR|SGD|INR|KES|UGX|TJS|THB|ERN|ETB|ERN|TMT|BWP|ZAR|TOP|EUR|TRY|TWD|ZAR|RUB|XOF|MAD|CNY|UAH|INR|PKR|PKR|AFN|UZS|UZS|LRD|LRD|ZAR|VND|TZS|EUR|CHF|ETB|XOF|ZAR|UGX|XAF||XOF|NGN|CNY|HKD|MAD|CNY|HKD|JPY|MOP|SGD|CNY|HKD|MOP|TWD|ZAR)$
    * @example "USD"
    */
   currency?: string | null;
@@ -2734,14 +2637,12 @@ export interface OrderItemUpdateDto {
   /**
    * Product Name
    * @minLength 1
-   * @pattern ^.{1,}$
    * @example "string"
    */
   productName?: string | null;
   /**
    * License Code
    * @minLength 1
-   * @pattern ^.{1,}$
    * @example "string"
    */
   licenseCode?: string | null;
@@ -2770,7 +2671,6 @@ export interface OrderUpdateDto {
   /**
    * Ref No
    * @minLength 1
-   * @pattern ^.{1,}$
    * @example "string"
    */
   refNo: string;
@@ -2839,7 +2739,7 @@ export interface TaskExecutionDto {
   completed?: boolean;
 }
 
-export interface UbsubscribeDetailsDto {
+export interface UnsubscribeDetailsDto {
   /**
    * Contact Id
    * @format int32
@@ -2865,8 +2765,8 @@ export interface UbsubscribeDetailsDto {
   /**
    * Created At
    * @format date-time
-   * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
-   * @example "2023-04-17T14:33:23Z"
+   * @pattern ^(\d{4})-(1[0-2]|0[1-9])-(3[01]|[12][0-9]|0[1-9])T(2[0-4]|1[0-9]|0[1-9]):(2[0-4]|1[0-9]|0[1-9]):([1-5]?0[0-9]).(\d{7})Z$
+   * @example "2023-04-18T12:00:00.0000000Z"
    */
   createdAt?: string;
 }
@@ -2921,8 +2821,8 @@ export interface UnsubscribeImportDto {
   /**
    * Created At
    * @format date-time
-   * @pattern ^(\d{4})-(1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])T(2[0-4]|1[0-9]|[1-9]):(2[0-4]|1[0-9]|[1-9]):([1-5]?[0-9])Z$
-   * @example "2023-04-17T14:33:23Z"
+   * @pattern ^(\d{4})-(1[0-2]|0[1-9])-(3[01]|[12][0-9]|0[1-9])T(2[0-4]|1[0-9]|0[1-9]):(2[0-4]|1[0-9]|0[1-9]):([1-5]?0[0-9]).(\d{7})Z$
+   * @example "2023-04-18T12:00:00.0000000Z"
    */
   createdAt?: string | null;
 }
@@ -4800,40 +4700,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
-     * @tags Sendgrid
-     * @name SendgridImportCreate
-     * @request POST:/api/sendgrid/import
-     * @secure
-     */
-    sendgridImportCreate: (data: MessageEventDto[], params: RequestParams = {}) =>
-      this.request<void, void | ProblemDetails>({
-        path: `/api/sendgrid/import`,
-        method: "POST",
-        body: data,
-        secure: true,
-        type: ContentType.Json,
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @tags Sendgrid
-     * @name SendgridWebhookCreate
-     * @request POST:/api/sendgrid/webhook
-     * @secure
-     */
-    sendgridWebhookCreate: (params: RequestParams = {}) =>
-      this.request<void, void | ProblemDetails>({
-        path: `/api/sendgrid/webhook`,
-        method: "POST",
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
      * @tags Statistics
      * @name StatisticsCreate
      * @request POST:/api/statistics
@@ -4959,7 +4825,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @secure
      */
     unsubscribesDetail: (id: number, params: RequestParams = {}) =>
-      this.request<UbsubscribeDetailsDto, void | ProblemDetails>({
+      this.request<UnsubscribeDetailsDto, void | ProblemDetails>({
         path: `/api/unsubscribes/${id}`,
         method: "GET",
         secure: true,
@@ -4976,7 +4842,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @secure
      */
     unsubscribesPartialUpdate: (id: number, data: UnsubscribeDto, params: RequestParams = {}) =>
-      this.request<UbsubscribeDetailsDto, void | ProblemDetails>({
+      this.request<UnsubscribeDetailsDto, void | ProblemDetails>({
         path: `/api/unsubscribes/${id}`,
         method: "PATCH",
         body: data,
@@ -5011,7 +4877,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @secure
      */
     unsubscribesCreate: (data: UnsubscribeDto, params: RequestParams = {}) =>
-      this.request<UbsubscribeDetailsDto, void | ProblemDetails>({
+      this.request<UnsubscribeDetailsDto, void | ProblemDetails>({
         path: `/api/unsubscribes`,
         method: "POST",
         body: data,
@@ -5035,7 +4901,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       },
       params: RequestParams = {},
     ) =>
-      this.request<UbsubscribeDetailsDto[], void | ProblemDetails>({
+      this.request<UnsubscribeDetailsDto[], void | ProblemDetails>({
         path: `/api/unsubscribes`,
         method: "GET",
         query: query,
