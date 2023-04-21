@@ -1,26 +1,49 @@
-import { Avatar, ListItemAvatar } from "@mui/material";
+import { Avatar, Button, ListItemAvatar } from "@mui/material";
 import { ContactDetailsDto, ContactImportDto } from "lib/network/swagger-client";
 import { useRequestContext } from "providers/request-provider";
 import { ContactNameListItem, ContactNameListItemText } from "./index.styled";
 import {
+  contactGridSettingsStorageKey,
   contactListPageBreadcrumb,
   defaultFilterOrderColumn,
   defaultFilterOrderDirection,
   modelName,
   searchLabel,
 } from "./constants";
-import { DataList } from "components/data-list";
+import { DataList } from "@components/data-list";
 import { GridColDef } from "@mui/x-data-grid";
-import { CoreModule } from "lib/router";
+import { CoreModule, getAddFormRoute } from "lib/router";
 import { dataListBreadcrumbLinks } from "utils/constants";
+import { ModuleWrapper } from "@components/module-wrapper";
+import { SearchBar } from "@components/search-bar";
+import { Fragment, useRef, useState } from "react";
+import { Add, Download, Upload } from "@mui/icons-material";
+import { GhostLink } from "@components/ghost-link";
+import { CsvImport } from "@components/spreadsheet-import";
+import { getModelByName } from "lib/network/swagger-models";
+import { Result } from "@wavepoint/react-spreadsheet-import/types/types";
+import { CsvExport } from "@components/export";
+import useLocalStorage from "use-local-storage";
+import { dataListSettings } from "utils/types";
 
 export const Contacts = () => {
   const { client } = useRequestContext();
+  const [gridSettings, setGridSettings] = useLocalStorage<dataListSettings | undefined>(
+    contactGridSettingsStorageKey,
+    undefined
+  );
 
-  const getContactList = async (query: string) => {
+  const [searchTerm, setSearchTerm] = useState(gridSettings?.searchTerm ?? "");
+  const [openImport, setOpenImport] = useState(false);
+  const [openExport, setOpenExport] = useState(false);
+  const [importFieldsObject, setImportFieldsObject] = useState<any>();
+  const dataExportQuery = useRef("");
+
+  const getContactList = async (mainQuery: string, exportQuery?: string) => {
     try {
+      dataExportQuery.current = exportQuery || "";
       const result = await client.api.contactsList({
-        query: query,
+        query: mainQuery,
       });
       return result;
     } catch (error) {
@@ -29,16 +52,30 @@ export const Contacts = () => {
     }
   };
 
-  const exportContactsAsync = async (query: string) => {
+  const exportContactsAsync = async () => {
     const response = await client.api.contactsExportList({
-      query: query
+      query: dataExportQuery.current,
     });
 
     return response.text();
   };
 
-  const handleContactImport = async (data: ContactImportDto[]) => {
-    await client.api.contactsImportCreate(data);
+  const handleImportOpen = () => {
+    !importFieldsObject && setImportFieldsObject(getModelByName(modelName));
+    setOpenImport(true);
+  };
+
+  const handleImportClose = () => {
+    setOpenImport(false);
+  };
+
+  const handleExportOpen = () => {
+    openExport ? setOpenExport(false) : setOpenExport(true);
+  };
+
+  const handleFileUpload = async (data: Result<string>) => {
+    const importDtoCollection: ContactImportDto[] = data.validData;
+    await client.api.contactsImportCreate(importDtoCollection);
   };
 
   const columns: GridColDef<ContactDetailsDto>[] = [
@@ -95,26 +132,71 @@ export const Contacts = () => {
     },
   ];
 
+  const searchBar = (
+    <SearchBar
+      setSearchTermOnChange={setSearchTerm}
+      searchBoxLabel={searchLabel}
+      initialValue={gridSettings?.searchTerm ?? ""}
+    ></SearchBar>
+  );
+
+  const extraActions = [
+    <Fragment key={"import-action"}>
+      <Button key={"import-btn"} startIcon={<Upload />} onClick={handleImportOpen}>
+        Import
+      </Button>
+      {importFieldsObject && (
+        <CsvImport
+          isOpen={openImport}
+          onClose={handleImportClose}
+          onUpload={handleFileUpload}
+          object={importFieldsObject}
+          endRoute={CoreModule.contacts}
+        ></CsvImport>
+      )}
+    </Fragment>,
+    <Fragment key={"export-action"}>
+      <Button key={"export-btn"} startIcon={<Download />} onClick={handleExportOpen}>
+        Export
+      </Button>
+      {openExport && (
+        <CsvExport
+          exportAsync={exportContactsAsync}
+          closeExport={handleExportOpen}
+          fileName={"contacts"}
+        ></CsvExport>
+      )}
+    </Fragment>,
+  ];
+
+  const addButton = (
+    <Button variant="contained" to={getAddFormRoute()} component={GhostLink} startIcon={<Add />}>
+      Add contact
+    </Button>
+  );
+
   return (
-    <DataList
-      modelName={modelName}
-      columns={columns}
-      dataListBreadcrumbLinks={dataListBreadcrumbLinks}
+    <ModuleWrapper
+      breadcrumbs={dataListBreadcrumbLinks}
       currentBreadcrumb={contactListPageBreadcrumb}
-      defaultFilterOrderColumn={defaultFilterOrderColumn}
-      defaultFilterOrderDirection={defaultFilterOrderDirection}
-      searchBarLabel={searchLabel}
-      endRoute={CoreModule.contacts}
-      getModelDataList={getContactList}
-      exportAsync={exportContactsAsync}
-      exportFileName="contacts"
-      dataImportCreate={handleContactImport}
-      initialGridState={{
-        columns: { columnVisibilityModel: { lastName: false, email: false } },
-        sorting: {
-          sortModel: [{ field: defaultFilterOrderColumn, sort: defaultFilterOrderDirection }],
-        },
-      }}
-    ></DataList>
+      leftContainerChildren={searchBar}
+      extraActionsContainerChildren={extraActions}
+      addButtonContainerChildren={addButton}
+    >
+      <DataList
+        columns={columns}
+        gridSettingsStorageKey={contactGridSettingsStorageKey}
+        defaultFilterOrderColumn={defaultFilterOrderColumn}
+        defaultFilterOrderDirection={defaultFilterOrderDirection}
+        searchText={searchTerm}
+        getModelDataList={getContactList}
+        initialGridState={{
+          columns: { columnVisibilityModel: { lastName: false, email: false } },
+          sorting: {
+            sortModel: [{ field: defaultFilterOrderColumn, sort: defaultFilterOrderDirection }],
+          },
+        }}
+      ></DataList>
+    </ModuleWrapper>
   );
 };

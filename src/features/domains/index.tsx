@@ -9,7 +9,7 @@ import {
   domainListPageBreadcrumb,
   searchLabel,
 } from "./constants";
-import { DataList } from "components/data-list";
+import { DataList } from "@components/data-list-old";
 import { GridColDef } from "@mui/x-data-grid";
 import { CoreModule } from "lib/router";
 import { dataListBreadcrumbLinks } from "utils/constants";
@@ -31,10 +31,10 @@ export const Domains = () => {
 
   const exportDomainsAsync = async (query: string) => {
     const response = await client.api.domainsExportList({
-      query: query
+      query: query,
     });
 
-    return response.text();    
+    return response.text();
   };
 
   const handleDomainImport = async (data: DomainImportDto[]) => {

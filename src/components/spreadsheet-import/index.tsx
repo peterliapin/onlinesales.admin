@@ -1,5 +1,5 @@
 import { CircularProgress } from "@mui/material";
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import { ReactSpreadsheetImport } from "@wavepoint/react-spreadsheet-import";
 import { Result } from "@wavepoint/react-spreadsheet-import/types/types";
 import { StyledBackdrop } from "./index.styled";
@@ -42,7 +42,7 @@ export const CsvImport = ({ isOpen, onClose, onUpload, object, endRoute }: csvIm
   };
 
   return (
-    <>
+    <Fragment key={"spreadsheet-import"}>
       <ReactSpreadsheetImport
         isOpen={isOpen}
         onClose={onClose}
@@ -52,6 +52,6 @@ export const CsvImport = ({ isOpen, onClose, onUpload, object, endRoute }: csvIm
       <StyledBackdrop open={isUploading}>
         <CircularProgress color="inherit" />
       </StyledBackdrop>
-    </>
+    </Fragment>
   );
 };

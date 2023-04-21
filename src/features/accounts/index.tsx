@@ -10,7 +10,7 @@ import {
   modelName,
   searchLabel,
 } from "./constants";
-import { DataList } from "components/data-list";
+import { DataList } from "@components/data-list-old";
 import { GridColDef } from "@mui/x-data-grid";
 import { CoreModule } from "lib/router";
 
@@ -31,7 +31,7 @@ export const Accounts = () => {
 
   const exportAccountsAsync = async (query: string, accept: string) => {
     const response = await client.api.accountsExportList({
-      query: query
+      query: query,
     });
 
     return response.text();
@@ -49,12 +49,9 @@ export const Accounts = () => {
       renderCell: ({ row }) => (
         <AccountListItem>
           <ListItemAvatar>
-            <Avatar src={row.logoUrl || "" }></Avatar>
+            <Avatar src={row.logoUrl || ""}></Avatar>
           </ListItemAvatar>
-          <AccountListItemText
-            primary={`${row.name || ""}`}
-            secondary={row.siteUrl}
-          />
+          <AccountListItemText primary={`${row.name || ""}`} secondary={row.siteUrl} />
         </AccountListItem>
       ),
     },
