@@ -1,5 +1,7 @@
+import { Avatar, ListItemAvatar } from "@mui/material";
 import { DomainDetailsDto, DomainImportDto } from "lib/network/swagger-client";
 import { useRequestContext } from "providers/request-provider";
+import { DomainListItem, DomainListItemText } from "./index.styled";
 import {
   defaultFilterOrderColumn,
   defaultFilterOrderDirection,
@@ -81,7 +83,23 @@ export const Domains = () => {
     {
       field: "name",
       headerName: "Name",
-      flex: 2,
+      flex: 4,
+      renderCell: ({ row }) => (
+        <DomainListItem>
+          <ListItemAvatar>
+            <Avatar sizes="64" src={
+              "http://www.google.com/s2/favicons?domain=" + row.name + "&sz=32"
+            } sx={{
+              width: 32,
+              height: 32,
+            }}></Avatar>
+          </ListItemAvatar>
+          <DomainListItemText
+            primary={`${row.name || ""}`}
+            secondary={row.url}
+          />
+        </DomainListItem>
+      ),
     },
     {
       field: "title",

@@ -1,18 +1,27 @@
-import {useEffect, useState} from "react";
+import {Ref, useEffect, useImperativeHandle, useState} from "react";
 import {HttpResponse, ProblemDetails, RequestParams} from "@lib/network/swagger-client";
 import {useModuleWrapperContext} from "@providers/module-wrapper-provider";
-import {DataGrid, GridColDef, GridColumnVisibilityModel, GridSortModel} from "@mui/x-data-grid";
+import {
+  DataGrid,
+  getGridStringOperators,
+  GridColDef,
+  GridColumnVisibilityModel,
+  GridFilterModel,
+  GridSortModel
+} from "@mui/x-data-grid";
 import {totalCountHeaderName} from "@lib/query";
 import {
   DtoSchema,
   camelCaseToTitleCase,
-  BasicTypeForGeneric, getSettings, saveSettings,
+  BasicTypeForGeneric,
+  GenericDataGridSettings,
 } from "@components/generic-components/common";
 import {ActionButtonContainer} from "@components/data-table/index.styled";
 import {IconButton} from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import dayjs from "dayjs";
+import useLocalStorage from "use-local-storage";
 
 export interface GenericDataGridProps<T extends BasicTypeForGeneric> {
   key: string;
@@ -24,7 +33,11 @@ export interface GenericDataGridProps<T extends BasicTypeForGeneric> {
   detailsNavigate?: (item: T) => void;
   editNavigate?: (item: T) => void;
   searchText?: string;
-  initiallyShownColumns?: string[]
+  initiallyShownColumns?: string[];
+}
+
+export interface GenericDataGridRef {
+  getExportFilters: () => any;
 }
 
 export function GenericDataGrid<T extends BasicTypeForGeneric>({
@@ -35,8 +48,18 @@ export function GenericDataGrid<T extends BasicTypeForGeneric>({
   editNavigate,
   searchText,
   initiallyShownColumns
-}: GenericDataGridProps<T>) {
+}: GenericDataGridProps<T>,
+ref: Ref<GenericDataGridRef>) {
   const {setBusy} = useModuleWrapperContext();
+
+  const [gridSettings, setGridSettings] =
+    useLocalStorage<GenericDataGridSettings>(
+      `data-grid-${key}`,
+      {
+        sortColumn: "id",
+        sortDirection: "desc",
+        columnVisibilityModel: {}
+      });
 
   const actionsColumn: GridColDef = {
     field: "_actions",
@@ -81,7 +104,10 @@ export function GenericDataGrid<T extends BasicTypeForGeneric>({
                 ? dayjs(params.value).format("L HH:mm")
                 : undefined;
             }
-            : undefined
+            : undefined,
+          filterOperators: getGridStringOperators().filter(
+            (operator) => operator.value === "contains"
+          ),
         };
         return column;
       })),
@@ -92,8 +118,33 @@ export function GenericDataGrid<T extends BasicTypeForGeneric>({
   const [totalItemsCount, setTotalItemsCount] = useState<number>(0);
   const [pageNumber, setPageNumber] = useState<number>(0);
   const [pageSize, setPageSize] = useState<number>(10);
-  const [sortColumn, setSortColumn] = useState<string>("id");
-  const [sortDirection, setSortDirection] = useState<string>("asc");
+  const [sortColumn, setSortColumn] = useState<string>(gridSettings.sortColumn);
+  const [sortDirection, setSortDirection] = useState<string>(gridSettings.sortDirection);
+  const [whereFilters, setWhereFilters] = useState<{ [x: string]: string; }>({});
+
+  const getFilters = () => {
+    const query: any = {
+      ...whereFilters,
+      "filter[limit]": pageSize,
+      "filter[order]": sortColumn ? `${sortColumn} ${sortDirection}` : undefined,
+      "filter[skip]": pageSize * pageNumber,
+    };
+
+    if (searchText) {
+      query["query"] = searchText;
+    }
+
+    return query;
+  };
+
+  useImperativeHandle(ref, () => ({
+    getExportFilters: () => {
+      const filters = getFilters();
+      delete filters["filter[limit]"];
+      delete filters["filter[skip]"];
+      return filters;
+    }
+  }));
 
   useEffect(() => {
     const abortController = new AbortController();
@@ -101,17 +152,7 @@ export function GenericDataGrid<T extends BasicTypeForGeneric>({
     if (getItemsFn) {
       setBusy(async () => {
         try {
-          const query: any = {
-            "filter[limit]": pageSize,
-            "filter[order]": sortColumn ? `${sortColumn} ${sortDirection}` : undefined,
-            "filter[skip]": pageSize * pageNumber,
-          };
-
-          if (searchText) {
-            query["query"] = searchText;
-          }
-
-          const {data, headers} = await getItemsFn(query as any, {
+          const {data, headers} = await getItemsFn(getFilters(), {
             signal: abortController.signal,
           });
 
@@ -127,18 +168,38 @@ export function GenericDataGrid<T extends BasicTypeForGeneric>({
     return () => {
       abortController.abort("canceled");
     };
-  }, [getItemsFn, pageSize, pageNumber, sortColumn, sortDirection, searchText]);
+  }, [getItemsFn, pageSize, pageNumber, sortColumn, sortDirection, searchText, whereFilters]);
 
   const handleSortChange = (sortModel: GridSortModel) => {
     if (sortModel.length > 0) {
       setSortColumn(sortModel[sortModel.length - 1].field);
       setSortDirection(sortModel[sortModel.length - 1].sort || "asc");
-    } else setSortDirection("asc");
+    } else {
+      setSortColumn("id");
+      setSortDirection("desc");
+    }
   };
 
-  const [settingsInitialized, setSettingsInitialized] = useState<boolean>(false);
+  const handleFilterChange = (filterModel: GridFilterModel) => {
+    if (filterModel.items.length === 0) {
+      return;
+    }
+
+    const newWhereFilters: { [x: string]: string; } = {};
+
+    for (const item of filterModel.items) {
+      newWhereFilters[`filter[where][${item.columnField}][like]`] = item.value;
+    }
+
+    setWhereFilters(newWhereFilters);
+  };
+
   const [columnVisibilityModel, setColumnVisibilityModel] =
     useState<GridColumnVisibilityModel>(() => {
+      if (gridSettings.columnVisibilityModel) {
+        return gridSettings.columnVisibilityModel;
+      }
+
       const initialValue: GridColumnVisibilityModel = {};
 
       const availableColumns = Object.keys(schema.properties)
@@ -150,43 +211,20 @@ export function GenericDataGrid<T extends BasicTypeForGeneric>({
           || initiallyShownColumns.indexOf(columnName) > -1);
       }
 
-      console.log(initiallyShownColumns);
-
       return initialValue;
     });
 
   useEffect(() => {
-    if (settingsInitialized) {
-      saveSettings(key, {
-        sortDirection: sortDirection,
-        sortColumn: sortColumn,
-        columnVisibilityModel: columnVisibilityModel
-      });
-    }
+    setGridSettings({
+      sortDirection: sortDirection,
+      sortColumn: sortColumn,
+      columnVisibilityModel: columnVisibilityModel
+    });
   }, [
     sortDirection,
     sortColumn,
     columnVisibilityModel
   ]);
-
-  useEffect(() => {
-    if (!settingsInitialized) {
-      const settings = getSettings(key);
-      if (settings) {
-        if (settings.sortDirection) {
-          setSortDirection(settings.sortDirection);
-        }
-        if (settings.sortColumn) {
-          setSortColumn(settings.sortColumn);
-        }
-        if (settings.columnVisibilityModel) {
-          setColumnVisibilityModel(settings.columnVisibilityModel);
-        }
-      }
-      setSettingsInitialized(true);
-    }
-
-  }, [settingsInitialized]);
 
   return (
     <DataGrid
@@ -206,10 +244,12 @@ export function GenericDataGrid<T extends BasicTypeForGeneric>({
       sortingMode="server"
       onSortModelChange={(newSortModel) => handleSortChange(newSortModel)}
       filterMode="server"
+      onFilterModelChange={(newFilterModel) => handleFilterChange(newFilterModel)}
       onColumnVisibilityModelChange={(newModel) => {
-        settingsInitialized && setColumnVisibilityModel(newModel);
+        setColumnVisibilityModel(newModel);
       }}
       columnVisibilityModel={columnVisibilityModel}
     />
   );
 }
+

@@ -6,14 +6,6 @@ export const ContentEditAvailableLanguages = ["English", "Russian"] as const;
 
 export const ContentEditAvailableTypes = ["Blog Post", "Release Note"] as const;
 
-export const ContentEditAvailableAuthors = ["Author 1", "Author 2"] as const;
-
-/// TODO: Runtime
-export const ContentEditAvailableTags = ["Tag 1", "Tag 2", "Tag 3"] as const;
-
-/// TODO: Runtime
-export const ContentEditAvailableCategories = ["Cat 1", "Cat 2", "Cat 3"] as const;
-
 export const ContentEditMaximumImageSize = 3 * 1000 * 1000; // 3 megabytes
 
 export const ContentEditDefaultValues: TypeDefaultValues[] = [

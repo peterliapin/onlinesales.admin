@@ -1,4 +1,6 @@
 import {
+  CustomFieldSourceDictionary,
+  DictItem,
   GenericDataGridProps,
   GenericFormProps,
   GenericModule,
@@ -18,11 +20,49 @@ import {
   CommentDetailsDto,
   CommentUpdateDto,
 } from "@lib/network/swagger-client";
+import {useEffect, useState} from "react";
+import {useModuleWrapperContext} from "@providers/module-wrapper-provider";
 
 
 export const CommentsModule = () => {
   const {client} = useRequestContext();
   const navigate = useNavigate();
+  const {setBusy} = useModuleWrapperContext();
+
+  const [contentDict, setContentDict] = useState<CustomFieldSourceDictionary>();
+  const [commentsDict, setCommentsDict] = useState<CustomFieldSourceDictionary>();
+
+  useEffect(() => {
+    const abortController = new AbortController();
+    setBusy(async () => {
+      const {data} = await client.api.contentList();
+      const dictItems = (data || [])
+        .map(item => ({
+          value: item.id,
+          displayText: `${item.id}: ${item.title}`
+        } as DictItem));
+      setContentDict({label: "Content", items: dictItems});
+    });
+    return () => {
+      abortController.abort("cancelled")
+    }
+  }, [client]);
+
+  useEffect(() => {
+    const abortController = new AbortController();
+    setBusy(async () => {
+      const {data} = await client.api.commentsList();
+      const dictItems = (data || [])
+        .map(item => ({
+          value: item.id,
+          displayText: `${item.id}: ${item.body}`
+        } as DictItem));
+      setCommentsDict({label: "Parent", items: dictItems});
+    });
+    return () => {
+      abortController.abort("cancelled")
+    }
+  }, [client]);
 
   const formProps: GenericFormProps<CommentDetailsDto, CommentCreateDto, CommentUpdateDto> = {
     detailsSchema: getSchemaDto("CommentDetailsDto", swaggerJson.components.schemas),
@@ -32,7 +72,11 @@ export const CommentsModule = () => {
     getItemFn: client.api.commentsDetail,
     updateItemFn: client.api.commentsPartialUpdate,
     createItemFn: client.api.commentsCreate,
-    getItemId: () => undefined
+    getItemId: () => undefined,
+    customDictionaries: {
+      "contentId": contentDict,
+      "parentId": commentsDict
+    }
   };
 
   const tableProps: GenericDataGridProps<CommentDetailsDto> = {
@@ -53,6 +97,17 @@ export const CommentsModule = () => {
     modulePath: CoreModule.comments,
     addButtonContent: "Add comment",
     tableProps: tableProps,
+    extraActions: {
+      export: {
+        showButton: true,
+        exportItemsFn: client.api.commentsExportList,
+      },
+      import: {
+        showButton: true,
+        importItemsFn: client.api.commentsImportCreate,
+        importSchema: getSchemaDto("CommentImportDto", swaggerJson.components.schemas),
+      }
+    },
     viewFormProps: {
       ...formProps,
       mode: "details",

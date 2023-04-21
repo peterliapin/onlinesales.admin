@@ -14,32 +14,30 @@ import {useNavigate, useParams} from "react-router-dom";
 import swaggerJson from "@lib/network/swagger.json";
 import {useRequestContext} from "@providers/request-provider";
 import {
-  LinkCreateDto,
-  LinkDetailsDto,
-  LinkUpdateDto
+  UnsubscribeDto,
+  UnsubscribeDetailsDto
 } from "@lib/network/swagger-client";
 
 
-export const LinksModule = () => {
+export const UnsubscribesModule = () => {
   const {client} = useRequestContext();
   const navigate = useNavigate();
 
-  const formProps: GenericFormProps<LinkDetailsDto, LinkCreateDto, LinkUpdateDto> = {
-    detailsSchema: getSchemaDto("LinkDetailsDto", swaggerJson.components.schemas),
-    updateSchema: getSchemaDto("LinkUpdateDto", swaggerJson.components.schemas),
-    createSchema: getSchemaDto("LinkCreateDto", swaggerJson.components.schemas),
+  const formProps: GenericFormProps<UnsubscribeDetailsDto, UnsubscribeDto, UnsubscribeDto> = {
+    detailsSchema: getSchemaDto("UnsubscribeDetailsDto", swaggerJson.components.schemas),
+    updateSchema: getSchemaDto("UnsubscribeDto", swaggerJson.components.schemas),
+    createSchema: getSchemaDto("UnsubscribeDto", swaggerJson.components.schemas),
     editable: false,
-    getItemFn: client.api.linksDetail,
-    updateItemFn: client.api.linksPartialUpdate,
-    createItemFn: client.api.linksCreate,
-    getItemId: () => undefined,
+    getItemFn: client.api.unsubscribesDetail,
+    updateItemFn: client.api.unsubscribesPartialUpdate,
+    createItemFn: client.api.unsubscribesCreate,
+    getItemId: () => undefined
   };
 
-  const tableProps: GenericDataGridProps<LinkDetailsDto> = {
-    key: "links-table",
-    initiallyShownColumns: ["name", "source", "destination"],
-    schema: getSchemaDto("LinkDetailsDto", swaggerJson.components.schemas),
-    getItemsFn: client.api.linksList,
+  const tableProps: GenericDataGridProps<UnsubscribeDetailsDto> = {
+    key: "unsubscribes-table",
+    schema: getSchemaDto("UnsubscribeDetailsDto", swaggerJson.components.schemas),
+    getItemsFn: client.api.unsubscribesList,
     detailsNavigate: (item) => {
       item.id && navigate(getViewFormRoute(item.id), {state: item});
     },
@@ -49,17 +47,18 @@ export const LinksModule = () => {
   };
 
   const module = GenericModule({
-    moduleName: "Links",
-    modulePath: CoreModule.links,
-    addButtonContent: "Add link",
+    moduleName: "Unsubscribes",
+    modulePath: CoreModule.unsubscribes,
     tableProps: tableProps,
     extraActions: {
       export: {
         showButton: true,
-        exportItemsFn: client.api.linksExportList,
+        exportItemsFn: client.api.unsubscribesExportList,
       },
       import: {
         showButton: true,
+        importItemsFn: client.api.unsubscribesImportCreate,
+        importSchema: getSchemaDto("UnsubscribeImportDto", swaggerJson.components.schemas)
       }
     },
     viewFormProps: {

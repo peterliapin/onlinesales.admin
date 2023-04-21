@@ -3,6 +3,8 @@ import {
   DtoSchema,
   camelCaseToTitleCase,
   BasicTypeForGeneric,
+  CustomFieldSourceDictionaries,
+  DictItem,
 } from "@components/generic-components/common";
 import {useEffect, useState} from "react";
 import {useModuleWrapperContext} from "@providers/module-wrapper-provider";
@@ -14,10 +16,9 @@ import {
   EnumEdit,
   DynamicValues,
   ValidationResult,
+  DictionaryEdit,
 } from "@components/generic-components/edit-components";
-import {useNotificationsService} from "@hooks";
 import {validate} from "@components/generic-components/edit-components/validator";
-import {z} from "zod";
 
 export interface DtoField {
   editable: boolean;
@@ -58,6 +59,8 @@ export interface GenericFormProps<TView extends BasicTypeForGeneric, TCreate, TU
   mode?: "create" | "update" | "details";
   getItemId: () => number | undefined;
   onSaved?: (item: TView) => void;
+
+  customDictionaries?: CustomFieldSourceDictionaries;
 }
 
 export function GenericForm<TView extends BasicTypeForGeneric, TCreate, TUpdate>({
@@ -70,10 +73,10 @@ export function GenericForm<TView extends BasicTypeForGeneric, TCreate, TUpdate>
   createSchema,
   mode,
   getItemId,
-  onSaved
+  onSaved,
+  customDictionaries
 }: GenericFormProps<TView, TCreate, TUpdate>) {
   const {setBusy, isBusy, setSaving, isSaving} = useModuleWrapperContext();
-  const {notificationsService} = useNotificationsService();
   const [validationResult, setValidationResult] = useState<ValidationResult>();
 
   const itemId = getItemId();
@@ -137,14 +140,25 @@ export function GenericForm<TView extends BasicTypeForGeneric, TCreate, TUpdate>
         hide: detailsSchema.properties[key].hide
       };
     });
-
-  const [values, setValues] = useState<DynamicValues>(() => {
+  const initValues = () => {
     const initValues: DynamicValues = {};
-    detailsFields.forEach((field) => {
-      initValues[field.name] = "";
-    });
+    for (const field of detailsFields) {
+      switch (field.type) {
+      case "integer":
+        initValues[field.name] = 0;
+        break;
+      case "number":
+        initValues[field.name] = 0;
+        break;
+      default:
+        initValues[field.name] = "";
+        break;
+      }
+    }
     return initValues;
-  });
+  };
+
+  const [values, setValues] = useState<DynamicValues>(initValues);
 
   useEffect(() => {
     const abortController = new AbortController();
@@ -158,11 +172,7 @@ export function GenericForm<TView extends BasicTypeForGeneric, TCreate, TUpdate>
         }
       });
     } else {
-      const initValues: DynamicValues = {};
-      detailsFields.forEach((field) => {
-        initValues[field.name] = "";
-      });
-      setValues({...initValues});
+      setValues(initValues);
     }
     return () => {
       abortController.abort("cancelled");
@@ -186,33 +196,17 @@ export function GenericForm<TView extends BasicTypeForGeneric, TCreate, TUpdate>
         }
       });
 
-      try {
-        if (itemId) {
-          if (!validationResult || !validationResult.errors) {
-            const {data} = await updateItemFn(itemId, saveData, {});
-            setValues((values) => ({...values, ...data}));
-            onSaved && onSaved(data);
-          }
-        } else {
-          if (!validationResult || !validationResult.errors) {
-            const {data} = await createItemFn(saveData, {});
-            setValues((values) => ({...values, ...data}));
-            onSaved && onSaved(data);
-          }
+      if (itemId) {
+        if (!validationResult || !validationResult.errors) {
+          const {data} = await updateItemFn(itemId, saveData, {});
+          setValues((values) => ({...values, ...data}));
+          onSaved && onSaved(data);
         }
-      } catch (error) {
-        if (error instanceof z.ZodError) {
-          const issues = [];
-          for (const issue of error.errors) {
-            const propertyName = detailsSchema.properties[issue.path[0]].title
-              || camelCaseToTitleCase(issue.path[0].toString());
-            issues.push(`${propertyName}: ${issue.message}`);
-          }
-          notificationsService
-            .errorWithContent(<div>{issues.map((issue, index) => <div
-              key={index}>{issue}</div>)}</div>);
-        } else {
-          throw error;
+      } else {
+        if (!validationResult || !validationResult.errors) {
+          const {data} = await createItemFn(saveData, {});
+          setValues((values) => ({...values, ...data}));
+          onSaved && onSaved(data);
         }
       }
     });
@@ -248,6 +242,25 @@ export function GenericForm<TView extends BasicTypeForGeneric, TCreate, TUpdate>
     };
     switch (field.type) {
     case "integer":
+      if (customDictionaries && customDictionaries[field.name]) {
+        const customDictionary = customDictionaries[field.name];
+        const dictItems = customDictionary?.items || [];
+        return DictionaryEdit({
+          ...commonProps,
+          label: customDictionary?.label || field.label,
+          example: undefined,
+          value: dictItems.find((item) => item.value === values[field.name]) || null,
+          valueOptions: dictItems,
+          onChangeValue: (newValue: DictItem | null) => {
+            setValues((prevValues) => ({
+              ...prevValues,
+              [field.name]: newValue ? newValue.value : null,
+            }));
+            customDictionary?.onSelect
+            && customDictionary?.onSelect(newValue ? newValue.value : null);
+          }
+        });
+      }
       return NumberEdit({
         ...commonProps,
       });

@@ -33,11 +33,8 @@ import {
   ContentEditValidationScheme,
   ContentEditAvailableLanguages,
   ContentEditAvailableTypes,
-  ContentEditAvailableTags,
-  ContentEditAvailableCategories,
   ContentEditDefaultValues,
   ContentEditMaximumImageSize,
-  ContentEditAvailableAuthors,
 } from "./validation";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 import { Automapper } from "@lib/automapper";
@@ -419,25 +416,17 @@ export const ContentEdit = (props: ContentEditProps) => {
                   ></TextField>
                 </Grid>
                 <Grid xs={6} sm={6} item>
-                  <Autocomplete
-                    freeSolo
-                    autoSelect
+                  <TextField
                     disabled={props.readonly}
                     value={formik.values.author}
-                    onChange={(ev, val) => autoCompleteValueUpdate<string | null>("author", val)}
-                    options={ContentEditAvailableAuthors}
-                    renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        label="Author"
-                        name="author"
-                        placeholder="Select Author"
-                        variant="outlined"
-                        error={formik.touched.author && Boolean(formik.errors.author)}
-                        helperText={formik.touched.author && formik.errors.author}
-                        fullWidth
-                      />
-                    )}
+                    onChange={valueUpdate}
+                    label="Author"
+                    name="author"
+                    placeholder="Select Author"
+                    variant="outlined"
+                    error={formik.touched.author && Boolean(formik.errors.author)}
+                    helperText={formik.touched.author && formik.errors.author}
+                    fullWidth
                   />
                 </Grid>
                 <Grid xs={6} sm={6} item>
