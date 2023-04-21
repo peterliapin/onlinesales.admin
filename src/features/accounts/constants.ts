@@ -19,3 +19,5 @@ export const accountFormBreadcrumbLinks: BreadcrumbLink[] = [
 ];
 
 export const accountListCurrentBreadcrumb = "Accounts";
+
+export const accountGridSettingsStorageKey = "accountDataListSettings";

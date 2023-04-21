@@ -4,21 +4,45 @@ import {
   defaultFilterOrderColumn,
   defaultFilterOrderDirection,
   modelName,
-  domainListPageBreadcrumb,
   searchLabel,
+  domainGridSettingsStorageKey,
+  domainListPageBreadcrumb,
 } from "./constants";
-import { DataList } from "@components/data-list-old";
+import { DataList } from "@components/data-list";
 import { GridColDef } from "@mui/x-data-grid";
-import { CoreModule } from "lib/router";
+import { CoreModule, getAddFormRoute } from "lib/router";
 import { dataListBreadcrumbLinks } from "utils/constants";
+import useLocalStorage from "use-local-storage";
+import { dataListSettings } from "utils/types";
+import { Fragment, useRef, useState } from "react";
+import { getModelByName } from "@lib/network/swagger-models";
+import { Result } from "@wavepoint/react-spreadsheet-import/types/types";
+import { SearchBar } from "@components/search-bar";
+import { Button } from "@mui/material";
+import { Add, Download, Upload } from "@mui/icons-material";
+import { CsvImport } from "@components/spreadsheet-import";
+import { CsvExport } from "@components/export";
+import { GhostLink } from "@components/ghost-link";
+import { ModuleWrapper } from "@components/module-wrapper";
 
 export const Domains = () => {
   const { client } = useRequestContext();
+  const [gridSettings, setGridSettings] = useLocalStorage<dataListSettings | undefined>(
+    domainGridSettingsStorageKey,
+    undefined
+  );
 
-  const getDomainList = async (query: string) => {
+  const [searchTerm, setSearchTerm] = useState(gridSettings?.searchTerm ?? "");
+  const [openImport, setOpenImport] = useState(false);
+  const [openExport, setOpenExport] = useState(false);
+  const [importFieldsObject, setImportFieldsObject] = useState<any>();
+  const dataExportQuery = useRef("");
+
+  const getDomainList = async (mainQuery: string, exportQuery?: string) => {
     try {
+      dataExportQuery.current = exportQuery || "";
       const result = await client.api.domainsList({
-        query: query,
+        query: mainQuery,
       });
       return result;
     } catch (error) {
@@ -27,16 +51,30 @@ export const Domains = () => {
     }
   };
 
-  const exportDomainsAsync = async (query: string) => {
+  const exportDomainsAsync = async () => {
     const response = await client.api.domainsExportList({
-      query: query,
+      query: dataExportQuery.current,
     });
 
     return response.text();
   };
 
-  const handleDomainImport = async (data: DomainImportDto[]) => {
-    await client.api.domainsImportCreate(data);
+  const handleImportOpen = () => {
+    !importFieldsObject && setImportFieldsObject(getModelByName(modelName));
+    setOpenImport(true);
+  };
+
+  const handleImportClose = () => {
+    setOpenImport(false);
+  };
+
+  const handleExportOpen = () => {
+    openExport ? setOpenExport(false) : setOpenExport(true);
+  };
+
+  const handleFileUpload = async (data: Result<string>) => {
+    const importDtoCollection: any[] = data.validData;
+    await client.api.domainsImportCreate(importDtoCollection);
   };
 
   const columns: GridColDef<DomainDetailsDto>[] = [
@@ -82,26 +120,71 @@ export const Domains = () => {
     },
   ];
 
+  const searchBar = (
+    <SearchBar
+      setSearchTermOnChange={setSearchTerm}
+      searchBoxLabel={searchLabel}
+      initialValue={gridSettings?.searchTerm ?? ""}
+    ></SearchBar>
+  );
+
+  const extraActions = [
+    <Fragment key={"import-action"}>
+      <Button key={"import-btn"} startIcon={<Upload />} onClick={handleImportOpen}>
+        Import
+      </Button>
+      {importFieldsObject && (
+        <CsvImport
+          isOpen={openImport}
+          onClose={handleImportClose}
+          onUpload={handleFileUpload}
+          object={importFieldsObject}
+          endRoute={CoreModule.domains}
+        ></CsvImport>
+      )}
+    </Fragment>,
+    <Fragment key={"export-action"}>
+      <Button key={"export-btn"} startIcon={<Download />} onClick={handleExportOpen}>
+        Export
+      </Button>
+      {openExport && (
+        <CsvExport
+          exportAsync={exportDomainsAsync}
+          closeExport={handleExportOpen}
+          fileName={"domains"}
+        ></CsvExport>
+      )}
+    </Fragment>,
+  ];
+
+  const addButton = (
+    <Button variant="contained" to={getAddFormRoute()} component={GhostLink} startIcon={<Add />}>
+      Add domain
+    </Button>
+  );
+
   return (
-    <DataList
-      modelName={modelName}
-      columns={columns}
-      dataListBreadcrumbLinks={dataListBreadcrumbLinks}
+    <ModuleWrapper
+      breadcrumbs={dataListBreadcrumbLinks}
       currentBreadcrumb={domainListPageBreadcrumb}
-      defaultFilterOrderColumn={defaultFilterOrderColumn}
-      defaultFilterOrderDirection={defaultFilterOrderDirection}
-      searchBarLabel={searchLabel}
-      endRoute={CoreModule.orders}
-      getModelDataList={getDomainList}
-      exportAsync={exportDomainsAsync}
-      exportFileName="domains"
-      dataImportCreate={handleDomainImport}
-      initialGridState={{
-        columns: { columnVisibilityModel: { dnsCheck: false, free: false } },
-        sorting: {
-          sortModel: [{ field: defaultFilterOrderColumn, sort: defaultFilterOrderDirection }],
-        },
-      }}
-    ></DataList>
+      leftContainerChildren={searchBar}
+      extraActionsContainerChildren={extraActions}
+      addButtonContainerChildren={addButton}
+    >
+      <DataList
+        columns={columns}
+        gridSettingsStorageKey={domainGridSettingsStorageKey}
+        defaultFilterOrderColumn={defaultFilterOrderColumn}
+        defaultFilterOrderDirection={defaultFilterOrderDirection}
+        searchText={searchTerm}
+        getModelDataList={getDomainList}
+        initialGridState={{
+          columns: { columnVisibilityModel: { dnsCheck: false, free: false } },
+          sorting: {
+            sortModel: [{ field: defaultFilterOrderColumn, sort: defaultFilterOrderDirection }],
+          },
+        }}
+      ></DataList>
+    </ModuleWrapper>
   );
 };
