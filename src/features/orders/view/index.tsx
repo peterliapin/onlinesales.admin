@@ -153,14 +153,7 @@ export const OrderViewBase = () => {
                   rowsPerPageOptions={undefined}
                   pageNumber={undefined}
                   dataViewMode="client"
-                  setSortColumn={undefined}
-                  setSortOrder={undefined}
-                  setPageSize={undefined}
-                  setSkipLimit={undefined}
-                  setFilterField={undefined}
-                  setFilterFieldValue={undefined}
-                  setPageNumber={undefined}
-                  handleColumnVisibilityModel={undefined}
+                  setFilterState={undefined}
                   initialState={undefined}
                   disableColumnFilter={true}
                   disablePagination={true}

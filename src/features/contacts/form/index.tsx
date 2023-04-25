@@ -1,27 +1,23 @@
 import { SyntheticEvent, useEffect, useState } from "react";
 import {
   Autocomplete,
-  Backdrop,
   Button,
   Card,
   CardContent,
   CircularProgress,
   Grid,
   TextField,
+  Typography,
 } from "@mui/material";
 import { ContactDetailsDto } from "lib/network/swagger-client";
-import {
-  ModuleContainer,
-  ModuleHeaderContainer,
-  ModuleHeaderSubtitleContainer,
-} from "components/module";
 import { CoreModule } from "lib/router";
-import { BreadCrumbNavigation } from "components/breadcrumbs";
 import { contactAddHeader, contactEditHeader, contactFormBreadcrumbLinks } from "../constants";
 import { getCountryList, useCoreModuleNavigation } from "utils/helper";
 import { isValidEmail, isValidNumber } from "utils/validators";
 import { useRequestContext } from "@providers/request-provider";
 import { useNotificationsService } from "@hooks";
+import { ModuleWrapper } from "@components/module-wrapper";
+import { useModuleWrapperContext } from "@providers/module-wrapper-provider";
 
 interface ContactFormProps {
   contact: ContactDetailsDto;
@@ -39,10 +35,10 @@ export const ContactForm = ({ contact, updateContact, handleSave, isEdit }: Cont
   const { notificationsService } = useNotificationsService();
   const context = useRequestContext();
   const handleNavigation = useCoreModuleNavigation();
+  const { setSaving } = useModuleWrapperContext();
 
   const [isInvalidEmail, setIsInvalidEmail] = useState(false);
   const [isInvalidNumber, setIsInvalidNumber] = useState(false);
-  const [isSaving, setIsSaving] = useState(false);
   const [countryList, setCountryList] = useState<Country[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -77,27 +73,25 @@ export const ContactForm = ({ contact, updateContact, handleSave, isEdit }: Cont
     }
   };
 
-  const validateAndSave = async () => {
-    setIsInvalidEmail(false);
-    setIsInvalidNumber(false);
+  const validateAndSave = () =>
+    setSaving(async () => {
+      setIsInvalidEmail(false);
+      setIsInvalidNumber(false);
 
-    if (!isValidEmail(contact.email)) {
-      setIsInvalidEmail(true);
-    } else if (!isValidNumber(contact.timezone)) {
-      setIsInvalidNumber(true);
-    } else {
-      try {
-        setIsSaving(true);
-        await handleSave();
-        handleSuccess();
-      } catch (e) {
-        console.log(e);
-        notificationsService.error("Server error occurred.");
-      } finally {
-        setIsSaving(false);
+      if (!isValidEmail(contact.email)) {
+        setIsInvalidEmail(true);
+      } else if (!isValidNumber(contact.timezone)) {
+        setIsInvalidNumber(true);
+      } else {
+        try {
+          handleSave();
+          handleSuccess();
+        } catch (e) {
+          console.log(e);
+          notificationsService.error("Server error occurred.");
+        }
       }
-    }
-  };
+    });
 
   const handleSuccess = () => {
     notificationsService.success(`Contact ${isEdit ? "updated" : "added"} successfully.`);
@@ -108,16 +102,25 @@ export const ContactForm = ({ contact, updateContact, handleSave, isEdit }: Cont
     handleNavigation(CoreModule.contacts);
   };
 
+  const savingIndicatorElement = (
+    <>
+      <Grid container item spacing={3} sm="auto" xs="auto">
+        <Grid item>
+          <CircularProgress size={14} />
+        </Grid>
+        <Grid item>
+          <Typography>Saving...</Typography>
+        </Grid>
+      </Grid>
+    </>
+  );
+
   return (
-    <ModuleContainer>
-      <ModuleHeaderContainer>
-        <ModuleHeaderSubtitleContainer>
-          <BreadCrumbNavigation
-            links={contactFormBreadcrumbLinks}
-            current={header}
-          ></BreadCrumbNavigation>
-        </ModuleHeaderSubtitleContainer>
-      </ModuleHeaderContainer>
+    <ModuleWrapper
+      breadcrumbs={contactFormBreadcrumbLinks}
+      currentBreadcrumb={header}
+      saveIndicatorElement={savingIndicatorElement}
+    >
       <Card>
         <CardContent>
           <Grid container spacing={3}>
@@ -286,9 +289,6 @@ export const ContactForm = ({ contact, updateContact, handleSave, isEdit }: Cont
           </Grid>
         </CardContent>
       </Card>
-      <Backdrop open={isSaving} style={{ zIndex: 999 }}>
-        <CircularProgress color="inherit" />
-      </Backdrop>
-    </ModuleContainer>
+    </ModuleWrapper>
   );
 };

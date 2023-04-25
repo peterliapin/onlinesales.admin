@@ -16,3 +16,5 @@ export const domainFormBreadcrumbLinks: BreadcrumbLink[] = [
   ...dataListBreadcrumbLinks,
   { linkText: domainListPageBreadcrumb, toRoute: getCoreModuleRoute(CoreModule.domains) },
 ];
+
+export const domainGridSettingsStorageKey = "domainDataListSettings";

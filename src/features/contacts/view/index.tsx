@@ -1,15 +1,9 @@
 import { useState } from "react";
-import { Tab, Tabs, Typography } from "@mui/material";
-import {
-  ModuleContainer,
-  ModuleHeaderContainer,
-  ModuleHeaderSubtitleContainer,
-  ModuleHeaderTitleContainer,
-} from "components/module";
+import { Tab, Tabs } from "@mui/material";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { ContactDetailsDto } from "lib/network/swagger-client";
-import { contactFormBreadcrumbLinks, contactViewHeader } from "../constants";
-import { BreadCrumbNavigation } from "components/breadcrumbs";
+import { contactFormBreadcrumbLinks } from "../constants";
+import { ModuleWrapper } from "@components/module-wrapper";
 
 export const ContactBase = () => {
   const { state } = useLocation();
@@ -25,24 +19,13 @@ export const ContactBase = () => {
   };
 
   return (
-    <ModuleContainer>
-      <ModuleHeaderContainer>
-        <ModuleHeaderTitleContainer>
-          <Typography variant="h3">{contactFullName}</Typography>
-        </ModuleHeaderTitleContainer>
-        <ModuleHeaderSubtitleContainer>
-          <BreadCrumbNavigation
-            links={contactFormBreadcrumbLinks}
-            current={contactViewHeader}
-          ></BreadCrumbNavigation>
-        </ModuleHeaderSubtitleContainer>
-      </ModuleHeaderContainer>
-      <Tabs value={tabValue} onChange={handleChange} aria-label="simple tabs example">
+    <ModuleWrapper breadcrumbs={contactFormBreadcrumbLinks} currentBreadcrumb={contactFullName}>
+      <Tabs value={tabValue} onChange={handleChange}>
         <Tab value="details" label="Details" />
         <Tab value="invoices" label="Invoices" />
         <Tab value="logs" label="Logs" />
       </Tabs>
       <Outlet />
-    </ModuleContainer>
+    </ModuleWrapper>
   );
 };

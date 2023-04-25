@@ -16,3 +16,5 @@ export const orderFormBreadcrumbLinks: BreadcrumbLink[] = [
   ...dataListBreadcrumbLinks,
   { linkText: orderListPageBreadcrumb, toRoute: getCoreModuleRoute(CoreModule.orders) },
 ];
+
+export const orderGridSettingsStorageKey = "orderDataListSettings";
