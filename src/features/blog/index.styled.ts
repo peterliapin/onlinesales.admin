@@ -69,3 +69,9 @@ export const ContentListWrapper = styled("div")`
   justify-content: center;
   background-color: #f8f8f0;
 `;
+
+export const DummyDiv = styled("div")`
+  width: 100%;
+  height: 100%;
+  background-color: #F4F5F7;
+`;
