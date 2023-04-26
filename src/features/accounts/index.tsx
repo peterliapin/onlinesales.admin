@@ -96,16 +96,21 @@ export const Accounts = () => {
       field: "state",
       headerName: "State",
       flex: 2,
+      type: "string",
     },
     {
       field: "countryCode",
       headerName: "Country Code",
       flex: 2,
+      type: "number",
+      align: "left",
+      headerAlign: "left",
     },
     {
       field: "cityName",
       headerName: "City",
       flex: 2,
+      type: "string",
     },
     {
       field: "createdAt",
@@ -116,11 +121,13 @@ export const Accounts = () => {
         const formattedDate = new Date(createdAt).toLocaleDateString();
         return formattedDate;
       },
+      type: "date",
     },
     {
       field: "continentCode",
       headerName: "Continent Code",
       flex: 2,
+      type: "number",
     },
   ];
 

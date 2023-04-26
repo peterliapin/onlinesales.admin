@@ -13,6 +13,7 @@ export type dataListSettings = {
   sortOrder: string;
   whereField: string;
   whereFieldValue: string;
+  whereOperator?: string;
   pageNumber: number;
   columnVisibilityModel: GridColumnVisibilityModel | undefined;
 };
@@ -23,6 +24,7 @@ export interface GridDataFilterState {
   sortOrder?: string;
   whereField?: string;
   whereFieldValue?: string;
+  whereOperator?: string;
   skipLimit?: number;
   pageNumber?: number;
   columnVisibilityModel?: GridColumnVisibilityModel | undefined;

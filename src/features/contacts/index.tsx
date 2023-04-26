@@ -83,6 +83,7 @@ export const Contacts = () => {
       field: "firstName",
       headerName: "Name",
       flex: 4,
+      type: "string",
       renderCell: ({ row }) => (
         <ContactNameListItem>
           <ListItemAvatar>
@@ -99,11 +100,13 @@ export const Contacts = () => {
       field: "lastName",
       headerName: "Last Name",
       flex: 2,
+      type: "string",
     },
     {
       field: "email",
       headerName: "Email",
       flex: 3,
+      type: "string",
     },
     {
       field: "address1",
@@ -114,11 +117,13 @@ export const Contacts = () => {
       field: "phone",
       headerName: "Phone",
       flex: 3,
+      type: "string",
     },
     {
       field: "createdAt",
       headerName: "Created At",
       flex: 2,
+      type: "date",
       valueGetter: (params) => {
         const createdAt = params.value as string;
         const formattedDate = new Date(createdAt).toLocaleDateString();
@@ -129,6 +134,7 @@ export const Contacts = () => {
       field: "language",
       headerName: "Language",
       flex: 1,
+      type: "string",
     },
   ];
 
