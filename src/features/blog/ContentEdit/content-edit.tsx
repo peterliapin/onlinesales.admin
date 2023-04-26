@@ -95,8 +95,9 @@ export const ContentEdit = (props: ContentEditProps) => {
     } else {
       (reference.latestAutoSave = new Date()), (reference.savedData = value);
     }
+    setEditorLocalStorage(localStorageSnapshot);
     setSaving(async () => {
-      setEditorLocalStorage(localStorageSnapshot);
+      await new Promise<void>(resolve => setTimeout(() => resolve(), 3000));
     });
   }, 3000); ///TODO: User Settings
 
@@ -276,16 +277,14 @@ export const ContentEdit = (props: ContentEditProps) => {
   }, [formik.values]);
 
   const savingIndicatorElement = (
-    <>
-      <Grid container item spacing={3} sm="auto" xs="auto">
-        <Grid item>
-          <CircularProgress size={14} />
-        </Grid>
-        <Grid item>
-          <Typography>Saving...</Typography>
-        </Grid>
+    <Grid container spacing={3} sm="auto" xs="auto">
+      <Grid item>
+        <CircularProgress size={14} />
       </Grid>
-    </>
+      <Grid item>
+        <Typography>Saving...</Typography>
+      </Grid>
+    </Grid>
   );
 
   return (
