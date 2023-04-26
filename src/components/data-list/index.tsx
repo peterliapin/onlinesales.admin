@@ -139,7 +139,7 @@ export const DataList = ({
       whereFieldValue: filterState.whereFieldValue!,
       whereOperator: filterState.whereOperator!,
       pageNumber: filterState.pageNumber!,
-      columnVisibilityModel: initialGridState?.columns?.columnVisibilityModel,
+      columnVisibilityModel: filterState.columnVisibilityModel!,
     });
   };
 
