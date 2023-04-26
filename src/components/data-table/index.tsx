@@ -86,19 +86,6 @@ export const DataTableGrid = ({
     navigate(getViewFormRoute(row.id!), { state: row });
   };
 
-  const filterAdjustedColumns = useMemo(
-    () =>
-      columns.map((col) => {
-        return {
-          ...col,
-          filterOperators: getGridStringOperators().filter(
-            (operator) => operator.value === "contains"
-          ),
-        };
-      }),
-    [columns]
-  );
-
   const handlePageChange = (page: number) => {
     if (setFilterState) {
       setFilterState({
@@ -130,14 +117,17 @@ export const DataTableGrid = ({
   const handleFilterChange = (filterModel: GridFilterModel) => {
     if (filterModel.items.length === 0) return;
 
-    const column = filterModel.items[0].columnField;
-    const columnValue = filterModel.items[0].value;
+    const filterModelItem = filterModel.items[0];
+    const column = filterModelItem.columnField;
+    const columnValue = filterModelItem.value;
+    const operator = filterModelItem.operatorValue;
 
     if (column) {
       if (setFilterState) {
         setFilterState({
           whereFieldValue: columnValue ? columnValue : "",
           whereField: column,
+          whereOperator: operator,
         });
       }
     }
@@ -159,9 +149,7 @@ export const DataTableGrid = ({
     }
   };
 
-  const gridFinalizedColumns = showActionsColumn
-    ? filterAdjustedColumns.concat(actionsColumn)
-    : filterAdjustedColumns;
+  const gridFinalizedColumns = showActionsColumn ? columns.concat(actionsColumn) : columns;
 
   return (
     <DataTableContainer>

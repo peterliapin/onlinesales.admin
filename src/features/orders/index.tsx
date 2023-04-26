@@ -82,41 +82,55 @@ export const Orders = () => {
       field: "orderNumber",
       headerName: "Order Number",
       flex: 2,
+      type: "string",
     },
     {
       field: "refNo",
       headerName: "Reference Number",
       flex: 2,
+      type: "string",
     },
     {
       field: "affiliateName",
       headerName: "Affiliate",
       flex: 2,
+      type: "string",
     },
     {
       field: "quantity",
       headerName: "Quantity",
       flex: 2,
+      type: "number",
+      align: "left",
+      headerAlign: "left",
     },
     {
       field: "total",
       headerName: "Total",
       flex: 2,
+      type: "number",
+      align: "left",
+      headerAlign: "left",
     },
     {
       field: "exchangeRate",
       headerName: "Exchange Rate",
       flex: 2,
+      type: "number",
+      align: "left",
+      headerAlign: "left",
     },
     {
       field: "currency",
       headerName: "Currency",
       flex: 2,
+      type: "string",
     },
     {
       field: "createdAt",
       headerName: "Created At",
       flex: 2,
+      type: "date",
       valueGetter: (params) => {
         const createdAt = params.value as string;
         const formattedDate = new Date(createdAt).toLocaleDateString();
