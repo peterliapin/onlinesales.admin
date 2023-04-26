@@ -1,11 +1,5 @@
 import { useEffect, useState } from "react";
-import { BreadCrumbNavigation } from "@components/breadcrumbs";
 import { DataTableGrid } from "@components/data-table";
-import {
-  ModuleContainer,
-  ModuleHeaderContainer,
-  ModuleHeaderSubtitleContainer,
-} from "@components/module";
 import { ContactCardHeader } from "@features/contacts/index.styled";
 import { useNotificationsService } from "@hooks";
 import {
@@ -14,14 +8,16 @@ import {
   OrderItemDetailsDto,
 } from "@lib/network/swagger-client";
 import { getWhereFilterQuery } from "@lib/query";
-import { viewFormRoute } from "@lib/router";
-import { Card, CardContent, Grid } from "@mui/material";
+import { CoreModule, getCoreModuleRoute, getViewFormRoute, viewFormRoute } from "@lib/router";
+import { Card, CardContent, Grid, Link } from "@mui/material";
 import { GridColDef } from "@mui/x-data-grid";
 import { useRequestContext } from "@providers/request-provider";
 import { DataView } from "components/data-view";
 import { useRouteParams } from "typesafe-routes";
 import { getCountryByCode, getFormattedDateTime } from "utils/helper";
 import { orderFormBreadcrumbLinks } from "../constants";
+import { ModuleWrapper } from "@components/module-wrapper";
+import { GhostLink } from "@components/ghost-link";
 
 export const OrderViewBase = () => {
   const context = useRequestContext();
@@ -88,7 +84,16 @@ export const OrderViewBase = () => {
 
   const nameAndAddress = (
     <div>
-      <div>{`${contact?.firstName || ""} ${contact?.lastName || ""}`}</div>
+      <div>
+        <Link
+          to={`${getCoreModuleRoute(CoreModule.contacts)}/${getViewFormRoute(contact!.id!)}`}
+          state={contact}
+          component={GhostLink}
+          underline="hover"
+        >
+          {`${contact?.firstName || ""} ${contact?.lastName || ""}`}
+        </Link>
+      </div>
       <div>{contact?.address1}</div>
       <div>{contact?.cityName}</div>
       <div>{contactCountry}</div>
@@ -128,15 +133,7 @@ export const OrderViewBase = () => {
   ];
 
   return (
-    <ModuleContainer>
-      <ModuleHeaderContainer>
-        <ModuleHeaderSubtitleContainer>
-          <BreadCrumbNavigation
-            links={orderFormBreadcrumbLinks}
-            current={"View Order"}
-          ></BreadCrumbNavigation>
-        </ModuleHeaderSubtitleContainer>
-      </ModuleHeaderContainer>
+    <ModuleWrapper breadcrumbs={orderFormBreadcrumbLinks} currentBreadcrumb="View Order">
       <Grid container spacing={3}>
         {order && <DataView header="Order Info" rows={orderViewData}></DataView>}
         <Grid xs={12} sm={6} item>
@@ -166,6 +163,6 @@ export const OrderViewBase = () => {
           </Card>
         </Grid>
       </Grid>
-    </ModuleContainer>
+    </ModuleWrapper>
   );
 };
