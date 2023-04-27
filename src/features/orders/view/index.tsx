@@ -82,26 +82,31 @@ export const OrderViewBase = () => {
     }
   };
 
-  const nameAndAddress = (
+  const contactRef =
+    contact?.firstName || contact?.lastName
+      ? `${contact.firstName || ""} ${contact.lastName || ""}`
+      : contact?.email;
+
+  const nameAndAddress = contact && (
     <div>
       <div>
         <Link
-          to={`${getCoreModuleRoute(CoreModule.contacts)}/${getViewFormRoute(contact!.id!)}`}
+          to={`${getCoreModuleRoute(CoreModule.contacts)}/${getViewFormRoute(contact.id!)}`}
           state={contact}
           component={GhostLink}
           underline="hover"
         >
-          {`${contact?.firstName || ""} ${contact?.lastName || ""}`}
+          {contactRef}
         </Link>
       </div>
-      <div>{contact?.address1}</div>
-      <div>{contact?.cityName}</div>
-      <div>{contactCountry}</div>
+      <div>{contact.address1 || ""}</div>
+      <div>{contact.cityName || ""}</div>
+      <div>{contactCountry || ""}</div>
     </div>
   );
 
   const orderViewData = [
-    { label: "Customer", value: nameAndAddress },
+    { label: "Customer", value: nameAndAddress || "" },
     { label: "Id", value: order?.orderNumber || "" },
     { label: "Reference no", value: order?.refNo || "" },
     { label: "Order date", value: order?.createdAt ? getFormattedDateTime(order?.createdAt) : "" },
