@@ -12,6 +12,7 @@ import { DataListContainer } from "./index.styled";
 import { DataTableGrid } from "@components/data-table";
 import useLocalStorage from "use-local-storage";
 import { dataListSettings, GridDataFilterState } from "utils/types";
+import { useNotificationsService } from "@hooks";
 
 type dataListProps = {
   columns: GridColDef<any>[];
@@ -32,6 +33,7 @@ export const DataList = ({
   initialGridState,
   getModelDataList,
 }: dataListProps) => {
+  const { notificationsService } = useNotificationsService();
   const [modelData, setModelData] = useState<any[] | undefined>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [totalRowCount, setTotalRowCount] = useState(0);
@@ -42,6 +44,7 @@ export const DataList = ({
     sortOrder: defaultFilterOrderDirection,
     whereField: "",
     whereFieldValue: "",
+    whereOperator: "",
     skipLimit: 0,
     pageNumber: 0,
     columnVisibilityModel: initialGridState?.columns?.columnVisibilityModel,
@@ -52,7 +55,8 @@ export const DataList = ({
 
   const whereFilterQuery = getWhereFilterQuery(
     filterState.whereField!,
-    filterState.whereFieldValue!
+    filterState.whereFieldValue!,
+    filterState.whereOperator!
   );
   const basicFilterQuery = getBasicFilterQuery(
     filterState.filterLimit!,
@@ -91,6 +95,7 @@ export const DataList = ({
         sortOrder,
         whereField,
         whereFieldValue,
+        whereOperator,
         pageNumber,
         columnVisibilityModel,
       } = gridSettings;
@@ -101,6 +106,7 @@ export const DataList = ({
         sortOrder: sortOrder,
         whereField: whereField,
         whereFieldValue: whereFieldValue,
+        whereOperator: whereOperator,
         pageNumber: pageNumber,
         columnVisibilityModel: columnVisibilityModel,
       });
@@ -118,7 +124,7 @@ export const DataList = ({
 
   useEffect(() => {
     if (!modelData) {
-      throw new Error("Server error: Data cannot be retrieved from server.");
+      notificationsService.error("Server error: Data cannot be retrieved from server.");
     }
   }, [modelData]);
 
@@ -131,8 +137,9 @@ export const DataList = ({
       sortOrder: filterState.sortOrder!,
       whereField: filterState.whereField!,
       whereFieldValue: filterState.whereFieldValue!,
+      whereOperator: filterState.whereOperator!,
       pageNumber: filterState.pageNumber!,
-      columnVisibilityModel: initialGridState?.columns?.columnVisibilityModel,
+      columnVisibilityModel: filterState.columnVisibilityModel!,
     });
   };
 
@@ -194,7 +201,7 @@ export const DataList = ({
     <DataListContainer>
       <DataTableGrid
         columns={columns}
-        data={modelData}
+        data={modelData || []}
         autoHeight={false}
         pageSize={filterState.filterLimit}
         totalRowCount={totalRowCount}

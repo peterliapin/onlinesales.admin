@@ -84,20 +84,20 @@ export const Domains = () => {
       field: "name",
       headerName: "Name",
       flex: 4,
+      type: "string",
       renderCell: ({ row }) => (
         <DomainListItem>
           <ListItemAvatar>
-            <Avatar sizes="64" src={
-              "http://www.google.com/s2/favicons?domain=" + row.name + "&sz=32"
-            } sx={{
-              width: 32,
-              height: 32,
-            }}></Avatar>
+            <Avatar
+              sizes="64"
+              src={"http://www.google.com/s2/favicons?domain=" + row.name + "&sz=32"}
+              sx={{
+                width: 32,
+                height: 32,
+              }}
+            ></Avatar>
           </ListItemAvatar>
-          <DomainListItemText
-            primary={`${row.name || ""}`}
-            secondary={row.url}
-          />
+          <DomainListItemText primary={`${row.name || ""}`} secondary={row.url} />
         </DomainListItem>
       ),
     },
@@ -105,31 +105,41 @@ export const Domains = () => {
       field: "title",
       headerName: "Title",
       flex: 2,
+      type: "string,",
     },
     {
       field: "description",
       headerName: "Description",
       flex: 2,
+      type: "string",
     },
     {
       field: "url",
       headerName: "Url",
       flex: 2,
+      type: "string",
     },
     {
       field: "dnsCheck",
       headerName: "Dns Check",
       flex: 2,
+      type: "boolean",
+      align: "left",
+      headerAlign: "left",
     },
     {
       field: "free",
       headerName: "Free",
       flex: 2,
+      type: "boolean",
+      align: "left",
+      headerAlign: "left",
     },
     {
       field: "createdAt",
       headerName: "Created At",
       flex: 2,
+      type: "date",
       valueGetter: (params) => {
         const createdAt = params.value as string;
         const formattedDate = new Date(createdAt).toLocaleDateString();
