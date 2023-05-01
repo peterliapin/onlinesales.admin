@@ -72,7 +72,7 @@ export const OrderViewBase = () => {
   const getOrderItems = async (orderId: number) => {
     try {
       const { data } = await client.api.orderItemsList({
-        query: getWhereFilterQuery("orderId", orderId.toString()),
+        query: getWhereFilterQuery("orderId", orderId.toString(), "equals"),
       });
       if (data.length > 0) {
         return data;
