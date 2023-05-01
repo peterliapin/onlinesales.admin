@@ -52,6 +52,7 @@ import { blogFormBreadcrumbLinks } from "@features/blog/constants";
 import { ModuleWrapper } from "@components/module-wrapper";
 import { RemoteAutocomplete } from "@components/RemoteAutocomplete";
 import { RemoteValues } from "@components/RemoteAutocomplete/types";
+import { SavingBar } from "@components/SavingBar";
 
 interface ContentEditProps {
   readonly?: boolean;
@@ -276,22 +277,11 @@ export const ContentEdit = (props: ContentEditProps) => {
     autoSave(formik.values);
   }, [formik.values]);
 
-  const savingIndicatorElement = (
-    <Grid container spacing={3} sm="auto" xs="auto">
-      <Grid item>
-        <CircularProgress size={14} />
-      </Grid>
-      <Grid item>
-        <Typography>Saving...</Typography>
-      </Grid>
-    </Grid>
-  );
-
   return (
     <ModuleWrapper
       breadcrumbs={blogFormBreadcrumbLinks}
       currentBreadcrumb={formik.values.title}
-      saveIndicatorElement={savingIndicatorElement}
+      saveIndicatorElement={<SavingBar/>}
     >
       <RestoreDataModal
         isOpen={restoreDataState === ContentEditRestoreState.Requested}
