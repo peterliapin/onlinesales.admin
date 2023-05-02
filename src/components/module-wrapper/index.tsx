@@ -19,6 +19,7 @@ import {
 } from "./index.styled";
 import { useModuleWrapperContext } from "@providers/module-wrapper-provider";
 import { BreadcrumbLink } from "../../utils/types";
+import { Grid } from "@mui/material";
 
 export interface ModuleWrapperProps extends PropsWithChildren {
   key?: string;
@@ -44,12 +45,21 @@ export const ModuleWrapper = ({
   return (
     <ModuleContainer>
       <ModuleHeaderContainer>
-        <ModuleHeaderSubtitleContainer>
-          <BreadCrumbNavigation
-            links={breadcrumbs}
-            current={currentBreadcrumb}
-          ></BreadCrumbNavigation>
-        </ModuleHeaderSubtitleContainer>
+        <Grid container direction={"row"} justifyContent={"space-between"}>
+          <Grid item>
+            <ModuleHeaderSubtitleContainer>
+              <BreadCrumbNavigation
+                links={breadcrumbs}
+                current={currentBreadcrumb}
+              ></BreadCrumbNavigation>
+            </ModuleHeaderSubtitleContainer>
+          </Grid>
+          {isSaving && saveIndicatorElement && (
+            <Grid item>
+              <SavingIndicatorContainer>{saveIndicatorElement}</SavingIndicatorContainer>
+            </Grid>
+          )}
+        </Grid>
       </ModuleHeaderContainer>
       {(leftContainerChildren || extraActionsContainerChildren || addButtonContainerChildren) && (
         <ActionsContainer>
@@ -68,9 +78,6 @@ export const ModuleWrapper = ({
       )}
       <ModuleContentContainer>
         <ScrollContainer>{children}</ScrollContainer>
-        {isSaving && saveIndicatorElement && (
-          <SavingIndicatorContainer>{saveIndicatorElement}</SavingIndicatorContainer>
-        )}
         {isBusy && (
           <>
             <LoadingIndicatorContainer />

@@ -88,7 +88,7 @@ export const ContentList = () => {
           promises.push((async () => {
             const filterWithPagination = {
               ...filter,
-              "filter[skip]": String(dataList.length),
+              "filter[skip]": String(i),
               "filter[limit]": String(toLoadChunkLen),
             };
             const { data } = await client.api.contentList(filterWithPagination,{
@@ -122,11 +122,12 @@ export const ContentList = () => {
         {contentItems.length > 0 &&
           <AutoSizer>
             {({ height, width }) => {
-              const columnsCount = Math.floor(width! / (345 + PADDING_SIZE));
+              const columnsCount = Math.floor(width! / (345 + (PADDING_SIZE * 2)));
+              const rowsCount = Math.ceil(contentItems.length / columnsCount);
               return (
                 <VirtualizedGrid
                   columnCount={columnsCount}
-                  rowCount={Math.ceil(contentItems.length / columnsCount)}
+                  rowCount={rowsCount}
                   columnWidth={345 + PADDING_SIZE}
                   rowHeight={500 + PADDING_SIZE}
                   height={height!}

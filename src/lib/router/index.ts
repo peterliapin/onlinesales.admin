@@ -9,6 +9,7 @@ export const enum CoreModule {
   orders = "orders",
   domains = "domains",
   unsubscribes = "unsubscribes",
+  users = "users",
 }
 
 const coreModuleParser: Parser<CoreModule> = {

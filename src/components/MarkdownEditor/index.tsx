@@ -1,18 +1,46 @@
-import MDEditor, { ICommand, commands } from "@uiw/react-md-editor";
+import MDEditor, { EditorContext, ICommand, commands } from "@uiw/react-md-editor";
 import { ImageUpload } from "./commands";
 import AppsIcon from "@mui/icons-material/Apps";
-import { MarkdownEditorProps, onFrontmatterErrorChangeFunc } from "./types";
-import { useMemo, useEffect, useState } from "react";
+import { ImageUploadingContext, MarkdownEditorProps, onFrontmatterErrorChangeFunc } from "./types";
+import { useEffect, useState, useContext, createContext } from "react";
 import { MarkdownViewerFunc } from "@components/MarkdownViewer";
 import CodeEditor from "@uiw/react-textarea-code-editor";
 import { validateFrontmatter, ValidateFrontmatterError } from "utils/frontmatter-validator";
+import Dropzone, { Accept, FileRejection } from "react-dropzone";
 import "./styles.css";
+import { useNotificationsService } from "@hooks";
+import { ContentEditMaximumImageSize } from "@features/blog/ContentEdit/validation";
+import { useRequestContext } from "@providers/request-provider";
+import { useUserInfo } from "@providers/user-provider";
+
+const ImageUploadingCtx = createContext<ImageUploadingContext | null>(null);
 
 const EditorViewFunc = (
   value: string,
   onChange: any,
   onErrorChange: onFrontmatterErrorChangeFunc
 ) => {
+  const { notificationsService } = useNotificationsService();
+  const editorCtx = useContext(EditorContext);
+  const imageCtx = useContext(ImageUploadingCtx);
+  const { client } = useRequestContext();
+  const userInfo = useUserInfo();
+
+  useEffect(() =>{
+    if (imageCtx === null){
+      return;
+    }
+    const func = async(file: File) => {
+      const resp = await client.api.mediaCreate({
+        Image: file,
+        ScopeUid: `${userInfo?.email}_avatar`,
+      });
+      const imageBlock = `![${file.name}](${resp.data.location})`;
+      editorCtx.commandOrchestrator?.textApi.replaceSelection(imageBlock);
+    };
+    func(imageCtx.currentFile);
+  }, [imageCtx]);
+
   useEffect(() => {
     const validationResult = validateFrontmatter(value);
     if (validationResult !== true) {
@@ -33,12 +61,12 @@ const EditorViewFunc = (
     }
     onErrorChange(null);
   }, [value]);
-
   return (
     <CodeEditor
       value={value}
       onChange={(evn) => onChange(evn.target.value)}
       padding={16}
+      minHeight={512}
       style={{
         fontSize: 16,
         font: "Helvetica Neue",
@@ -57,7 +85,10 @@ const MarkdownEditor = ({
   contentDetails,
   onFrontmatterErrorChange,
 }: MarkdownEditorProps) => {
+  const { notificationsService } = useNotificationsService();
   const [currentError, setCurrentError] = useState<string>("");
+  const [currentFile, setCurrentFile] = useState<ImageUploadingContext | null>(null);
+
   const customCommands = commands.getCommands().concat([
     commands.group([ImageUpload(contentDetails, false)], {
       name: "OnlineSales components",
@@ -80,28 +111,56 @@ const MarkdownEditor = ({
     return command;
   };
 
+  const onDrop = async (acceptedFiles: File[], rejections: FileRejection[]) => {
+    if (rejections.length > 0) {
+      rejections.map((rejection) => {
+        const fileName = rejection.file.name;
+        const error = rejection.errors[0].message;
+        notificationsService.error(`Failed to select image ${fileName} (${error}).`);
+      });
+    }
+    if (acceptedFiles.length !== 0) {
+      setCurrentFile({
+        currentFile: acceptedFiles[0],
+      });
+    }
+  };
+
   const strippedValue = value.replace(/(---.*?---)/s, "");
   return (
-    <>
-      <MDEditor
-        aria-disabled={isReadOnly}
-        hideToolbar={isReadOnly}
-        height={600}
-        preview={"live"}
-        value={value}
-        onChange={onChange}
-        commands={customCommands}
-        commandsFilter={commandFilter}
-        style={{ padding: 0 }}
-        highlightEnable
-        components={{
-          preview: (value) => {
-            return MarkdownViewerFunc(`${currentError}${strippedValue}`);
-          },
-          textarea: () => EditorViewFunc(value, onChange, onErrorChange),
-        }}
-      />
-    </>
+    <Dropzone
+      onDrop={onDrop}
+      maxSize={ContentEditMaximumImageSize}
+      maxFiles={1}
+      accept={{ key: ["image/*"] } as Accept}
+      noClick
+    >
+      {({ getRootProps, getInputProps, isDragAccept }) => (
+        <div {...getRootProps()}>
+          <input {...getInputProps()} />
+          <ImageUploadingCtx.Provider value={currentFile} >
+            <MDEditor
+              aria-disabled={isReadOnly}
+              hideToolbar={isReadOnly}
+              height={600}
+              preview={"live"}
+              value={value}
+              onChange={onChange}
+              commands={customCommands}
+              commandsFilter={commandFilter}
+              style={{ padding: 0 }}
+              highlightEnable
+              components={{
+                preview: (value) => {
+                  return MarkdownViewerFunc(`${currentError}${strippedValue}`);
+                },
+                textarea: () => EditorViewFunc(value, onChange, onErrorChange),
+              }}
+            />
+          </ImageUploadingCtx.Provider>
+        </div>
+      )}
+    </Dropzone>
   );
 };
 

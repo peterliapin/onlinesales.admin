@@ -24,3 +24,7 @@ export interface MarkdownEditorProps {
   contentDetails: ContentDetails;
   onFrontmatterErrorChange: onFrontmatterErrorChangeFunc;
 }
+
+export interface ImageUploadingContext {
+  currentFile: File;
+};

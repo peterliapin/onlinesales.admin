@@ -61,9 +61,5 @@ export const CenteredCircularProgress = styled(CircularProgress)`
 `;
 
 export const SavingIndicatorContainer = styled("div")`
-  position: absolute;
-  margin: 25px;
-  right: 0;
-  top: 0;
-  z-index: 99;
+
 `;

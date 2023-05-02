@@ -3,6 +3,7 @@ import { styled } from "@mui/material";
 export const ContentListContainer = styled("div")`
   flex-grow: 1;
   height: 100%;
+  overflow: hidden;
 `;
 
 export const ContentEditContainer = styled("div")`
