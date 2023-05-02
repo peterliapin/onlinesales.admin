@@ -2448,7 +2448,7 @@ export interface OrderItemCreateDto {
   /**
    * Currency
    * @minLength 1
-   * @pattern ^(NAD|ZAR|XAF|JPY|GHS|ETB|USD||AED|BHD|DJF|DZD|EGP|MAD|ERN|ILS|IQD|JOD|KMF|KWD|LBP|LYD|MAD|MRU|OMR|ILS|QAR|SAR|SDG|SOS|SSP|SYP|XAF|TND|YER|CLP|INR|TZS|EUR|AZN|AZN|RUB|XAF|BYN|ZMW|TZS|BGN|XOF|BDT|INR|CNY|INR|EUR|INR|BAM|BAM|ERN|EUR|EUR|EUR|EUR|BDT|INR|RUB|PHP|UGX|USD|USD|USD|IQD|IRR|EUR|CZK|RUB|GBP|DKK|DKK|KES|EUR|EUR|CHF|EUR|EUR|CHF|EUR|XOF|INR|EUR|XAF|MVR|XOF|BTN|KES|GHS|XOF|EUR|EUR|||AED|XCD|XCD|ALL|ARS|USD|EUR|AUD|BBD|BDT|EUR|BGN|BIF|BMD|BND|BRL|BSD|BWP|BZD|CAD|AUD|CHF|NZD|CLP|XAF|CNY|COP|CVE|AUD|EUR|CZK|EUR|USD|DKK|XCD|EUR|ERN|EUR|FJD|FKP|USD|EUR|GBP|XCD|GBP|GHS|GIP|GMD|EUR|USD|GYD|HKD|HUF|IDR|EUR|ILS|GBP|INR|USD|GBP|JMD|JPY|KES|AUD|XCD|KRW|KYD|XCD|LRD|ZAR|EUR|EUR|MGA|USD|MMK|MOP|USD|XCD|EUR|MUR|MVR|MWK|MXN|MYR|NAD|AUD|NGN|EUR|NOK|AUD|NZD|NZD|PGK|PHP|PKR|PLN|NZD|USD|EUR|USD|RUB|RWF|SAR|SBD|SCR|SDG|SEK|SGD|SHP|EUR|EUR|SLL|SSP|ANG|SZL|USD|THB|NZD|TOP|TRY|TTD|AUD|TWD|TZS|UAH|UGX|USD|USD|USD|XCD|USD|USD|VUV|WST|ZAR|ZMW|USD||||XCD|ARS|BBD|BMD|BOB|USD|BRL|BSD|BZD|CAD|CLP|COP|CRC|CUP|ANG|XCD|DOP|EUR|USD|EUR|XCD|XAF|GTQ|GYD|HNL|HTG|EUR|XCD|KYD|XCD|MXN|NIO|PAB|PEN|PHP|USD|PYG|USD|USD|TTD|USD|UYU|XCD|VES|USD|USD|EUR|EUR|XAF|AFN|IRR|XOF|XAF|GHS|GMD|GNF|XOF|LRD|MRU|XOF|NGN|SLL|XOF|XOF|XAF|GHS|GMD|GNF|XOF|LRD|MRU|XOF|NGN|SLL|XOF|EUR|PHP|DKK|DKK|EUR|XOF|BIF|XOF|EUR|CAD|CDF|XAF|XAF|CHF|XOF|XAF|DJF|DZD|EUR|XAF|EUR|GNF|EUR|XAF|HTG|KMF|EUR|MAD|EUR|EUR|MGA|XOF|EUR|MRU|MUR|XPF|XOF|XPF|EUR|EUR|RWF|SCR|XOF|SYP|XAF|XOF|TND|VUV|XPF|EUR|EUR|EUR|GBP|EUR|GHS|GBP|ERN|ETB|EUR|PYG|CHF|EUR|CHF|INR|KES|GBP|GHS|XOF|NGN|USD|ILS|INR|INR|BAM|EUR|EUR|HUF|AMD||IDR|NGN|CNY||ISK|CHF|EUR|EUR|EUR|CAD|JPY||XAF|TZS|IDR|GEL|DZD|NGN|KES|NGN|TZS|CVE|XOF|KES|KZT|XAF|DKK|KES|KHR|INR|KPW|KRW|INR|GNF|LRD|INR|INR|INR|TZS|XAF|EUR|TRY|GBP|KGS|TZS|EUR|UGX|USD|AOA|CDF|XAF|XAF|LAK|IQD|IRR|EUR|CDF|KES|KES|EUR|INR|KES|TZS|KES|MUR|MGA|MZN|XAF|NZD|MKD|INR|MNT|INR|INR|CAD|INR|BND|MYR|BND|IDR|MYR|SGD|EUR|XAF|MMK|RUB|IRR|NAD|NOK|NOK|USD|EUR|EUR|INR|NPR|AWG|EUR|USD|ANG|EUR|SRD|ANG|XAF|NOK|XAF|GNF|ZAR|ZAR|SSP|USD|MWK|UGX|EUR|ETB|KES|INR|GEL|RUB|PKR|PKR|INR|NGN|PLN|AFN|PKR|AOA|BRL|CHF|CVE|EUR|XAF|XOF|EUR|MOP|MZN|EUR|STN|USD|BOB|USD|PEN|BDT|MMK|CHF|BIF|MDL|RON|TZS|BYN|KGS|KZT|MDL|RUB|UAH|RWF|TZS|INR|RUB|KES|INR|INR|TZS|EUR|EUR|PKR|INR|EUR|NOK|SEK|MZN|XOF|XAF|MAD|MAD|LKR|EUR|EUR|USD|WST|EUR|USD|DJF|ETB|KES|SOS|ALL|MKD|EUR|BAM|EUR|RSD|EUR|BAM|EUR|RSD|EUR|SZL|ZAR|ZAR|ZAR|IDR|EUR|EUR|SEK|CDF|KES|TZS|UGX|IQD|SYP|INR|LKR|MYR|SGD|INR|KES|UGX|TJS|THB|ERN|ETB|ERN|TMT|BWP|ZAR|TOP|EUR|TRY|TWD|ZAR|RUB|XOF|MAD|CNY|UAH|INR|PKR|PKR|AFN|UZS|UZS|LRD|LRD|ZAR|VND|TZS|EUR|CHF|ETB|XOF|ZAR|UGX|XAF||XOF|NGN|CNY|HKD|MAD|CNY|HKD|JPY|MOP|SGD|CNY|HKD|MOP|TWD|ZAR)$
+   * @pattern ^(DJF|ERN|ETB|NAD|ZAR|XAF|GHS|ETB||AED|BHD|DJF|DZD|EGP|ERN|ILS|IQD|JOD|KMF|KWD|LBP|LYD|MAD|MRU|OMR|ILS|QAR|SAR|SDG|SOS|SSP|SYP|XAF|TND|YER|CLP|INR|TZS|EUR|AZN|AZN|RUB|XAF|BYN|ZMW|TZS|BGN|XOF|BDT|INR|CNY|INR|EUR|INR|BAM|BAM|ERN|EUR|EUR|EUR|EUR|EUR|BDT|INR|RUB|PHP|UGX|USD|IQD|IRR|EUR|CZK|RUB|GBP|DKK|DKK|KES|EUR|EUR|CHF|EUR|EUR|CHF|EUR|XOF|EUR|XAF|MVR|XOF|BTN|KES|GHS|XOF|EUR|EUR|||AED|XCD|XCD|USD|EUR|AUD|BBD|EUR|BIF|BMD|BSD|BWP|BZD|CAD|AUD|CHF|NZD|XAF|AUD|EUR|EUR|DKK|XCD|ERN|EUR|FJD|FKP|USD|GBP|XCD|GBP|GHS|GIP|GMD|USD|GYD|HKD|EUR|ILS|GBP|INR|USD|GBP|JMD|KES|AUD|XCD|KYD|XCD|LRD|ZAR|MGA|USD|MOP|USD|XCD|EUR|MUR|MWK|MYR|NAD|AUD|NGN|EUR|AUD|NZD|NZD|PGK|PHP|PKR|NZD|USD|USD|RWF|SBD|SCR|SDG|SEK|SGD|SHP|EUR|SLL|SSP|ANG|SZL|USD|NZD|TOP|TTD|AUD|TZS|UGX|USD|USD|USD|XCD|USD|USD|VUV|WST|ZAR|ZMW|USD|||ARS|BOB|BRL|BZD|CLP|COP|CRC|CUP|DOP|USD|EUR|XAF|GTQ|HNL|MXN|NIO|PAB|PEN|PHP|USD|PYG|USD|USD|UYU|VES|EUR|EUR|XAF|AFN|IRR|XOF|XAF|GHS|GMD|GNF|XOF|LRD|MRU|XOF|NGN|SLL|XOF|EUR|PHP|DKK|DKK|EUR|XOF|BIF|XOF|EUR|CAD|CDF|XAF|XAF|CHF|XOF|XAF|DJF|DZD|EUR|XAF|EUR|GNF|EUR|XAF|HTG|KMF|EUR|MAD|EUR|EUR|MGA|XOF|EUR|MRU|MUR|XPF|XOF|XPF|EUR|EUR|RWF|SCR|XOF|SYP|XAF|XOF|TND|VUV|XPF|EUR|EUR|EUR|EUR|GBP|EUR|PYG|CHF|EUR|CHF|INR|KES|GBP|GHS|XOF|NGN|USD|ILS|INR|BAM|HRK|EUR|HUF|AMD||IDR|NGN|CNY|ISK|CHF|EUR|EUR|EUR|CAD|CAD|JPY|XAF|TZS|IDR|GEL|DZD|KES|TZS|CVE|XOF|KES|KZT|XAF|DKK|KES|KHR|INR|KPW|KRW|INR|INR|TZS|XAF|EUR|GBP|KGS|TZS|EUR|UGX|USD|AOA|CDF|XAF|XAF|LAK|IQD|IRR|EUR|CDF|KES|KES|EUR|KES|TZS|KES|MUR|MGA|MZN|XAF|NZD|MKD|INR|MNT|CNY|MNT|CAD|INR|BND|MYR|SGD|EUR|XAF|MMK|IRR|NAD|NOK|NOK|USD|EUR|EUR|INR|NPR|AWG|EUR|USD|ANG|EUR|SRD|ANG|XAF|NOK|XAF|GNF|ZAR|ZAR|SSP|UGX|EUR|ETB|KES|INR|GEL|RUB|PKR|INR|PLN||AFN|PKR|AOA|BRL|CHF|CVE|XAF|XOF|EUR|MOP|MZN|EUR|STN|USD|BOB|USD|PEN|GTQ|CHF|BIF|MDL|RON|TZS|BYN|KGS|KZT|MDL|RUB|UAH|RWF|TZS|INR|RUB|KES|TZS|PKR|EUR|NOK|SEK|MZN|XOF|XAF|MAD|MAD|LKR|EUR|EUR|NOK|SEK|NOK|SEK|EUR|EUR|USD|DJF|ETB|KES|SOS|ALL|MKD|EUR|BAM|EUR|RSD|EUR|BAM|EUR|RSD|EUR|SZL|ZAR|ERN|ZAR|ZAR|EUR|EUR|SEK|CDF|KES|TZS|UGX|SYP|INR|LKR|MYR|SGD|INR|KES|UGX|TJS|THB|ERN|ETB|ERN|TMT|BWP|ZAR|TOP|EUR|TRY|ZAR|RUB|XOF|MAD|CNY|UAH|INR|PKR|AFN|UZS|UZS|LRD|LRD|ZAR|VND||TZS|CHF|ETB|XOF|ZAR|UGX|XAF||XOF|NGN|MAD|CNY|HKD|MOP|SGD|HKD|MOP|TWD|ZAR)$
    * @example "USD"
    */
   currency: string;
@@ -2495,7 +2495,7 @@ export interface OrderItemDetailsDto {
   /**
    * Currency
    * @minLength 1
-   * @pattern ^(NAD|ZAR|XAF|JPY|GHS|ETB|USD||AED|BHD|DJF|DZD|EGP|MAD|ERN|ILS|IQD|JOD|KMF|KWD|LBP|LYD|MAD|MRU|OMR|ILS|QAR|SAR|SDG|SOS|SSP|SYP|XAF|TND|YER|CLP|INR|TZS|EUR|AZN|AZN|RUB|XAF|BYN|ZMW|TZS|BGN|XOF|BDT|INR|CNY|INR|EUR|INR|BAM|BAM|ERN|EUR|EUR|EUR|EUR|BDT|INR|RUB|PHP|UGX|USD|USD|USD|IQD|IRR|EUR|CZK|RUB|GBP|DKK|DKK|KES|EUR|EUR|CHF|EUR|EUR|CHF|EUR|XOF|INR|EUR|XAF|MVR|XOF|BTN|KES|GHS|XOF|EUR|EUR|||AED|XCD|XCD|ALL|ARS|USD|EUR|AUD|BBD|BDT|EUR|BGN|BIF|BMD|BND|BRL|BSD|BWP|BZD|CAD|AUD|CHF|NZD|CLP|XAF|CNY|COP|CVE|AUD|EUR|CZK|EUR|USD|DKK|XCD|EUR|ERN|EUR|FJD|FKP|USD|EUR|GBP|XCD|GBP|GHS|GIP|GMD|EUR|USD|GYD|HKD|HUF|IDR|EUR|ILS|GBP|INR|USD|GBP|JMD|JPY|KES|AUD|XCD|KRW|KYD|XCD|LRD|ZAR|EUR|EUR|MGA|USD|MMK|MOP|USD|XCD|EUR|MUR|MVR|MWK|MXN|MYR|NAD|AUD|NGN|EUR|NOK|AUD|NZD|NZD|PGK|PHP|PKR|PLN|NZD|USD|EUR|USD|RUB|RWF|SAR|SBD|SCR|SDG|SEK|SGD|SHP|EUR|EUR|SLL|SSP|ANG|SZL|USD|THB|NZD|TOP|TRY|TTD|AUD|TWD|TZS|UAH|UGX|USD|USD|USD|XCD|USD|USD|VUV|WST|ZAR|ZMW|USD||||XCD|ARS|BBD|BMD|BOB|USD|BRL|BSD|BZD|CAD|CLP|COP|CRC|CUP|ANG|XCD|DOP|EUR|USD|EUR|XCD|XAF|GTQ|GYD|HNL|HTG|EUR|XCD|KYD|XCD|MXN|NIO|PAB|PEN|PHP|USD|PYG|USD|USD|TTD|USD|UYU|XCD|VES|USD|USD|EUR|EUR|XAF|AFN|IRR|XOF|XAF|GHS|GMD|GNF|XOF|LRD|MRU|XOF|NGN|SLL|XOF|XOF|XAF|GHS|GMD|GNF|XOF|LRD|MRU|XOF|NGN|SLL|XOF|EUR|PHP|DKK|DKK|EUR|XOF|BIF|XOF|EUR|CAD|CDF|XAF|XAF|CHF|XOF|XAF|DJF|DZD|EUR|XAF|EUR|GNF|EUR|XAF|HTG|KMF|EUR|MAD|EUR|EUR|MGA|XOF|EUR|MRU|MUR|XPF|XOF|XPF|EUR|EUR|RWF|SCR|XOF|SYP|XAF|XOF|TND|VUV|XPF|EUR|EUR|EUR|GBP|EUR|GHS|GBP|ERN|ETB|EUR|PYG|CHF|EUR|CHF|INR|KES|GBP|GHS|XOF|NGN|USD|ILS|INR|INR|BAM|EUR|EUR|HUF|AMD||IDR|NGN|CNY||ISK|CHF|EUR|EUR|EUR|CAD|JPY||XAF|TZS|IDR|GEL|DZD|NGN|KES|NGN|TZS|CVE|XOF|KES|KZT|XAF|DKK|KES|KHR|INR|KPW|KRW|INR|GNF|LRD|INR|INR|INR|TZS|XAF|EUR|TRY|GBP|KGS|TZS|EUR|UGX|USD|AOA|CDF|XAF|XAF|LAK|IQD|IRR|EUR|CDF|KES|KES|EUR|INR|KES|TZS|KES|MUR|MGA|MZN|XAF|NZD|MKD|INR|MNT|INR|INR|CAD|INR|BND|MYR|BND|IDR|MYR|SGD|EUR|XAF|MMK|RUB|IRR|NAD|NOK|NOK|USD|EUR|EUR|INR|NPR|AWG|EUR|USD|ANG|EUR|SRD|ANG|XAF|NOK|XAF|GNF|ZAR|ZAR|SSP|USD|MWK|UGX|EUR|ETB|KES|INR|GEL|RUB|PKR|PKR|INR|NGN|PLN|AFN|PKR|AOA|BRL|CHF|CVE|EUR|XAF|XOF|EUR|MOP|MZN|EUR|STN|USD|BOB|USD|PEN|BDT|MMK|CHF|BIF|MDL|RON|TZS|BYN|KGS|KZT|MDL|RUB|UAH|RWF|TZS|INR|RUB|KES|INR|INR|TZS|EUR|EUR|PKR|INR|EUR|NOK|SEK|MZN|XOF|XAF|MAD|MAD|LKR|EUR|EUR|USD|WST|EUR|USD|DJF|ETB|KES|SOS|ALL|MKD|EUR|BAM|EUR|RSD|EUR|BAM|EUR|RSD|EUR|SZL|ZAR|ZAR|ZAR|IDR|EUR|EUR|SEK|CDF|KES|TZS|UGX|IQD|SYP|INR|LKR|MYR|SGD|INR|KES|UGX|TJS|THB|ERN|ETB|ERN|TMT|BWP|ZAR|TOP|EUR|TRY|TWD|ZAR|RUB|XOF|MAD|CNY|UAH|INR|PKR|PKR|AFN|UZS|UZS|LRD|LRD|ZAR|VND|TZS|EUR|CHF|ETB|XOF|ZAR|UGX|XAF||XOF|NGN|CNY|HKD|MAD|CNY|HKD|JPY|MOP|SGD|CNY|HKD|MOP|TWD|ZAR)$
+   * @pattern ^(DJF|ERN|ETB|NAD|ZAR|XAF|GHS|ETB||AED|BHD|DJF|DZD|EGP|ERN|ILS|IQD|JOD|KMF|KWD|LBP|LYD|MAD|MRU|OMR|ILS|QAR|SAR|SDG|SOS|SSP|SYP|XAF|TND|YER|CLP|INR|TZS|EUR|AZN|AZN|RUB|XAF|BYN|ZMW|TZS|BGN|XOF|BDT|INR|CNY|INR|EUR|INR|BAM|BAM|ERN|EUR|EUR|EUR|EUR|EUR|BDT|INR|RUB|PHP|UGX|USD|IQD|IRR|EUR|CZK|RUB|GBP|DKK|DKK|KES|EUR|EUR|CHF|EUR|EUR|CHF|EUR|XOF|EUR|XAF|MVR|XOF|BTN|KES|GHS|XOF|EUR|EUR|||AED|XCD|XCD|USD|EUR|AUD|BBD|EUR|BIF|BMD|BSD|BWP|BZD|CAD|AUD|CHF|NZD|XAF|AUD|EUR|EUR|DKK|XCD|ERN|EUR|FJD|FKP|USD|GBP|XCD|GBP|GHS|GIP|GMD|USD|GYD|HKD|EUR|ILS|GBP|INR|USD|GBP|JMD|KES|AUD|XCD|KYD|XCD|LRD|ZAR|MGA|USD|MOP|USD|XCD|EUR|MUR|MWK|MYR|NAD|AUD|NGN|EUR|AUD|NZD|NZD|PGK|PHP|PKR|NZD|USD|USD|RWF|SBD|SCR|SDG|SEK|SGD|SHP|EUR|SLL|SSP|ANG|SZL|USD|NZD|TOP|TTD|AUD|TZS|UGX|USD|USD|USD|XCD|USD|USD|VUV|WST|ZAR|ZMW|USD|||ARS|BOB|BRL|BZD|CLP|COP|CRC|CUP|DOP|USD|EUR|XAF|GTQ|HNL|MXN|NIO|PAB|PEN|PHP|USD|PYG|USD|USD|UYU|VES|EUR|EUR|XAF|AFN|IRR|XOF|XAF|GHS|GMD|GNF|XOF|LRD|MRU|XOF|NGN|SLL|XOF|EUR|PHP|DKK|DKK|EUR|XOF|BIF|XOF|EUR|CAD|CDF|XAF|XAF|CHF|XOF|XAF|DJF|DZD|EUR|XAF|EUR|GNF|EUR|XAF|HTG|KMF|EUR|MAD|EUR|EUR|MGA|XOF|EUR|MRU|MUR|XPF|XOF|XPF|EUR|EUR|RWF|SCR|XOF|SYP|XAF|XOF|TND|VUV|XPF|EUR|EUR|EUR|EUR|GBP|EUR|PYG|CHF|EUR|CHF|INR|KES|GBP|GHS|XOF|NGN|USD|ILS|INR|BAM|HRK|EUR|HUF|AMD||IDR|NGN|CNY|ISK|CHF|EUR|EUR|EUR|CAD|CAD|JPY|XAF|TZS|IDR|GEL|DZD|KES|TZS|CVE|XOF|KES|KZT|XAF|DKK|KES|KHR|INR|KPW|KRW|INR|INR|TZS|XAF|EUR|GBP|KGS|TZS|EUR|UGX|USD|AOA|CDF|XAF|XAF|LAK|IQD|IRR|EUR|CDF|KES|KES|EUR|KES|TZS|KES|MUR|MGA|MZN|XAF|NZD|MKD|INR|MNT|CNY|MNT|CAD|INR|BND|MYR|SGD|EUR|XAF|MMK|IRR|NAD|NOK|NOK|USD|EUR|EUR|INR|NPR|AWG|EUR|USD|ANG|EUR|SRD|ANG|XAF|NOK|XAF|GNF|ZAR|ZAR|SSP|UGX|EUR|ETB|KES|INR|GEL|RUB|PKR|INR|PLN||AFN|PKR|AOA|BRL|CHF|CVE|XAF|XOF|EUR|MOP|MZN|EUR|STN|USD|BOB|USD|PEN|GTQ|CHF|BIF|MDL|RON|TZS|BYN|KGS|KZT|MDL|RUB|UAH|RWF|TZS|INR|RUB|KES|TZS|PKR|EUR|NOK|SEK|MZN|XOF|XAF|MAD|MAD|LKR|EUR|EUR|NOK|SEK|NOK|SEK|EUR|EUR|USD|DJF|ETB|KES|SOS|ALL|MKD|EUR|BAM|EUR|RSD|EUR|BAM|EUR|RSD|EUR|SZL|ZAR|ERN|ZAR|ZAR|EUR|EUR|SEK|CDF|KES|TZS|UGX|SYP|INR|LKR|MYR|SGD|INR|KES|UGX|TJS|THB|ERN|ETB|ERN|TMT|BWP|ZAR|TOP|EUR|TRY|ZAR|RUB|XOF|MAD|CNY|UAH|INR|PKR|AFN|UZS|UZS|LRD|LRD|ZAR|VND||TZS|CHF|ETB|XOF|ZAR|UGX|XAF||XOF|NGN|MAD|CNY|HKD|MOP|SGD|HKD|MOP|TWD|ZAR)$
    * @example "USD"
    */
   currency: string;
@@ -2621,7 +2621,7 @@ export interface OrderItemImportDto {
   unitPrice?: number | null;
   /**
    * Currency
-   * @pattern ^(NAD|ZAR|XAF|JPY|GHS|ETB|USD||AED|BHD|DJF|DZD|EGP|MAD|ERN|ILS|IQD|JOD|KMF|KWD|LBP|LYD|MAD|MRU|OMR|ILS|QAR|SAR|SDG|SOS|SSP|SYP|XAF|TND|YER|CLP|INR|TZS|EUR|AZN|AZN|RUB|XAF|BYN|ZMW|TZS|BGN|XOF|BDT|INR|CNY|INR|EUR|INR|BAM|BAM|ERN|EUR|EUR|EUR|EUR|BDT|INR|RUB|PHP|UGX|USD|USD|USD|IQD|IRR|EUR|CZK|RUB|GBP|DKK|DKK|KES|EUR|EUR|CHF|EUR|EUR|CHF|EUR|XOF|INR|EUR|XAF|MVR|XOF|BTN|KES|GHS|XOF|EUR|EUR|||AED|XCD|XCD|ALL|ARS|USD|EUR|AUD|BBD|BDT|EUR|BGN|BIF|BMD|BND|BRL|BSD|BWP|BZD|CAD|AUD|CHF|NZD|CLP|XAF|CNY|COP|CVE|AUD|EUR|CZK|EUR|USD|DKK|XCD|EUR|ERN|EUR|FJD|FKP|USD|EUR|GBP|XCD|GBP|GHS|GIP|GMD|EUR|USD|GYD|HKD|HUF|IDR|EUR|ILS|GBP|INR|USD|GBP|JMD|JPY|KES|AUD|XCD|KRW|KYD|XCD|LRD|ZAR|EUR|EUR|MGA|USD|MMK|MOP|USD|XCD|EUR|MUR|MVR|MWK|MXN|MYR|NAD|AUD|NGN|EUR|NOK|AUD|NZD|NZD|PGK|PHP|PKR|PLN|NZD|USD|EUR|USD|RUB|RWF|SAR|SBD|SCR|SDG|SEK|SGD|SHP|EUR|EUR|SLL|SSP|ANG|SZL|USD|THB|NZD|TOP|TRY|TTD|AUD|TWD|TZS|UAH|UGX|USD|USD|USD|XCD|USD|USD|VUV|WST|ZAR|ZMW|USD||||XCD|ARS|BBD|BMD|BOB|USD|BRL|BSD|BZD|CAD|CLP|COP|CRC|CUP|ANG|XCD|DOP|EUR|USD|EUR|XCD|XAF|GTQ|GYD|HNL|HTG|EUR|XCD|KYD|XCD|MXN|NIO|PAB|PEN|PHP|USD|PYG|USD|USD|TTD|USD|UYU|XCD|VES|USD|USD|EUR|EUR|XAF|AFN|IRR|XOF|XAF|GHS|GMD|GNF|XOF|LRD|MRU|XOF|NGN|SLL|XOF|XOF|XAF|GHS|GMD|GNF|XOF|LRD|MRU|XOF|NGN|SLL|XOF|EUR|PHP|DKK|DKK|EUR|XOF|BIF|XOF|EUR|CAD|CDF|XAF|XAF|CHF|XOF|XAF|DJF|DZD|EUR|XAF|EUR|GNF|EUR|XAF|HTG|KMF|EUR|MAD|EUR|EUR|MGA|XOF|EUR|MRU|MUR|XPF|XOF|XPF|EUR|EUR|RWF|SCR|XOF|SYP|XAF|XOF|TND|VUV|XPF|EUR|EUR|EUR|GBP|EUR|GHS|GBP|ERN|ETB|EUR|PYG|CHF|EUR|CHF|INR|KES|GBP|GHS|XOF|NGN|USD|ILS|INR|INR|BAM|EUR|EUR|HUF|AMD||IDR|NGN|CNY||ISK|CHF|EUR|EUR|EUR|CAD|JPY||XAF|TZS|IDR|GEL|DZD|NGN|KES|NGN|TZS|CVE|XOF|KES|KZT|XAF|DKK|KES|KHR|INR|KPW|KRW|INR|GNF|LRD|INR|INR|INR|TZS|XAF|EUR|TRY|GBP|KGS|TZS|EUR|UGX|USD|AOA|CDF|XAF|XAF|LAK|IQD|IRR|EUR|CDF|KES|KES|EUR|INR|KES|TZS|KES|MUR|MGA|MZN|XAF|NZD|MKD|INR|MNT|INR|INR|CAD|INR|BND|MYR|BND|IDR|MYR|SGD|EUR|XAF|MMK|RUB|IRR|NAD|NOK|NOK|USD|EUR|EUR|INR|NPR|AWG|EUR|USD|ANG|EUR|SRD|ANG|XAF|NOK|XAF|GNF|ZAR|ZAR|SSP|USD|MWK|UGX|EUR|ETB|KES|INR|GEL|RUB|PKR|PKR|INR|NGN|PLN|AFN|PKR|AOA|BRL|CHF|CVE|EUR|XAF|XOF|EUR|MOP|MZN|EUR|STN|USD|BOB|USD|PEN|BDT|MMK|CHF|BIF|MDL|RON|TZS|BYN|KGS|KZT|MDL|RUB|UAH|RWF|TZS|INR|RUB|KES|INR|INR|TZS|EUR|EUR|PKR|INR|EUR|NOK|SEK|MZN|XOF|XAF|MAD|MAD|LKR|EUR|EUR|USD|WST|EUR|USD|DJF|ETB|KES|SOS|ALL|MKD|EUR|BAM|EUR|RSD|EUR|BAM|EUR|RSD|EUR|SZL|ZAR|ZAR|ZAR|IDR|EUR|EUR|SEK|CDF|KES|TZS|UGX|IQD|SYP|INR|LKR|MYR|SGD|INR|KES|UGX|TJS|THB|ERN|ETB|ERN|TMT|BWP|ZAR|TOP|EUR|TRY|TWD|ZAR|RUB|XOF|MAD|CNY|UAH|INR|PKR|PKR|AFN|UZS|UZS|LRD|LRD|ZAR|VND|TZS|EUR|CHF|ETB|XOF|ZAR|UGX|XAF||XOF|NGN|CNY|HKD|MAD|CNY|HKD|JPY|MOP|SGD|CNY|HKD|MOP|TWD|ZAR)$
+   * @pattern ^(DJF|ERN|ETB|NAD|ZAR|XAF|GHS|ETB||AED|BHD|DJF|DZD|EGP|ERN|ILS|IQD|JOD|KMF|KWD|LBP|LYD|MAD|MRU|OMR|ILS|QAR|SAR|SDG|SOS|SSP|SYP|XAF|TND|YER|CLP|INR|TZS|EUR|AZN|AZN|RUB|XAF|BYN|ZMW|TZS|BGN|XOF|BDT|INR|CNY|INR|EUR|INR|BAM|BAM|ERN|EUR|EUR|EUR|EUR|EUR|BDT|INR|RUB|PHP|UGX|USD|IQD|IRR|EUR|CZK|RUB|GBP|DKK|DKK|KES|EUR|EUR|CHF|EUR|EUR|CHF|EUR|XOF|EUR|XAF|MVR|XOF|BTN|KES|GHS|XOF|EUR|EUR|||AED|XCD|XCD|USD|EUR|AUD|BBD|EUR|BIF|BMD|BSD|BWP|BZD|CAD|AUD|CHF|NZD|XAF|AUD|EUR|EUR|DKK|XCD|ERN|EUR|FJD|FKP|USD|GBP|XCD|GBP|GHS|GIP|GMD|USD|GYD|HKD|EUR|ILS|GBP|INR|USD|GBP|JMD|KES|AUD|XCD|KYD|XCD|LRD|ZAR|MGA|USD|MOP|USD|XCD|EUR|MUR|MWK|MYR|NAD|AUD|NGN|EUR|AUD|NZD|NZD|PGK|PHP|PKR|NZD|USD|USD|RWF|SBD|SCR|SDG|SEK|SGD|SHP|EUR|SLL|SSP|ANG|SZL|USD|NZD|TOP|TTD|AUD|TZS|UGX|USD|USD|USD|XCD|USD|USD|VUV|WST|ZAR|ZMW|USD|||ARS|BOB|BRL|BZD|CLP|COP|CRC|CUP|DOP|USD|EUR|XAF|GTQ|HNL|MXN|NIO|PAB|PEN|PHP|USD|PYG|USD|USD|UYU|VES|EUR|EUR|XAF|AFN|IRR|XOF|XAF|GHS|GMD|GNF|XOF|LRD|MRU|XOF|NGN|SLL|XOF|EUR|PHP|DKK|DKK|EUR|XOF|BIF|XOF|EUR|CAD|CDF|XAF|XAF|CHF|XOF|XAF|DJF|DZD|EUR|XAF|EUR|GNF|EUR|XAF|HTG|KMF|EUR|MAD|EUR|EUR|MGA|XOF|EUR|MRU|MUR|XPF|XOF|XPF|EUR|EUR|RWF|SCR|XOF|SYP|XAF|XOF|TND|VUV|XPF|EUR|EUR|EUR|EUR|GBP|EUR|PYG|CHF|EUR|CHF|INR|KES|GBP|GHS|XOF|NGN|USD|ILS|INR|BAM|HRK|EUR|HUF|AMD||IDR|NGN|CNY|ISK|CHF|EUR|EUR|EUR|CAD|CAD|JPY|XAF|TZS|IDR|GEL|DZD|KES|TZS|CVE|XOF|KES|KZT|XAF|DKK|KES|KHR|INR|KPW|KRW|INR|INR|TZS|XAF|EUR|GBP|KGS|TZS|EUR|UGX|USD|AOA|CDF|XAF|XAF|LAK|IQD|IRR|EUR|CDF|KES|KES|EUR|KES|TZS|KES|MUR|MGA|MZN|XAF|NZD|MKD|INR|MNT|CNY|MNT|CAD|INR|BND|MYR|SGD|EUR|XAF|MMK|IRR|NAD|NOK|NOK|USD|EUR|EUR|INR|NPR|AWG|EUR|USD|ANG|EUR|SRD|ANG|XAF|NOK|XAF|GNF|ZAR|ZAR|SSP|UGX|EUR|ETB|KES|INR|GEL|RUB|PKR|INR|PLN||AFN|PKR|AOA|BRL|CHF|CVE|XAF|XOF|EUR|MOP|MZN|EUR|STN|USD|BOB|USD|PEN|GTQ|CHF|BIF|MDL|RON|TZS|BYN|KGS|KZT|MDL|RUB|UAH|RWF|TZS|INR|RUB|KES|TZS|PKR|EUR|NOK|SEK|MZN|XOF|XAF|MAD|MAD|LKR|EUR|EUR|NOK|SEK|NOK|SEK|EUR|EUR|USD|DJF|ETB|KES|SOS|ALL|MKD|EUR|BAM|EUR|RSD|EUR|BAM|EUR|RSD|EUR|SZL|ZAR|ERN|ZAR|ZAR|EUR|EUR|SEK|CDF|KES|TZS|UGX|SYP|INR|LKR|MYR|SGD|INR|KES|UGX|TJS|THB|ERN|ETB|ERN|TMT|BWP|ZAR|TOP|EUR|TRY|ZAR|RUB|XOF|MAD|CNY|UAH|INR|PKR|AFN|UZS|UZS|LRD|LRD|ZAR|VND||TZS|CHF|ETB|XOF|ZAR|UGX|XAF||XOF|NGN|MAD|CNY|HKD|MOP|SGD|HKD|MOP|TWD|ZAR)$
    * @example "USD"
    */
   currency?: string | null;
@@ -2827,12 +2827,93 @@ export interface UnsubscribeImportDto {
   createdAt?: string | null;
 }
 
-export interface User {
+export interface UserCreateDto {
   /**
-   * Name
+   * Email
+   * @minLength 1
    * @example "string"
    */
-  name?: string;
+  email: string;
+  /**
+   * User Name
+   * @minLength 1
+   * @example "string"
+   */
+  userName: string;
+  /**
+   * Display Name
+   * @minLength 1
+   * @example "string"
+   */
+  displayName: string;
+}
+
+export interface UserDetailsDto {
+  /**
+   * Email
+   * @minLength 1
+   * @example "string"
+   */
+  email: string;
+  /**
+   * User Name
+   * @minLength 1
+   * @example "string"
+   */
+  userName: string;
+  /**
+   * Display Name
+   * @minLength 1
+   * @example "string"
+   */
+  displayName: string;
+  /**
+   * Id
+   * @example "string"
+   */
+  id?: string;
+  /**
+   * Created At
+   * @format date-time
+   * @pattern ^(\d{4})-(1[0-2]|0[1-9])-(3[01]|[12][0-9]|0[1-9])T(2[0-4]|1[0-9]|0[1-9]):(2[0-4]|1[0-9]|0[1-9]):([1-5]?0[0-9]).(\d{7})Z$
+   * @example "2023-04-18T12:00:00.0000000Z"
+   */
+  createdAt?: string;
+  /**
+   * Last Time Logged In
+   * @format date-time
+   * @pattern ^(\d{4})-(1[0-2]|0[1-9])-(3[01]|[12][0-9]|0[1-9])T(2[0-4]|1[0-9]|0[1-9]):(2[0-4]|1[0-9]|0[1-9]):([1-5]?0[0-9]).(\d{7})Z$
+   * @example "2023-04-18T12:00:00.0000000Z"
+   */
+  lastTimeLoggedIn?: string;
+  /**
+   * Avatar Url
+   * @example "string"
+   */
+  avatarUrl?: string;
+}
+
+export interface UserUpdateDto {
+  /**
+   * Email
+   * @example "string"
+   */
+  email?: string | null;
+  /**
+   * User Name
+   * @example "string"
+   */
+  userName?: string | null;
+  /**
+   * Display Name
+   * @example "string"
+   */
+  displayName?: string | null;
+  /**
+   * Avatar Url
+   * @example "string"
+   */
+  avatarUrl?: string | null;
 }
 
 export type QueryParamsType = Record<string | number, any>;
@@ -3050,106 +3131,6 @@ export class HttpClient<SecurityDataType = unknown> {
  * @version 1.2.2.0
  */
 export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
-  microsoftIdentity = {
-    /**
-     * No description
-     *
-     * @tags Account
-     * @name AccountSignInDetail
-     * @request GET:/microsoft-identity/account/sign-in/{scheme}
-     * @secure
-     */
-    accountSignInDetail: (
-      scheme: string,
-      query?: {
-        redirectUri?: string;
-      },
-      params: RequestParams = {},
-    ) =>
-      this.request<void, any>({
-        path: `/microsoft-identity/account/sign-in/${scheme}`,
-        method: "GET",
-        query: query,
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @tags Account
-     * @name AccountChallengeDetail
-     * @request GET:/microsoft-identity/account/challenge/{scheme}
-     * @secure
-     */
-    accountChallengeDetail: (
-      scheme: string,
-      query?: {
-        redirectUri?: string;
-        scope?: string;
-        loginHint?: string;
-        domainHint?: string;
-        claims?: string;
-        policy?: string;
-      },
-      params: RequestParams = {},
-    ) =>
-      this.request<void, any>({
-        path: `/microsoft-identity/account/challenge/${scheme}`,
-        method: "GET",
-        query: query,
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @tags Account
-     * @name AccountSignOutDetail
-     * @request GET:/microsoft-identity/account/sign-out/{scheme}
-     * @secure
-     */
-    accountSignOutDetail: (scheme: string, params: RequestParams = {}) =>
-      this.request<void, any>({
-        path: `/microsoft-identity/account/sign-out/${scheme}`,
-        method: "GET",
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @tags Account
-     * @name AccountResetPasswordDetail
-     * @request GET:/microsoft-identity/account/reset-password/{scheme}
-     * @secure
-     */
-    accountResetPasswordDetail: (scheme: string, params: RequestParams = {}) =>
-      this.request<void, any>({
-        path: `/microsoft-identity/account/reset-password/${scheme}`,
-        method: "GET",
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @tags Account
-     * @name AccountEditProfileDetail
-     * @request GET:/microsoft-identity/account/edit-profile/{scheme}
-     * @secure
-     */
-    accountEditProfileDetail: (scheme: string, params: RequestParams = {}) =>
-      this.request<void, any>({
-        path: `/microsoft-identity/account/edit-profile/${scheme}`,
-        method: "GET",
-        secure: true,
-        ...params,
-      }),
-  };
   api = {
     /**
      * No description
@@ -3283,67 +3264,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         method: "GET",
         query: query,
         secure: true,
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @tags Auth
-     * @name AuthLoginList
-     * @request GET:/api/auth/login
-     * @secure
-     */
-    authLoginList: (
-      query?: {
-        redirectUrl?: string;
-      },
-      params: RequestParams = {},
-    ) =>
-      this.request<void, void | ProblemDetails>({
-        path: `/api/auth/login`,
-        method: "GET",
-        query: query,
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @tags Auth
-     * @name AuthLogoutList
-     * @request GET:/api/auth/logout
-     * @secure
-     */
-    authLogoutList: (
-      query?: {
-        redirectUrl?: string;
-      },
-      params: RequestParams = {},
-    ) =>
-      this.request<any, void | ProblemDetails>({
-        path: `/api/auth/logout`,
-        method: "GET",
-        query: query,
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @tags Auth
-     * @name AuthProfileList
-     * @request GET:/api/auth/profile
-     * @secure
-     */
-    authProfileList: (params: RequestParams = {}) =>
-      this.request<User, void | ProblemDetails>({
-        path: `/api/auth/profile`,
-        method: "GET",
-        secure: true,
-        format: "json",
         ...params,
       }),
 
@@ -4223,6 +4143,50 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
+     * @tags Identity
+     * @name IdentityExternalLoginList
+     * @request GET:/api/identity/external-login
+     * @secure
+     */
+    identityExternalLoginList: (
+      query?: {
+        returnUrl?: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<void, any>({
+        path: `/api/identity/external-login`,
+        method: "GET",
+        query: query,
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Identity
+     * @name IdentityCallbackList
+     * @request GET:/api/identity/callback
+     * @secure
+     */
+    identityCallbackList: (
+      query?: {
+        returnUrl?: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<void, any>({
+        path: `/api/identity/callback`,
+        method: "GET",
+        query: query,
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
      * @tags Links
      * @name LinksCreate
      * @request POST:/api/links
@@ -4928,6 +4892,111 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/api/unsubscribes/export`,
         method: "GET",
         query: query,
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Users
+     * @name UsersList
+     * @request GET:/api/users
+     * @secure
+     */
+    usersList: (params: RequestParams = {}) =>
+      this.request<UserDetailsDto[], void | ProblemDetails>({
+        path: `/api/users`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Users
+     * @name UsersCreate
+     * @request POST:/api/users
+     * @secure
+     */
+    usersCreate: (data: UserCreateDto, params: RequestParams = {}) =>
+      this.request<UserDetailsDto, void | ProblemDetails>({
+        path: `/api/users`,
+        method: "POST",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Users
+     * @name UsersMeList
+     * @request GET:/api/users/me
+     * @secure
+     */
+    usersMeList: (params: RequestParams = {}) =>
+      this.request<UserDetailsDto, void | ProblemDetails>({
+        path: `/api/users/me`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Users
+     * @name UsersDetail
+     * @request GET:/api/users/{id}
+     * @secure
+     */
+    usersDetail: (id: string, params: RequestParams = {}) =>
+      this.request<UserDetailsDto, void | ProblemDetails>({
+        path: `/api/users/${id}`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Users
+     * @name UsersPartialUpdate
+     * @request PATCH:/api/users/{id}
+     * @secure
+     */
+    usersPartialUpdate: (id: string, data: UserUpdateDto, params: RequestParams = {}) =>
+      this.request<UserDetailsDto, void | ProblemDetails>({
+        path: `/api/users/${id}`,
+        method: "PATCH",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Users
+     * @name UsersDelete
+     * @request DELETE:/api/users/{id}
+     * @secure
+     */
+    usersDelete: (id: string, params: RequestParams = {}) =>
+      this.request<void, void | ProblemDetails>({
+        path: `/api/users/${id}`,
+        method: "DELETE",
         secure: true,
         ...params,
       }),

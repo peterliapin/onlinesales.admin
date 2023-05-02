@@ -9,7 +9,12 @@ import {
   Typography,
 } from "@mui/material";
 import { ContentDetailsDto } from "@lib/network/swagger-client";
-import { ContentListContainer, TimestampContainer, ContentListWrapper } from "./index.styled";
+import { 
+  ContentListContainer, 
+  TimestampContainer, 
+  ContentListWrapper, 
+  DummyDiv
+} from "./index.styled";
 import React, { useEffect, useState, useMemo } from "react";
 import { Add, Upload, Download } from "@mui/icons-material";
 import { useRequestContext } from "@providers/request-provider";
@@ -19,6 +24,7 @@ import { blogBreadcrumbLinks } from "@features/blog/constants";
 import { ModuleWrapper } from "@components/module-wrapper";
 import { FixedSizeGrid as VirtualizedGrid } from "react-window";
 import AutoSizer from "react-virtualized-auto-sizer";
+import { totalCountHeaderName } from "@lib/query";
 
 const coreApi = process.env.CORE_API;
 const PADDING_SIZE = 15;
@@ -62,12 +68,38 @@ export const ContentList = () => {
         // const filter = searchText
         //   ? { "filter[where][title][like]=": searchText }
         //   : {}
+        const dataList: ContentDetailsDto[] = [];
         const filter = searchText ? { query: searchText } : { "filter[order]" : "createdAt desc"};
-        const { data } = await client.api.contentList(filter, {
+        const { data, headers } = await client.api.contentList(filter, {
           signal: controller.signal,
-          
         });
-        setContentItems(data);
+        dataList.push(...data);
+        const chunkLength = data.length;
+        const totalCount = Number(headers.get(totalCountHeaderName)) || dataList.length;
+        const promises: Promise<void>[] = [];
+        let i = dataList.length;
+        console.log(totalCount);
+        while(i < totalCount){
+          console.log(i);
+          const toLoadChunkLen = (i + chunkLength) < totalCount ? 
+            chunkLength : 
+            (totalCount - i);
+          console.log(toLoadChunkLen);
+          promises.push((async () => {
+            const filterWithPagination = {
+              ...filter,
+              "filter[skip]": String(i),
+              "filter[limit]": String(toLoadChunkLen),
+            };
+            const { data } = await client.api.contentList(filterWithPagination,{
+              signal: controller.signal,
+            });
+            dataList.push(...data);
+          })());
+          i+= toLoadChunkLen;
+        }
+        await Promise.all(promises);
+        setContentItems(dataList);
       } catch (e) {
         console.log(e);
       }
@@ -90,11 +122,12 @@ export const ContentList = () => {
         {contentItems.length > 0 &&
           <AutoSizer>
             {({ height, width }) => {
-              const columnsCount = Math.floor(width! / (345 + PADDING_SIZE));
+              const columnsCount = Math.floor(width! / (345 + (PADDING_SIZE * 2)));
+              const rowsCount = Math.ceil(contentItems.length / columnsCount);
               return (
                 <VirtualizedGrid
                   columnCount={columnsCount}
-                  rowCount={contentItems.length / columnsCount}
+                  rowCount={rowsCount}
                   columnWidth={345 + PADDING_SIZE}
                   rowHeight={500 + PADDING_SIZE}
                   height={height!}
@@ -113,8 +146,8 @@ export const ContentList = () => {
                       >
                         <ItemCard
                           style={{}}
-                          item={contentItems[(rowIndex * 2) + columnIndex]} 
-                          index={(rowIndex * 2) + columnIndex}
+                          item={contentItems[(rowIndex * columnsCount) + columnIndex]} 
+                          index={(rowIndex * columnsCount) + columnIndex}
                         />
                       </ContentListWrapper>
                     );
@@ -155,6 +188,11 @@ const innerElementType = React.forwardRef(function innerFunc(props: InnerFuncPro
 
 
 const ItemCard = ({item, index, style}: ItemProps) => {
+  if (!item || !item.id){
+    return (
+      <DummyDiv/>
+    );
+  }
   return (
     <Grid 
       item 

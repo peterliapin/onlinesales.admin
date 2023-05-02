@@ -10,6 +10,7 @@ import {AuthProvider} from "@providers/auth-provider";
 import {ToastContainer} from "react-toastify";
 import {LocalizationProvider} from "@mui/x-date-pickers";
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
+import { UserProvider } from "@providers/user-provider";
 
 export const App = () => {
   return (
@@ -18,25 +19,27 @@ export const App = () => {
         <AuthProvider>
           <RequestProvider>
             <ToastContainer/>
-            <BrowserRouter>
-              <Routes>
-                <Route
-                  path={rootRoute}
-                  element={
-                    <AppLayoutContainer>
-                      <AppHeader/>
-                      <Sidebar/>
-                      <MainContentContainer>
-                        <Outlet/>
-                      </MainContentContainer>
-                    </AppLayoutContainer>
-                  }
-                >
+            <UserProvider>
+              <BrowserRouter>
+                <Routes>
+                  <Route
+                    path={rootRoute}
+                    element={
+                      <AppLayoutContainer>
+                        <AppHeader/>
+                        <Sidebar/>
+                        <MainContentContainer>
+                          <Outlet/>
+                        </MainContentContainer>
+                      </AppLayoutContainer>
+                    }
+                  >
                     <Route index element="Index page"/>
                     <Route path={`${coreModuleRoute.template}/*`} element={<ModuleLoader/>}/>
-                </Route>
-              </Routes>
-            </BrowserRouter>
+                  </Route>
+                </Routes>
+              </BrowserRouter>
+            </UserProvider>
           </RequestProvider>
         </AuthProvider>
       </ThemeProvider>

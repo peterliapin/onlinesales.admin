@@ -11,6 +11,7 @@ import {LinksModule} from "@features/links";
 import {ModuleWrapperProvider} from "@providers/module-wrapper-provider";
 import {CommentsModule} from "@features/comments";
 import {UnsubscribesModule} from "@features/unsubscribes";
+import {UserModule} from "@features/users";
 
 export const ModuleLoader = () => {
   const {moduleName} = useRouteParams(coreModuleRoute);
@@ -27,6 +28,7 @@ export const ModuleLoader = () => {
           {moduleName === CoreModule.accounts && <AccountsModule/>}
           {moduleName === CoreModule.orders && <OrdersModule/>}
           {moduleName === CoreModule.domains && <DomainsModule/>}
+          {moduleName === CoreModule.users && <UserModule/>}
         </Suspense>
       </ErrorBoundary>
     </ModuleWrapperProvider>

@@ -3,6 +3,7 @@ import { styled } from "@mui/material";
 export const ContentListContainer = styled("div")`
   flex-grow: 1;
   height: 100%;
+  overflow: hidden;
 `;
 
 export const ContentEditContainer = styled("div")`
@@ -68,4 +69,10 @@ export const ContentListWrapper = styled("div")`
   align-items: center;
   justify-content: center;
   background-color: #f8f8f0;
+`;
+
+export const DummyDiv = styled("div")`
+  width: 100%;
+  height: 100%;
+  background-color: #F4F5F7;
 `;

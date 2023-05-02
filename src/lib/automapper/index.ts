@@ -80,9 +80,9 @@ createMap<ContentDetailsDto, ContentDetails>(
     (d) => d.language,
     mapFrom((s) => {
       switch (s.language) {
-      case "ru":
+      case "ru-RU":
         return "Russian";
-      case "en":
+      case "en-US":
         return "English";
       default:
         return "Unknown";
@@ -112,9 +112,9 @@ createMap<ContentDetails, ContentUpdateDto>(
     mapFrom((s) => {
       switch (s.language) {
       case "Russian":
-        return "ru";
+        return "ru-RU";
       case "English":
-        return "en";
+        return "en-US";
       default:
         return s.language;
       }
@@ -143,9 +143,9 @@ createMap<ContentDetails, ContentCreateDto>(
     mapFrom((s) => {
       switch (s.language) {
       case "Russian":
-        return "ru";
+        return "ru-RU";
       case "English":
-        return "en";
+        return "en-US";
       default:
         return s.language;
       }
