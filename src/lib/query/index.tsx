@@ -53,17 +53,17 @@ const getWhereOperatorAndValue = (
   case "=":
     return { operator: "eq", value: whereFieldValue };
   case "contains":
-    return { operator: "like", value: whereFieldValue };
+    return { operator: "contains", value: whereFieldValue };
   case "startsWith":
-    return { operator: "regexp", value: `^${whereFieldValue}` };
+    return { operator: "contains", value: `${whereFieldValue}*` };
   case "endsWith":
-    return { operator: "regexp", value: whereFieldValue };
+    return { operator: "contains", value: `*${whereFieldValue}` };
   case "isEmpty":
-    return { operator: "regexp", value: "/^s*$/" };
+    return { operator: "eq", value: "null" };
   case "isNotEmpty":
-    return { operator: "regexp", value: "/^.+$/" };
+    return { operator: "neq", value: "null" };
   case "isAnyOf":
-    return { operator: "regexp", value: `(${whereFieldValue.join("|")})` };
+    return { operator: "eq", value: `${whereFieldValue.join("|")}` };
   case "not":
   case "!=":
     return { operator: "neq", value: whereFieldValue };
