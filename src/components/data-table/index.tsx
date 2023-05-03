@@ -115,7 +115,17 @@ export const DataTableGrid = ({
   };
 
   const handleFilterChange = (filterModel: GridFilterModel) => {
-    if (filterModel.items.length === 0) return;
+    if (!setFilterState) {
+      return;
+    }
+
+    if (filterModel.items.length === 0) {
+      setFilterState({
+        whereFieldValue: undefined,
+        whereField: undefined,
+      });
+      return;
+    }
 
     const filterModelItem = filterModel.items[0];
     const column = filterModelItem.columnField;
@@ -123,13 +133,11 @@ export const DataTableGrid = ({
     const operator = filterModelItem.operatorValue;
 
     if (column) {
-      if (setFilterState) {
-        setFilterState({
-          whereFieldValue: columnValue ? columnValue : "",
-          whereField: column,
-          whereOperator: operator,
-        });
-      }
+      setFilterState({
+        whereFieldValue: columnValue,
+        whereField: column,
+        whereOperator: operator,
+      });
     }
   };
 

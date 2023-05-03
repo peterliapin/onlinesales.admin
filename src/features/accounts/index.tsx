@@ -99,14 +99,6 @@ export const Accounts = () => {
       type: "string",
     },
     {
-      field: "countryCode",
-      headerName: "Country Code",
-      flex: 2,
-      type: "number",
-      align: "left",
-      headerAlign: "left",
-    },
-    {
       field: "cityName",
       headerName: "City",
       flex: 2,

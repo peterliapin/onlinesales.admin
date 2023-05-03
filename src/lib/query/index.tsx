@@ -1,4 +1,5 @@
 import { Dictionary } from "lodash";
+import moment from "moment";
 
 type FilterParams = {
   [key: string]: number | string | boolean;
@@ -37,10 +38,44 @@ export const getWhereFilterQuery = (
   whereFieldValue: string,
   operatorValue: string
 ) => {
+  if (!whereField) return "";
+  if (operatorValue === "isAnyOf" && (!whereFieldValue || whereFieldValue.length === 0)) return "";
   if (operatorValue === "isEmpty" || operatorValue === "isNotEmpty" || whereFieldValue) {
-    const whereObj = getWhereOperatorAndValue(operatorValue, whereFieldValue);
+    return generateFilterQuery(whereField, operatorValue, whereFieldValue);
+  }
+  return "";
+};
+
+const generateFilterQuery = (whereField: string, operatorValue: string, whereFieldValue: any) => {
+  const whereObj = getWhereOperatorAndValue(operatorValue, whereFieldValue);
+  if (!moment(whereFieldValue, "YYYY-MM-DD", true).isValid()) {
     return `&filter[where][${whereField}][${whereObj.operator}]=${whereObj.value}`;
-  } else return "";
+  }
+
+  const beginDate = new Date(whereFieldValue);
+  const endDate = new Date(beginDate);
+  endDate.setDate(beginDate.getDate() + 1);
+  const beginDateString = beginDate.toISOString();
+  const endDateString = endDate.toISOString();
+
+  switch (whereObj.operator) {
+  case "eq":
+    return `&filter[where][${whereField}][gte]=${beginDateString}
+    &filter[where][${whereField}][lt]=${endDateString}`;
+  case "neq":
+    return `&filter[where][or][${whereField}][lt]=${beginDateString}
+    &filter[where][or][${whereField}][gt]=${endDateString}`;
+  case "gt":
+    return `&filter[where][${whereField}][gt]=${endDateString}`;
+  case "gte":
+    return `&filter[where][${whereField}][gte]=${beginDateString}`;
+  case "lt":
+    return `&filter[where][${whereField}][lt]=${beginDateString}`;
+  case "lte":
+    return `&filter[where][${whereField}][lte]=${endDateString}`;
+  default:
+    return `&filter[where][${whereField}][${whereObj.operator}]=null`;
+  }
 };
 
 const getWhereOperatorAndValue = (
@@ -53,15 +88,15 @@ const getWhereOperatorAndValue = (
   case "=":
     return { operator: "eq", value: whereFieldValue };
   case "contains":
-    return { operator: "contains", value: whereFieldValue };
+    return { operator: "contains", value: `*${whereFieldValue}*` };
   case "startsWith":
     return { operator: "contains", value: `${whereFieldValue}*` };
   case "endsWith":
     return { operator: "contains", value: `*${whereFieldValue}` };
   case "isEmpty":
-    return { operator: "eq", value: "null" };
+    return { operator: "eq", value: "null|" };
   case "isNotEmpty":
-    return { operator: "neq", value: "null" };
+    return { operator: "neq", value: "null|" };
   case "isAnyOf":
     return { operator: "eq", value: `${whereFieldValue.join("|")}` };
   case "not":
