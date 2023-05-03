@@ -173,7 +173,7 @@ export const DataList = ({
         items: [
           {
             columnField: gridSettings.whereField,
-            operatorValue: "contains",
+            operatorValue: gridSettings.whereOperator,
             value: gridSettings.whereFieldValue,
           },
         ],
