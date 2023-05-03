@@ -1,7 +1,7 @@
-import {BreadcrumbLink} from "../../utils/types";
-import {dataListBreadcrumbLinks} from "../../utils/constants";
-import {CoreModule, getCoreModuleRoute} from "@lib/router";
-import {GridColumnVisibilityModel} from "@mui/x-data-grid";
+import { BreadcrumbLink } from "../../utils/types";
+import { dataListBreadcrumbLinks } from "../../utils/constants";
+import { CoreModule, getCoreModuleRoute } from "@lib/router";
+import { GridColumnVisibilityModel } from "@mui/x-data-grid";
 
 export interface DtoSourceProperty {
   $ref?: string;
@@ -67,7 +67,7 @@ export const getBreadcrumbLinks = (
 ): BreadcrumbLink[] => {
   return [
     ...dataListBreadcrumbLinks,
-    {linkText: moduleName, toRoute: getCoreModuleRoute(modulePath)},
+    { linkText: moduleName, toRoute: getCoreModuleRoute(modulePath) },
   ];
 };
 

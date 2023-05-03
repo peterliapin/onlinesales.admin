@@ -1,6 +1,6 @@
-import {ReactNode} from "react";
-import {EditProps} from "@components/generic-components/edit-components/common";
-import {Autocomplete, TextField} from "@mui/material";
+import { ReactNode } from "react";
+import { EditProps } from "@components/generic-components/edit-components/common";
+import { Autocomplete, TextField } from "@mui/material";
 
 export const EnumEdit = ({
   key,
@@ -11,7 +11,7 @@ export const EnumEdit = ({
   onChangeValue,
   disabled,
   valueOptions,
-  error
+  error,
 }: EditProps<string>): ReactNode => {
   return (
     <Autocomplete

@@ -1,4 +1,4 @@
-import {HttpResponse, ProblemDetails, RequestParams} from "@lib/network/swagger-client";
+import { HttpResponse, ProblemDetails, RequestParams } from "@lib/network/swagger-client";
 import {
   DtoSchema,
   camelCaseToTitleCase,
@@ -6,9 +6,9 @@ import {
   CustomFieldSourceDictionaries,
   DictItem,
 } from "@components/generic-components/common";
-import {useEffect, useState} from "react";
-import {useModuleWrapperContext} from "@providers/module-wrapper-provider";
-import {Button, Card, CardContent, Grid} from "@mui/material";
+import { useEffect, useState } from "react";
+import { useModuleWrapperContext } from "@providers/module-wrapper-provider";
+import { Button, Card, CardContent, Grid } from "@mui/material";
 import {
   NumberEdit,
   TextEdit,
@@ -18,7 +18,7 @@ import {
   ValidationResult,
   DictionaryEdit,
 } from "@components/generic-components/edit-components";
-import {validate} from "@components/generic-components/edit-components/validator";
+import { validate } from "@components/generic-components/edit-components/validator";
 
 export interface DtoField {
   editable: boolean;
@@ -36,7 +36,6 @@ export interface DtoField {
   pattern?: string;
   example?: any;
 }
-
 
 export interface GenericFormProps<TView extends BasicTypeForGeneric, TCreate, TUpdate> {
   editable: boolean;
@@ -74,85 +73,82 @@ export function GenericForm<TView extends BasicTypeForGeneric, TCreate, TUpdate>
   mode,
   getItemId,
   onSaved,
-  customDictionaries
+  customDictionaries,
 }: GenericFormProps<TView, TCreate, TUpdate>) {
-  const {setBusy, isBusy, setSaving, isSaving} = useModuleWrapperContext();
+  const { setBusy, isBusy, setSaving, isSaving } = useModuleWrapperContext();
   const [validationResult, setValidationResult] = useState<ValidationResult>();
 
   const itemId = getItemId();
 
-  const updateFields: DtoField[] = Object.keys(updateSchema.properties)
-    .map((key) => {
-      return {
-        name: key,
-        label: updateSchema.properties[key].title || camelCaseToTitleCase(key),
-        type: updateSchema.properties[key].type,
-        format: updateSchema.properties[key].format,
-        nullable: updateSchema.properties[key].nullable,
-        description: updateSchema.properties[key].description,
-        enum: updateSchema.properties[key].enum,
-        example: updateSchema.properties[key].example,
-        pattern: updateSchema.properties[key].pattern,
-        minLength: updateSchema.properties[key].minLength,
-        maxLength: updateSchema.properties[key].maxLength,
-        required: updateSchema.required && updateSchema.required.indexOf(key) > -1,
-        editable: true,
-        hide: updateSchema.properties[key].hide
-      };
-    });
+  const updateFields: DtoField[] = Object.keys(updateSchema.properties).map((key) => {
+    return {
+      name: key,
+      label: updateSchema.properties[key].title || camelCaseToTitleCase(key),
+      type: updateSchema.properties[key].type,
+      format: updateSchema.properties[key].format,
+      nullable: updateSchema.properties[key].nullable,
+      description: updateSchema.properties[key].description,
+      enum: updateSchema.properties[key].enum,
+      example: updateSchema.properties[key].example,
+      pattern: updateSchema.properties[key].pattern,
+      minLength: updateSchema.properties[key].minLength,
+      maxLength: updateSchema.properties[key].maxLength,
+      required: updateSchema.required && updateSchema.required.indexOf(key) > -1,
+      editable: true,
+      hide: updateSchema.properties[key].hide,
+    };
+  });
 
-  const createFields: DtoField[] = Object.keys(createSchema.properties)
-    .map((key) => {
-      return {
-        name: key,
-        label: createSchema.properties[key].title || camelCaseToTitleCase(key),
-        type: createSchema.properties[key].type,
-        format: createSchema.properties[key].format,
-        nullable: createSchema.properties[key].nullable,
-        description: createSchema.properties[key].description,
-        enum: createSchema.properties[key].enum,
-        example: createSchema.properties[key].example,
-        pattern: createSchema.properties[key].pattern,
-        minLength: createSchema.properties[key].minLength,
-        maxLength: createSchema.properties[key].maxLength,
-        required: createSchema.required && createSchema.required.indexOf(key) > -1,
-        editable: true,
-        hide: createSchema.properties[key].hide
-      };
-    });
+  const createFields: DtoField[] = Object.keys(createSchema.properties).map((key) => {
+    return {
+      name: key,
+      label: createSchema.properties[key].title || camelCaseToTitleCase(key),
+      type: createSchema.properties[key].type,
+      format: createSchema.properties[key].format,
+      nullable: createSchema.properties[key].nullable,
+      description: createSchema.properties[key].description,
+      enum: createSchema.properties[key].enum,
+      example: createSchema.properties[key].example,
+      pattern: createSchema.properties[key].pattern,
+      minLength: createSchema.properties[key].minLength,
+      maxLength: createSchema.properties[key].maxLength,
+      required: createSchema.required && createSchema.required.indexOf(key) > -1,
+      editable: true,
+      hide: createSchema.properties[key].hide,
+    };
+  });
 
-  const detailsFields: DtoField[] = Object.keys(detailsSchema.properties)
-    .map((key) => {
-      return {
-        name: key,
-        label: detailsSchema.properties[key].title || camelCaseToTitleCase(key),
-        type: detailsSchema.properties[key].type,
-        format: detailsSchema.properties[key].format,
-        nullable: detailsSchema.properties[key].nullable,
-        description: detailsSchema.properties[key].description,
-        enum: detailsSchema.properties[key].enum,
-        example: detailsSchema.properties[key].example,
-        pattern: detailsSchema.properties[key].pattern,
-        minLength: detailsSchema.properties[key].minLength,
-        maxLength: detailsSchema.properties[key].maxLength,
-        required: detailsSchema.required && detailsSchema.required.indexOf(key) > -1,
-        editable: key in updateSchema.properties,
-        hide: detailsSchema.properties[key].hide
-      };
-    });
+  const detailsFields: DtoField[] = Object.keys(detailsSchema.properties).map((key) => {
+    return {
+      name: key,
+      label: detailsSchema.properties[key].title || camelCaseToTitleCase(key),
+      type: detailsSchema.properties[key].type,
+      format: detailsSchema.properties[key].format,
+      nullable: detailsSchema.properties[key].nullable,
+      description: detailsSchema.properties[key].description,
+      enum: detailsSchema.properties[key].enum,
+      example: detailsSchema.properties[key].example,
+      pattern: detailsSchema.properties[key].pattern,
+      minLength: detailsSchema.properties[key].minLength,
+      maxLength: detailsSchema.properties[key].maxLength,
+      required: detailsSchema.required && detailsSchema.required.indexOf(key) > -1,
+      editable: key in updateSchema.properties,
+      hide: detailsSchema.properties[key].hide,
+    };
+  });
   const initValues = () => {
     const initValues: DynamicValues = {};
     for (const field of detailsFields) {
       switch (field.type) {
-      case "integer":
-        initValues[field.name] = 0;
-        break;
-      case "number":
-        initValues[field.name] = 0;
-        break;
-      default:
-        initValues[field.name] = "";
-        break;
+        case "integer":
+          initValues[field.name] = 0;
+          break;
+        case "number":
+          initValues[field.name] = 0;
+          break;
+        default:
+          initValues[field.name] = "";
+          break;
       }
     }
     return initValues;
@@ -165,8 +161,8 @@ export function GenericForm<TView extends BasicTypeForGeneric, TCreate, TUpdate>
     if (itemId) {
       setBusy(async () => {
         try {
-          const {data} = await getItemFn(itemId);
-          setValues((values) => ({...values, ...data}));
+          const { data } = await getItemFn(itemId);
+          setValues((values) => ({ ...values, ...data }));
         } catch (e) {
           console.log(e);
         }
@@ -198,14 +194,14 @@ export function GenericForm<TView extends BasicTypeForGeneric, TCreate, TUpdate>
 
       if (itemId) {
         if (!validationResult || !validationResult.errors) {
-          const {data} = await updateItemFn(itemId, saveData, {});
-          setValues((values) => ({...values, ...data}));
+          const { data } = await updateItemFn(itemId, saveData, {});
+          setValues((values) => ({ ...values, ...data }));
           onSaved && onSaved(data);
         }
       } else {
         if (!validationResult || !validationResult.errors) {
-          const {data} = await createItemFn(saveData, {});
-          setValues((values) => ({...values, ...data}));
+          const { data } = await createItemFn(saveData, {});
+          setValues((values) => ({ ...values, ...data }));
           onSaved && onSaved(data);
         }
       }
@@ -214,18 +210,18 @@ export function GenericForm<TView extends BasicTypeForGeneric, TCreate, TUpdate>
 
   const fieldsSet = () => {
     switch (mode) {
-    case "create":
-      return createFields;
-    case "update":
-      return detailsFields;
-    default:
-      return detailsFields;
+      case "create":
+        return createFields;
+      case "update":
+        return detailsFields;
+      default:
+        return detailsFields;
     }
   };
 
   const getEdit = (field: DtoField) => {
     const commonProps = {
-      error: (validationResult && validationResult.errors && validationResult.errors[field.name]),
+      error: validationResult && validationResult.errors && validationResult.errors[field.name],
       required: field.required,
       pattern: field.pattern,
       key: field.name,
@@ -241,63 +237,63 @@ export function GenericForm<TView extends BasicTypeForGeneric, TCreate, TUpdate>
       },
     };
     switch (field.type) {
-    case "integer":
-      if (customDictionaries && customDictionaries[field.name]) {
-        const customDictionary = customDictionaries[field.name];
-        const dictItems = customDictionary?.items || [];
-        return DictionaryEdit({
+      case "integer":
+        if (customDictionaries && customDictionaries[field.name]) {
+          const customDictionary = customDictionaries[field.name];
+          const dictItems = customDictionary?.items || [];
+          return DictionaryEdit({
+            ...commonProps,
+            label: customDictionary?.label || field.label,
+            example: undefined,
+            value: dictItems.find((item) => item.value === values[field.name]) || null,
+            valueOptions: dictItems,
+            onChangeValue: (newValue: DictItem | null) => {
+              setValues((prevValues) => ({
+                ...prevValues,
+                [field.name]: newValue ? newValue.value : null,
+              }));
+              customDictionary?.onSelect &&
+                customDictionary?.onSelect(newValue ? newValue.value : null);
+            },
+          });
+        }
+        return NumberEdit({
           ...commonProps,
-          label: customDictionary?.label || field.label,
-          example: undefined,
-          value: dictItems.find((item) => item.value === values[field.name]) || null,
-          valueOptions: dictItems,
-          onChangeValue: (newValue: DictItem | null) => {
-            setValues((prevValues) => ({
-              ...prevValues,
-              [field.name]: newValue ? newValue.value : null,
-            }));
-            customDictionary?.onSelect
-            && customDictionary?.onSelect(newValue ? newValue.value : null);
-          }
         });
-      }
-      return NumberEdit({
-        ...commonProps,
-      });
-    case "number":
-      return NumberEdit({
-        ...commonProps,
-      });
-    case "string":
-      if (field.format === "date-time") {
-        return DatetimeEdit({
+      case "number":
+        return NumberEdit({
           ...commonProps,
-          value: values[field.name] ? new Date(values[field.name]) : null,
-          onChangeValue: (newValue: Date | null) => {
-            setValues((prevValues) => ({
-              ...prevValues,
-              [field.name]: newValue ? newValue.toISOString() : null,
-            }));
-          },
         });
-      } else if (field.enum && field.enum.length > 0) {
-        return EnumEdit({
-          ...commonProps,
-          valueOptions: field.enum,
-        });
-      } else {
+      case "string":
+        if (field.format === "date-time") {
+          return DatetimeEdit({
+            ...commonProps,
+            value: values[field.name] ? new Date(values[field.name]) : null,
+            onChangeValue: (newValue: Date | null) => {
+              setValues((prevValues) => ({
+                ...prevValues,
+                [field.name]: newValue ? newValue.toISOString() : null,
+              }));
+            },
+          });
+        } else if (field.enum && field.enum.length > 0) {
+          return EnumEdit({
+            ...commonProps,
+            valueOptions: field.enum,
+          });
+        } else {
+          return TextEdit({
+            ...commonProps,
+            minLength: field.minLength,
+            maxLength: field.maxLength,
+          });
+        }
+      default:
         return TextEdit({
           ...commonProps,
           minLength: field.minLength,
           maxLength: field.maxLength,
         });
-      }
-    default:
-      return TextEdit({
-        ...commonProps,
-        minLength: field.minLength,
-        maxLength: field.maxLength,
-      });
     }
   };
 
@@ -314,18 +310,18 @@ export function GenericForm<TView extends BasicTypeForGeneric, TCreate, TUpdate>
                 </Grid>
               ))}
             <Grid item xs={12} sm={12}>
-              {
-                editable && (
-                  <Button
-                    type="submit"
-                    disabled={isBusy || isSaving}
-                    variant="contained"
-                    fullWidth
-                    onClick={save}
-                    size="large">
-                    Save
-                  </Button>
-                )}
+              {editable && (
+                <Button
+                  type="submit"
+                  disabled={isBusy || isSaving}
+                  variant="contained"
+                  fullWidth
+                  onClick={save}
+                  size="large"
+                >
+                  Save
+                </Button>
+              )}
             </Grid>
           </Grid>
         </CardContent>

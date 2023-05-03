@@ -1,15 +1,11 @@
 import { memo, PropsWithChildren, useCallback } from "react";
-import { 
-  PublicClientApplication, 
-  Configuration, 
-  InteractionStatus, 
-  InteractionType 
-} from "@azure/msal-browser";
 import {
-  MsalProvider,
-  useMsal,
-  MsalAuthenticationTemplate
-} from "@azure/msal-react";
+  PublicClientApplication,
+  Configuration,
+  InteractionStatus,
+  InteractionType,
+} from "@azure/msal-browser";
+import { MsalProvider, useMsal, MsalAuthenticationTemplate } from "@azure/msal-react";
 
 const msalConfig: Configuration = {
   auth: {
@@ -22,7 +18,7 @@ const msalConfig: Configuration = {
 const msalInstance = new PublicClientApplication(msalConfig);
 
 export const Loading = () => {
-  return (<div>Authentication in progress...</div>); // TODO: Design better one
+  return <div>Authentication in progress...</div>; // TODO: Design better one
 };
 
 export const AuthProvider = memo(function AuthProvider({ children }: PropsWithChildren) {

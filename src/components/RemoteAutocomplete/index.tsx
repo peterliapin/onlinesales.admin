@@ -6,12 +6,12 @@ import { HttpResponse, ProblemDetails } from "@lib/network/swagger-client";
 import { useNotificationsService } from "@hooks";
 
 export function RemoteAutocomplete({
-  label, 
-  placeholder, 
-  freeSolo, 
-  multiple, 
+  label,
+  placeholder,
+  freeSolo,
+  multiple,
   value,
-  onChange, 
+  onChange,
   limit,
   type,
   error,
@@ -26,28 +26,26 @@ export function RemoteAutocomplete({
 
   const requestData = async () => {
     let response: HttpResponse<string[], void | ProblemDetails> | undefined = undefined;
-    try{
-      switch(type){
-      case RemoteValues.TAGS:
-        response = await client.api.contentTagsList();
-        break;
-      case RemoteValues.CATEGORIES:
-        response = await client.api.contentCategoriesList();
+    try {
+      switch (type) {
+        case RemoteValues.TAGS:
+          response = await client.api.contentTagsList();
+          break;
+        case RemoteValues.CATEGORIES:
+          response = await client.api.contentCategoriesList();
       }
-    }
-    catch(e){
+    } catch (e) {
       const error = e as ProblemDetails;
       notificationsService.error(`Failed to get options: ${error.detail}`);
-    }
-    finally{
-      setOptions(response && response.data || []);
+    } finally {
+      setOptions((response && response.data) || []);
       setIsLoading(false);
       setIsLoaded(true);
     }
   };
 
   useEffect(() => {
-    if (isOpen && !isLoaded && !isLoading){
+    if (isOpen && !isLoaded && !isLoading) {
       setIsLoading(true);
       requestData();
     }
@@ -89,6 +87,5 @@ export function RemoteAutocomplete({
         />
       )}
     />
-
   );
-};
+}

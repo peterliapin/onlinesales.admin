@@ -1,4 +1,4 @@
-import {Outlet, Route, Routes} from "react-router-dom";
+import { Outlet, Route, Routes } from "react-router-dom";
 import {
   addFormRoute,
   CoreModule,
@@ -9,31 +9,31 @@ import {
 import {
   BasicTypeForGeneric,
   DtoSchema,
-  getBreadcrumbLinks
+  getBreadcrumbLinks,
 } from "@components/generic-components/common";
-import {ReactNode, useRef, useState} from "react";
+import { ReactNode, useRef, useState } from "react";
 import {
   GenericDataGrid,
   GenericDataGridProps,
   GenericDataGridRef,
 } from "@components/generic-components/generic-data-grid";
-import {ModuleWrapper} from "@components/module-wrapper";
-import {dataListBreadcrumbLinks} from "../../utils/constants";
-import {GenericForm, GenericFormProps} from "@components/generic-components/generic-form";
-import {Button, CircularProgress, Grid, Typography} from "@mui/material";
-import {SearchBar} from "@components/search-bar";
-import {GhostLink} from "@components/ghost-link";
-import {Download, Upload} from "@mui/icons-material";
+import { ModuleWrapper } from "@components/module-wrapper";
+import { dataListBreadcrumbLinks } from "../../utils/constants";
+import { GenericForm, GenericFormProps } from "@components/generic-components/generic-form";
+import { Button, CircularProgress, Grid, Typography } from "@mui/material";
+import { SearchBar } from "@components/search-bar";
+import { GhostLink } from "@components/ghost-link";
+import { Download, Upload } from "@mui/icons-material";
 import {
   CommentImportDto,
   HttpResponse,
   ImportResult,
   ProblemDetails,
-  RequestParams
+  RequestParams,
 } from "@lib/network/swagger-client";
-import {CsvExport} from "@components/export";
-import {CsvImport} from "@components/spreadsheet-import";
-import {Result} from "@wavepoint/react-spreadsheet-import/types/types";
+import { CsvExport } from "@components/export";
+import { CsvImport } from "@components/spreadsheet-import";
+import { Result } from "@wavepoint/react-spreadsheet-import/types/types";
 
 interface ExtraActions {
   export?: {
@@ -42,7 +42,7 @@ interface ExtraActions {
       query?: { query?: string },
       params?: RequestParams
     ) => Promise<HttpResponse<any, void | ProblemDetails>>;
-  }
+  };
   import?: {
     showButton?: boolean;
     importSchema?: DtoSchema;
@@ -50,7 +50,7 @@ interface ExtraActions {
       data: any[],
       params: RequestParams
     ) => Promise<HttpResponse<ImportResult, void | ProblemDetails>>;
-  }
+  };
 }
 
 interface GenericModuleProps<TView extends BasicTypeForGeneric, TCreate, TUpdate> {
@@ -72,7 +72,7 @@ export function GenericModule<TView extends BasicTypeForGeneric, TCreate, TUpdat
   createFormProps,
   editFormProps,
   viewFormProps,
-  extraActions
+  extraActions,
 }: GenericModuleProps<TView, TCreate, TUpdate>): JSX.Element {
   const [searchText, setSearchText] = useState("");
   const [exportIsOpen, setExportIsOpen] = useState(false);
@@ -80,10 +80,13 @@ export function GenericModule<TView extends BasicTypeForGeneric, TCreate, TUpdat
   const genericDataGridRef = useRef<GenericDataGridRef>(null);
 
   const getGenericTable = (key: string, tableProps: GenericDataGridProps<TView>) => {
-    const genericDataGrid = GenericDataGrid<TView>({
-      ...tableProps,
-      searchText: searchText
-    }, genericDataGridRef);
+    const genericDataGrid = GenericDataGrid<TView>(
+      {
+        ...tableProps,
+        searchText: searchText,
+      },
+      genericDataGridRef
+    );
 
     const searchBox = (
       <SearchBar
@@ -101,25 +104,30 @@ export function GenericModule<TView extends BasicTypeForGeneric, TCreate, TUpdat
 
     const extraActionsChildren = (
       <>
-        {extraActions?.import?.showButton
-          && <Button key={"import-btn"}
-            disabled={!(extraActions?.import?.importItemsFn
-                       && extraActions?.import?.importSchema)}
+        {extraActions?.import?.showButton && (
+          <Button
+            key={"import-btn"}
+            disabled={!(extraActions?.import?.importItemsFn && extraActions?.import?.importSchema)}
             onClick={() => {
               setImportIsOpen(true);
             }}
-            startIcon={<Upload/>}>
+            startIcon={<Upload />}
+          >
             Import
-          </Button>}
-        {extraActions?.export?.showButton
-          && <Button key={"export-btn"}
+          </Button>
+        )}
+        {extraActions?.export?.showButton && (
+          <Button
+            key={"export-btn"}
             disabled={!extraActions?.export?.exportItemsFn}
             onClick={() => {
               setExportIsOpen(true);
             }}
-            startIcon={<Download/>}>
+            startIcon={<Download />}
+          >
             Export
-          </Button>}
+          </Button>
+        )}
       </>
     );
 
@@ -140,24 +148,26 @@ export function GenericModule<TView extends BasicTypeForGeneric, TCreate, TUpdat
               setImportIsOpen(false);
             }}
             onUpload={async (data: Result<string>) => {
-              extraActions?.import?.importItemsFn
-              && await extraActions.import.importItemsFn(data.validData as any[], {});
+              extraActions?.import?.importItemsFn &&
+                (await extraActions.import.importItemsFn(data.validData as any[], {}));
             }}
             object={extraActions?.import?.importSchema.properties}
-            endRoute={modulePath as CoreModule}/>
+            endRoute={modulePath as CoreModule}
+          />
         )}
         {exportIsOpen && extraActions?.export?.exportItemsFn && (
           <CsvExport
             exportAsync={async () => {
-              const filters = genericDataGridRef.current
-                && genericDataGridRef.current.getExportFilters();
+              const filters =
+                genericDataGridRef.current && genericDataGridRef.current.getExportFilters();
               const response = await extraActions!.export!.exportItemsFn!(filters || {});
               return response?.text();
             }}
             closeExport={() => {
               setExportIsOpen(false);
             }}
-            fileName={moduleName}/>
+            fileName={moduleName}
+          />
         )}
       </ModuleWrapper>
     );
@@ -176,7 +186,7 @@ export function GenericModule<TView extends BasicTypeForGeneric, TCreate, TUpdat
       <>
         <Grid container item spacing={3} sm="auto" xs="auto">
           <Grid item>
-            <CircularProgress size={14}/>
+            <CircularProgress size={14} />
           </Grid>
           <Grid item>
             <Typography>Saving...</Typography>
@@ -204,12 +214,12 @@ export function GenericModule<TView extends BasicTypeForGeneric, TCreate, TUpdat
   return (
     <>
       <Routes>
-        <Route index element={genericTable}/>
-        <Route path={addFormRoute.template} element={genericCreateForm}/>
-        <Route path={editFormRoute.template} element={genericEditForm}/>
-        <Route path={viewFormRoute.template} element={genericViewForm}/>
+        <Route index element={genericTable} />
+        <Route path={addFormRoute.template} element={genericCreateForm} />
+        <Route path={editFormRoute.template} element={genericEditForm} />
+        <Route path={viewFormRoute.template} element={genericViewForm} />
       </Routes>
-      <Outlet/>
+      <Outlet />
     </>
   );
 }
