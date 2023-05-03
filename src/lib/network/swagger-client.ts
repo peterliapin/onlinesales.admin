@@ -21,8 +21,267 @@ export interface AccountCreateDto {
    * @example "string"
    */
   state?: string | null;
-  continentCode?: Continent;
-  countryCode?: Country;
+  /**
+   * Continent Code
+   * @example "ZZ"
+   */
+  continentCode?: "ZZ" | "AF" | "AN" | "AS" | "EU" | "NA" | "OC" | "SA" | null;
+  /**
+   * Country Code
+   * @example "ZZ"
+   */
+  countryCode?:
+    | "ZZ"
+    | "AF"
+    | "AL"
+    | "AQ"
+    | "DZ"
+    | "AS"
+    | "AD"
+    | "AO"
+    | "AG"
+    | "AZ"
+    | "AR"
+    | "AU"
+    | "AT"
+    | "BS"
+    | "BH"
+    | "BD"
+    | "AM"
+    | "BB"
+    | "BE"
+    | "BM"
+    | "BT"
+    | "BO"
+    | "BA"
+    | "BW"
+    | "BV"
+    | "BR"
+    | "BZ"
+    | "IO"
+    | "SB"
+    | "VG"
+    | "BN"
+    | "BG"
+    | "MM"
+    | "BI"
+    | "BY"
+    | "KH"
+    | "CM"
+    | "CA"
+    | "CV"
+    | "KY"
+    | "CF"
+    | "LK"
+    | "TD"
+    | "CL"
+    | "CN"
+    | "TW"
+    | "CX"
+    | "CC"
+    | "CO"
+    | "KM"
+    | "YT"
+    | "CG"
+    | "CD"
+    | "CK"
+    | "CR"
+    | "HR"
+    | "CU"
+    | "CY"
+    | "CZ"
+    | "BJ"
+    | "DK"
+    | "DM"
+    | "DO"
+    | "EC"
+    | "SV"
+    | "GQ"
+    | "ET"
+    | "ER"
+    | "EE"
+    | "FO"
+    | "FK"
+    | "GS"
+    | "FJ"
+    | "FI"
+    | "AX"
+    | "FR"
+    | "GF"
+    | "PF"
+    | "TF"
+    | "DJ"
+    | "GA"
+    | "GE"
+    | "GM"
+    | "PS"
+    | "DE"
+    | "GH"
+    | "GI"
+    | "KI"
+    | "GR"
+    | "GL"
+    | "GD"
+    | "GP"
+    | "GU"
+    | "GT"
+    | "GN"
+    | "GY"
+    | "HT"
+    | "HM"
+    | "VA"
+    | "HN"
+    | "HK"
+    | "HU"
+    | "IS"
+    | "IN"
+    | "ID"
+    | "IR"
+    | "IQ"
+    | "IE"
+    | "IL"
+    | "IT"
+    | "CI"
+    | "JM"
+    | "JP"
+    | "KZ"
+    | "JO"
+    | "KE"
+    | "KP"
+    | "KR"
+    | "KW"
+    | "KG"
+    | "LA"
+    | "LB"
+    | "LS"
+    | "LV"
+    | "LR"
+    | "LY"
+    | "LI"
+    | "LT"
+    | "LU"
+    | "MO"
+    | "MG"
+    | "MW"
+    | "MY"
+    | "MV"
+    | "ML"
+    | "MT"
+    | "MQ"
+    | "MR"
+    | "MU"
+    | "MX"
+    | "MC"
+    | "MN"
+    | "MD"
+    | "ME"
+    | "MS"
+    | "MA"
+    | "MZ"
+    | "OM"
+    | "NA"
+    | "NR"
+    | "NP"
+    | "NL"
+    | "CW"
+    | "AW"
+    | "SX"
+    | "BQ"
+    | "NC"
+    | "VU"
+    | "NZ"
+    | "NI"
+    | "NE"
+    | "NG"
+    | "NU"
+    | "NF"
+    | "NO"
+    | "MP"
+    | "UM"
+    | "FM"
+    | "MH"
+    | "PW"
+    | "PK"
+    | "PA"
+    | "PG"
+    | "PY"
+    | "PE"
+    | "PH"
+    | "PN"
+    | "PL"
+    | "PT"
+    | "GW"
+    | "TL"
+    | "PR"
+    | "QA"
+    | "RE"
+    | "RO"
+    | "RU"
+    | "RW"
+    | "BL"
+    | "SH"
+    | "KN"
+    | "AI"
+    | "LC"
+    | "MF"
+    | "PM"
+    | "VC"
+    | "SM"
+    | "ST"
+    | "SA"
+    | "SN"
+    | "RS"
+    | "SC"
+    | "SL"
+    | "SG"
+    | "SK"
+    | "VN"
+    | "SI"
+    | "SO"
+    | "ZA"
+    | "ZW"
+    | "ES"
+    | "SS"
+    | "SD"
+    | "EH"
+    | "SR"
+    | "SJ"
+    | "SZ"
+    | "SE"
+    | "CH"
+    | "SY"
+    | "TJ"
+    | "TH"
+    | "TG"
+    | "TK"
+    | "TO"
+    | "TT"
+    | "AE"
+    | "TN"
+    | "TR"
+    | "TM"
+    | "TC"
+    | "TV"
+    | "UG"
+    | "UA"
+    | "MK"
+    | "EG"
+    | "GB"
+    | "GG"
+    | "JE"
+    | "IM"
+    | "TZ"
+    | "US"
+    | "VI"
+    | "BF"
+    | "UY"
+    | "UZ"
+    | "VE"
+    | "WF"
+    | "WS"
+    | "YE"
+    | "ZM"
+    | null;
   /**
    * City Name
    * @example "Colombo"
@@ -83,8 +342,267 @@ export interface AccountDetailsDto {
    * @example "string"
    */
   state?: string | null;
-  continentCode?: Continent;
-  countryCode?: Country;
+  /**
+   * Continent Code
+   * @example "ZZ"
+   */
+  continentCode?: "ZZ" | "AF" | "AN" | "AS" | "EU" | "NA" | "OC" | "SA" | null;
+  /**
+   * Country Code
+   * @example "ZZ"
+   */
+  countryCode?:
+    | "ZZ"
+    | "AF"
+    | "AL"
+    | "AQ"
+    | "DZ"
+    | "AS"
+    | "AD"
+    | "AO"
+    | "AG"
+    | "AZ"
+    | "AR"
+    | "AU"
+    | "AT"
+    | "BS"
+    | "BH"
+    | "BD"
+    | "AM"
+    | "BB"
+    | "BE"
+    | "BM"
+    | "BT"
+    | "BO"
+    | "BA"
+    | "BW"
+    | "BV"
+    | "BR"
+    | "BZ"
+    | "IO"
+    | "SB"
+    | "VG"
+    | "BN"
+    | "BG"
+    | "MM"
+    | "BI"
+    | "BY"
+    | "KH"
+    | "CM"
+    | "CA"
+    | "CV"
+    | "KY"
+    | "CF"
+    | "LK"
+    | "TD"
+    | "CL"
+    | "CN"
+    | "TW"
+    | "CX"
+    | "CC"
+    | "CO"
+    | "KM"
+    | "YT"
+    | "CG"
+    | "CD"
+    | "CK"
+    | "CR"
+    | "HR"
+    | "CU"
+    | "CY"
+    | "CZ"
+    | "BJ"
+    | "DK"
+    | "DM"
+    | "DO"
+    | "EC"
+    | "SV"
+    | "GQ"
+    | "ET"
+    | "ER"
+    | "EE"
+    | "FO"
+    | "FK"
+    | "GS"
+    | "FJ"
+    | "FI"
+    | "AX"
+    | "FR"
+    | "GF"
+    | "PF"
+    | "TF"
+    | "DJ"
+    | "GA"
+    | "GE"
+    | "GM"
+    | "PS"
+    | "DE"
+    | "GH"
+    | "GI"
+    | "KI"
+    | "GR"
+    | "GL"
+    | "GD"
+    | "GP"
+    | "GU"
+    | "GT"
+    | "GN"
+    | "GY"
+    | "HT"
+    | "HM"
+    | "VA"
+    | "HN"
+    | "HK"
+    | "HU"
+    | "IS"
+    | "IN"
+    | "ID"
+    | "IR"
+    | "IQ"
+    | "IE"
+    | "IL"
+    | "IT"
+    | "CI"
+    | "JM"
+    | "JP"
+    | "KZ"
+    | "JO"
+    | "KE"
+    | "KP"
+    | "KR"
+    | "KW"
+    | "KG"
+    | "LA"
+    | "LB"
+    | "LS"
+    | "LV"
+    | "LR"
+    | "LY"
+    | "LI"
+    | "LT"
+    | "LU"
+    | "MO"
+    | "MG"
+    | "MW"
+    | "MY"
+    | "MV"
+    | "ML"
+    | "MT"
+    | "MQ"
+    | "MR"
+    | "MU"
+    | "MX"
+    | "MC"
+    | "MN"
+    | "MD"
+    | "ME"
+    | "MS"
+    | "MA"
+    | "MZ"
+    | "OM"
+    | "NA"
+    | "NR"
+    | "NP"
+    | "NL"
+    | "CW"
+    | "AW"
+    | "SX"
+    | "BQ"
+    | "NC"
+    | "VU"
+    | "NZ"
+    | "NI"
+    | "NE"
+    | "NG"
+    | "NU"
+    | "NF"
+    | "NO"
+    | "MP"
+    | "UM"
+    | "FM"
+    | "MH"
+    | "PW"
+    | "PK"
+    | "PA"
+    | "PG"
+    | "PY"
+    | "PE"
+    | "PH"
+    | "PN"
+    | "PL"
+    | "PT"
+    | "GW"
+    | "TL"
+    | "PR"
+    | "QA"
+    | "RE"
+    | "RO"
+    | "RU"
+    | "RW"
+    | "BL"
+    | "SH"
+    | "KN"
+    | "AI"
+    | "LC"
+    | "MF"
+    | "PM"
+    | "VC"
+    | "SM"
+    | "ST"
+    | "SA"
+    | "SN"
+    | "RS"
+    | "SC"
+    | "SL"
+    | "SG"
+    | "SK"
+    | "VN"
+    | "SI"
+    | "SO"
+    | "ZA"
+    | "ZW"
+    | "ES"
+    | "SS"
+    | "SD"
+    | "EH"
+    | "SR"
+    | "SJ"
+    | "SZ"
+    | "SE"
+    | "CH"
+    | "SY"
+    | "TJ"
+    | "TH"
+    | "TG"
+    | "TK"
+    | "TO"
+    | "TT"
+    | "AE"
+    | "TN"
+    | "TR"
+    | "TM"
+    | "TC"
+    | "TV"
+    | "UG"
+    | "UA"
+    | "MK"
+    | "EG"
+    | "GB"
+    | "GG"
+    | "JE"
+    | "IM"
+    | "TZ"
+    | "US"
+    | "VI"
+    | "BF"
+    | "UY"
+    | "UZ"
+    | "VE"
+    | "WF"
+    | "WS"
+    | "YE"
+    | "ZM"
+    | null;
   /**
    * City Name
    * @example "Colombo"
@@ -214,7 +732,262 @@ export interface AccountImportDto {
    * @example "string"
    */
   stateCode?: string | null;
-  countryCode?: Country;
+  /**
+   * Country Code
+   * @example "ZZ"
+   */
+  countryCode?:
+    | "ZZ"
+    | "AF"
+    | "AL"
+    | "AQ"
+    | "DZ"
+    | "AS"
+    | "AD"
+    | "AO"
+    | "AG"
+    | "AZ"
+    | "AR"
+    | "AU"
+    | "AT"
+    | "BS"
+    | "BH"
+    | "BD"
+    | "AM"
+    | "BB"
+    | "BE"
+    | "BM"
+    | "BT"
+    | "BO"
+    | "BA"
+    | "BW"
+    | "BV"
+    | "BR"
+    | "BZ"
+    | "IO"
+    | "SB"
+    | "VG"
+    | "BN"
+    | "BG"
+    | "MM"
+    | "BI"
+    | "BY"
+    | "KH"
+    | "CM"
+    | "CA"
+    | "CV"
+    | "KY"
+    | "CF"
+    | "LK"
+    | "TD"
+    | "CL"
+    | "CN"
+    | "TW"
+    | "CX"
+    | "CC"
+    | "CO"
+    | "KM"
+    | "YT"
+    | "CG"
+    | "CD"
+    | "CK"
+    | "CR"
+    | "HR"
+    | "CU"
+    | "CY"
+    | "CZ"
+    | "BJ"
+    | "DK"
+    | "DM"
+    | "DO"
+    | "EC"
+    | "SV"
+    | "GQ"
+    | "ET"
+    | "ER"
+    | "EE"
+    | "FO"
+    | "FK"
+    | "GS"
+    | "FJ"
+    | "FI"
+    | "AX"
+    | "FR"
+    | "GF"
+    | "PF"
+    | "TF"
+    | "DJ"
+    | "GA"
+    | "GE"
+    | "GM"
+    | "PS"
+    | "DE"
+    | "GH"
+    | "GI"
+    | "KI"
+    | "GR"
+    | "GL"
+    | "GD"
+    | "GP"
+    | "GU"
+    | "GT"
+    | "GN"
+    | "GY"
+    | "HT"
+    | "HM"
+    | "VA"
+    | "HN"
+    | "HK"
+    | "HU"
+    | "IS"
+    | "IN"
+    | "ID"
+    | "IR"
+    | "IQ"
+    | "IE"
+    | "IL"
+    | "IT"
+    | "CI"
+    | "JM"
+    | "JP"
+    | "KZ"
+    | "JO"
+    | "KE"
+    | "KP"
+    | "KR"
+    | "KW"
+    | "KG"
+    | "LA"
+    | "LB"
+    | "LS"
+    | "LV"
+    | "LR"
+    | "LY"
+    | "LI"
+    | "LT"
+    | "LU"
+    | "MO"
+    | "MG"
+    | "MW"
+    | "MY"
+    | "MV"
+    | "ML"
+    | "MT"
+    | "MQ"
+    | "MR"
+    | "MU"
+    | "MX"
+    | "MC"
+    | "MN"
+    | "MD"
+    | "ME"
+    | "MS"
+    | "MA"
+    | "MZ"
+    | "OM"
+    | "NA"
+    | "NR"
+    | "NP"
+    | "NL"
+    | "CW"
+    | "AW"
+    | "SX"
+    | "BQ"
+    | "NC"
+    | "VU"
+    | "NZ"
+    | "NI"
+    | "NE"
+    | "NG"
+    | "NU"
+    | "NF"
+    | "NO"
+    | "MP"
+    | "UM"
+    | "FM"
+    | "MH"
+    | "PW"
+    | "PK"
+    | "PA"
+    | "PG"
+    | "PY"
+    | "PE"
+    | "PH"
+    | "PN"
+    | "PL"
+    | "PT"
+    | "GW"
+    | "TL"
+    | "PR"
+    | "QA"
+    | "RE"
+    | "RO"
+    | "RU"
+    | "RW"
+    | "BL"
+    | "SH"
+    | "KN"
+    | "AI"
+    | "LC"
+    | "MF"
+    | "PM"
+    | "VC"
+    | "SM"
+    | "ST"
+    | "SA"
+    | "SN"
+    | "RS"
+    | "SC"
+    | "SL"
+    | "SG"
+    | "SK"
+    | "VN"
+    | "SI"
+    | "SO"
+    | "ZA"
+    | "ZW"
+    | "ES"
+    | "SS"
+    | "SD"
+    | "EH"
+    | "SR"
+    | "SJ"
+    | "SZ"
+    | "SE"
+    | "CH"
+    | "SY"
+    | "TJ"
+    | "TH"
+    | "TG"
+    | "TK"
+    | "TO"
+    | "TT"
+    | "AE"
+    | "TN"
+    | "TR"
+    | "TM"
+    | "TC"
+    | "TV"
+    | "UG"
+    | "UA"
+    | "MK"
+    | "EG"
+    | "GB"
+    | "GG"
+    | "JE"
+    | "IM"
+    | "TZ"
+    | "US"
+    | "VI"
+    | "BF"
+    | "UY"
+    | "UZ"
+    | "VE"
+    | "WF"
+    | "WS"
+    | "YE"
+    | "ZM"
+    | null;
   /**
    * Site Url
    * @example "string"
@@ -279,7 +1052,262 @@ export interface AccountUpdateDto {
    * @example "string"
    */
   stateCode?: string | null;
-  countryCode?: Country;
+  /**
+   * Country Code
+   * @example "ZZ"
+   */
+  countryCode?:
+    | "ZZ"
+    | "AF"
+    | "AL"
+    | "AQ"
+    | "DZ"
+    | "AS"
+    | "AD"
+    | "AO"
+    | "AG"
+    | "AZ"
+    | "AR"
+    | "AU"
+    | "AT"
+    | "BS"
+    | "BH"
+    | "BD"
+    | "AM"
+    | "BB"
+    | "BE"
+    | "BM"
+    | "BT"
+    | "BO"
+    | "BA"
+    | "BW"
+    | "BV"
+    | "BR"
+    | "BZ"
+    | "IO"
+    | "SB"
+    | "VG"
+    | "BN"
+    | "BG"
+    | "MM"
+    | "BI"
+    | "BY"
+    | "KH"
+    | "CM"
+    | "CA"
+    | "CV"
+    | "KY"
+    | "CF"
+    | "LK"
+    | "TD"
+    | "CL"
+    | "CN"
+    | "TW"
+    | "CX"
+    | "CC"
+    | "CO"
+    | "KM"
+    | "YT"
+    | "CG"
+    | "CD"
+    | "CK"
+    | "CR"
+    | "HR"
+    | "CU"
+    | "CY"
+    | "CZ"
+    | "BJ"
+    | "DK"
+    | "DM"
+    | "DO"
+    | "EC"
+    | "SV"
+    | "GQ"
+    | "ET"
+    | "ER"
+    | "EE"
+    | "FO"
+    | "FK"
+    | "GS"
+    | "FJ"
+    | "FI"
+    | "AX"
+    | "FR"
+    | "GF"
+    | "PF"
+    | "TF"
+    | "DJ"
+    | "GA"
+    | "GE"
+    | "GM"
+    | "PS"
+    | "DE"
+    | "GH"
+    | "GI"
+    | "KI"
+    | "GR"
+    | "GL"
+    | "GD"
+    | "GP"
+    | "GU"
+    | "GT"
+    | "GN"
+    | "GY"
+    | "HT"
+    | "HM"
+    | "VA"
+    | "HN"
+    | "HK"
+    | "HU"
+    | "IS"
+    | "IN"
+    | "ID"
+    | "IR"
+    | "IQ"
+    | "IE"
+    | "IL"
+    | "IT"
+    | "CI"
+    | "JM"
+    | "JP"
+    | "KZ"
+    | "JO"
+    | "KE"
+    | "KP"
+    | "KR"
+    | "KW"
+    | "KG"
+    | "LA"
+    | "LB"
+    | "LS"
+    | "LV"
+    | "LR"
+    | "LY"
+    | "LI"
+    | "LT"
+    | "LU"
+    | "MO"
+    | "MG"
+    | "MW"
+    | "MY"
+    | "MV"
+    | "ML"
+    | "MT"
+    | "MQ"
+    | "MR"
+    | "MU"
+    | "MX"
+    | "MC"
+    | "MN"
+    | "MD"
+    | "ME"
+    | "MS"
+    | "MA"
+    | "MZ"
+    | "OM"
+    | "NA"
+    | "NR"
+    | "NP"
+    | "NL"
+    | "CW"
+    | "AW"
+    | "SX"
+    | "BQ"
+    | "NC"
+    | "VU"
+    | "NZ"
+    | "NI"
+    | "NE"
+    | "NG"
+    | "NU"
+    | "NF"
+    | "NO"
+    | "MP"
+    | "UM"
+    | "FM"
+    | "MH"
+    | "PW"
+    | "PK"
+    | "PA"
+    | "PG"
+    | "PY"
+    | "PE"
+    | "PH"
+    | "PN"
+    | "PL"
+    | "PT"
+    | "GW"
+    | "TL"
+    | "PR"
+    | "QA"
+    | "RE"
+    | "RO"
+    | "RU"
+    | "RW"
+    | "BL"
+    | "SH"
+    | "KN"
+    | "AI"
+    | "LC"
+    | "MF"
+    | "PM"
+    | "VC"
+    | "SM"
+    | "ST"
+    | "SA"
+    | "SN"
+    | "RS"
+    | "SC"
+    | "SL"
+    | "SG"
+    | "SK"
+    | "VN"
+    | "SI"
+    | "SO"
+    | "ZA"
+    | "ZW"
+    | "ES"
+    | "SS"
+    | "SD"
+    | "EH"
+    | "SR"
+    | "SJ"
+    | "SZ"
+    | "SE"
+    | "CH"
+    | "SY"
+    | "TJ"
+    | "TH"
+    | "TG"
+    | "TK"
+    | "TO"
+    | "TT"
+    | "AE"
+    | "TN"
+    | "TR"
+    | "TM"
+    | "TC"
+    | "TV"
+    | "UG"
+    | "UA"
+    | "MK"
+    | "EG"
+    | "GB"
+    | "GG"
+    | "JE"
+    | "IM"
+    | "TZ"
+    | "US"
+    | "VI"
+    | "BF"
+    | "UY"
+    | "UZ"
+    | "VE"
+    | "WF"
+    | "WS"
+    | "YE"
+    | "ZM"
+    | null;
   /**
    * Employees Range
    * @example "string"
@@ -315,17 +1343,18 @@ export interface AccountUpdateDto {
 
 export interface CommentCreateDto {
   /**
+   * Author Email
+   * @format email
+   * @minLength 1
+   * @pattern ^([\w\.\-]+)@([\w\-]+)((\.(\w){1,63})+)$
+   * @example "example@example.com"
+   */
+  authorEmail: string;
+  /**
    * Author Name
    * @example "string"
    */
   authorName?: string;
-  /**
-   * Author Email
-   * @format email
-   * @pattern ^([\w\.\-]+)@([\w\-]+)((\.(\w){1,63})+)$
-   * @example "example@example.com"
-   */
-  authorEmail?: string;
   /**
    * Body
    * @minLength 1
@@ -338,6 +1367,12 @@ export interface CommentCreateDto {
    * @example 1
    */
   contentId: number;
+  /**
+   * Contact Id
+   * @format int32
+   * @example 1
+   */
+  contactId?: number | null;
   /**
    * Parent Id
    * @format int32
@@ -353,17 +1388,18 @@ export interface CommentCreateDto {
 
 export interface CommentDetailsDto {
   /**
+   * Author Email
+   * @format email
+   * @minLength 1
+   * @pattern ^([\w\.\-]+)@([\w\-]+)((\.(\w){1,63})+)$
+   * @example "example@example.com"
+   */
+  authorEmail: string;
+  /**
    * Author Name
    * @example "string"
    */
   authorName?: string;
-  /**
-   * Author Email
-   * @format email
-   * @pattern ^([\w\.\-]+)@([\w\-]+)((\.(\w){1,63})+)$
-   * @example "example@example.com"
-   */
-  authorEmail?: string;
   /**
    * Body
    * @minLength 1
@@ -376,6 +1412,12 @@ export interface CommentDetailsDto {
    * @example 1
    */
   contentId: number;
+  /**
+   * Contact Id
+   * @format int32
+   * @example 1
+   */
+  contactId?: number | null;
   /**
    * Parent Id
    * @format int32
@@ -456,6 +1498,12 @@ export interface CommentImportDto {
    */
   updatedByUserAgent?: string | null;
   /**
+   * Contact Id
+   * @format int32
+   * @example 1
+   */
+  contactId?: number | null;
+  /**
    * Author Name
    * @example "string"
    */
@@ -463,16 +1511,27 @@ export interface CommentImportDto {
   /**
    * Author Email
    * @format email
+   * @minLength 1
    * @pattern ^([\w\.\-]+)@([\w\-]+)((\.(\w){1,63})+)$
    * @example "example@example.com"
    */
-  authorEmail?: string;
+  authorEmail: string;
   /**
    * Body
    * @minLength 1
    * @example "string"
    */
   body: string;
+  /**
+   * Status
+   * @example "NotApproved"
+   */
+  status?: "NotApproved" | "Approved" | "Spam" | null;
+  /**
+   * Language
+   * @example "string"
+   */
+  language?: string | null;
   /**
    * Content Id
    * @format int32
@@ -522,8 +1581,267 @@ export interface ContactCreateDto {
    * @example "string"
    */
   firstName?: string | null;
-  continentCode?: Continent;
-  countryCode?: Country;
+  /**
+   * Continent Code
+   * @example "ZZ"
+   */
+  continentCode?: "ZZ" | "AF" | "AN" | "AS" | "EU" | "NA" | "OC" | "SA" | null;
+  /**
+   * Country Code
+   * @example "ZZ"
+   */
+  countryCode?:
+    | "ZZ"
+    | "AF"
+    | "AL"
+    | "AQ"
+    | "DZ"
+    | "AS"
+    | "AD"
+    | "AO"
+    | "AG"
+    | "AZ"
+    | "AR"
+    | "AU"
+    | "AT"
+    | "BS"
+    | "BH"
+    | "BD"
+    | "AM"
+    | "BB"
+    | "BE"
+    | "BM"
+    | "BT"
+    | "BO"
+    | "BA"
+    | "BW"
+    | "BV"
+    | "BR"
+    | "BZ"
+    | "IO"
+    | "SB"
+    | "VG"
+    | "BN"
+    | "BG"
+    | "MM"
+    | "BI"
+    | "BY"
+    | "KH"
+    | "CM"
+    | "CA"
+    | "CV"
+    | "KY"
+    | "CF"
+    | "LK"
+    | "TD"
+    | "CL"
+    | "CN"
+    | "TW"
+    | "CX"
+    | "CC"
+    | "CO"
+    | "KM"
+    | "YT"
+    | "CG"
+    | "CD"
+    | "CK"
+    | "CR"
+    | "HR"
+    | "CU"
+    | "CY"
+    | "CZ"
+    | "BJ"
+    | "DK"
+    | "DM"
+    | "DO"
+    | "EC"
+    | "SV"
+    | "GQ"
+    | "ET"
+    | "ER"
+    | "EE"
+    | "FO"
+    | "FK"
+    | "GS"
+    | "FJ"
+    | "FI"
+    | "AX"
+    | "FR"
+    | "GF"
+    | "PF"
+    | "TF"
+    | "DJ"
+    | "GA"
+    | "GE"
+    | "GM"
+    | "PS"
+    | "DE"
+    | "GH"
+    | "GI"
+    | "KI"
+    | "GR"
+    | "GL"
+    | "GD"
+    | "GP"
+    | "GU"
+    | "GT"
+    | "GN"
+    | "GY"
+    | "HT"
+    | "HM"
+    | "VA"
+    | "HN"
+    | "HK"
+    | "HU"
+    | "IS"
+    | "IN"
+    | "ID"
+    | "IR"
+    | "IQ"
+    | "IE"
+    | "IL"
+    | "IT"
+    | "CI"
+    | "JM"
+    | "JP"
+    | "KZ"
+    | "JO"
+    | "KE"
+    | "KP"
+    | "KR"
+    | "KW"
+    | "KG"
+    | "LA"
+    | "LB"
+    | "LS"
+    | "LV"
+    | "LR"
+    | "LY"
+    | "LI"
+    | "LT"
+    | "LU"
+    | "MO"
+    | "MG"
+    | "MW"
+    | "MY"
+    | "MV"
+    | "ML"
+    | "MT"
+    | "MQ"
+    | "MR"
+    | "MU"
+    | "MX"
+    | "MC"
+    | "MN"
+    | "MD"
+    | "ME"
+    | "MS"
+    | "MA"
+    | "MZ"
+    | "OM"
+    | "NA"
+    | "NR"
+    | "NP"
+    | "NL"
+    | "CW"
+    | "AW"
+    | "SX"
+    | "BQ"
+    | "NC"
+    | "VU"
+    | "NZ"
+    | "NI"
+    | "NE"
+    | "NG"
+    | "NU"
+    | "NF"
+    | "NO"
+    | "MP"
+    | "UM"
+    | "FM"
+    | "MH"
+    | "PW"
+    | "PK"
+    | "PA"
+    | "PG"
+    | "PY"
+    | "PE"
+    | "PH"
+    | "PN"
+    | "PL"
+    | "PT"
+    | "GW"
+    | "TL"
+    | "PR"
+    | "QA"
+    | "RE"
+    | "RO"
+    | "RU"
+    | "RW"
+    | "BL"
+    | "SH"
+    | "KN"
+    | "AI"
+    | "LC"
+    | "MF"
+    | "PM"
+    | "VC"
+    | "SM"
+    | "ST"
+    | "SA"
+    | "SN"
+    | "RS"
+    | "SC"
+    | "SL"
+    | "SG"
+    | "SK"
+    | "VN"
+    | "SI"
+    | "SO"
+    | "ZA"
+    | "ZW"
+    | "ES"
+    | "SS"
+    | "SD"
+    | "EH"
+    | "SR"
+    | "SJ"
+    | "SZ"
+    | "SE"
+    | "CH"
+    | "SY"
+    | "TJ"
+    | "TH"
+    | "TG"
+    | "TK"
+    | "TO"
+    | "TT"
+    | "AE"
+    | "TN"
+    | "TR"
+    | "TM"
+    | "TC"
+    | "TV"
+    | "UG"
+    | "UA"
+    | "MK"
+    | "EG"
+    | "GB"
+    | "GG"
+    | "JE"
+    | "IM"
+    | "TZ"
+    | "US"
+    | "VI"
+    | "BF"
+    | "UY"
+    | "UZ"
+    | "VE"
+    | "WF"
+    | "WS"
+    | "YE"
+    | "ZM"
+    | null;
   /**
    * City Name
    * @example "string"
@@ -597,8 +1915,267 @@ export interface ContactDetailsDto {
    * @example "string"
    */
   firstName?: string | null;
-  continentCode?: Continent;
-  countryCode?: Country;
+  /**
+   * Continent Code
+   * @example "ZZ"
+   */
+  continentCode?: "ZZ" | "AF" | "AN" | "AS" | "EU" | "NA" | "OC" | "SA" | null;
+  /**
+   * Country Code
+   * @example "ZZ"
+   */
+  countryCode?:
+    | "ZZ"
+    | "AF"
+    | "AL"
+    | "AQ"
+    | "DZ"
+    | "AS"
+    | "AD"
+    | "AO"
+    | "AG"
+    | "AZ"
+    | "AR"
+    | "AU"
+    | "AT"
+    | "BS"
+    | "BH"
+    | "BD"
+    | "AM"
+    | "BB"
+    | "BE"
+    | "BM"
+    | "BT"
+    | "BO"
+    | "BA"
+    | "BW"
+    | "BV"
+    | "BR"
+    | "BZ"
+    | "IO"
+    | "SB"
+    | "VG"
+    | "BN"
+    | "BG"
+    | "MM"
+    | "BI"
+    | "BY"
+    | "KH"
+    | "CM"
+    | "CA"
+    | "CV"
+    | "KY"
+    | "CF"
+    | "LK"
+    | "TD"
+    | "CL"
+    | "CN"
+    | "TW"
+    | "CX"
+    | "CC"
+    | "CO"
+    | "KM"
+    | "YT"
+    | "CG"
+    | "CD"
+    | "CK"
+    | "CR"
+    | "HR"
+    | "CU"
+    | "CY"
+    | "CZ"
+    | "BJ"
+    | "DK"
+    | "DM"
+    | "DO"
+    | "EC"
+    | "SV"
+    | "GQ"
+    | "ET"
+    | "ER"
+    | "EE"
+    | "FO"
+    | "FK"
+    | "GS"
+    | "FJ"
+    | "FI"
+    | "AX"
+    | "FR"
+    | "GF"
+    | "PF"
+    | "TF"
+    | "DJ"
+    | "GA"
+    | "GE"
+    | "GM"
+    | "PS"
+    | "DE"
+    | "GH"
+    | "GI"
+    | "KI"
+    | "GR"
+    | "GL"
+    | "GD"
+    | "GP"
+    | "GU"
+    | "GT"
+    | "GN"
+    | "GY"
+    | "HT"
+    | "HM"
+    | "VA"
+    | "HN"
+    | "HK"
+    | "HU"
+    | "IS"
+    | "IN"
+    | "ID"
+    | "IR"
+    | "IQ"
+    | "IE"
+    | "IL"
+    | "IT"
+    | "CI"
+    | "JM"
+    | "JP"
+    | "KZ"
+    | "JO"
+    | "KE"
+    | "KP"
+    | "KR"
+    | "KW"
+    | "KG"
+    | "LA"
+    | "LB"
+    | "LS"
+    | "LV"
+    | "LR"
+    | "LY"
+    | "LI"
+    | "LT"
+    | "LU"
+    | "MO"
+    | "MG"
+    | "MW"
+    | "MY"
+    | "MV"
+    | "ML"
+    | "MT"
+    | "MQ"
+    | "MR"
+    | "MU"
+    | "MX"
+    | "MC"
+    | "MN"
+    | "MD"
+    | "ME"
+    | "MS"
+    | "MA"
+    | "MZ"
+    | "OM"
+    | "NA"
+    | "NR"
+    | "NP"
+    | "NL"
+    | "CW"
+    | "AW"
+    | "SX"
+    | "BQ"
+    | "NC"
+    | "VU"
+    | "NZ"
+    | "NI"
+    | "NE"
+    | "NG"
+    | "NU"
+    | "NF"
+    | "NO"
+    | "MP"
+    | "UM"
+    | "FM"
+    | "MH"
+    | "PW"
+    | "PK"
+    | "PA"
+    | "PG"
+    | "PY"
+    | "PE"
+    | "PH"
+    | "PN"
+    | "PL"
+    | "PT"
+    | "GW"
+    | "TL"
+    | "PR"
+    | "QA"
+    | "RE"
+    | "RO"
+    | "RU"
+    | "RW"
+    | "BL"
+    | "SH"
+    | "KN"
+    | "AI"
+    | "LC"
+    | "MF"
+    | "PM"
+    | "VC"
+    | "SM"
+    | "ST"
+    | "SA"
+    | "SN"
+    | "RS"
+    | "SC"
+    | "SL"
+    | "SG"
+    | "SK"
+    | "VN"
+    | "SI"
+    | "SO"
+    | "ZA"
+    | "ZW"
+    | "ES"
+    | "SS"
+    | "SD"
+    | "EH"
+    | "SR"
+    | "SJ"
+    | "SZ"
+    | "SE"
+    | "CH"
+    | "SY"
+    | "TJ"
+    | "TH"
+    | "TG"
+    | "TK"
+    | "TO"
+    | "TT"
+    | "AE"
+    | "TN"
+    | "TR"
+    | "TM"
+    | "TC"
+    | "TV"
+    | "UG"
+    | "UA"
+    | "MK"
+    | "EG"
+    | "GB"
+    | "GG"
+    | "JE"
+    | "IM"
+    | "TZ"
+    | "US"
+    | "VI"
+    | "BF"
+    | "UY"
+    | "UZ"
+    | "VE"
+    | "WF"
+    | "WS"
+    | "YE"
+    | "ZM"
+    | null;
   /**
    * City Name
    * @example "string"
@@ -755,8 +2332,267 @@ export interface ContactImportDto {
    * @example "string"
    */
   firstName?: string | null;
-  continentCode?: Continent;
-  countryCode?: Country;
+  /**
+   * Continent Code
+   * @example "ZZ"
+   */
+  continentCode?: "ZZ" | "AF" | "AN" | "AS" | "EU" | "NA" | "OC" | "SA" | null;
+  /**
+   * Country Code
+   * @example "ZZ"
+   */
+  countryCode?:
+    | "ZZ"
+    | "AF"
+    | "AL"
+    | "AQ"
+    | "DZ"
+    | "AS"
+    | "AD"
+    | "AO"
+    | "AG"
+    | "AZ"
+    | "AR"
+    | "AU"
+    | "AT"
+    | "BS"
+    | "BH"
+    | "BD"
+    | "AM"
+    | "BB"
+    | "BE"
+    | "BM"
+    | "BT"
+    | "BO"
+    | "BA"
+    | "BW"
+    | "BV"
+    | "BR"
+    | "BZ"
+    | "IO"
+    | "SB"
+    | "VG"
+    | "BN"
+    | "BG"
+    | "MM"
+    | "BI"
+    | "BY"
+    | "KH"
+    | "CM"
+    | "CA"
+    | "CV"
+    | "KY"
+    | "CF"
+    | "LK"
+    | "TD"
+    | "CL"
+    | "CN"
+    | "TW"
+    | "CX"
+    | "CC"
+    | "CO"
+    | "KM"
+    | "YT"
+    | "CG"
+    | "CD"
+    | "CK"
+    | "CR"
+    | "HR"
+    | "CU"
+    | "CY"
+    | "CZ"
+    | "BJ"
+    | "DK"
+    | "DM"
+    | "DO"
+    | "EC"
+    | "SV"
+    | "GQ"
+    | "ET"
+    | "ER"
+    | "EE"
+    | "FO"
+    | "FK"
+    | "GS"
+    | "FJ"
+    | "FI"
+    | "AX"
+    | "FR"
+    | "GF"
+    | "PF"
+    | "TF"
+    | "DJ"
+    | "GA"
+    | "GE"
+    | "GM"
+    | "PS"
+    | "DE"
+    | "GH"
+    | "GI"
+    | "KI"
+    | "GR"
+    | "GL"
+    | "GD"
+    | "GP"
+    | "GU"
+    | "GT"
+    | "GN"
+    | "GY"
+    | "HT"
+    | "HM"
+    | "VA"
+    | "HN"
+    | "HK"
+    | "HU"
+    | "IS"
+    | "IN"
+    | "ID"
+    | "IR"
+    | "IQ"
+    | "IE"
+    | "IL"
+    | "IT"
+    | "CI"
+    | "JM"
+    | "JP"
+    | "KZ"
+    | "JO"
+    | "KE"
+    | "KP"
+    | "KR"
+    | "KW"
+    | "KG"
+    | "LA"
+    | "LB"
+    | "LS"
+    | "LV"
+    | "LR"
+    | "LY"
+    | "LI"
+    | "LT"
+    | "LU"
+    | "MO"
+    | "MG"
+    | "MW"
+    | "MY"
+    | "MV"
+    | "ML"
+    | "MT"
+    | "MQ"
+    | "MR"
+    | "MU"
+    | "MX"
+    | "MC"
+    | "MN"
+    | "MD"
+    | "ME"
+    | "MS"
+    | "MA"
+    | "MZ"
+    | "OM"
+    | "NA"
+    | "NR"
+    | "NP"
+    | "NL"
+    | "CW"
+    | "AW"
+    | "SX"
+    | "BQ"
+    | "NC"
+    | "VU"
+    | "NZ"
+    | "NI"
+    | "NE"
+    | "NG"
+    | "NU"
+    | "NF"
+    | "NO"
+    | "MP"
+    | "UM"
+    | "FM"
+    | "MH"
+    | "PW"
+    | "PK"
+    | "PA"
+    | "PG"
+    | "PY"
+    | "PE"
+    | "PH"
+    | "PN"
+    | "PL"
+    | "PT"
+    | "GW"
+    | "TL"
+    | "PR"
+    | "QA"
+    | "RE"
+    | "RO"
+    | "RU"
+    | "RW"
+    | "BL"
+    | "SH"
+    | "KN"
+    | "AI"
+    | "LC"
+    | "MF"
+    | "PM"
+    | "VC"
+    | "SM"
+    | "ST"
+    | "SA"
+    | "SN"
+    | "RS"
+    | "SC"
+    | "SL"
+    | "SG"
+    | "SK"
+    | "VN"
+    | "SI"
+    | "SO"
+    | "ZA"
+    | "ZW"
+    | "ES"
+    | "SS"
+    | "SD"
+    | "EH"
+    | "SR"
+    | "SJ"
+    | "SZ"
+    | "SE"
+    | "CH"
+    | "SY"
+    | "TJ"
+    | "TH"
+    | "TG"
+    | "TK"
+    | "TO"
+    | "TT"
+    | "AE"
+    | "TN"
+    | "TR"
+    | "TM"
+    | "TC"
+    | "TV"
+    | "UG"
+    | "UA"
+    | "MK"
+    | "EG"
+    | "GB"
+    | "GG"
+    | "JE"
+    | "IM"
+    | "TZ"
+    | "US"
+    | "VI"
+    | "BF"
+    | "UY"
+    | "UZ"
+    | "VE"
+    | "WF"
+    | "WS"
+    | "YE"
+    | "ZM"
+    | null;
   /**
    * City Name
    * @example "string"
@@ -834,8 +2670,267 @@ export interface ContactUpdateDto {
    * @example "string"
    */
   firstName?: string | null;
-  continentCode?: Continent;
-  countryCode?: Country;
+  /**
+   * Continent Code
+   * @example "ZZ"
+   */
+  continentCode?: "ZZ" | "AF" | "AN" | "AS" | "EU" | "NA" | "OC" | "SA" | null;
+  /**
+   * Country Code
+   * @example "ZZ"
+   */
+  countryCode?:
+    | "ZZ"
+    | "AF"
+    | "AL"
+    | "AQ"
+    | "DZ"
+    | "AS"
+    | "AD"
+    | "AO"
+    | "AG"
+    | "AZ"
+    | "AR"
+    | "AU"
+    | "AT"
+    | "BS"
+    | "BH"
+    | "BD"
+    | "AM"
+    | "BB"
+    | "BE"
+    | "BM"
+    | "BT"
+    | "BO"
+    | "BA"
+    | "BW"
+    | "BV"
+    | "BR"
+    | "BZ"
+    | "IO"
+    | "SB"
+    | "VG"
+    | "BN"
+    | "BG"
+    | "MM"
+    | "BI"
+    | "BY"
+    | "KH"
+    | "CM"
+    | "CA"
+    | "CV"
+    | "KY"
+    | "CF"
+    | "LK"
+    | "TD"
+    | "CL"
+    | "CN"
+    | "TW"
+    | "CX"
+    | "CC"
+    | "CO"
+    | "KM"
+    | "YT"
+    | "CG"
+    | "CD"
+    | "CK"
+    | "CR"
+    | "HR"
+    | "CU"
+    | "CY"
+    | "CZ"
+    | "BJ"
+    | "DK"
+    | "DM"
+    | "DO"
+    | "EC"
+    | "SV"
+    | "GQ"
+    | "ET"
+    | "ER"
+    | "EE"
+    | "FO"
+    | "FK"
+    | "GS"
+    | "FJ"
+    | "FI"
+    | "AX"
+    | "FR"
+    | "GF"
+    | "PF"
+    | "TF"
+    | "DJ"
+    | "GA"
+    | "GE"
+    | "GM"
+    | "PS"
+    | "DE"
+    | "GH"
+    | "GI"
+    | "KI"
+    | "GR"
+    | "GL"
+    | "GD"
+    | "GP"
+    | "GU"
+    | "GT"
+    | "GN"
+    | "GY"
+    | "HT"
+    | "HM"
+    | "VA"
+    | "HN"
+    | "HK"
+    | "HU"
+    | "IS"
+    | "IN"
+    | "ID"
+    | "IR"
+    | "IQ"
+    | "IE"
+    | "IL"
+    | "IT"
+    | "CI"
+    | "JM"
+    | "JP"
+    | "KZ"
+    | "JO"
+    | "KE"
+    | "KP"
+    | "KR"
+    | "KW"
+    | "KG"
+    | "LA"
+    | "LB"
+    | "LS"
+    | "LV"
+    | "LR"
+    | "LY"
+    | "LI"
+    | "LT"
+    | "LU"
+    | "MO"
+    | "MG"
+    | "MW"
+    | "MY"
+    | "MV"
+    | "ML"
+    | "MT"
+    | "MQ"
+    | "MR"
+    | "MU"
+    | "MX"
+    | "MC"
+    | "MN"
+    | "MD"
+    | "ME"
+    | "MS"
+    | "MA"
+    | "MZ"
+    | "OM"
+    | "NA"
+    | "NR"
+    | "NP"
+    | "NL"
+    | "CW"
+    | "AW"
+    | "SX"
+    | "BQ"
+    | "NC"
+    | "VU"
+    | "NZ"
+    | "NI"
+    | "NE"
+    | "NG"
+    | "NU"
+    | "NF"
+    | "NO"
+    | "MP"
+    | "UM"
+    | "FM"
+    | "MH"
+    | "PW"
+    | "PK"
+    | "PA"
+    | "PG"
+    | "PY"
+    | "PE"
+    | "PH"
+    | "PN"
+    | "PL"
+    | "PT"
+    | "GW"
+    | "TL"
+    | "PR"
+    | "QA"
+    | "RE"
+    | "RO"
+    | "RU"
+    | "RW"
+    | "BL"
+    | "SH"
+    | "KN"
+    | "AI"
+    | "LC"
+    | "MF"
+    | "PM"
+    | "VC"
+    | "SM"
+    | "ST"
+    | "SA"
+    | "SN"
+    | "RS"
+    | "SC"
+    | "SL"
+    | "SG"
+    | "SK"
+    | "VN"
+    | "SI"
+    | "SO"
+    | "ZA"
+    | "ZW"
+    | "ES"
+    | "SS"
+    | "SD"
+    | "EH"
+    | "SR"
+    | "SJ"
+    | "SZ"
+    | "SE"
+    | "CH"
+    | "SY"
+    | "TJ"
+    | "TH"
+    | "TG"
+    | "TK"
+    | "TO"
+    | "TT"
+    | "AE"
+    | "TN"
+    | "TR"
+    | "TM"
+    | "TC"
+    | "TV"
+    | "UG"
+    | "UA"
+    | "MK"
+    | "EG"
+    | "GB"
+    | "GG"
+    | "JE"
+    | "IM"
+    | "TZ"
+    | "US"
+    | "VI"
+    | "BF"
+    | "UY"
+    | "UZ"
+    | "VE"
+    | "WF"
+    | "WS"
+    | "YE"
+    | "ZM"
+    | null;
   /**
    * City Name
    * @example "string"
@@ -1247,272 +3342,6 @@ export interface ContentUpdateDto {
    * @example "string"
    */
   source?: string | null;
-}
-
-/** Continent */
-export enum Continent {
-  ZZ = "ZZ",
-  AF = "AF",
-  AN = "AN",
-  AS = "AS",
-  EU = "EU",
-  NA = "NA",
-  OC = "OC",
-  SA = "SA",
-}
-
-/** Country */
-export enum Country {
-  ZZ = "ZZ",
-  AF = "AF",
-  AL = "AL",
-  AQ = "AQ",
-  DZ = "DZ",
-  AS = "AS",
-  AD = "AD",
-  AO = "AO",
-  AG = "AG",
-  AZ = "AZ",
-  AR = "AR",
-  AU = "AU",
-  AT = "AT",
-  BS = "BS",
-  BH = "BH",
-  BD = "BD",
-  AM = "AM",
-  BB = "BB",
-  BE = "BE",
-  BM = "BM",
-  BT = "BT",
-  BO = "BO",
-  BA = "BA",
-  BW = "BW",
-  BV = "BV",
-  BR = "BR",
-  BZ = "BZ",
-  IO = "IO",
-  SB = "SB",
-  VG = "VG",
-  BN = "BN",
-  BG = "BG",
-  MM = "MM",
-  BI = "BI",
-  BY = "BY",
-  KH = "KH",
-  CM = "CM",
-  CA = "CA",
-  CV = "CV",
-  KY = "KY",
-  CF = "CF",
-  LK = "LK",
-  TD = "TD",
-  CL = "CL",
-  CN = "CN",
-  TW = "TW",
-  CX = "CX",
-  CC = "CC",
-  CO = "CO",
-  KM = "KM",
-  YT = "YT",
-  CG = "CG",
-  CD = "CD",
-  CK = "CK",
-  CR = "CR",
-  HR = "HR",
-  CU = "CU",
-  CY = "CY",
-  CZ = "CZ",
-  BJ = "BJ",
-  DK = "DK",
-  DM = "DM",
-  DO = "DO",
-  EC = "EC",
-  SV = "SV",
-  GQ = "GQ",
-  ET = "ET",
-  ER = "ER",
-  EE = "EE",
-  FO = "FO",
-  FK = "FK",
-  GS = "GS",
-  FJ = "FJ",
-  FI = "FI",
-  AX = "AX",
-  FR = "FR",
-  GF = "GF",
-  PF = "PF",
-  TF = "TF",
-  DJ = "DJ",
-  GA = "GA",
-  GE = "GE",
-  GM = "GM",
-  PS = "PS",
-  DE = "DE",
-  GH = "GH",
-  GI = "GI",
-  KI = "KI",
-  GR = "GR",
-  GL = "GL",
-  GD = "GD",
-  GP = "GP",
-  GU = "GU",
-  GT = "GT",
-  GN = "GN",
-  GY = "GY",
-  HT = "HT",
-  HM = "HM",
-  VA = "VA",
-  HN = "HN",
-  HK = "HK",
-  HU = "HU",
-  IS = "IS",
-  IN = "IN",
-  ID = "ID",
-  IR = "IR",
-  IQ = "IQ",
-  IE = "IE",
-  IL = "IL",
-  IT = "IT",
-  CI = "CI",
-  JM = "JM",
-  JP = "JP",
-  KZ = "KZ",
-  JO = "JO",
-  KE = "KE",
-  KP = "KP",
-  KR = "KR",
-  KW = "KW",
-  KG = "KG",
-  LA = "LA",
-  LB = "LB",
-  LS = "LS",
-  LV = "LV",
-  LR = "LR",
-  LY = "LY",
-  LI = "LI",
-  LT = "LT",
-  LU = "LU",
-  MO = "MO",
-  MG = "MG",
-  MW = "MW",
-  MY = "MY",
-  MV = "MV",
-  ML = "ML",
-  MT = "MT",
-  MQ = "MQ",
-  MR = "MR",
-  MU = "MU",
-  MX = "MX",
-  MC = "MC",
-  MN = "MN",
-  MD = "MD",
-  ME = "ME",
-  MS = "MS",
-  MA = "MA",
-  MZ = "MZ",
-  OM = "OM",
-  NA = "NA",
-  NR = "NR",
-  NP = "NP",
-  NL = "NL",
-  CW = "CW",
-  AW = "AW",
-  SX = "SX",
-  BQ = "BQ",
-  NC = "NC",
-  VU = "VU",
-  NZ = "NZ",
-  NI = "NI",
-  NE = "NE",
-  NG = "NG",
-  NU = "NU",
-  NF = "NF",
-  NO = "NO",
-  MP = "MP",
-  UM = "UM",
-  FM = "FM",
-  MH = "MH",
-  PW = "PW",
-  PK = "PK",
-  PA = "PA",
-  PG = "PG",
-  PY = "PY",
-  PE = "PE",
-  PH = "PH",
-  PN = "PN",
-  PL = "PL",
-  PT = "PT",
-  GW = "GW",
-  TL = "TL",
-  PR = "PR",
-  QA = "QA",
-  RE = "RE",
-  RO = "RO",
-  RU = "RU",
-  RW = "RW",
-  BL = "BL",
-  SH = "SH",
-  KN = "KN",
-  AI = "AI",
-  LC = "LC",
-  MF = "MF",
-  PM = "PM",
-  VC = "VC",
-  SM = "SM",
-  ST = "ST",
-  SA = "SA",
-  SN = "SN",
-  RS = "RS",
-  SC = "SC",
-  SL = "SL",
-  SG = "SG",
-  SK = "SK",
-  VN = "VN",
-  SI = "SI",
-  SO = "SO",
-  ZA = "ZA",
-  ZW = "ZW",
-  ES = "ES",
-  SS = "SS",
-  SD = "SD",
-  EH = "EH",
-  SR = "SR",
-  SJ = "SJ",
-  SZ = "SZ",
-  SE = "SE",
-  CH = "CH",
-  SY = "SY",
-  TJ = "TJ",
-  TH = "TH",
-  TG = "TG",
-  TK = "TK",
-  TO = "TO",
-  TT = "TT",
-  AE = "AE",
-  TN = "TN",
-  TR = "TR",
-  TM = "TM",
-  TC = "TC",
-  TV = "TV",
-  UG = "UG",
-  UA = "UA",
-  MK = "MK",
-  EG = "EG",
-  GB = "GB",
-  GG = "GG",
-  JE = "JE",
-  IM = "IM",
-  TZ = "TZ",
-  US = "US",
-  VI = "VI",
-  BF = "BF",
-  UY = "UY",
-  UZ = "UZ",
-  VE = "VE",
-  WF = "WF",
-  WS = "WS",
-  YE = "YE",
-  ZM = "ZM",
 }
 
 export interface DnsRecord {
@@ -2154,16 +3983,6 @@ export interface LinkUpdateDto {
   source?: string | null;
 }
 
-export enum LogLevel {
-  Trace = "Trace",
-  Debug = "Debug",
-  Information = "Information",
-  Warning = "Warning",
-  Error = "Error",
-  Critical = "Critical",
-  None = "None",
-}
-
 export interface LogRecord {
   /**
    * Date Time
@@ -2172,7 +3991,11 @@ export interface LogRecord {
    * @example "2023-04-18T12:00:00.0000000Z"
    */
   dateTime?: string;
-  logLevel?: LogLevel;
+  /**
+   * Log Level
+   * @example "Trace"
+   */
+  logLevel?: "Trace" | "Debug" | "Information" | "Warning" | "Error" | "Critical" | "None";
   /**
    * Message
    * @example "string"
@@ -2405,7 +4228,9 @@ export interface OrderImportDto {
   contactId?: number | null;
   /**
    * Contact Email
-   * @example "string"
+   * @format email
+   * @pattern ^([\w\.\-]+)@([\w\-]+)((\.(\w){1,63})+)$
+   * @example "example@example.com"
    */
   contactEmail?: string | null;
   /**
@@ -2448,7 +4273,7 @@ export interface OrderItemCreateDto {
   /**
    * Currency
    * @minLength 1
-   * @pattern ^(DJF|ERN|ETB|NAD|ZAR|XAF|GHS|ETB||AED|BHD|DJF|DZD|EGP|ERN|ILS|IQD|JOD|KMF|KWD|LBP|LYD|MAD|MRU|OMR|ILS|QAR|SAR|SDG|SOS|SSP|SYP|XAF|TND|YER|CLP|INR|TZS|EUR|AZN|AZN|RUB|XAF|BYN|ZMW|TZS|BGN|XOF|BDT|INR|CNY|INR|EUR|INR|BAM|BAM|ERN|EUR|EUR|EUR|EUR|EUR|BDT|INR|RUB|PHP|UGX|USD|IQD|IRR|EUR|CZK|RUB|GBP|DKK|DKK|KES|EUR|EUR|CHF|EUR|EUR|CHF|EUR|XOF|EUR|XAF|MVR|XOF|BTN|KES|GHS|XOF|EUR|EUR|||AED|XCD|XCD|USD|EUR|AUD|BBD|EUR|BIF|BMD|BSD|BWP|BZD|CAD|AUD|CHF|NZD|XAF|AUD|EUR|EUR|DKK|XCD|ERN|EUR|FJD|FKP|USD|GBP|XCD|GBP|GHS|GIP|GMD|USD|GYD|HKD|EUR|ILS|GBP|INR|USD|GBP|JMD|KES|AUD|XCD|KYD|XCD|LRD|ZAR|MGA|USD|MOP|USD|XCD|EUR|MUR|MWK|MYR|NAD|AUD|NGN|EUR|AUD|NZD|NZD|PGK|PHP|PKR|NZD|USD|USD|RWF|SBD|SCR|SDG|SEK|SGD|SHP|EUR|SLL|SSP|ANG|SZL|USD|NZD|TOP|TTD|AUD|TZS|UGX|USD|USD|USD|XCD|USD|USD|VUV|WST|ZAR|ZMW|USD|||ARS|BOB|BRL|BZD|CLP|COP|CRC|CUP|DOP|USD|EUR|XAF|GTQ|HNL|MXN|NIO|PAB|PEN|PHP|USD|PYG|USD|USD|UYU|VES|EUR|EUR|XAF|AFN|IRR|XOF|XAF|GHS|GMD|GNF|XOF|LRD|MRU|XOF|NGN|SLL|XOF|EUR|PHP|DKK|DKK|EUR|XOF|BIF|XOF|EUR|CAD|CDF|XAF|XAF|CHF|XOF|XAF|DJF|DZD|EUR|XAF|EUR|GNF|EUR|XAF|HTG|KMF|EUR|MAD|EUR|EUR|MGA|XOF|EUR|MRU|MUR|XPF|XOF|XPF|EUR|EUR|RWF|SCR|XOF|SYP|XAF|XOF|TND|VUV|XPF|EUR|EUR|EUR|EUR|GBP|EUR|PYG|CHF|EUR|CHF|INR|KES|GBP|GHS|XOF|NGN|USD|ILS|INR|BAM|HRK|EUR|HUF|AMD||IDR|NGN|CNY|ISK|CHF|EUR|EUR|EUR|CAD|CAD|JPY|XAF|TZS|IDR|GEL|DZD|KES|TZS|CVE|XOF|KES|KZT|XAF|DKK|KES|KHR|INR|KPW|KRW|INR|INR|TZS|XAF|EUR|GBP|KGS|TZS|EUR|UGX|USD|AOA|CDF|XAF|XAF|LAK|IQD|IRR|EUR|CDF|KES|KES|EUR|KES|TZS|KES|MUR|MGA|MZN|XAF|NZD|MKD|INR|MNT|CNY|MNT|CAD|INR|BND|MYR|SGD|EUR|XAF|MMK|IRR|NAD|NOK|NOK|USD|EUR|EUR|INR|NPR|AWG|EUR|USD|ANG|EUR|SRD|ANG|XAF|NOK|XAF|GNF|ZAR|ZAR|SSP|UGX|EUR|ETB|KES|INR|GEL|RUB|PKR|INR|PLN||AFN|PKR|AOA|BRL|CHF|CVE|XAF|XOF|EUR|MOP|MZN|EUR|STN|USD|BOB|USD|PEN|GTQ|CHF|BIF|MDL|RON|TZS|BYN|KGS|KZT|MDL|RUB|UAH|RWF|TZS|INR|RUB|KES|TZS|PKR|EUR|NOK|SEK|MZN|XOF|XAF|MAD|MAD|LKR|EUR|EUR|NOK|SEK|NOK|SEK|EUR|EUR|USD|DJF|ETB|KES|SOS|ALL|MKD|EUR|BAM|EUR|RSD|EUR|BAM|EUR|RSD|EUR|SZL|ZAR|ERN|ZAR|ZAR|EUR|EUR|SEK|CDF|KES|TZS|UGX|SYP|INR|LKR|MYR|SGD|INR|KES|UGX|TJS|THB|ERN|ETB|ERN|TMT|BWP|ZAR|TOP|EUR|TRY|ZAR|RUB|XOF|MAD|CNY|UAH|INR|PKR|AFN|UZS|UZS|LRD|LRD|ZAR|VND||TZS|CHF|ETB|XOF|ZAR|UGX|XAF||XOF|NGN|MAD|CNY|HKD|MOP|SGD|HKD|MOP|TWD|ZAR)$
+   * @pattern ^(NAD|ZAR|XAF|JPY|GHS|ETB|USD||AED|BHD|DJF|DZD|EGP|MAD|ERN|ILS|IQD|JOD|KMF|KWD|LBP|LYD|MAD|MRU|OMR|ILS|QAR|SAR|SDG|SOS|SSP|SYP|XAF|TND|YER|CLP|INR|TZS|EUR|AZN|AZN|RUB|XAF|BYN|ZMW|TZS|BGN|XOF|BDT|INR|CNY|INR|EUR|INR|BAM|BAM|ERN|EUR|EUR|EUR|EUR|BDT|INR|RUB|PHP|UGX|USD|IQD|IRR|EUR|CZK|RUB|GBP|DKK|DKK|KES|EUR|EUR|CHF|EUR|EUR|CHF|EUR|XOF|INR|EUR|XAF|MVR|XOF|BTN|KES|GHS|XOF|EUR|EUR|||AED|XCD|XCD|ALL|ARS|USD|EUR|AUD|BBD|BDT|EUR|BGN|BIF|BMD|BND|BRL|BSD|BWP|BZD|CAD|AUD|CHF|NZD|CLP|XAF|CNY|COP|CVE|AUD|EUR|CZK|EUR|USD|DKK|XCD|EUR|ERN|EUR|FJD|FKP|USD|EUR|GBP|XCD|GBP|GHS|GIP|GMD|EUR|USD|GYD|HKD|HUF|IDR|EUR|ILS|GBP|INR|USD|GBP|JMD|JPY|KES|AUD|XCD|KRW|KYD|XCD|LRD|ZAR|EUR|EUR|MGA|USD|MMK|MOP|USD|XCD|EUR|MUR|MVR|MWK|MXN|MYR|NAD|AUD|NGN|EUR|NOK|AUD|NZD|NZD|PGK|PHP|PKR|PLN|NZD|USD|EUR|USD|RUB|RWF|SAR|SBD|SCR|SDG|SEK|SGD|SHP|EUR|EUR|SLL|SSP|ANG|SZL|USD|THB|NZD|TOP|TRY|TTD|AUD|TWD|TZS|UAH|UGX|USD|USD|USD|XCD|USD|USD|VUV|WST|ZAR|ZMW|USD||||XCD|ARS|BBD|BMD|BOB|USD|BRL|BSD|BZD|CAD|CLP|COP|CRC|CUP|ANG|XCD|DOP|EUR|USD|EUR|XCD|XAF|GTQ|GYD|HNL|HTG|EUR|XCD|KYD|XCD|MXN|NIO|PAB|PEN|PHP|USD|PYG|USD|USD|TTD|USD|UYU|XCD|VES|USD|USD|EUR|EUR|XAF|AFN|IRR|XOF|XAF|GHS|GMD|GNF|XOF|LRD|MRU|XOF|NGN|SLL|XOF|XOF|XAF|GHS|GMD|GNF|XOF|LRD|MRU|XOF|NGN|SLL|XOF|EUR|PHP|DKK|DKK|EUR|XOF|BIF|XOF|EUR|CAD|CDF|XAF|XAF|CHF|XOF|XAF|DJF|DZD|EUR|XAF|EUR|GNF|EUR|XAF|HTG|KMF|EUR|MAD|EUR|EUR|MGA|XOF|EUR|MRU|MUR|XPF|XOF|XPF|EUR|EUR|RWF|SCR|XOF|SYP|XAF|XOF|TND|VUV|XPF|EUR|EUR|EUR|GBP|EUR|GHS|GBP|ERN|ETB|EUR|PYG|CHF|EUR|CHF|INR|KES|GBP|GHS|XOF|NGN|USD|ILS|INR|INR|BAM|HRK|EUR|HUF|AMD||IDR|NGN|CNY||ISK|CHF|EUR|EUR|EUR|CAD|JPY||XAF|TZS|IDR|GEL|DZD|NGN|KES|NGN|TZS|CVE|XOF|KES|KZT|XAF|DKK|KES|KHR|INR|KPW|KRW|INR|GNF|LRD|INR|INR|INR|TZS|XAF|EUR|TRY|GBP|KGS|TZS|EUR|UGX|USD|AOA|CDF|XAF|XAF|LAK|IQD|IRR|EUR|CDF|KES|KES|EUR|INR|KES|TZS|KES|MUR|MGA|MZN|XAF|NZD|MKD|INR|MNT|INR|INR|CAD|INR|BND|MYR|BND|IDR|MYR|SGD|EUR|XAF|MMK|RUB|IRR|NAD|NOK|NOK|USD|EUR|EUR|INR|NPR|AWG|EUR|USD|ANG|EUR|SRD|ANG|XAF|NOK|XAF|GNF|ZAR|ZAR|SSP|USD|MWK|UGX|EUR|ETB|KES|INR|GEL|RUB|PKR|PKR|INR|NGN|PLN|AFN|PKR|AOA|BRL|CHF|CVE|EUR|XAF|XOF|EUR|MOP|MZN|EUR|STN|USD|BOB|USD|PEN|BDT|MMK|CHF|BIF|MDL|RON|TZS|BYN|KGS|KZT|MDL|RUB|UAH|RWF|TZS|INR|RUB|KES|INR|INR|TZS|EUR|EUR|PKR|INR|EUR|NOK|SEK|MZN|XOF|XAF|MAD|MAD|LKR|EUR|EUR|USD|WST|EUR|USD|DJF|ETB|KES|SOS|ALL|MKD|EUR|BAM|EUR|RSD|EUR|BAM|EUR|RSD|EUR|SZL|ZAR|ZAR|ZAR|IDR|EUR|EUR|SEK|CDF|KES|TZS|UGX|IQD|SYP|INR|LKR|MYR|SGD|INR|KES|UGX|TJS|THB|ERN|ETB|ERN|TMT|BWP|ZAR|TOP|EUR|TRY|TWD|ZAR|RUB|XOF|MAD|CNY|UAH|INR|PKR|PKR|AFN|UZS|UZS|LRD|LRD|ZAR|VND|TZS|EUR|CHF|ETB|XOF|ZAR|UGX|XAF||XOF|NGN|CNY|HKD|MAD|CNY|HKD|JPY|MOP|SGD|CNY|HKD|MOP|TWD|ZAR)$
    * @example "USD"
    */
   currency: string;
@@ -2495,7 +4320,7 @@ export interface OrderItemDetailsDto {
   /**
    * Currency
    * @minLength 1
-   * @pattern ^(DJF|ERN|ETB|NAD|ZAR|XAF|GHS|ETB||AED|BHD|DJF|DZD|EGP|ERN|ILS|IQD|JOD|KMF|KWD|LBP|LYD|MAD|MRU|OMR|ILS|QAR|SAR|SDG|SOS|SSP|SYP|XAF|TND|YER|CLP|INR|TZS|EUR|AZN|AZN|RUB|XAF|BYN|ZMW|TZS|BGN|XOF|BDT|INR|CNY|INR|EUR|INR|BAM|BAM|ERN|EUR|EUR|EUR|EUR|EUR|BDT|INR|RUB|PHP|UGX|USD|IQD|IRR|EUR|CZK|RUB|GBP|DKK|DKK|KES|EUR|EUR|CHF|EUR|EUR|CHF|EUR|XOF|EUR|XAF|MVR|XOF|BTN|KES|GHS|XOF|EUR|EUR|||AED|XCD|XCD|USD|EUR|AUD|BBD|EUR|BIF|BMD|BSD|BWP|BZD|CAD|AUD|CHF|NZD|XAF|AUD|EUR|EUR|DKK|XCD|ERN|EUR|FJD|FKP|USD|GBP|XCD|GBP|GHS|GIP|GMD|USD|GYD|HKD|EUR|ILS|GBP|INR|USD|GBP|JMD|KES|AUD|XCD|KYD|XCD|LRD|ZAR|MGA|USD|MOP|USD|XCD|EUR|MUR|MWK|MYR|NAD|AUD|NGN|EUR|AUD|NZD|NZD|PGK|PHP|PKR|NZD|USD|USD|RWF|SBD|SCR|SDG|SEK|SGD|SHP|EUR|SLL|SSP|ANG|SZL|USD|NZD|TOP|TTD|AUD|TZS|UGX|USD|USD|USD|XCD|USD|USD|VUV|WST|ZAR|ZMW|USD|||ARS|BOB|BRL|BZD|CLP|COP|CRC|CUP|DOP|USD|EUR|XAF|GTQ|HNL|MXN|NIO|PAB|PEN|PHP|USD|PYG|USD|USD|UYU|VES|EUR|EUR|XAF|AFN|IRR|XOF|XAF|GHS|GMD|GNF|XOF|LRD|MRU|XOF|NGN|SLL|XOF|EUR|PHP|DKK|DKK|EUR|XOF|BIF|XOF|EUR|CAD|CDF|XAF|XAF|CHF|XOF|XAF|DJF|DZD|EUR|XAF|EUR|GNF|EUR|XAF|HTG|KMF|EUR|MAD|EUR|EUR|MGA|XOF|EUR|MRU|MUR|XPF|XOF|XPF|EUR|EUR|RWF|SCR|XOF|SYP|XAF|XOF|TND|VUV|XPF|EUR|EUR|EUR|EUR|GBP|EUR|PYG|CHF|EUR|CHF|INR|KES|GBP|GHS|XOF|NGN|USD|ILS|INR|BAM|HRK|EUR|HUF|AMD||IDR|NGN|CNY|ISK|CHF|EUR|EUR|EUR|CAD|CAD|JPY|XAF|TZS|IDR|GEL|DZD|KES|TZS|CVE|XOF|KES|KZT|XAF|DKK|KES|KHR|INR|KPW|KRW|INR|INR|TZS|XAF|EUR|GBP|KGS|TZS|EUR|UGX|USD|AOA|CDF|XAF|XAF|LAK|IQD|IRR|EUR|CDF|KES|KES|EUR|KES|TZS|KES|MUR|MGA|MZN|XAF|NZD|MKD|INR|MNT|CNY|MNT|CAD|INR|BND|MYR|SGD|EUR|XAF|MMK|IRR|NAD|NOK|NOK|USD|EUR|EUR|INR|NPR|AWG|EUR|USD|ANG|EUR|SRD|ANG|XAF|NOK|XAF|GNF|ZAR|ZAR|SSP|UGX|EUR|ETB|KES|INR|GEL|RUB|PKR|INR|PLN||AFN|PKR|AOA|BRL|CHF|CVE|XAF|XOF|EUR|MOP|MZN|EUR|STN|USD|BOB|USD|PEN|GTQ|CHF|BIF|MDL|RON|TZS|BYN|KGS|KZT|MDL|RUB|UAH|RWF|TZS|INR|RUB|KES|TZS|PKR|EUR|NOK|SEK|MZN|XOF|XAF|MAD|MAD|LKR|EUR|EUR|NOK|SEK|NOK|SEK|EUR|EUR|USD|DJF|ETB|KES|SOS|ALL|MKD|EUR|BAM|EUR|RSD|EUR|BAM|EUR|RSD|EUR|SZL|ZAR|ERN|ZAR|ZAR|EUR|EUR|SEK|CDF|KES|TZS|UGX|SYP|INR|LKR|MYR|SGD|INR|KES|UGX|TJS|THB|ERN|ETB|ERN|TMT|BWP|ZAR|TOP|EUR|TRY|ZAR|RUB|XOF|MAD|CNY|UAH|INR|PKR|AFN|UZS|UZS|LRD|LRD|ZAR|VND||TZS|CHF|ETB|XOF|ZAR|UGX|XAF||XOF|NGN|MAD|CNY|HKD|MOP|SGD|HKD|MOP|TWD|ZAR)$
+   * @pattern ^(NAD|ZAR|XAF|JPY|GHS|ETB|USD||AED|BHD|DJF|DZD|EGP|MAD|ERN|ILS|IQD|JOD|KMF|KWD|LBP|LYD|MAD|MRU|OMR|ILS|QAR|SAR|SDG|SOS|SSP|SYP|XAF|TND|YER|CLP|INR|TZS|EUR|AZN|AZN|RUB|XAF|BYN|ZMW|TZS|BGN|XOF|BDT|INR|CNY|INR|EUR|INR|BAM|BAM|ERN|EUR|EUR|EUR|EUR|BDT|INR|RUB|PHP|UGX|USD|IQD|IRR|EUR|CZK|RUB|GBP|DKK|DKK|KES|EUR|EUR|CHF|EUR|EUR|CHF|EUR|XOF|INR|EUR|XAF|MVR|XOF|BTN|KES|GHS|XOF|EUR|EUR|||AED|XCD|XCD|ALL|ARS|USD|EUR|AUD|BBD|BDT|EUR|BGN|BIF|BMD|BND|BRL|BSD|BWP|BZD|CAD|AUD|CHF|NZD|CLP|XAF|CNY|COP|CVE|AUD|EUR|CZK|EUR|USD|DKK|XCD|EUR|ERN|EUR|FJD|FKP|USD|EUR|GBP|XCD|GBP|GHS|GIP|GMD|EUR|USD|GYD|HKD|HUF|IDR|EUR|ILS|GBP|INR|USD|GBP|JMD|JPY|KES|AUD|XCD|KRW|KYD|XCD|LRD|ZAR|EUR|EUR|MGA|USD|MMK|MOP|USD|XCD|EUR|MUR|MVR|MWK|MXN|MYR|NAD|AUD|NGN|EUR|NOK|AUD|NZD|NZD|PGK|PHP|PKR|PLN|NZD|USD|EUR|USD|RUB|RWF|SAR|SBD|SCR|SDG|SEK|SGD|SHP|EUR|EUR|SLL|SSP|ANG|SZL|USD|THB|NZD|TOP|TRY|TTD|AUD|TWD|TZS|UAH|UGX|USD|USD|USD|XCD|USD|USD|VUV|WST|ZAR|ZMW|USD||||XCD|ARS|BBD|BMD|BOB|USD|BRL|BSD|BZD|CAD|CLP|COP|CRC|CUP|ANG|XCD|DOP|EUR|USD|EUR|XCD|XAF|GTQ|GYD|HNL|HTG|EUR|XCD|KYD|XCD|MXN|NIO|PAB|PEN|PHP|USD|PYG|USD|USD|TTD|USD|UYU|XCD|VES|USD|USD|EUR|EUR|XAF|AFN|IRR|XOF|XAF|GHS|GMD|GNF|XOF|LRD|MRU|XOF|NGN|SLL|XOF|XOF|XAF|GHS|GMD|GNF|XOF|LRD|MRU|XOF|NGN|SLL|XOF|EUR|PHP|DKK|DKK|EUR|XOF|BIF|XOF|EUR|CAD|CDF|XAF|XAF|CHF|XOF|XAF|DJF|DZD|EUR|XAF|EUR|GNF|EUR|XAF|HTG|KMF|EUR|MAD|EUR|EUR|MGA|XOF|EUR|MRU|MUR|XPF|XOF|XPF|EUR|EUR|RWF|SCR|XOF|SYP|XAF|XOF|TND|VUV|XPF|EUR|EUR|EUR|GBP|EUR|GHS|GBP|ERN|ETB|EUR|PYG|CHF|EUR|CHF|INR|KES|GBP|GHS|XOF|NGN|USD|ILS|INR|INR|BAM|HRK|EUR|HUF|AMD||IDR|NGN|CNY||ISK|CHF|EUR|EUR|EUR|CAD|JPY||XAF|TZS|IDR|GEL|DZD|NGN|KES|NGN|TZS|CVE|XOF|KES|KZT|XAF|DKK|KES|KHR|INR|KPW|KRW|INR|GNF|LRD|INR|INR|INR|TZS|XAF|EUR|TRY|GBP|KGS|TZS|EUR|UGX|USD|AOA|CDF|XAF|XAF|LAK|IQD|IRR|EUR|CDF|KES|KES|EUR|INR|KES|TZS|KES|MUR|MGA|MZN|XAF|NZD|MKD|INR|MNT|INR|INR|CAD|INR|BND|MYR|BND|IDR|MYR|SGD|EUR|XAF|MMK|RUB|IRR|NAD|NOK|NOK|USD|EUR|EUR|INR|NPR|AWG|EUR|USD|ANG|EUR|SRD|ANG|XAF|NOK|XAF|GNF|ZAR|ZAR|SSP|USD|MWK|UGX|EUR|ETB|KES|INR|GEL|RUB|PKR|PKR|INR|NGN|PLN|AFN|PKR|AOA|BRL|CHF|CVE|EUR|XAF|XOF|EUR|MOP|MZN|EUR|STN|USD|BOB|USD|PEN|BDT|MMK|CHF|BIF|MDL|RON|TZS|BYN|KGS|KZT|MDL|RUB|UAH|RWF|TZS|INR|RUB|KES|INR|INR|TZS|EUR|EUR|PKR|INR|EUR|NOK|SEK|MZN|XOF|XAF|MAD|MAD|LKR|EUR|EUR|USD|WST|EUR|USD|DJF|ETB|KES|SOS|ALL|MKD|EUR|BAM|EUR|RSD|EUR|BAM|EUR|RSD|EUR|SZL|ZAR|ZAR|ZAR|IDR|EUR|EUR|SEK|CDF|KES|TZS|UGX|IQD|SYP|INR|LKR|MYR|SGD|INR|KES|UGX|TJS|THB|ERN|ETB|ERN|TMT|BWP|ZAR|TOP|EUR|TRY|TWD|ZAR|RUB|XOF|MAD|CNY|UAH|INR|PKR|PKR|AFN|UZS|UZS|LRD|LRD|ZAR|VND|TZS|EUR|CHF|ETB|XOF|ZAR|UGX|XAF||XOF|NGN|CNY|HKD|MAD|CNY|HKD|JPY|MOP|SGD|CNY|HKD|MOP|TWD|ZAR)$
    * @example "USD"
    */
   currency: string;
@@ -2621,7 +4446,7 @@ export interface OrderItemImportDto {
   unitPrice?: number | null;
   /**
    * Currency
-   * @pattern ^(DJF|ERN|ETB|NAD|ZAR|XAF|GHS|ETB||AED|BHD|DJF|DZD|EGP|ERN|ILS|IQD|JOD|KMF|KWD|LBP|LYD|MAD|MRU|OMR|ILS|QAR|SAR|SDG|SOS|SSP|SYP|XAF|TND|YER|CLP|INR|TZS|EUR|AZN|AZN|RUB|XAF|BYN|ZMW|TZS|BGN|XOF|BDT|INR|CNY|INR|EUR|INR|BAM|BAM|ERN|EUR|EUR|EUR|EUR|EUR|BDT|INR|RUB|PHP|UGX|USD|IQD|IRR|EUR|CZK|RUB|GBP|DKK|DKK|KES|EUR|EUR|CHF|EUR|EUR|CHF|EUR|XOF|EUR|XAF|MVR|XOF|BTN|KES|GHS|XOF|EUR|EUR|||AED|XCD|XCD|USD|EUR|AUD|BBD|EUR|BIF|BMD|BSD|BWP|BZD|CAD|AUD|CHF|NZD|XAF|AUD|EUR|EUR|DKK|XCD|ERN|EUR|FJD|FKP|USD|GBP|XCD|GBP|GHS|GIP|GMD|USD|GYD|HKD|EUR|ILS|GBP|INR|USD|GBP|JMD|KES|AUD|XCD|KYD|XCD|LRD|ZAR|MGA|USD|MOP|USD|XCD|EUR|MUR|MWK|MYR|NAD|AUD|NGN|EUR|AUD|NZD|NZD|PGK|PHP|PKR|NZD|USD|USD|RWF|SBD|SCR|SDG|SEK|SGD|SHP|EUR|SLL|SSP|ANG|SZL|USD|NZD|TOP|TTD|AUD|TZS|UGX|USD|USD|USD|XCD|USD|USD|VUV|WST|ZAR|ZMW|USD|||ARS|BOB|BRL|BZD|CLP|COP|CRC|CUP|DOP|USD|EUR|XAF|GTQ|HNL|MXN|NIO|PAB|PEN|PHP|USD|PYG|USD|USD|UYU|VES|EUR|EUR|XAF|AFN|IRR|XOF|XAF|GHS|GMD|GNF|XOF|LRD|MRU|XOF|NGN|SLL|XOF|EUR|PHP|DKK|DKK|EUR|XOF|BIF|XOF|EUR|CAD|CDF|XAF|XAF|CHF|XOF|XAF|DJF|DZD|EUR|XAF|EUR|GNF|EUR|XAF|HTG|KMF|EUR|MAD|EUR|EUR|MGA|XOF|EUR|MRU|MUR|XPF|XOF|XPF|EUR|EUR|RWF|SCR|XOF|SYP|XAF|XOF|TND|VUV|XPF|EUR|EUR|EUR|EUR|GBP|EUR|PYG|CHF|EUR|CHF|INR|KES|GBP|GHS|XOF|NGN|USD|ILS|INR|BAM|HRK|EUR|HUF|AMD||IDR|NGN|CNY|ISK|CHF|EUR|EUR|EUR|CAD|CAD|JPY|XAF|TZS|IDR|GEL|DZD|KES|TZS|CVE|XOF|KES|KZT|XAF|DKK|KES|KHR|INR|KPW|KRW|INR|INR|TZS|XAF|EUR|GBP|KGS|TZS|EUR|UGX|USD|AOA|CDF|XAF|XAF|LAK|IQD|IRR|EUR|CDF|KES|KES|EUR|KES|TZS|KES|MUR|MGA|MZN|XAF|NZD|MKD|INR|MNT|CNY|MNT|CAD|INR|BND|MYR|SGD|EUR|XAF|MMK|IRR|NAD|NOK|NOK|USD|EUR|EUR|INR|NPR|AWG|EUR|USD|ANG|EUR|SRD|ANG|XAF|NOK|XAF|GNF|ZAR|ZAR|SSP|UGX|EUR|ETB|KES|INR|GEL|RUB|PKR|INR|PLN||AFN|PKR|AOA|BRL|CHF|CVE|XAF|XOF|EUR|MOP|MZN|EUR|STN|USD|BOB|USD|PEN|GTQ|CHF|BIF|MDL|RON|TZS|BYN|KGS|KZT|MDL|RUB|UAH|RWF|TZS|INR|RUB|KES|TZS|PKR|EUR|NOK|SEK|MZN|XOF|XAF|MAD|MAD|LKR|EUR|EUR|NOK|SEK|NOK|SEK|EUR|EUR|USD|DJF|ETB|KES|SOS|ALL|MKD|EUR|BAM|EUR|RSD|EUR|BAM|EUR|RSD|EUR|SZL|ZAR|ERN|ZAR|ZAR|EUR|EUR|SEK|CDF|KES|TZS|UGX|SYP|INR|LKR|MYR|SGD|INR|KES|UGX|TJS|THB|ERN|ETB|ERN|TMT|BWP|ZAR|TOP|EUR|TRY|ZAR|RUB|XOF|MAD|CNY|UAH|INR|PKR|AFN|UZS|UZS|LRD|LRD|ZAR|VND||TZS|CHF|ETB|XOF|ZAR|UGX|XAF||XOF|NGN|MAD|CNY|HKD|MOP|SGD|HKD|MOP|TWD|ZAR)$
+   * @pattern ^(NAD|ZAR|XAF|JPY|GHS|ETB|USD||AED|BHD|DJF|DZD|EGP|MAD|ERN|ILS|IQD|JOD|KMF|KWD|LBP|LYD|MAD|MRU|OMR|ILS|QAR|SAR|SDG|SOS|SSP|SYP|XAF|TND|YER|CLP|INR|TZS|EUR|AZN|AZN|RUB|XAF|BYN|ZMW|TZS|BGN|XOF|BDT|INR|CNY|INR|EUR|INR|BAM|BAM|ERN|EUR|EUR|EUR|EUR|BDT|INR|RUB|PHP|UGX|USD|IQD|IRR|EUR|CZK|RUB|GBP|DKK|DKK|KES|EUR|EUR|CHF|EUR|EUR|CHF|EUR|XOF|INR|EUR|XAF|MVR|XOF|BTN|KES|GHS|XOF|EUR|EUR|||AED|XCD|XCD|ALL|ARS|USD|EUR|AUD|BBD|BDT|EUR|BGN|BIF|BMD|BND|BRL|BSD|BWP|BZD|CAD|AUD|CHF|NZD|CLP|XAF|CNY|COP|CVE|AUD|EUR|CZK|EUR|USD|DKK|XCD|EUR|ERN|EUR|FJD|FKP|USD|EUR|GBP|XCD|GBP|GHS|GIP|GMD|EUR|USD|GYD|HKD|HUF|IDR|EUR|ILS|GBP|INR|USD|GBP|JMD|JPY|KES|AUD|XCD|KRW|KYD|XCD|LRD|ZAR|EUR|EUR|MGA|USD|MMK|MOP|USD|XCD|EUR|MUR|MVR|MWK|MXN|MYR|NAD|AUD|NGN|EUR|NOK|AUD|NZD|NZD|PGK|PHP|PKR|PLN|NZD|USD|EUR|USD|RUB|RWF|SAR|SBD|SCR|SDG|SEK|SGD|SHP|EUR|EUR|SLL|SSP|ANG|SZL|USD|THB|NZD|TOP|TRY|TTD|AUD|TWD|TZS|UAH|UGX|USD|USD|USD|XCD|USD|USD|VUV|WST|ZAR|ZMW|USD||||XCD|ARS|BBD|BMD|BOB|USD|BRL|BSD|BZD|CAD|CLP|COP|CRC|CUP|ANG|XCD|DOP|EUR|USD|EUR|XCD|XAF|GTQ|GYD|HNL|HTG|EUR|XCD|KYD|XCD|MXN|NIO|PAB|PEN|PHP|USD|PYG|USD|USD|TTD|USD|UYU|XCD|VES|USD|USD|EUR|EUR|XAF|AFN|IRR|XOF|XAF|GHS|GMD|GNF|XOF|LRD|MRU|XOF|NGN|SLL|XOF|XOF|XAF|GHS|GMD|GNF|XOF|LRD|MRU|XOF|NGN|SLL|XOF|EUR|PHP|DKK|DKK|EUR|XOF|BIF|XOF|EUR|CAD|CDF|XAF|XAF|CHF|XOF|XAF|DJF|DZD|EUR|XAF|EUR|GNF|EUR|XAF|HTG|KMF|EUR|MAD|EUR|EUR|MGA|XOF|EUR|MRU|MUR|XPF|XOF|XPF|EUR|EUR|RWF|SCR|XOF|SYP|XAF|XOF|TND|VUV|XPF|EUR|EUR|EUR|GBP|EUR|GHS|GBP|ERN|ETB|EUR|PYG|CHF|EUR|CHF|INR|KES|GBP|GHS|XOF|NGN|USD|ILS|INR|INR|BAM|HRK|EUR|HUF|AMD||IDR|NGN|CNY||ISK|CHF|EUR|EUR|EUR|CAD|JPY||XAF|TZS|IDR|GEL|DZD|NGN|KES|NGN|TZS|CVE|XOF|KES|KZT|XAF|DKK|KES|KHR|INR|KPW|KRW|INR|GNF|LRD|INR|INR|INR|TZS|XAF|EUR|TRY|GBP|KGS|TZS|EUR|UGX|USD|AOA|CDF|XAF|XAF|LAK|IQD|IRR|EUR|CDF|KES|KES|EUR|INR|KES|TZS|KES|MUR|MGA|MZN|XAF|NZD|MKD|INR|MNT|INR|INR|CAD|INR|BND|MYR|BND|IDR|MYR|SGD|EUR|XAF|MMK|RUB|IRR|NAD|NOK|NOK|USD|EUR|EUR|INR|NPR|AWG|EUR|USD|ANG|EUR|SRD|ANG|XAF|NOK|XAF|GNF|ZAR|ZAR|SSP|USD|MWK|UGX|EUR|ETB|KES|INR|GEL|RUB|PKR|PKR|INR|NGN|PLN|AFN|PKR|AOA|BRL|CHF|CVE|EUR|XAF|XOF|EUR|MOP|MZN|EUR|STN|USD|BOB|USD|PEN|BDT|MMK|CHF|BIF|MDL|RON|TZS|BYN|KGS|KZT|MDL|RUB|UAH|RWF|TZS|INR|RUB|KES|INR|INR|TZS|EUR|EUR|PKR|INR|EUR|NOK|SEK|MZN|XOF|XAF|MAD|MAD|LKR|EUR|EUR|USD|WST|EUR|USD|DJF|ETB|KES|SOS|ALL|MKD|EUR|BAM|EUR|RSD|EUR|BAM|EUR|RSD|EUR|SZL|ZAR|ZAR|ZAR|IDR|EUR|EUR|SEK|CDF|KES|TZS|UGX|IQD|SYP|INR|LKR|MYR|SGD|INR|KES|UGX|TJS|THB|ERN|ETB|ERN|TMT|BWP|ZAR|TOP|EUR|TRY|TWD|ZAR|RUB|XOF|MAD|CNY|UAH|INR|PKR|PKR|AFN|UZS|UZS|LRD|LRD|ZAR|VND|TZS|EUR|CHF|ETB|XOF|ZAR|UGX|XAF||XOF|NGN|CNY|HKD|MAD|CNY|HKD|JPY|MOP|SGD|CNY|HKD|MOP|TWD|ZAR)$
    * @example "USD"
    */
   currency?: string | null;

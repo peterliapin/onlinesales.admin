@@ -1,10 +1,14 @@
 import { memo, PropsWithChildren, useCallback } from "react";
-import { PublicClientApplication, Configuration, InteractionType } from "@azure/msal-browser";
+import { 
+  PublicClientApplication, 
+  Configuration, 
+  InteractionStatus, 
+  InteractionType 
+} from "@azure/msal-browser";
 import {
-  AuthenticatedTemplate,
   MsalProvider,
   useMsal,
-  useMsalAuthentication,
+  MsalAuthenticationTemplate
 } from "@azure/msal-react";
 
 const msalConfig: Configuration = {
@@ -17,20 +21,25 @@ const msalConfig: Configuration = {
 
 const msalInstance = new PublicClientApplication(msalConfig);
 
+export const Loading = () => {
+  return (<div>Authentication in progress...</div>); // TODO: Design better one
+};
+
 export const AuthProvider = memo(function AuthProvider({ children }: PropsWithChildren) {
   return (
     <MsalProvider instance={msalInstance}>
-      <RedirectLogin />
-      <AuthenticatedTemplate>{children}</AuthenticatedTemplate>
+      <MsalAuthenticationTemplate
+        interactionType={InteractionType.Redirect}
+        authenticationRequest={{
+          scopes: ["User.Read"],
+        }}
+        loadingComponent={Loading}
+      >
+        {children}
+      </MsalAuthenticationTemplate>
     </MsalProvider>
   );
 });
-
-const RedirectLogin = () => {
-  useMsalAuthentication(InteractionType.Redirect);
-
-  return null;
-};
 
 export const useAuthState = () => {
   const { instance, accounts } = useMsal();
