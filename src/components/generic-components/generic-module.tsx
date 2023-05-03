@@ -47,7 +47,7 @@ interface ExtraActions {
     showButton?: boolean;
     importSchema?: DtoSchema;
     importItemsFn?: (
-      data: CommentImportDto[],
+      data: any[],
       params: RequestParams
     ) => Promise<HttpResponse<ImportResult, void | ProblemDetails>>;
   }
