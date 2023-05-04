@@ -1,4 +1,3 @@
-import { Dictionary } from "lodash";
 import moment from "moment";
 
 type FilterParams = {
@@ -74,7 +73,7 @@ const generateFilterQuery = (whereField: string, operatorValue: string, whereFie
   case "lte":
     return `&filter[where][${whereField}][lte]=${endDateString}`;
   default:
-    return `&filter[where][${whereField}][${whereObj.operator}]=null`;
+    return `&filter[where][${whereField}][${whereObj.operator}]=`;
   }
 };
 
@@ -94,9 +93,9 @@ const getWhereOperatorAndValue = (
   case "endsWith":
     return { operator: "contains", value: `*${whereFieldValue}` };
   case "isEmpty":
-    return { operator: "eq", value: "null|" };
+    return { operator: "eq", value: "" };
   case "isNotEmpty":
-    return { operator: "neq", value: "null|" };
+    return { operator: "neq", value: "" };
   case "isAnyOf":
     return { operator: "eq", value: `${whereFieldValue.join("|")}` };
   case "not":

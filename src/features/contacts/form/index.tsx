@@ -1,14 +1,5 @@
 import { SyntheticEvent, useEffect, useState } from "react";
-import {
-  Autocomplete,
-  Button,
-  Card,
-  CardContent,
-  CircularProgress,
-  Grid,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Autocomplete, Button, Card, CardContent, Grid, TextField } from "@mui/material";
 import { ContactDetailsDto } from "lib/network/swagger-client";
 import { CoreModule } from "lib/router";
 import { contactAddHeader, contactEditHeader, contactFormBreadcrumbLinks } from "../constants";
@@ -18,6 +9,7 @@ import { useRequestContext } from "@providers/request-provider";
 import { useNotificationsService } from "@hooks";
 import { ModuleWrapper } from "@components/module-wrapper";
 import { useModuleWrapperContext } from "@providers/module-wrapper-provider";
+import { SavingBar } from "@components/SavingBar";
 
 interface ContactFormProps {
   contact: ContactDetailsDto;
@@ -102,24 +94,11 @@ export const ContactForm = ({ contact, updateContact, handleSave, isEdit }: Cont
     handleNavigation(CoreModule.contacts);
   };
 
-  const savingIndicatorElement = (
-    <>
-      <Grid container item spacing={3} sm="auto" xs="auto">
-        <Grid item>
-          <CircularProgress size={14} />
-        </Grid>
-        <Grid item>
-          <Typography>Saving...</Typography>
-        </Grid>
-      </Grid>
-    </>
-  );
-
   return (
     <ModuleWrapper
       breadcrumbs={contactFormBreadcrumbLinks}
       currentBreadcrumb={header}
-      saveIndicatorElement={savingIndicatorElement}
+      saveIndicatorElement={<SavingBar />}
     >
       <Card>
         <CardContent>
