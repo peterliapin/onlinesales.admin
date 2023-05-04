@@ -9,7 +9,6 @@ import {
   Avatar,
   Divider,
   ListItemIcon,
-
 } from "@mui/material";
 import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
@@ -24,11 +23,8 @@ export const DropdownMenu = () => {
   const navigate = useNavigate();
 
   const displayName = (userInfo && userInfo.displayName) || "Unknown";
-  const avatarUrl = (
-    userInfo && 
-    userInfo.avatarUrl &&
-    buildAbsoluteUrl(userInfo.avatarUrl)
-  ) || undefined;
+  const avatarUrl =
+    (userInfo && userInfo.avatarUrl && buildAbsoluteUrl(userInfo.avatarUrl)) || undefined;
 
   const [anchorElement, setAnchorElement] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorElement);
@@ -45,9 +41,7 @@ export const DropdownMenu = () => {
 
   return (
     <React.Fragment>
-      <Box
-        sx={{ display: "flex", alignItems: "center", textAlign: "center" }}
-      >
+      <Box sx={{ display: "flex", alignItems: "center", textAlign: "center" }}>
         <Typography sx={{ minWidth: 100 }}>{displayName}</Typography>
         <Tooltip title="Account settings">
           <IconButton
@@ -58,10 +52,7 @@ export const DropdownMenu = () => {
             aria-haspopup="true"
             aria-expanded={open ? "true" : undefined}
           >
-            <Avatar 
-              sx={{ width: 32, height: 32 }}
-              src={avatarUrl}
-            >
+            <Avatar sx={{ width: 32, height: 32 }} src={avatarUrl}>
               {displayName[0]}
             </Avatar>
           </IconButton>
@@ -74,11 +65,8 @@ export const DropdownMenu = () => {
         onClose={handleClose}
         onClick={handleClose}
       >
-        <MenuItem 
-          onClick={handleProfileClick}
-          disabled={userInfo === null}
-        >
-          <Avatar 
+        <MenuItem onClick={handleProfileClick} disabled={userInfo === null}>
+          <Avatar
             sx={{ width: 32, height: 32, marginRight: 2.5, marginLeft: -1.5 }}
             src={avatarUrl}
           >
@@ -86,20 +74,14 @@ export const DropdownMenu = () => {
           </Avatar>
           Profile
         </MenuItem>
-        <Divider/>
-        <MenuItem 
-          onClick={handleClose}
-          disabled={userInfo === null}
-        >
+        <Divider />
+        <MenuItem onClick={handleClose} disabled={userInfo === null}>
           <ListItemIcon>
             <Settings fontSize="small" />
           </ListItemIcon>
           Settings
         </MenuItem>
-        <MenuItem
-          onClick={logout}
-          disabled={userInfo === null}
-        >
+        <MenuItem onClick={logout} disabled={userInfo === null}>
           <ListItemIcon>
             <Logout fontSize="small" />
           </ListItemIcon>

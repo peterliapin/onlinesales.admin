@@ -45,15 +45,10 @@ const TabPanel = (props: TabPanelProps) => {
       aria-labelledby={`simple-tab-${index}`}
       {...other}
     >
-      {value === index && (
-        <Box sx={{ p: 3 }}>
-          {children}
-        </Box>
-      )}
+      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
     </div>
   );
 };
-
 
 export const UserEdit = () => {
   const { setSaving, setBusy } = useModuleWrapperContext();
@@ -68,20 +63,20 @@ export const UserEdit = () => {
   const submit = async (values: UserDetailsDto, helpers: FormikHelpers<UserDetailsDto>) => {
     let response: HttpResponse<UserDetailsDto, void | ProblemDetails>;
     notificationsService.info(`${values?.id ? "Updating" : "Creating"} a user...`);
-    try{
-      if (id === undefined){
+    try {
+      if (id === undefined) {
         response = await client.api.usersCreate(values);
-      }else{
+      } else {
         response = await client.api.usersPartialUpdate(id, values);
       }
       helpers.setValues(response.data);
       notificationsService.success(`Successfully ${values?.id ? "updated" : "created"} user`);
-    }catch(data: any){
+    } catch (data: any) {
       const errMessage = data.error && data.error.title;
       notificationsService.error(
         `Failed to ${values?.id ? "update" : "create"} user (${errMessage})`
       );
-    }finally{
+    } finally {
       helpers.setSubmitting(false);
     }
   };
@@ -91,10 +86,10 @@ export const UserEdit = () => {
   const formik = useFormik({
     validationSchema: toFormikValidationSchema(UserEditValidationScheme),
     initialValues: {
-      "avatarUrl": "", 
-      "displayName": "", 
-      "email": "", 
-      "userName": ""
+      avatarUrl: "",
+      displayName: "",
+      email: "",
+      userName: "",
     } as UserDetailsDto,
     onSubmit: submit,
     validateOnChange: false,
@@ -115,7 +110,7 @@ export const UserEdit = () => {
     const input = document.createElement("input");
     input.type = "file";
     input.onchange = async (e) => {
-      if (e === null || e.target === null){
+      if (e === null || e.target === null) {
         return;
       }
       const target = e.target as HTMLInputElement;
@@ -142,28 +137,15 @@ export const UserEdit = () => {
         <form onSubmit={formik.handleSubmit}>
           <Card>
             <CardContent>
-              <Box
-                sx={{ borderBottom: 1, borderColor: "divider" }}
-              >
-                <Tabs
-                  value={currentPanel}
-                  onChange={(_, newValue) => setCurrentPanel(newValue)}
-                >
-                  <Tab
-                    label="Overview"
-                    {...tabProps(0)}
-                  />
+              <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+                <Tabs value={currentPanel} onChange={(_, newValue) => setCurrentPanel(newValue)}>
+                  <Tab label="Overview" {...tabProps(0)} />
                 </Tabs>
               </Box>
-              <TabPanel
-                value={currentPanel} 
-                index={0}
-              >
+              <TabPanel value={currentPanel} index={0}>
                 <Grid container gap={"2rem"} direction={"column"}>
                   <Grid item>
-                    <Typography>
-                      Basic Info
-                    </Typography>
+                    <Typography>Basic Info</Typography>
                   </Grid>
                   <Grid item container direction={"row"} gap={"2rem"}>
                     <Grid item>
@@ -172,43 +154,30 @@ export const UserEdit = () => {
                         anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
                         sx={{
                           width: 96,
-                          height: 96
+                          height: 96,
                         }}
                         badgeContent={
-                          <StyledAvatar
-                            onClick={handleImageUpload}
-                          >
-                            <AddAPhotoIcon
-                            />
+                          <StyledAvatar onClick={handleImageUpload}>
+                            <AddAPhotoIcon />
                           </StyledAvatar>
                         }
                       >
-                        <Avatar 
+                        <Avatar
                           alt={formik.values.displayName || "Avatar image"}
                           src={formik.values.avatarUrl && buildAbsoluteUrl(formik.values.avatarUrl)}
-                          sx={{ 
+                          sx={{
                             width: 96,
-                            height: 96 
+                            height: 96,
                           }}
                         />
                       </Badge>
                     </Grid>
-                    <Grid 
-                      item 
-                      container
-                      direction={"column"} 
-                      xs={6} 
-                      justifyContent={"center"}
-                    >
+                    <Grid item container direction={"column"} xs={6} justifyContent={"center"}>
                       <Grid item>
-                        <Typography>
-                          Display name: {formik.values.displayName}
-                        </Typography>
+                        <Typography>Display name: {formik.values.displayName}</Typography>
                       </Grid>
                       <Grid item>
-                        <Typography>
-                          Email: {formik.values.email}
-                        </Typography>
+                        <Typography>Email: {formik.values.email}</Typography>
                       </Grid>
                     </Grid>
                   </Grid>
@@ -238,8 +207,7 @@ export const UserEdit = () => {
                       onChange={valueUpdate}
                     />
                   </Grid>
-                  {
-                    !id &&
+                  {!id && (
                     <Grid item xs={6} sm={6}>
                       <TextField
                         disabled={!allowedToModify}
@@ -253,13 +221,13 @@ export const UserEdit = () => {
                         onChange={valueUpdate}
                       />
                     </Grid>
-                  }
+                  )}
                 </Grid>
                 <Button
                   type="submit"
                   variant="contained"
                   sx={{
-                    marginTop: "1rem"
+                    marginTop: "1rem",
                   }}
                 >
                   Save

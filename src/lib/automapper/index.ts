@@ -80,12 +80,12 @@ createMap<ContentDetailsDto, ContentDetails>(
     (d) => d.language,
     mapFrom((s) => {
       switch (s.language) {
-      case "ru-RU":
-        return "Russian";
-      case "en-US":
-        return "English";
-      default:
-        return "Unknown";
+        case "ru-RU":
+          return "Russian";
+        case "en-US":
+          return "English";
+        default:
+          return "Unknown";
       }
     })
   ),
@@ -93,15 +93,15 @@ createMap<ContentDetailsDto, ContentDetails>(
     (d) => d.type,
     mapFrom((s) => {
       switch (s.type) {
-      case "post":
-        return "Blog Post";
-      case "release":
-        return "Release Note";
-      default:
-        return s.type;
+        case "post":
+          return "Blog Post";
+        case "release":
+          return "Release Note";
+        default:
+          return s.type;
       }
     })
-  ),
+  )
 );
 createMap<ContentDetails, ContentUpdateDto>(
   Automapper,
@@ -111,12 +111,12 @@ createMap<ContentDetails, ContentUpdateDto>(
     (d) => d.language,
     mapFrom((s) => {
       switch (s.language) {
-      case "Russian":
-        return "ru-RU";
-      case "English":
-        return "en-US";
-      default:
-        return s.language;
+        case "Russian":
+          return "ru-RU";
+        case "English":
+          return "en-US";
+        default:
+          return s.language;
       }
     })
   ),
@@ -124,12 +124,12 @@ createMap<ContentDetails, ContentUpdateDto>(
     (d) => d.type,
     mapFrom((s) => {
       switch (s.type) {
-      case "Blog Post":
-        return "post";
-      case "Release Note":
-        return "release";
-      default:
-        return s.type;
+        case "Blog Post":
+          return "post";
+        case "Release Note":
+          return "release";
+        default:
+          return s.type;
       }
     })
   )
@@ -142,12 +142,12 @@ createMap<ContentDetails, ContentCreateDto>(
     (d) => d.language,
     mapFrom((s) => {
       switch (s.language) {
-      case "Russian":
-        return "ru-RU";
-      case "English":
-        return "en-US";
-      default:
-        return s.language;
+        case "Russian":
+          return "ru-RU";
+        case "English":
+          return "en-US";
+        default:
+          return s.language;
       }
     })
   ),
@@ -155,13 +155,13 @@ createMap<ContentDetails, ContentCreateDto>(
     (d) => d.type,
     mapFrom((s) => {
       switch (s.type) {
-      case "Blog Post":
-        return "post";
-      case "Release Note":
-        return "release";
-      default:
-        return s.type;
+        case "Blog Post":
+          return "post";
+        case "Release Note":
+          return "release";
+        default:
+          return s.type;
       }
     })
-  ),
+  )
 );

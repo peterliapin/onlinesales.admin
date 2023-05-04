@@ -1,9 +1,9 @@
 import { Dictionary } from "lodash";
 
-interface Validation {  
+interface Validation {
   rule: string;
   errorMessage: string;
-  level: string;  
+  level: string;
 }
 
 const alternativeMatches: Dictionary<string[]> = {
@@ -17,7 +17,7 @@ const alternativeMatches: Dictionary<string[]> = {
   createdByIp: ["ip address", "ip", "ipaddress", "IP Address", "IP"],
   phone: ["Telephone no", "Telephone number", "Phone number"],
   website: ["website address"],
-  country: ["country name"],  
+  country: ["country name"],
   timezone: ["time zone", "TimezoneOffset"],
   language: ["lang", "language name", "language code"],
   createdAt: ["created at", "created date", "Date", "Created Time", "Created"],
@@ -50,44 +50,46 @@ const buildValidations = (key: string, property: any) => {
   return validations;
 };
 
-const typeMapping : Dictionary<string> = {
-  "string": "input",
-  "integer": "input",
-  "boolean": "checkbox",
-  "enum": "select",
-  "array": "input",
+const typeMapping: Dictionary<string> = {
+  string: "input",
+  integer: "input",
+  boolean: "checkbox",
+  enum: "select",
+  array: "input",
 };
 
 export const getImportFields = (importModel: any) => {
-  const importContactFields = Object.keys(importModel).map((key) => {
-    const property = importModel[key];
+  const importContactFields = Object.keys(importModel)
+    .map((key) => {
+      const property = importModel[key];
 
-    if (!property.type) {
-      return; // skip the field if property.type is undefined
-    }
+      if (!property.type) {
+        return; // skip the field if property.type is undefined
+      }
 
-    const importType = typeMapping[property.type] ? typeMapping[property.type] : "input";
-    let example = property.example ? property.example : "string";
+      const importType = typeMapping[property.type] ? typeMapping[property.type] : "input";
+      let example = property.example ? property.example : "string";
 
-    if (example instanceof Array || example instanceof Object) {
-      example = JSON.stringify(example);
-    }
+      if (example instanceof Array || example instanceof Object) {
+        example = JSON.stringify(example);
+      }
 
-    const alternatives = getAlternatives(key, property.title);
-    const title = property.title ? property.title : key;
-    const validations = buildValidations(key, property);
+      const alternatives = getAlternatives(key, property.title);
+      const title = property.title ? property.title : key;
+      const validations = buildValidations(key, property);
 
-    return {
-      key,
-      label: title,
-      alternateMatches: alternatives,
-      fieldType: {
-        type: importType,
-      },
-      example: example,
-      validations: validations,
-    };
-  }).filter(Boolean);
+      return {
+        key,
+        label: title,
+        alternateMatches: alternatives,
+        fieldType: {
+          type: importType,
+        },
+        example: example,
+        validations: validations,
+      };
+    })
+    .filter(Boolean);
 
   return importContactFields;
 };

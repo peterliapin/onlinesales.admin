@@ -1,6 +1,6 @@
-import {ReactNode} from "react";
-import {EditProps} from "@components/generic-components/edit-components/common";
-import {TextField} from "@mui/material";
+import { ReactNode } from "react";
+import { EditProps } from "@components/generic-components/edit-components/common";
+import { TextField } from "@mui/material";
 
 export const NumberEdit = ({
   key,
@@ -11,7 +11,7 @@ export const NumberEdit = ({
   disabled,
   required,
   pattern,
-  error
+  error,
 }: EditProps<number>): ReactNode => {
   return (
     <TextField
@@ -23,7 +23,7 @@ export const NumberEdit = ({
       value={value}
       required={required}
       inputProps={{
-        pattern: pattern
+        pattern: pattern,
       }}
       error={!!error}
       helperText={error}

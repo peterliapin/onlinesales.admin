@@ -1,13 +1,13 @@
 import { DataList } from "@components/data-list";
 import { ModuleWrapper } from "@components/module-wrapper";
 import { GridColDef } from "@mui/x-data-grid";
-import { 
-  UserGridStorageKey, 
-  UsersBreadcrumbLinks, 
-  UsersListCurrentBreadcrumb, 
-  defaultFilterOrderColumn, 
+import {
+  UserGridStorageKey,
+  UsersBreadcrumbLinks,
+  UsersListCurrentBreadcrumb,
+  defaultFilterOrderColumn,
   defaultFilterOrderDirection,
-  searchLabel
+  searchLabel,
 } from "../constants";
 import { SearchBar } from "@components/search-bar";
 import { UserDetailsDto } from "@lib/network/swagger-client";
@@ -19,7 +19,6 @@ import { Button } from "@mui/material";
 import { getAddFormRoute } from "@lib/router";
 import { GhostLink } from "@components/ghost-link";
 import { useRequestContext } from "@providers/request-provider";
-
 
 const columns: GridColDef<UserDetailsDto>[] = [
   {
@@ -107,7 +106,6 @@ export const UserList = () => {
       Add account
     </Button>
   );
-
 
   return (
     <ModuleWrapper

@@ -14,7 +14,7 @@ export const UserProvider = memo(function UserProvider({ children }: PropsWithCh
   useEffect(() => {
     const infoRetrieve = async () => {
       const resp = await requestContext.client.api.usersMeList();
-      if (resp.error){
+      if (resp.error) {
         notificationsService.error("Unable to retrieve user info data");
         setCurrentUser(null);
         return;
@@ -23,13 +23,8 @@ export const UserProvider = memo(function UserProvider({ children }: PropsWithCh
     };
     infoRetrieve();
   }, [authState.account]);
-  return (
-    <UserContext.Provider value={currentUser}>
-      {children}
-    </UserContext.Provider>
-  );
+  return <UserContext.Provider value={currentUser}>{children}</UserContext.Provider>;
 });
-
 
 export const useUserInfo = () => {
   const ctx = useContext(UserContext);

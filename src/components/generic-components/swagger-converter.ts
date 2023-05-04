@@ -1,4 +1,4 @@
-import {DtoSchema, DtoSchemaSource} from "@components/generic-components/common";
+import { DtoSchema, DtoSchemaSource } from "@components/generic-components/common";
 
 const convertSchemaToDtoSchema = (
   schema: DtoSchemaSource,
@@ -29,7 +29,7 @@ const convertSchemaToDtoSchema = (
       } else {
         dtoSchema.properties[key] = {
           type: value.type || "unknown",
-          hide: false
+          hide: false,
         };
 
         if (value.format) {

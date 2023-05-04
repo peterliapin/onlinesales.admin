@@ -27,4 +27,4 @@ export interface MarkdownEditorProps {
 
 export interface ImageUploadingContext {
   currentFile: File;
-};
+}

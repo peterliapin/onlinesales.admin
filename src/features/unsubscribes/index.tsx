@@ -2,25 +2,17 @@ import {
   GenericDataGridProps,
   GenericFormProps,
   GenericModule,
-  getSchemaDto
+  getSchemaDto,
 } from "@components/generic-components";
-import {
-  CoreModule,
-  getEditFormRoute,
-  getViewFormRoute,
-} from "@lib/router";
-import {useNavigate, useParams} from "react-router-dom";
+import { CoreModule, getEditFormRoute, getViewFormRoute } from "@lib/router";
+import { useNavigate, useParams } from "react-router-dom";
 
 import swaggerJson from "@lib/network/swagger.json";
-import {useRequestContext} from "@providers/request-provider";
-import {
-  UnsubscribeDto,
-  UnsubscribeDetailsDto
-} from "@lib/network/swagger-client";
-
+import { useRequestContext } from "@providers/request-provider";
+import { UnsubscribeDto, UnsubscribeDetailsDto } from "@lib/network/swagger-client";
 
 export const UnsubscribesModule = () => {
-  const {client} = useRequestContext();
+  const { client } = useRequestContext();
   const navigate = useNavigate();
 
   const formProps: GenericFormProps<UnsubscribeDetailsDto, UnsubscribeDto, UnsubscribeDto> = {
@@ -31,7 +23,7 @@ export const UnsubscribesModule = () => {
     getItemFn: client.api.unsubscribesDetail,
     updateItemFn: client.api.unsubscribesPartialUpdate,
     createItemFn: client.api.unsubscribesCreate,
-    getItemId: () => undefined
+    getItemId: () => undefined,
   };
 
   const tableProps: GenericDataGridProps<UnsubscribeDetailsDto> = {
@@ -39,11 +31,11 @@ export const UnsubscribesModule = () => {
     schema: getSchemaDto("UnsubscribeDetailsDto", swaggerJson.components.schemas),
     getItemsFn: client.api.unsubscribesList,
     detailsNavigate: (item) => {
-      item.id && navigate(getViewFormRoute(item.id), {state: item});
+      item.id && navigate(getViewFormRoute(item.id), { state: item });
     },
     editNavigate: (item) => {
-      item.id && navigate(getEditFormRoute(item.id), {state: item});
-    }
+      item.id && navigate(getEditFormRoute(item.id), { state: item });
+    },
   };
 
   const module = GenericModule({
@@ -58,8 +50,8 @@ export const UnsubscribesModule = () => {
       import: {
         showButton: true,
         importItemsFn: client.api.unsubscribesImportCreate,
-        importSchema: getSchemaDto("UnsubscribeImportDto", swaggerJson.components.schemas)
-      }
+        importSchema: getSchemaDto("UnsubscribeImportDto", swaggerJson.components.schemas),
+      },
     },
     viewFormProps: {
       ...formProps,
@@ -68,7 +60,7 @@ export const UnsubscribesModule = () => {
       getItemId: () => {
         const params = useParams();
         return Number(params && params["*"] && params["*"].match(/^(\d+)\/view$/)?.[1]);
-      }
+      },
     },
     editFormProps: {
       ...formProps,
@@ -77,17 +69,17 @@ export const UnsubscribesModule = () => {
       getItemId: () => {
         const params = useParams();
         return Number(params && params["*"] && params["*"].match(/^(\d+)\/edit$/)?.[1]);
-      }
+      },
     },
     createFormProps: {
       ...formProps,
       mode: "create",
       editable: true,
       onSaved: (item) => {
-        item.id && navigate(getEditFormRoute(item.id), {state: item});
-      }
-    }
+        item.id && navigate(getEditFormRoute(item.id), { state: item });
+      },
+    },
   });
 
-  return (module);
+  return module;
 };

@@ -74,5 +74,5 @@ export const ContentListWrapper = styled("div")`
 export const DummyDiv = styled("div")`
   width: 100%;
   height: 100%;
-  background-color: #F4F5F7;
+  background-color: #f4f5f7;
 `;

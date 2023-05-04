@@ -1,7 +1,7 @@
-import {ReactNode} from "react";
-import {EditProps} from "@components/generic-components/edit-components/common";
-import {Autocomplete, TextField} from "@mui/material";
-import {DictItem} from "@components/generic-components";
+import { ReactNode } from "react";
+import { EditProps } from "@components/generic-components/edit-components/common";
+import { Autocomplete, TextField } from "@mui/material";
+import { DictItem } from "@components/generic-components";
 
 export const DictionaryEdit = ({
   key,
@@ -12,7 +12,7 @@ export const DictionaryEdit = ({
   onChangeValue,
   disabled,
   valueOptions,
-  error
+  error,
 }: EditProps<DictItem>): ReactNode => {
   return (
     <Autocomplete

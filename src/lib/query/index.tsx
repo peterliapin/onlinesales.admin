@@ -59,22 +59,22 @@ const generateFilterQuery = (whereField: string, operatorValue: string, whereFie
   const endDateString = endDate.toISOString();
 
   switch (whereObj.operator) {
-  case "eq":
-    return `&filter[where][${whereField}][gte]=${beginDateString}
+    case "eq":
+      return `&filter[where][${whereField}][gte]=${beginDateString}
     &filter[where][${whereField}][lt]=${endDateString}`;
-  case "neq":
-    return `&filter[where][or][${whereField}][lt]=${beginDateString}
+    case "neq":
+      return `&filter[where][or][${whereField}][lt]=${beginDateString}
     &filter[where][or][${whereField}][gt]=${endDateString}`;
-  case "gt":
-    return `&filter[where][${whereField}][gt]=${endDateString}`;
-  case "gte":
-    return `&filter[where][${whereField}][gte]=${beginDateString}`;
-  case "lt":
-    return `&filter[where][${whereField}][lt]=${beginDateString}`;
-  case "lte":
-    return `&filter[where][${whereField}][lte]=${endDateString}`;
-  default:
-    return `&filter[where][${whereField}][${whereObj.operator}]=null`;
+    case "gt":
+      return `&filter[where][${whereField}][gt]=${endDateString}`;
+    case "gte":
+      return `&filter[where][${whereField}][gte]=${beginDateString}`;
+    case "lt":
+      return `&filter[where][${whereField}][lt]=${beginDateString}`;
+    case "lte":
+      return `&filter[where][${whereField}][lte]=${endDateString}`;
+    default:
+      return `&filter[where][${whereField}][${whereObj.operator}]=null`;
   }
 };
 
@@ -83,38 +83,38 @@ const getWhereOperatorAndValue = (
   whereFieldValue: any
 ): { operator: string; value: string } => {
   switch (operatorValue) {
-  case "equals":
-  case "is":
-  case "=":
-    return { operator: "eq", value: whereFieldValue };
-  case "contains":
-    return { operator: "contains", value: `*${whereFieldValue}*` };
-  case "startsWith":
-    return { operator: "contains", value: `${whereFieldValue}*` };
-  case "endsWith":
-    return { operator: "contains", value: `*${whereFieldValue}` };
-  case "isEmpty":
-    return { operator: "eq", value: "null|" };
-  case "isNotEmpty":
-    return { operator: "neq", value: "null|" };
-  case "isAnyOf":
-    return { operator: "eq", value: `${whereFieldValue.join("|")}` };
-  case "not":
-  case "!=":
-    return { operator: "neq", value: whereFieldValue };
-  case "after":
-  case ">":
-    return { operator: "gt", value: whereFieldValue };
-  case "onOrAfter":
-  case ">=":
-    return { operator: "gte", value: whereFieldValue };
-  case "before":
-  case "<":
-    return { operator: "lt", value: whereFieldValue };
-  case "onOrBefore":
-  case "<=":
-    return { operator: "lte", value: whereFieldValue };
-  default:
-    return { operator: "eq", value: whereFieldValue };
+    case "equals":
+    case "is":
+    case "=":
+      return { operator: "eq", value: whereFieldValue };
+    case "contains":
+      return { operator: "contains", value: `*${whereFieldValue}*` };
+    case "startsWith":
+      return { operator: "contains", value: `${whereFieldValue}*` };
+    case "endsWith":
+      return { operator: "contains", value: `*${whereFieldValue}` };
+    case "isEmpty":
+      return { operator: "eq", value: "null|" };
+    case "isNotEmpty":
+      return { operator: "neq", value: "null|" };
+    case "isAnyOf":
+      return { operator: "eq", value: `${whereFieldValue.join("|")}` };
+    case "not":
+    case "!=":
+      return { operator: "neq", value: whereFieldValue };
+    case "after":
+    case ">":
+      return { operator: "gt", value: whereFieldValue };
+    case "onOrAfter":
+    case ">=":
+      return { operator: "gte", value: whereFieldValue };
+    case "before":
+    case "<":
+      return { operator: "lt", value: whereFieldValue };
+    case "onOrBefore":
+    case "<=":
+      return { operator: "lte", value: whereFieldValue };
+    default:
+      return { operator: "eq", value: whereFieldValue };
   }
 };

@@ -60,6 +60,4 @@ export const CenteredCircularProgress = styled(CircularProgress)`
   z-index: 99;
 `;
 
-export const SavingIndicatorContainer = styled("div")`
-
-`;
+export const SavingIndicatorContainer = styled("div")``;

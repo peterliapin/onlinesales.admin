@@ -1,6 +1,6 @@
-import {ReactNode} from "react";
-import {EditProps} from "@components/generic-components/edit-components/common";
-import {TextField} from "@mui/material";
+import { ReactNode } from "react";
+import { EditProps } from "@components/generic-components/edit-components/common";
+import { TextField } from "@mui/material";
 
 export const TextEdit = ({
   key,
@@ -13,7 +13,7 @@ export const TextEdit = ({
   minLength,
   maxLength,
   pattern,
-  error
+  error,
 }: EditProps<string>): ReactNode => {
   return (
     <TextField
@@ -26,7 +26,7 @@ export const TextEdit = ({
       inputProps={{
         minLength,
         maxLength,
-        pattern
+        pattern,
       }}
       error={!!error}
       helperText={error}

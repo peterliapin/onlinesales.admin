@@ -11,7 +11,7 @@ export const AppHeader = () => {
         <Typography component={GhostLink} to={rootRoute} variant="h5">
           OnlineSales
         </Typography>
-        <DropdownMenu/>
+        <DropdownMenu />
       </AppBarToolbar>
     </AppBarStyled>
   );

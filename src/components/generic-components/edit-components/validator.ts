@@ -1,10 +1,9 @@
 import * as z from "zod";
-import {DtoField} from "@components/generic-components";
+import { DtoField } from "@components/generic-components";
 import {
   DynamicValues,
-  ValidationResult
+  ValidationResult,
 } from "@components/generic-components/edit-components/common";
-
 
 const getValidator = (fields: DtoField[]) => {
   const shape: any = {};
@@ -13,48 +12,43 @@ const getValidator = (fields: DtoField[]) => {
     let shapeItem;
 
     switch (field.type) {
-    case "string":
-      shapeItem = z.string();
+      case "string":
+        shapeItem = z.string();
 
-      if (typeof field.minLength !== "undefined") {
-        shapeItem = shapeItem.min(field.minLength);
-      }
+        if (typeof field.minLength !== "undefined") {
+          shapeItem = shapeItem.min(field.minLength);
+        }
 
-      if (typeof field.maxLength !== "undefined") {
-        shapeItem = shapeItem.max(field.maxLength);
-      }
+        if (typeof field.maxLength !== "undefined") {
+          shapeItem = shapeItem.max(field.maxLength);
+        }
 
-      if (field.pattern) {
-        shapeItem = shapeItem.regex(
-          RegExp(field.pattern),
-          `Doesn't match regexp "${field.pattern}"`);
-      }
+        if (field.pattern) {
+          shapeItem = shapeItem.regex(
+            RegExp(field.pattern),
+            `Doesn't match regexp "${field.pattern}"`
+          );
+        }
 
-      shape[field.name] = field.required
-        ? shapeItem
-        : shapeItem.optional();
-      break;
+        shape[field.name] = field.required ? shapeItem : shapeItem.optional();
+        break;
 
-    case "number":
-      shapeItem = z.number();
+      case "number":
+        shapeItem = z.number();
 
-      shape[field.name] = shapeItem;
+        shape[field.name] = shapeItem;
 
-      shape[field.name] = field.required
-        ? shapeItem
-        : shapeItem.optional();
-      break;
+        shape[field.name] = field.required ? shapeItem : shapeItem.optional();
+        break;
 
-    case "integer":
-      shapeItem = z.number().int();
+      case "integer":
+        shapeItem = z.number().int();
 
-      shape[field.name] = field.required
-        ? shapeItem
-        : shapeItem.optional();
-      break;
+        shape[field.name] = field.required ? shapeItem : shapeItem.optional();
+        break;
 
-    default:
-      break;
+      default:
+        break;
     }
   }
 
@@ -62,8 +56,7 @@ const getValidator = (fields: DtoField[]) => {
 };
 
 export const validate = (fields: DtoField[], values: DynamicValues): ValidationResult => {
-  const res: ValidationResult = {
-  };
+  const res: ValidationResult = {};
 
   const validator = getValidator(fields);
 

@@ -2,26 +2,17 @@ import {
   GenericDataGridProps,
   GenericFormProps,
   GenericModule,
-  getSchemaDto
+  getSchemaDto,
 } from "@components/generic-components";
-import {
-  CoreModule,
-  getEditFormRoute,
-  getViewFormRoute,
-} from "@lib/router";
-import {useNavigate, useParams} from "react-router-dom";
+import { CoreModule, getEditFormRoute, getViewFormRoute } from "@lib/router";
+import { useNavigate, useParams } from "react-router-dom";
 
 import swaggerJson from "@lib/network/swagger.json";
-import {useRequestContext} from "@providers/request-provider";
-import {
-  LinkCreateDto,
-  LinkDetailsDto,
-  LinkUpdateDto
-} from "@lib/network/swagger-client";
-
+import { useRequestContext } from "@providers/request-provider";
+import { LinkCreateDto, LinkDetailsDto, LinkUpdateDto } from "@lib/network/swagger-client";
 
 export const LinksModule = () => {
-  const {client} = useRequestContext();
+  const { client } = useRequestContext();
   const navigate = useNavigate();
 
   const formProps: GenericFormProps<LinkDetailsDto, LinkCreateDto, LinkUpdateDto> = {
@@ -41,11 +32,11 @@ export const LinksModule = () => {
     schema: getSchemaDto("LinkDetailsDto", swaggerJson.components.schemas),
     getItemsFn: client.api.linksList,
     detailsNavigate: (item) => {
-      item.id && navigate(getViewFormRoute(item.id), {state: item});
+      item.id && navigate(getViewFormRoute(item.id), { state: item });
     },
     editNavigate: (item) => {
-      item.id && navigate(getEditFormRoute(item.id), {state: item});
-    }
+      item.id && navigate(getEditFormRoute(item.id), { state: item });
+    },
   };
 
   const module = GenericModule({
@@ -60,7 +51,7 @@ export const LinksModule = () => {
       },
       import: {
         showButton: true,
-      }
+      },
     },
     viewFormProps: {
       ...formProps,
@@ -69,7 +60,7 @@ export const LinksModule = () => {
       getItemId: () => {
         const params = useParams();
         return Number(params && params["*"] && params["*"].match(/^(\d+)\/view$/)?.[1]);
-      }
+      },
     },
     editFormProps: {
       ...formProps,
@@ -78,17 +69,17 @@ export const LinksModule = () => {
       getItemId: () => {
         const params = useParams();
         return Number(params && params["*"] && params["*"].match(/^(\d+)\/edit$/)?.[1]);
-      }
+      },
     },
     createFormProps: {
       ...formProps,
       mode: "create",
       editable: true,
       onSaved: (item) => {
-        item.id && navigate(getEditFormRoute(item.id), {state: item});
-      }
-    }
+        item.id && navigate(getEditFormRoute(item.id), { state: item });
+      },
+    },
   });
 
-  return (module);
+  return module;
 };
