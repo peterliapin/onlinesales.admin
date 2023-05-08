@@ -1,13 +1,13 @@
 import { List, ListItem } from "@mui/material";
 import {
-  People, 
-  Business, 
-  Inventory, 
-  Web, 
-  Link, 
-  Comment, 
-  Unsubscribe, 
-  Person
+  People,
+  Business,
+  Inventory,
+  Web,
+  Link,
+  Comment,
+  Unsubscribe,
+  Person,
 } from "@mui/icons-material";
 import { CoreModule, coreModuleRoute, getCoreModuleRoute } from "lib/router";
 import { SidebarLinkButton } from "./sidebar-link-button";
@@ -36,7 +36,7 @@ export const Sidebar = () => {
             Icon={Comment}
             selected={moduleName === CoreModule.comments}
           />
-        </ListItem>        
+        </ListItem>
         <ListItem>
           <SidebarLinkButton
             title="Contacts"
@@ -52,7 +52,7 @@ export const Sidebar = () => {
             Icon={Unsubscribe}
             selected={moduleName === CoreModule.unsubscribes}
           />
-        </ListItem>        
+        </ListItem>
         <ListItem>
           <SidebarLinkButton
             title="Accounts"

@@ -5,10 +5,7 @@ import { RequestContextType, useRequestContext } from "@providers/request-provid
 import { ContentDetails } from "@features/blog/ContentEdit/types";
 import { useNotificationsService } from "@hooks";
 
-export const ImageUpload = (
-  contentDetails: ContentDetails, 
-  isInToolbar: boolean
-) => {
+export const ImageUpload = (contentDetails: ContentDetails, isInToolbar: boolean) => {
   const { notificationsService } = useNotificationsService();
   const networkContext = useRequestContext();
   const command = {
@@ -18,23 +15,25 @@ export const ImageUpload = (
     keyCommand: "image-upload",
     buttonProps: { "aria-label": "Upload image" },
     icon: <ImageIcon sx={{ fontSize: 14, padding: 0 }} />,
-    render: isInToolbar ? undefined :(command, disabled, executeCommand) => {
-      const onClick = () => {
-        executeCommand(command, command.groupName);
-      };
-      return (
-        <>
-          <Button
-            variant="outlined"
-            disabled={disabled}
-            startIcon={<ImageIcon sx={{ fontSize: 20 }} />}
-            onClick={onClick}
-          >
-            Upload Image
-          </Button>
-        </>
-      );
-    },
+    render: isInToolbar
+      ? undefined
+      : (command, disabled, executeCommand) => {
+          const onClick = () => {
+            executeCommand(command, command.groupName);
+          };
+          return (
+            <>
+              <Button
+                variant="outlined"
+                disabled={disabled}
+                startIcon={<ImageIcon sx={{ fontSize: 20 }} />}
+                onClick={onClick}
+              >
+                Upload Image
+              </Button>
+            </>
+          );
+        },
     execute(state, api) {
       if (this.contentDetails.slug.length === 0) {
         notificationsService.error("Specify slug first!");

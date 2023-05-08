@@ -1,23 +1,23 @@
-import {Ref, useEffect, useImperativeHandle, useState} from "react";
-import {HttpResponse, ProblemDetails, RequestParams} from "@lib/network/swagger-client";
-import {useModuleWrapperContext} from "@providers/module-wrapper-provider";
+import { Ref, useEffect, useImperativeHandle, useState } from "react";
+import { HttpResponse, ProblemDetails, RequestParams } from "@lib/network/swagger-client";
+import { useModuleWrapperContext } from "@providers/module-wrapper-provider";
 import {
   DataGrid,
   getGridStringOperators,
   GridColDef,
   GridColumnVisibilityModel,
   GridFilterModel,
-  GridSortModel
+  GridSortModel,
 } from "@mui/x-data-grid";
-import {totalCountHeaderName} from "@lib/query";
+import { totalCountHeaderName } from "@lib/query";
 import {
   DtoSchema,
   camelCaseToTitleCase,
   BasicTypeForGeneric,
   GenericDataGridSettings,
 } from "@components/generic-components/common";
-import {ActionButtonContainer} from "@components/data-table/index.styled";
-import {IconButton} from "@mui/material";
+import { ActionButtonContainer } from "@components/data-table/index.styled";
+import { IconButton } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import dayjs from "dayjs";
@@ -40,26 +40,28 @@ export interface GenericDataGridRef {
   getExportFilters: () => any;
 }
 
-export function GenericDataGrid<T extends BasicTypeForGeneric>({
-  key,
-  getItemsFn,
-  schema,
-  detailsNavigate,
-  editNavigate,
-  searchText,
-  initiallyShownColumns
-}: GenericDataGridProps<T>,
-ref: Ref<GenericDataGridRef>) {
-  const {setBusy} = useModuleWrapperContext();
+export function GenericDataGrid<T extends BasicTypeForGeneric>(
+  {
+    key,
+    getItemsFn,
+    schema,
+    detailsNavigate,
+    editNavigate,
+    searchText,
+    initiallyShownColumns,
+  }: GenericDataGridProps<T>,
+  ref: Ref<GenericDataGridRef>
+) {
+  const { setBusy } = useModuleWrapperContext();
 
-  const [gridSettings, setGridSettings] =
-    useLocalStorage<GenericDataGridSettings>(
-      `data-grid-${key}`,
-      {
-        sortColumn: "id",
-        sortDirection: "desc",
-        columnVisibilityModel: {}
-      });
+  const [gridSettings, setGridSettings] = useLocalStorage<GenericDataGridSettings>(
+    `data-grid-${key}`,
+    {
+      sortColumn: "id",
+      sortDirection: "desc",
+      columnVisibilityModel: {},
+    }
+  );
 
   const actionsColumn: GridColDef = {
     field: "_actions",
@@ -70,17 +72,17 @@ ref: Ref<GenericDataGridRef>) {
     filterable: false,
     sortable: false,
     disableColumnMenu: true,
-    renderCell: ({row}: any) => {
+    renderCell: ({ row }: any) => {
       return (
         <ActionButtonContainer>
           {editNavigate && (
             <IconButton onClick={() => editNavigate(row)}>
-              <EditIcon fontSize="small"/>
+              <EditIcon fontSize="small" />
             </IconButton>
           )}
           {detailsNavigate && (
             <IconButton onClick={() => detailsNavigate(row)}>
-              <ArrowForwardIcon fontSize="small"/>
+              <ArrowForwardIcon fontSize="small" />
             </IconButton>
           )}
         </ActionButtonContainer>
@@ -89,7 +91,7 @@ ref: Ref<GenericDataGridRef>) {
   };
 
   const columns: GridColDef[] = [
-    ...(Object.keys(schema.properties)
+    ...Object.keys(schema.properties)
       .filter((key) => !schema.properties[key].hide)
       .map((key) => {
         const column: GridColDef = {
@@ -98,19 +100,18 @@ ref: Ref<GenericDataGridRef>) {
           width: 200,
           description: schema.properties[key].description,
           headerName: camelCaseToTitleCase(key),
-          valueFormatter: schema.properties[key].format === "date-time"
-            ? (params) => {
-              return params.value
-                ? dayjs(params.value).format("L HH:mm")
-                : undefined;
-            }
-            : undefined,
+          valueFormatter:
+            schema.properties[key].format === "date-time"
+              ? (params) => {
+                  return params.value ? dayjs(params.value).format("L HH:mm") : undefined;
+                }
+              : undefined,
           filterOperators: getGridStringOperators().filter(
             (operator) => operator.value === "contains"
           ),
         };
         return column;
-      })),
+      }),
   ].concat([actionsColumn]);
 
   const [items, setItems] = useState<T[] | undefined>();
@@ -120,7 +121,7 @@ ref: Ref<GenericDataGridRef>) {
   const [pageSize, setPageSize] = useState<number>(10);
   const [sortColumn, setSortColumn] = useState<string>(gridSettings.sortColumn);
   const [sortDirection, setSortDirection] = useState<string>(gridSettings.sortDirection);
-  const [whereFilters, setWhereFilters] = useState<{ [x: string]: string; }>({});
+  const [whereFilters, setWhereFilters] = useState<{ [x: string]: string }>({});
 
   const getFilters = () => {
     const query: any = {
@@ -143,7 +144,7 @@ ref: Ref<GenericDataGridRef>) {
       delete filters["filter[limit]"];
       delete filters["filter[skip]"];
       return filters;
-    }
+    },
   }));
 
   useEffect(() => {
@@ -152,13 +153,12 @@ ref: Ref<GenericDataGridRef>) {
     if (getItemsFn) {
       setBusy(async () => {
         try {
-          const {data, headers} = await getItemsFn(getFilters(), {
+          const { data, headers } = await getItemsFn(getFilters(), {
             signal: abortController.signal,
           });
 
           setTotalItemsCount(() => parseInt(headers.get(totalCountHeaderName) || "0"));
           setItems(() => data);
-
         } catch (e) {
           console.log(e);
         }
@@ -185,7 +185,7 @@ ref: Ref<GenericDataGridRef>) {
       return;
     }
 
-    const newWhereFilters: { [x: string]: string; } = {};
+    const newWhereFilters: { [x: string]: string } = {};
 
     for (const item of filterModel.items) {
       newWhereFilters[`filter[where][${item.columnField}][like]`] = item.value;
@@ -194,37 +194,36 @@ ref: Ref<GenericDataGridRef>) {
     setWhereFilters(newWhereFilters);
   };
 
-  const [columnVisibilityModel, setColumnVisibilityModel] =
-    useState<GridColumnVisibilityModel>(() => {
+  const [columnVisibilityModel, setColumnVisibilityModel] = useState<GridColumnVisibilityModel>(
+    () => {
       if (gridSettings.columnVisibilityModel) {
         return gridSettings.columnVisibilityModel;
       }
 
       const initialValue: GridColumnVisibilityModel = {};
 
-      const availableColumns = Object.keys(schema.properties)
-        .filter((key) => !schema.properties[key].hide);
+      const availableColumns = Object.keys(schema.properties).filter(
+        (key) => !schema.properties[key].hide
+      );
 
       for (const columnName of availableColumns) {
-        initialValue[columnName] = (!initiallyShownColumns
-          || initiallyShownColumns.length === 0
-          || initiallyShownColumns.indexOf(columnName) > -1);
+        initialValue[columnName] =
+          !initiallyShownColumns ||
+          initiallyShownColumns.length === 0 ||
+          initiallyShownColumns.indexOf(columnName) > -1;
       }
 
       return initialValue;
-    });
+    }
+  );
 
   useEffect(() => {
     setGridSettings({
       sortDirection: sortDirection,
       sortColumn: sortColumn,
-      columnVisibilityModel: columnVisibilityModel
+      columnVisibilityModel: columnVisibilityModel,
     });
-  }, [
-    sortDirection,
-    sortColumn,
-    columnVisibilityModel
-  ]);
+  }, [sortDirection, sortColumn, columnVisibilityModel]);
 
   return (
     <DataGrid
@@ -252,4 +251,3 @@ ref: Ref<GenericDataGridRef>) {
     />
   );
 }
-

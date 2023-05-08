@@ -74,8 +74,7 @@ export const ContentView = () => {
                   </>
                 </TagsContainer>
                 <TagsContainer>
-                  Category:{" "}
-                  <Chip size={"small"} label={contentItem.category} variant="outlined" />
+                  Category: <Chip size={"small"} label={contentItem.category} variant="outlined" />
                 </TagsContainer>
                 <AuthorContainer>Author: {contentItem.author}</AuthorContainer>
                 <TimestampContainer>

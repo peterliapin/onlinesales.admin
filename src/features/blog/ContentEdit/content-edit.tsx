@@ -98,7 +98,7 @@ export const ContentEdit = (props: ContentEditProps) => {
     }
     setEditorLocalStorage(localStorageSnapshot);
     setSaving(async () => {
-      await new Promise<void>(resolve => setTimeout(() => resolve(), 3000));
+      await new Promise<void>((resolve) => setTimeout(() => resolve(), 3000));
     });
   }, 3000); ///TODO: User Settings
 
@@ -228,30 +228,30 @@ export const ContentEdit = (props: ContentEditProps) => {
       try {
         const localStorageSnapshot = { ...editorLocalStorage };
         switch (restoreDataState) {
-        case ContentEditRestoreState.Idle:
-          if (localStorageSnapshot.data.filter((data) => data.id === id).length > 0) {
-            setRestoreDataState(ContentEditRestoreState.Requested);
+          case ContentEditRestoreState.Idle:
+            if (localStorageSnapshot.data.filter((data) => data.id === id).length > 0) {
+              setRestoreDataState(ContentEditRestoreState.Requested);
+              return;
+            }
+            break;
+          case ContentEditRestoreState.Requested:
             return;
-          }
-          break;
-        case ContentEditRestoreState.Requested:
-          return;
-        case ContentEditRestoreState.Rejected:
-          localStorageSnapshot.data = localStorageSnapshot.data.filter((data) => data.id !== id);
-          setEditorLocalStorage(localStorageSnapshot);
-          break;
-        case ContentEditRestoreState.Accepted:
-          await formik.setValues(
-            localStorageSnapshot.data.filter((data) => data.id === id)[0].savedData
-          );
-          if (
-            localStorageSnapshot.data.filter((data) => data.id === id)[0].savedData
-              .coverImagePending.fileName.length > 0
-          ) {
-            setCoverWasModified(true);
-          }
-          setWasModified(true);
-          return;
+          case ContentEditRestoreState.Rejected:
+            localStorageSnapshot.data = localStorageSnapshot.data.filter((data) => data.id !== id);
+            setEditorLocalStorage(localStorageSnapshot);
+            break;
+          case ContentEditRestoreState.Accepted:
+            await formik.setValues(
+              localStorageSnapshot.data.filter((data) => data.id === id)[0].savedData
+            );
+            if (
+              localStorageSnapshot.data.filter((data) => data.id === id)[0].savedData
+                .coverImagePending.fileName.length > 0
+            ) {
+              setCoverWasModified(true);
+            }
+            setWasModified(true);
+            return;
         }
         if (client && id) {
           const { data } = await client.api.contentDetail(Number(id));
@@ -281,7 +281,7 @@ export const ContentEdit = (props: ContentEditProps) => {
     <ModuleWrapper
       breadcrumbs={blogFormBreadcrumbLinks}
       currentBreadcrumb={formik.values.title}
-      saveIndicatorElement={<SavingBar/>}
+      saveIndicatorElement={<SavingBar />}
     >
       <RestoreDataModal
         isOpen={restoreDataState === ContentEditRestoreState.Requested}
@@ -448,8 +448,9 @@ export const ContentEdit = (props: ContentEditProps) => {
                     error={formik.touched.tags && Boolean(formik.errors.tags)}
                     helperText={formik.touched.tags && formik.errors.tags}
                     value={formik.values.tags}
-                    onChange={(ev, val) => 
-                      autoCompleteValueUpdate<string[]>("tags", val as string[])}
+                    onChange={(ev, val) =>
+                      autoCompleteValueUpdate<string[]>("tags", val as string[])
+                    }
                     freeSolo
                     multiple
                     limit={3}
@@ -476,8 +477,9 @@ export const ContentEdit = (props: ContentEditProps) => {
                     error={formik.touched.category && Boolean(formik.errors.category)}
                     helperText={formik.touched.category && formik.errors.category}
                     value={formik.values.category}
-                    onChange={(ev, val) => 
-                      autoCompleteValueUpdate<string>("category", val as string)}
+                    onChange={(ev, val) =>
+                      autoCompleteValueUpdate<string>("category", val as string)
+                    }
                     freeSolo
                   />
                 </Grid>

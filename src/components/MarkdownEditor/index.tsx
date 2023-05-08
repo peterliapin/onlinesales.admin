@@ -26,11 +26,11 @@ const EditorViewFunc = (
   const { client } = useRequestContext();
   const userInfo = useUserInfo();
 
-  useEffect(() =>{
-    if (imageCtx === null){
+  useEffect(() => {
+    if (imageCtx === null) {
       return;
     }
-    const func = async(file: File) => {
+    const func = async (file: File) => {
       const resp = await client.api.mediaCreate({
         Image: file,
         ScopeUid: `${userInfo?.email}_avatar`,
@@ -105,7 +105,7 @@ const MarkdownEditor = ({
   };
 
   const commandFilter = (command: ICommand, isExtra: boolean) => {
-    if (command.name === "image"){
+    if (command.name === "image") {
       return ImageUpload(contentDetails, true);
     }
     return command;
@@ -138,7 +138,7 @@ const MarkdownEditor = ({
       {({ getRootProps, getInputProps, isDragAccept }) => (
         <div {...getRootProps()}>
           <input {...getInputProps()} />
-          <ImageUploadingCtx.Provider value={currentFile} >
+          <ImageUploadingCtx.Provider value={currentFile}>
             <MDEditor
               aria-disabled={isReadOnly}
               hideToolbar={isReadOnly}

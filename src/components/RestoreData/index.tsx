@@ -31,15 +31,13 @@ export const RestoreDataModal = ({ isOpen, onClose }: RestoreDataProps) => {
       <DialogTitle>{"Restore Draft Version"}</DialogTitle>
       <DialogContent>
         <DialogContentText>
-          Would you like to restore the locally saved draft version and continue editing? 
+          Would you like to restore the locally saved draft version and continue editing?
         </DialogContentText>
+        <DialogContentText>&nbsp;</DialogContentText>
         <DialogContentText>
-          &nbsp;
-        </DialogContentText>
-        <DialogContentText>
-          Any unsaved changes made after the last save will be lost.
-          Click &apos;Restore&apos; to continue editing the draft,
-          or &apos;Cancel&apos; to discard the draft and start a new one.
+          Any unsaved changes made after the last save will be lost. Click &apos;Restore&apos; to
+          continue editing the draft, or &apos;Cancel&apos; to discard the draft and start a new
+          one.
         </DialogContentText>
       </DialogContent>
       <DialogActions>

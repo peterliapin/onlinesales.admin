@@ -81,7 +81,7 @@ const FileDropdown = ({
               <Box
                 component="img"
                 sx={{
-                  "objectFit": "contain",
+                  objectFit: "contain",
                 }}
                 alt="Cover image preview"
                 src={data.url}
