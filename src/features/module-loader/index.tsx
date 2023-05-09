@@ -12,6 +12,7 @@ import { ModuleWrapperProvider } from "@providers/module-wrapper-provider";
 import { CommentsModule } from "@features/comments";
 import { UnsubscribesModule } from "@features/unsubscribes";
 import { UserModule } from "@features/users";
+import { AboutModule } from "@features/about";
 
 export const ModuleLoader = () => {
   const { moduleName } = useRouteParams(coreModuleRoute);
@@ -29,6 +30,7 @@ export const ModuleLoader = () => {
           {moduleName === CoreModule.orders && <OrdersModule />}
           {moduleName === CoreModule.domains && <DomainsModule />}
           {moduleName === CoreModule.users && <UserModule />}
+          {moduleName === CoreModule.about && <AboutModule />}
         </Suspense>
       </ErrorBoundary>
     </ModuleWrapperProvider>
