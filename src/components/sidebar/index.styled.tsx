@@ -1,4 +1,11 @@
-import { Drawer, ListItemButton, ListItemText, ListSubheader, styled } from "@mui/material";
+import {
+  Drawer,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  ListSubheader,
+  styled,
+} from "@mui/material";
 
 export const SidebarStyled = styled(Drawer)`
   grid-area: sidebar;
@@ -36,3 +43,7 @@ export const SidebarLinkText = styled(ListItemText)`
     font-weight: 600;
   }
 ` as typeof ListItemText;
+
+export const ListItemIconStyled = styled(ListItemIcon)`
+  min-width: ${({ theme }) => theme.spacing(10)};
+` as typeof ListItemIcon;
