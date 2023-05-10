@@ -82,7 +82,7 @@ export const ContentEdit = (props: ContentEditProps) => {
   const [restoreDataState, setRestoreDataState] = useState<ContentEditRestoreState>(
     ContentEditRestoreState.Idle
   );
-  const [errorModalData, setErrorModalData ] = useState<React.ReactNode | string | null>(null);
+  const [errorModalData, setErrorModalData] = useState<React.ReactNode | string | null>(null);
 
   const autoSave = useDebouncedCallback((value) => {
     if (!wasModified && !coverWasModified) {
@@ -168,22 +168,21 @@ export const ContentEdit = (props: ContentEditProps) => {
   };
 
   const submit = async (values: ContentDetails, helpers: FormikHelpers<ContentDetails>) => {
-    notificationsService.promise(
-      submitFunc(values, helpers),
-      {
-        pending: `${values?.id ? "Updating" : "Creating"} a post...`,
-        success: `Successfully ${values?.id ? "updated" : "created"} post`,
-        error: (error) => {
-          const errMessage: string = (error.data.error && error.data.error.title) || 
-          (error.data.message && error.data.message) || "unknown";
-          return (
-            <div onClick={() => setErrorModalData(errMessage)}>
-              Failed to {values?.id ? "update" : "create"} post ({errMessage})
-            </div>
-          );
-        }
-      }
-    );
+    notificationsService.promise(submitFunc(values, helpers), {
+      pending: `${values?.id ? "Updating" : "Creating"} a post...`,
+      success: `Successfully ${values?.id ? "updated" : "created"} post`,
+      error: (error) => {
+        const errMessage: string =
+          (error.data.error && error.data.error.title) ||
+          (error.data.message && error.data.message) ||
+          "unknown";
+        return (
+          <div onClick={() => setErrorModalData(errMessage)}>
+            Failed to {values?.id ? "update" : "create"} post ({errMessage})
+          </div>
+        );
+      },
+    });
   };
 
   const formik = useFormik({

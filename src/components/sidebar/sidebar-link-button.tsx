@@ -1,7 +1,6 @@
-import { ListItemIcon } from "@mui/material";
 import { SvgIconComponent } from "@mui/icons-material";
 import { GhostLink } from "components/ghost-link";
-import { SidebarLink, SidebarLinkText } from "./index.styled";
+import { ListItemIconStyled, SidebarLink, SidebarLinkText } from "./index.styled";
 
 type SidebarLinkButtonProps = {
   Icon?: SvgIconComponent;
@@ -13,9 +12,9 @@ type SidebarLinkButtonProps = {
 export const SidebarLinkButton = ({ title, Icon, selected, to }: SidebarLinkButtonProps) => (
   <SidebarLink component={GhostLink} to={to} selected={selected}>
     {Icon && (
-      <ListItemIcon>
+      <ListItemIconStyled>
         <Icon color={selected ? "primary" : undefined} />
-      </ListItemIcon>
+      </ListItemIconStyled>
     )}
     <SidebarLinkText>{title}</SidebarLinkText>
   </SidebarLink>

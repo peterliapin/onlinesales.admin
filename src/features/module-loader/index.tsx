@@ -1,6 +1,6 @@
 import React, { Suspense } from "react";
 import { useRouteParams } from "typesafe-routes";
-import { CoreModule, coreModuleRoute } from "lib/router";
+import { CoreModule, coreModuleRoute, defaultModuleRoute } from "lib/router";
 import { BlogModule } from "features/blog";
 import { ErrorBoundary } from "components/error-boundary";
 import { ContactsModule } from "features/contacts/contacts-module";
@@ -13,6 +13,7 @@ import { CommentsModule } from "@features/comments";
 import { UnsubscribesModule } from "@features/unsubscribes";
 import { UserModule } from "@features/users";
 import { AboutModule } from "@features/about";
+import { Navigate } from "react-router-dom";
 
 export const ModuleLoader = () => {
   const { moduleName } = useRouteParams(coreModuleRoute);
@@ -31,6 +32,7 @@ export const ModuleLoader = () => {
           {moduleName === CoreModule.domains && <DomainsModule />}
           {moduleName === CoreModule.users && <UserModule />}
           {moduleName === CoreModule.about && <AboutModule />}
+          {!moduleName && <Navigate to={defaultModuleRoute} replace />}
         </Suspense>
       </ErrorBoundary>
     </ModuleWrapperProvider>

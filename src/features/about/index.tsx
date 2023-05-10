@@ -15,17 +15,12 @@ export const AboutModule = () => {
     getVersion();
   });
   return (
-    <ModuleWrapper
-      breadcrumbs={[]}
-      currentBreadcrumb={"About"}
-    >
+    <ModuleWrapper breadcrumbs={[]} currentBreadcrumb={"About"}>
       <Grid container gap={5}>
         <Grid item>
           <Card sx={{ minWidth: 275 }}>
             <CardContent>
-              <Typography>
-                Frontend version: 1.0.0f
-              </Typography>
+              <Typography>Frontend version: 1.0.0f</Typography>
             </CardContent>
           </Card>
         </Grid>
@@ -34,11 +29,11 @@ export const AboutModule = () => {
             <CardContent>
               <Typography>
                 Backend version:
-                {backendVersion ?
+                {backendVersion ? (
                   backendVersion
-                  :
-                    <CircularProgress size={"0.8rem"} sx={{marginLeft: "2rem"}}/>
-                }
+                ) : (
+                  <CircularProgress size={"0.8rem"} sx={{ marginLeft: "2rem" }} />
+                )}
               </Typography>
             </CardContent>
           </Card>

@@ -34,7 +34,7 @@ export const App = () => {
                       </AppLayoutContainer>
                     }
                   >
-                    <Route index element="Index page" />
+                    <Route path={rootRoute} element={<ModuleLoader />} />
                     <Route path={`${coreModuleRoute.template}/*`} element={<ModuleLoader />} />
                   </Route>
                 </Routes>

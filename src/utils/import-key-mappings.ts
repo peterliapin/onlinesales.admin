@@ -38,11 +38,20 @@ const getAlternatives = (key: string, title: string) => {
 const buildValidations = (key: string, property: any) => {
   const validations: Validation[] = [];
   const required = property.nullable === true ? false : true;
+  const isUnique = property["x-unique"];
 
   if (required) {
     validations.push({
       rule: "required",
       errorMessage: `${property.title ?? key} is required`,
+      level: "error",
+    });
+  }
+
+  if (isUnique) {
+    validations.push({
+      rule: "unique",
+      errorMessage: `${property.title ?? key} must contain unique values`,
       level: "error",
     });
   }

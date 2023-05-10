@@ -56,22 +56,21 @@ class NotificationsService {
   promise(promise: Promise<unknown>, options: PromiseNotificationOptions) {
     toast.promise(promise, {
       pending: {
-        render(){
+        render() {
           return options.pending;
-        }
+        },
       },
       success: {
-        render(){
+        render() {
           return options.success;
-        }
+        },
       },
       error: {
-        render(data){
+        render(data) {
           return options.error(data);
-        }
-      }
-    } 
-    );
+        },
+      },
+    });
   }
 }
 

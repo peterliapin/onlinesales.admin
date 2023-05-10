@@ -21,7 +21,7 @@ export const Sidebar = () => {
 
   return (
     <SidebarStyled>
-      <List component="nav" subheader={<ListSubheaderStyled>General</ListSubheaderStyled>}>
+      <List component="nav" subheader={<ListSubheaderStyled>CMS</ListSubheaderStyled>}>
         <ListItem>
           <SidebarLinkButton
             title="Content"
@@ -40,18 +40,20 @@ export const Sidebar = () => {
         </ListItem>
         <ListItem>
           <SidebarLinkButton
+            title="Links"
+            to={getCoreModuleRoute(CoreModule.links)}
+            Icon={Link}
+            selected={moduleName === CoreModule.links}
+          />
+        </ListItem>
+      </List>
+      <List component="nav" subheader={<ListSubheaderStyled>CRM</ListSubheaderStyled>}>
+        <ListItem>
+          <SidebarLinkButton
             title="Contacts"
             to={getCoreModuleRoute(CoreModule.contacts)}
             Icon={People}
             selected={moduleName === CoreModule.contacts}
-          />
-        </ListItem>
-        <ListItem>
-          <SidebarLinkButton
-            title="Unsubscribes"
-            to={getCoreModuleRoute(CoreModule.unsubscribes)}
-            Icon={Unsubscribe}
-            selected={moduleName === CoreModule.unsubscribes}
           />
         </ListItem>
         <ListItem>
@@ -80,14 +82,6 @@ export const Sidebar = () => {
         </ListItem>
         <ListItem>
           <SidebarLinkButton
-            title="Links"
-            to={getCoreModuleRoute(CoreModule.links)}
-            Icon={Link}
-            selected={moduleName === CoreModule.links}
-          />
-        </ListItem>
-        <ListItem>
-          <SidebarLinkButton
             title="Users"
             to={getCoreModuleRoute(CoreModule.users)}
             Icon={Person}
@@ -100,6 +94,16 @@ export const Sidebar = () => {
             to={getCoreModuleRoute(CoreModule.about)}
             Icon={Info}
             selected={moduleName === CoreModule.about}
+          />
+        </ListItem>
+      </List>
+      <List component="nav" subheader={<ListSubheaderStyled>MARKETING</ListSubheaderStyled>}>
+        <ListItem>
+          <SidebarLinkButton
+            title="Unsubscribes"
+            to={getCoreModuleRoute(CoreModule.unsubscribes)}
+            Icon={Unsubscribe}
+            selected={moduleName === CoreModule.unsubscribes}
           />
         </ListItem>
       </List>
