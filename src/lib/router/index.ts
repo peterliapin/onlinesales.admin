@@ -62,3 +62,5 @@ export const getAddFormRoute = () => addFormRoute({}).$;
 export const getImportFormRoute = () => importFormRoute({}).$;
 
 export const rootRoute = "/";
+
+export const defaultModuleRoute = "/blog";
