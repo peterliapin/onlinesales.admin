@@ -8,6 +8,7 @@ import {
   Comment,
   Unsubscribe,
   Person,
+  Info,
 } from "@mui/icons-material";
 import { CoreModule, coreModuleRoute, getCoreModuleRoute } from "lib/router";
 import { SidebarLinkButton } from "./sidebar-link-button";
@@ -85,6 +86,14 @@ export const Sidebar = () => {
             to={getCoreModuleRoute(CoreModule.users)}
             Icon={Person}
             selected={moduleName === CoreModule.users}
+          />
+        </ListItem>
+        <ListItem>
+          <SidebarLinkButton
+            title="About"
+            to={getCoreModuleRoute(CoreModule.about)}
+            Icon={Info}
+            selected={moduleName === CoreModule.about}
           />
         </ListItem>
       </List>

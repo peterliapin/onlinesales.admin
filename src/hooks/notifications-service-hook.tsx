@@ -5,6 +5,12 @@ export interface NotificationOptions {
   autoClose?: number;
 }
 
+export interface PromiseNotificationOptions {
+  pending: React.ReactNode;
+  success: React.ReactNode;
+  error: (data: any) => React.ReactNode;
+}
+
 export interface NotificationsServiceSettings {
   defaultAutoClose?: number;
 }
@@ -44,6 +50,26 @@ class NotificationsService {
   success(msg: string, options: NotificationOptions = {}) {
     toast.success(msg, {
       autoClose: options.autoClose ?? this.defaultAutoClose,
+    });
+  }
+
+  promise(promise: Promise<unknown>, options: PromiseNotificationOptions) {
+    toast.promise(promise, {
+      pending: {
+        render() {
+          return options.pending;
+        },
+      },
+      success: {
+        render() {
+          return options.success;
+        },
+      },
+      error: {
+        render(data) {
+          return options.error(data);
+        },
+      },
     });
   }
 }
