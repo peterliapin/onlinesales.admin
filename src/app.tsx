@@ -11,6 +11,7 @@ import { ToastContainer } from "react-toastify";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { UserProvider } from "@providers/user-provider";
+import { ErrorDetailsModalProvider } from "@providers/error-details-modal-provider";
 
 export const App = () => {
   return (
@@ -20,25 +21,27 @@ export const App = () => {
           <RequestProvider>
             <ToastContainer />
             <UserProvider>
-              <BrowserRouter>
-                <Routes>
-                  <Route
-                    path={rootRoute}
-                    element={
-                      <AppLayoutContainer>
-                        <AppHeader />
-                        <Sidebar />
-                        <MainContentContainer>
-                          <Outlet />
-                        </MainContentContainer>
-                      </AppLayoutContainer>
-                    }
-                  >
-                    <Route path={rootRoute} element={<ModuleLoader />} />
-                    <Route path={`${coreModuleRoute.template}/*`} element={<ModuleLoader />} />
-                  </Route>
-                </Routes>
-              </BrowserRouter>
+              <ErrorDetailsModalProvider>
+                <BrowserRouter>
+                  <Routes>
+                    <Route
+                      path={rootRoute}
+                      element={
+                        <AppLayoutContainer>
+                          <AppHeader />
+                          <Sidebar />
+                          <MainContentContainer>
+                            <Outlet />
+                          </MainContentContainer>
+                        </AppLayoutContainer>
+                      }
+                    >
+                      <Route path={rootRoute} element={<ModuleLoader />} />
+                      <Route path={`${coreModuleRoute.template}/*`} element={<ModuleLoader />} />
+                    </Route>
+                  </Routes>
+                </BrowserRouter>
+              </ErrorDetailsModalProvider>
             </UserProvider>
           </RequestProvider>
         </AuthProvider>

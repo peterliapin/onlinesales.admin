@@ -26,6 +26,9 @@ import {
 import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
 import { TabPanelProps } from "./types";
 import { buildAbsoluteUrl } from "@lib/network/utils";
+import { useUserInfo } from "@providers/user-provider";
+import networkErrorToStringArray from "utils/networkErrorToStringArray";
+import { useErrorDetailsModal } from "@providers/error-details-modal-provider";
 
 const tabProps = (index: number) => {
   return {
@@ -54,31 +57,48 @@ export const UserEdit = () => {
   const { setSaving, setBusy } = useModuleWrapperContext();
 
   const { notificationsService } = useNotificationsService();
+  const { Show: showErrorModal } = useErrorDetailsModal()!;
   const { client } = useRequestContext();
+  const userInfo = useUserInfo();
 
   const { id } = useParams();
 
   const [currentPanel, setCurrentPanel] = useState<number>(0);
 
-  const submit = async (values: UserDetailsDto, helpers: FormikHelpers<UserDetailsDto>) => {
+  const submitFunc = async (values: UserDetailsDto, helpers: FormikHelpers<UserDetailsDto>) => {
     let response: HttpResponse<UserDetailsDto, void | ProblemDetails>;
-    notificationsService.info(`${values?.id ? "Updating" : "Creating"} a user...`);
-    try {
-      if (id === undefined) {
-        response = await client.api.usersCreate(values);
-      } else {
-        response = await client.api.usersPartialUpdate(id, values);
-      }
-      helpers.setValues(response.data);
-      notificationsService.success(`Successfully ${values?.id ? "updated" : "created"} user`);
-    } catch (data: any) {
-      const errMessage = data.error && data.error.title;
-      notificationsService.error(
-        `Failed to ${values?.id ? "update" : "create"} user (${errMessage})`
-      );
-    } finally {
-      helpers.setSubmitting(false);
+    if (id === undefined) {
+      response = await client.api.usersCreate(values);
+    } else {
+      response = await client.api.usersPartialUpdate(id, values);
     }
+    helpers.setValues(response.data);
+    notificationsService.success(`Successfully ${values?.id ? "updated" : "created"} user`);
+    if (id === userInfo?.details?.id){
+      userInfo?.refresh();
+    }
+    helpers.setSubmitting(false);
+  };
+
+  const submit = async (values: UserDetailsDto, helpers: FormikHelpers<UserDetailsDto>) => {
+    notificationsService.promise(submitFunc(values, helpers), {
+      pending: `${values?.id ? "Updating" : "Creating"} a user...`,
+      success: `Successfully ${values?.id ? "updated" : "created"} user`,
+      error: (error) => {
+        const errMessage: string =
+          (error.data.error && error.data.error.title) ||
+          (error.data.message && error.data.message) ||
+          "unknown";
+        const errDetails : string[] = [];
+        if (error.data.error && error.data.error.errors){
+          errDetails.push(...networkErrorToStringArray(error.data.error.errors));
+        }
+        return {
+          title: errMessage,
+          onClick: () => {showErrorModal(errDetails);}
+        };
+      },
+    });
   };
 
   const allowedToModify = true; // TODO: For now, until permission system wouldn't be ready.
@@ -115,12 +135,17 @@ export const UserEdit = () => {
       }
       const target = e.target as HTMLInputElement;
       const file = target.files![0];
-      const resp = await client.api.mediaCreate({
+      const imageUploadingResponse = await client.api.mediaCreate({
         Image: file,
         ScopeUid: "UserAvatarStorage",
       });
+      if (imageUploadingResponse.error){
+        notificationsService.error(
+          `Failed to upload image ${imageUploadingResponse.error.detail}`
+        );
+      }
       input.remove();
-      await formik.setFieldValue("avatarUrl", resp.data.location);
+      await formik.setFieldValue("avatarUrl", imageUploadingResponse.data.location);
     };
     input.click();
   };

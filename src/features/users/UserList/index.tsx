@@ -15,31 +15,30 @@ import useLocalStorage from "use-local-storage";
 import { dataListSettings } from "utils/types";
 import { Add, Download, Upload } from "@mui/icons-material";
 import { Fragment, useState } from "react";
-import { Button } from "@mui/material";
+import { Avatar, Button, ListItemAvatar } from "@mui/material";
 import { getAddFormRoute } from "@lib/router";
 import { GhostLink } from "@components/ghost-link";
 import { useRequestContext } from "@providers/request-provider";
+import { buildAbsoluteUrl } from "@lib/network/utils";
+import { UserNameListItem, UserNameListItemText } from "./index.styled";
 
 const columns: GridColDef<UserDetailsDto>[] = [
   {
-    field: "id",
-    headerName: "id",
-    flex: 2,
-  },
-  {
-    field: "displayName",
-    headerName: "Display Name",
-    flex: 2,
-  },
-  {
-    field: "userName",
-    headerName: "User Name",
-    flex: 2,
-  },
-  {
-    field: "email",
-    headerName: "Email",
-    flex: 2,
+    field: "firstName",
+    headerName: "Display",
+    flex: 4,
+    type: "string",
+    renderCell: ({ row }) => (
+      <UserNameListItem>
+        <ListItemAvatar>
+          <Avatar src={buildAbsoluteUrl(row.avatarUrl)}></Avatar>
+        </ListItemAvatar>
+        <UserNameListItemText
+          primary={row.displayName || ""}
+          secondary={row.email}
+        />
+      </UserNameListItem>
+    ),
   },
   {
     field: "createdAt",
@@ -53,13 +52,23 @@ const columns: GridColDef<UserDetailsDto>[] = [
   },
   {
     field: "lastTimeLoggedIn",
-    headerName: "Last time logged in",
+    headerName: "Last Active",
     flex: 2,
     valueGetter: (params) => {
       const lastTimeLoggedIn = params.value as string;
       const formattedDate = new Date(lastTimeLoggedIn).toLocaleDateString();
       return formattedDate;
     },
+  },
+  {
+    field: "userName",
+    headerName: "User Name",
+    flex: 1,
+  },
+  {
+    field: "id",
+    headerName: "id",
+    flex: 1,
   },
 ];
 
@@ -103,7 +112,7 @@ export const UserList = () => {
 
   const addButton = (
     <Button variant="contained" to={getAddFormRoute()} component={GhostLink} startIcon={<Add />}>
-      Add account
+      Add user
     </Button>
   );
 

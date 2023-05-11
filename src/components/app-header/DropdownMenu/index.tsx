@@ -22,9 +22,11 @@ export const DropdownMenu = () => {
   const userInfo = useUserInfo();
   const navigate = useNavigate();
 
-  const displayName = (userInfo && userInfo.displayName) || "Unknown";
+  const displayName = (userInfo && userInfo?.details?.displayName) || "Unknown";
   const avatarUrl =
-    (userInfo && userInfo.avatarUrl && buildAbsoluteUrl(userInfo.avatarUrl)) || undefined;
+    (userInfo && 
+    userInfo?.details?.avatarUrl &&
+    buildAbsoluteUrl(userInfo?.details.avatarUrl)) || undefined;
 
   const [anchorElement, setAnchorElement] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorElement);
@@ -36,7 +38,7 @@ export const DropdownMenu = () => {
   };
 
   const handleProfileClick = () => {
-    navigate(`/users/${userInfo?.id}/edit`);
+    navigate(`/users/${userInfo?.details?.id}/edit`);
   };
 
   return (
@@ -75,12 +77,6 @@ export const DropdownMenu = () => {
           Profile
         </MenuItem>
         <Divider />
-        <MenuItem onClick={handleClose} disabled={userInfo === null}>
-          <ListItemIcon>
-            <Settings fontSize="small" />
-          </ListItemIcon>
-          Settings
-        </MenuItem>
         <MenuItem onClick={logout} disabled={userInfo === null}>
           <ListItemIcon>
             <Logout fontSize="small" />

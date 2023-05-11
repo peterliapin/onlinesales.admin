@@ -15,23 +15,9 @@ export type onCloseFunc = () => void;
 
 interface ErrorDetailsModalProps {
   isOpen: boolean;
-  errorDetails: React.ReactNode | string | string[];
+  errorDetails: React.ReactNode;
   onClose: onCloseFunc;
 }
-
-const constructErrorBody = (error: string | string[]) => {
-  return (
-    <Box>
-      {typeof error === "string"
-        ? error
-        : (error as string[]).map((val, idx) => (
-            <Box key={idx} component="span" sx={{ display: "block" }}>
-              {val}
-            </Box>
-          ))}
-    </Box>
-  );
-};
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -43,20 +29,13 @@ const Transition = React.forwardRef(function Transition(
 });
 
 export const ErrorDetailsModal = ({ isOpen, onClose, errorDetails }: ErrorDetailsModalProps) => {
-  let errorBody;
-  if (typeof errorDetails === "string" || Array.isArray(errorDetails)) {
-    errorBody = constructErrorBody(errorDetails);
-  } else {
-    errorBody = errorDetails;
-  }
   return (
     <Dialog open={isOpen} onClose={onClose} TransitionComponent={Transition}>
       <DialogTitle>
         <Typography>Error Details</Typography>
       </DialogTitle>
-      <DialogContent>{errorBody}</DialogContent>
+      <DialogContent>{errorDetails}</DialogContent>
       <DialogActions>
-        <Button onClick={() => onClose()}>Report</Button>
         <Button onClick={() => onClose()}>Close</Button>
       </DialogActions>
     </Dialog>

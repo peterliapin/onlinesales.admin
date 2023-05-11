@@ -24,16 +24,19 @@ const EditorViewFunc = (
   const editorCtx = useContext(EditorContext);
   const imageCtx = useContext(ImageUploadingCtx);
   const { client } = useRequestContext();
-  const userInfo = useUserInfo();
 
   useEffect(() => {
     if (imageCtx === null) {
       return;
     }
     const func = async (file: File) => {
+      if (imageCtx.contentDetails.slug.length === 0) {
+        notificationsService.error("Specify slug first!");
+        return;
+      }
       const resp = await client.api.mediaCreate({
         Image: file,
-        ScopeUid: `${userInfo?.email}_avatar`,
+        ScopeUid: imageCtx.contentDetails.slug,
       });
       const imageBlock = `![${file.name}](${resp.data.location})`;
       editorCtx.commandOrchestrator?.textApi.replaceSelection(imageBlock);
@@ -87,7 +90,10 @@ const MarkdownEditor = ({
 }: MarkdownEditorProps) => {
   const { notificationsService } = useNotificationsService();
   const [currentError, setCurrentError] = useState<string>("");
-  const [currentFile, setCurrentFile] = useState<ImageUploadingContext | null>(null);
+  const [
+    currentImageCtxValue, 
+    setCurrentImageCtxValue
+  ] = useState<ImageUploadingContext | null>(null);
 
   const customCommands = commands.getCommands().concat([
     commands.group([ImageUpload(contentDetails, false)], {
@@ -120,8 +126,9 @@ const MarkdownEditor = ({
       });
     }
     if (acceptedFiles.length !== 0) {
-      setCurrentFile({
+      setCurrentImageCtxValue({
         currentFile: acceptedFiles[0],
+        contentDetails,
       });
     }
   };
@@ -138,7 +145,7 @@ const MarkdownEditor = ({
       {({ getRootProps, getInputProps, isDragAccept }) => (
         <div {...getRootProps()}>
           <input {...getInputProps()} />
-          <ImageUploadingCtx.Provider value={currentFile}>
+          <ImageUploadingCtx.Provider value={currentImageCtxValue}>
             <MDEditor
               aria-disabled={isReadOnly}
               hideToolbar={isReadOnly}

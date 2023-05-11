@@ -56,6 +56,8 @@ import { RemoteValues } from "@components/RemoteAutocomplete/types";
 import { SavingBar } from "@components/SavingBar";
 import { ErrorDetailsModal } from "@components/ErrorDetails";
 import { set } from "lodash";
+import networkErrorToStringArray from "utils/networkErrorToStringArray";
+import { useErrorDetailsModal } from "@providers/error-details-modal-provider";
 
 interface ContentEditProps {
   readonly?: boolean;
@@ -63,7 +65,7 @@ interface ContentEditProps {
 
 export const ContentEdit = (props: ContentEditProps) => {
   const { setSaving, setBusy } = useModuleWrapperContext();
-
+  const { Show: showErrorModal } = useErrorDetailsModal()!;
   const { notificationsService } = useNotificationsService();
   const networkContext = useRequestContext();
   const [editorLocalStorage, setEditorLocalStorage] = useLocalStorage<ContentEditData>(
@@ -82,7 +84,6 @@ export const ContentEdit = (props: ContentEditProps) => {
   const [restoreDataState, setRestoreDataState] = useState<ContentEditRestoreState>(
     ContentEditRestoreState.Idle
   );
-  const [errorModalData, setErrorModalData] = useState<React.ReactNode | string | null>(null);
 
   const autoSave = useDebouncedCallback((value) => {
     if (!wasModified && !coverWasModified) {
@@ -116,14 +117,17 @@ export const ContentEdit = (props: ContentEditProps) => {
     if (coverWasModified) {
       const blob = await (await fetch(values.coverImagePending.url!)).blob();
       const file = new File([blob], values.coverImagePending.fileName);
-      const { data } = await client.api.mediaCreate({
+      const imageUploadingResponse = await client.api.mediaCreate({
         Image: file,
         ScopeUid: values.slug,
       });
-      if (data.location === null) {
+      if (imageUploadingResponse.error){
+        throw Error(imageUploadingResponse.error.title as string);
+      }
+      if (imageUploadingResponse.data.location === null) {
         throw Error("imageupload.data.location is null");
       }
-      coverUrl = data.location as string;
+      coverUrl = imageUploadingResponse.data.location as string;
     }
     if (values?.id) {
       const content = Automapper.map<ContentDetails, ContentUpdateDto>(
@@ -176,11 +180,14 @@ export const ContentEdit = (props: ContentEditProps) => {
           (error.data.error && error.data.error.title) ||
           (error.data.message && error.data.message) ||
           "unknown";
-        return (
-          <div onClick={() => setErrorModalData(errMessage)}>
-            Failed to {values?.id ? "update" : "create"} post ({errMessage})
-          </div>
-        );
+        const errDetails : string[] = [];
+        if (error.data.error && error.data.error.errors){
+          errDetails.push(...networkErrorToStringArray(error.data.error.errors));
+        }
+        return {
+          title: errMessage,
+          onClick: () => {showErrorModal(errDetails);}
+        };
       },
     });
   };
@@ -298,12 +305,6 @@ export const ContentEdit = (props: ContentEditProps) => {
             : setRestoreDataState(ContentEditRestoreState.Rejected)
         }
       />
-      <ErrorDetailsModal
-        isOpen={errorModalData !== null}
-        onClose={() => setErrorModalData(null)}
-        errorDetails={errorModalData}
-      />
-
       <ContentEditContainer>
         {isSaving && <div>Saving...</div>}
         <form onSubmit={formik.handleSubmit}>
