@@ -80,6 +80,18 @@ export const Sidebar = () => {
             selected={moduleName === CoreModule.domains}
           />
         </ListItem>
+      </List>
+      <List component="nav" subheader={<ListSubheaderStyled>MARKETING</ListSubheaderStyled>}>
+        <ListItem>
+          <SidebarLinkButton
+            title="Unsubscribes"
+            to={getCoreModuleRoute(CoreModule.unsubscribes)}
+            Icon={Unsubscribe}
+            selected={moduleName === CoreModule.unsubscribes}
+          />
+        </ListItem>
+      </List>
+      <List component="nav" subheader={<ListSubheaderStyled>General</ListSubheaderStyled>}>
         <ListItem>
           <SidebarLinkButton
             title="Users"
@@ -94,16 +106,6 @@ export const Sidebar = () => {
             to={getCoreModuleRoute(CoreModule.about)}
             Icon={Info}
             selected={moduleName === CoreModule.about}
-          />
-        </ListItem>
-      </List>
-      <List component="nav" subheader={<ListSubheaderStyled>MARKETING</ListSubheaderStyled>}>
-        <ListItem>
-          <SidebarLinkButton
-            title="Unsubscribes"
-            to={getCoreModuleRoute(CoreModule.unsubscribes)}
-            Icon={Unsubscribe}
-            selected={moduleName === CoreModule.unsubscribes}
           />
         </ListItem>
       </List>

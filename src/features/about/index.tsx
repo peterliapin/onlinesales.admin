@@ -20,7 +20,7 @@ export const AboutModule = () => {
         <Grid item>
           <Card sx={{ minWidth: 275 }}>
             <CardContent>
-              <Typography>Frontend version: 1.0.0f</Typography>
+              <Typography>Frontend Version: {process.env.VERSION}</Typography>
             </CardContent>
           </Card>
         </Grid>
@@ -28,7 +28,7 @@ export const AboutModule = () => {
           <Card sx={{ minWidth: 275 }}>
             <CardContent>
               <Typography>
-                Backend version:
+                Backend version: 
                 {backendVersion ? (
                   backendVersion
                 ) : (

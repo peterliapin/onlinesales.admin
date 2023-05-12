@@ -51,15 +51,20 @@ export const ImageUpload = (contentDetails: ContentDetails, isInToolbar: boolean
         const replaceText = `![${selectedFile.name}](Uploading...)`;
         const textPosStart = api.replaceSelection("").selection.start;
         api.replaceSelection(replaceText);
-        const response = await this.networkContext.client.api.mediaCreate({
+        const imageUploadingResponse = await this.networkContext.client.api.mediaCreate({
           Image: selectedFile,
           ScopeUid: this.contentDetails.slug,
         });
+        if (imageUploadingResponse.error){
+          notificationsService.error(
+            `Failed to upload image ${imageUploadingResponse.error.detail}`
+          );
+        }
         api.setSelectionRange({
           start: textPosStart,
           end: replaceText.length + textPosStart,
         });
-        api.replaceSelection(`![${selectedFile.name}](${response.data.location})`);
+        api.replaceSelection(`![${selectedFile.name}](${imageUploadingResponse.data.location})`);
         document.body.removeChild(inputElement);
       });
       document.body.appendChild(inputElement);
