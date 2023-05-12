@@ -19,6 +19,7 @@ import {
   DictionaryEdit,
 } from "@components/generic-components/edit-components";
 import { validate } from "@components/generic-components/edit-components/validator";
+import { ArrayEdit } from "./edit-components/array-edit";
 
 export interface DtoField {
   editable: boolean;
@@ -288,6 +289,10 @@ export function GenericForm<TView extends BasicTypeForGeneric, TCreate, TUpdate>
             maxLength: field.maxLength,
           });
         }
+      case "array":
+        return ArrayEdit({
+          ...commonProps,
+        });
       default:
         return TextEdit({
           ...commonProps,
