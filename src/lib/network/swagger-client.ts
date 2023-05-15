@@ -3617,11 +3617,6 @@ export interface DomainUpdateDto {
    */
   faviconUrl?: string | null;
   /**
-   * Http Check
-   * @example true
-   */
-  httpCheck?: boolean | null;
-  /**
    * Free
    * @example true
    */
@@ -3636,13 +3631,6 @@ export interface DomainUpdateDto {
    * @example true
    */
   catchAll?: boolean | null;
-  /** Dns Records */
-  dnsRecords?: DnsRecord[] | null;
-  /**
-   * Dns Check
-   * @example true
-   */
-  dnsCheck?: boolean | null;
 }
 
 export interface EmailGroupCreateDto {
@@ -4520,6 +4508,11 @@ export interface ProblemDetails {
   [key: string]: any;
 }
 
+export interface StringStringValuesKeyValuePair {
+  key?: string;
+  value?: string[];
+}
+
 export interface TaskDetailsDto {
   /**
    * Name
@@ -4740,6 +4733,31 @@ export interface UserUpdateDto {
   avatarUrl?: string | null;
 }
 
+export interface VersionDto {
+  /**
+   * Version
+   * @example "string"
+   */
+  version?: string | null;
+  /**
+   * Ip
+   * @example "string"
+   */
+  ip?: string | null;
+  /**
+   * I Pv4
+   * @example "string"
+   */
+  iPv4?: string | null;
+  /**
+   * I Pv6
+   * @example "string"
+   */
+  iPv6?: string | null;
+  /** Headers */
+  headers?: StringStringValuesKeyValuePair[];
+}
+
 export type QueryParamsType = Record<string | number, any>;
 export type ResponseFormat = keyof Omit<Body, "body" | "bodyUsed">;
 
@@ -4952,7 +4970,7 @@ export class HttpClient<SecurityDataType = unknown> {
 
 /**
  * @title OnlineSales API
- * @version 1.2.4.0
+ * @version 1.2.5.0
  */
 export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
   api = {
@@ -6834,10 +6852,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @secure
      */
     versionList: (params: RequestParams = {}) =>
-      this.request<void, void>({
+      this.request<VersionDto, void>({
         path: `/api/version`,
         method: "GET",
         secure: true,
+        format: "json",
         ...params,
       }),
   };
