@@ -14,6 +14,7 @@ import { UnsubscribesModule } from "@features/unsubscribes";
 import { UserModule } from "@features/users";
 import { AboutModule } from "@features/about";
 import { Navigate } from "react-router-dom";
+import { EmailTemplatesModule } from "@features/email-templates";
 
 export const ModuleLoader = () => {
   const { moduleName } = useRouteParams(coreModuleRoute);
@@ -32,6 +33,7 @@ export const ModuleLoader = () => {
           {moduleName === CoreModule.domains && <DomainsModule />}
           {moduleName === CoreModule.users && <UserModule />}
           {moduleName === CoreModule.about && <AboutModule />}
+          {moduleName === CoreModule.emailTemplates && <EmailTemplatesModule />}
           {!moduleName && <Navigate to={defaultModuleRoute} replace />}
         </Suspense>
       </ErrorBoundary>

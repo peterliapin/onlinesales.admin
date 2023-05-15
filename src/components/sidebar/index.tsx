@@ -9,6 +9,7 @@ import {
   Unsubscribe,
   Person,
   Info,
+  Email,
 } from "@mui/icons-material";
 import { CoreModule, coreModuleRoute, getCoreModuleRoute } from "lib/router";
 import { SidebarLinkButton } from "./sidebar-link-button";
@@ -82,6 +83,14 @@ export const Sidebar = () => {
         </ListItem>
       </List>
       <List component="nav" subheader={<ListSubheaderStyled>MARKETING</ListSubheaderStyled>}>
+        <ListItem>
+          <SidebarLinkButton
+            title="Email templates"
+            to={getCoreModuleRoute(CoreModule.emailTemplates)}
+            Icon={Email}
+            selected={moduleName === CoreModule.emailTemplates}
+          />
+        </ListItem>
         <ListItem>
           <SidebarLinkButton
             title="Unsubscribes"

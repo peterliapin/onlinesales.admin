@@ -1,56 +1,79 @@
 import { Autocomplete, TextField, CircularProgress } from "@mui/material";
-import { RemoteAutoCompleteProps, RemoteValues } from "./types";
+import { EmailGroupAutoCompleteProps, EmailGroupOption } from "./types";
 import React, { useState, useEffect } from "react";
 import { useRequestContext } from "@providers/request-provider";
-import { HttpResponse, ProblemDetails } from "@lib/network/swagger-client";
+import { ProblemDetails } from "@lib/network/swagger-client";
 import { useNotificationsService } from "@hooks";
+import { CreateNewEmailGroup } from "./create-new";
 
-export function RemoteAutocomplete({
+
+export function EmailGroupAutocomplete({
   label,
   placeholder,
-  freeSolo,
-  multiple,
   value,
   onChange,
-  limit,
-  type,
   error,
   helperText,
-}: RemoteAutoCompleteProps) {
+}: EmailGroupAutoCompleteProps) {
   const { client } = useRequestContext();
   const { notificationsService } = useNotificationsService();
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [options, setOptions] = useState<string[]>([]);
+  const [options, setOptions] = useState<EmailGroupOption[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
+  const [valueState, setValue] = useState<EmailGroupOption>({
+    id: -1,
+    label: "Loading",
+  });
 
   const requestData = async () => {
-    let response: HttpResponse<string[], void | ProblemDetails> | undefined = undefined;
+    let data: EmailGroupOption[] = [];
     try {
-      switch (type) {
-        case RemoteValues.TAGS:
-          response = await client.api.contentTagsList();
-          break;
-        case RemoteValues.CATEGORIES:
-          response = await client.api.contentCategoriesList();
-          break;
-      }
+      const response = await client.api.emailGroupsList();
+      data = response.data.map((value) => {
+        return {
+          id: value.id as number,
+          label: value.name
+        };
+      });
     } catch (e) {
       const error = e as ProblemDetails;
       notificationsService.error(`Failed to get options: ${error.detail}`);
     } finally {
-      setOptions((response && response.data) || []);
+      setOptions(data);
       setIsLoading(false);
       setIsLoaded(true);
     }
   };
 
+  /*
   useEffect(() => {
     if (isOpen && !isLoaded && !isLoading) {
       setIsLoading(true);
       requestData();
     }
   }, [isOpen]);
+  */
+  useEffect(() => {
+    if (isLoaded){
+      const matchedOption = options.filter((v) => v.id === value)[0];
+      setValue({
+        id: value,
+        label: (matchedOption && matchedOption.label) || "Unknown",
+      });  
+    }
+  }, [isLoaded]);
+
+  useEffect(() => {
+    setValue({
+      id: value,
+      label: isLoaded ? options.filter((v) => v.id === value)[0].label : "Loading...",
+    });
+  }, [value]);
+
+  useEffect(() => {
+    requestData();
+  }, []);
 
   return (
     <Autocomplete
@@ -61,14 +84,12 @@ export function RemoteAutocomplete({
       onClose={() => {
         setIsOpen(false);
       }}
-      options={options}
-      loading={isLoading}
-      freeSolo={freeSolo}
-      multiple={multiple ? multiple : false}
-      limitTags={limit ? limit : -1}
       autoSelect
-      value={value}
-      onChange={onChange}
+      options={options}
+      getOptionLabel={(option) => option.label}
+      loading={isLoading}
+      value={valueState}
+      onChange={(_, value) => onChange( (value && value.id) || -1)}
       renderInput={(params) => (
         <TextField
           {...params}
@@ -81,6 +102,14 @@ export function RemoteAutocomplete({
             endAdornment: (
               <React.Fragment>
                 {isLoading ? <CircularProgress color="inherit" size={20} /> : null}
+                <CreateNewEmailGroup
+                  onChange={
+                    (value) => { 
+                      setValue(value);
+                      setIsLoaded(false);
+                    }
+                  }
+                />
                 {params.InputProps.endAdornment}
               </React.Fragment>
             ),

@@ -58,6 +58,7 @@ import { ErrorDetailsModal } from "@components/ErrorDetails";
 import { set } from "lodash";
 import networkErrorToStringArray from "utils/networkErrorToStringArray";
 import { useErrorDetailsModal } from "@providers/error-details-modal-provider";
+import { LanguageAutocomplete } from "@components/LanguageAutocomplete";
 
 interface ContentEditProps {
   readonly?: boolean;
@@ -432,13 +433,9 @@ export const ContentEdit = (props: ContentEditProps) => {
                   />
                 </Grid>
                 <Grid xs={6} sm={6} item>
-                  <Autocomplete
-                    freeSolo
-                    autoSelect
-                    disabled={props.readonly}
+                  <LanguageAutocomplete
                     value={formik.values.language}
-                    onChange={(ev, val) => autoCompleteValueUpdate<string | null>("language", val)}
-                    options={ContentEditAvailableLanguages}
+                    onChange={(val) => autoCompleteValueUpdate<string | null>("language", val)}
                     renderInput={(params) => (
                       <TextField
                         {...params}
