@@ -188,7 +188,7 @@ export function GenericForm<TView extends BasicTypeForGeneric, TCreate, TUpdate>
     setSaving(async () => {
       const saveData: any = {};
       (itemId ? updateFields : createFields).forEach((field) => {
-        if (values[field.name]) {
+        if (isValidUpdate(field)) {
           saveData[field.name] = values[field.name];
         }
       });
@@ -207,6 +207,13 @@ export function GenericForm<TView extends BasicTypeForGeneric, TCreate, TUpdate>
         }
       }
     });
+  };
+
+  const isValidUpdate = (field: DtoField) => {
+    if (field.type == "boolean" && (values[field.name] === true || values[field.name] === false))
+      return true;
+    if (field.type == "string" && values[field.name] == "") return true;
+    if (values[field.name]) return true;
   };
 
   const fieldsSet = () => {
@@ -292,6 +299,19 @@ export function GenericForm<TView extends BasicTypeForGeneric, TCreate, TUpdate>
       case "array":
         return ArrayEdit({
           ...commonProps,
+          minLength: field.minLength,
+          maxLength: field.maxLength,
+        });
+      case "boolean":
+        return EnumEdit({
+          ...commonProps,
+          valueOptions: ["true", "false"],
+          onChangeValue: (newValue: string | null) => {
+            setValues((prevValues) => ({
+              ...prevValues,
+              [field.name]: newValue === "true",
+            }));
+          },
         });
       default:
         return TextEdit({
