@@ -1341,6 +1341,54 @@ export interface AccountUpdateDto {
   data?: string | null;
 }
 
+export interface ActivityLogDto {
+  /**
+   * Id
+   * @format int32
+   * @example 1
+   */
+  id?: number;
+  /**
+   * Source
+   * @example "string"
+   */
+  source?: string;
+  /**
+   * Source Id
+   * @format int32
+   * @example 1
+   */
+  sourceId?: number;
+  /**
+   * Type
+   * @example "string"
+   */
+  type?: string;
+  /**
+   * Created At
+   * @format date-time
+   * @pattern ^(\d{4})-(1[0-2]|0[1-9])-(3[01]|[12][0-9]|0[1-9])T(2[0-4]|1[0-9]|0[1-9]):(2[0-4]|1[0-9]|0[1-9]):([1-5]?0[0-9]).(\d{7})Z$
+   * @example "2023-04-18T12:00:00.0000000Z"
+   */
+  createdAt?: string;
+  /**
+   * Contact Id
+   * @format int32
+   * @example 1
+   */
+  contactId?: number | null;
+  /**
+   * Ip
+   * @example "string"
+   */
+  ip?: string | null;
+  /**
+   * Data
+   * @example "string"
+   */
+  data?: string;
+}
+
 export interface CommentCreateDto {
   /**
    * Author Email
@@ -4982,7 +5030,7 @@ export class HttpClient<SecurityDataType = unknown> {
 
 /**
  * @title OnlineSales API
- * @version 1.2.4.0
+ * @version 1.2.5.0
  */
 export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
   api = {
@@ -5118,6 +5166,29 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         method: "GET",
         query: query,
         secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags ActivityLog
+     * @name ActivityLogList
+     * @request GET:/api/activity-log
+     * @secure
+     */
+    activityLogList: (
+      query?: {
+        query?: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<ActivityLogDto[], void | ProblemDetails>({
+        path: `/api/activity-log`,
+        method: "GET",
+        query: query,
+        secure: true,
+        format: "json",
         ...params,
       }),
 

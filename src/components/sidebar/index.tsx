@@ -10,6 +10,7 @@ import {
   Person,
   Info,
   Email,
+  Book,
 } from "@mui/icons-material";
 import { CoreModule, coreModuleRoute, getCoreModuleRoute } from "lib/router";
 import { SidebarLinkButton } from "./sidebar-link-button";
@@ -101,6 +102,14 @@ export const Sidebar = () => {
         </ListItem>
       </List>
       <List component="nav" subheader={<ListSubheaderStyled>General</ListSubheaderStyled>}>
+        <ListItem>
+          <SidebarLinkButton
+            title="Activity logs"
+            to={getCoreModuleRoute(CoreModule.activityLogs)}
+            Icon={Book}
+            selected={moduleName === CoreModule.activityLogs}
+          />
+        </ListItem>
         <ListItem>
           <SidebarLinkButton
             title="Users"

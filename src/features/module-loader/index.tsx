@@ -15,6 +15,7 @@ import { UserModule } from "@features/users";
 import { AboutModule } from "@features/about";
 import { Navigate } from "react-router-dom";
 import { EmailTemplatesModule } from "@features/email-templates";
+import { ActivityLogModule } from "@features/activity-log";
 
 export const ModuleLoader = () => {
   const { moduleName } = useRouteParams(coreModuleRoute);
@@ -34,6 +35,7 @@ export const ModuleLoader = () => {
           {moduleName === CoreModule.users && <UserModule />}
           {moduleName === CoreModule.about && <AboutModule />}
           {moduleName === CoreModule.emailTemplates && <EmailTemplatesModule />}
+          {moduleName === CoreModule.activityLogs && <ActivityLogModule />}
           {!moduleName && <Navigate to={defaultModuleRoute} replace />}
         </Suspense>
       </ErrorBoundary>
