@@ -32,7 +32,6 @@ import {
 } from "./types";
 import {
   ContentEditValidationScheme,
-  ContentEditAvailableLanguages,
   ContentEditAvailableTypes,
   ContentEditDefaultValues,
   ContentEditMaximumImageSize,
