@@ -9,6 +9,8 @@ import {
   Unsubscribe,
   Person,
   Info,
+  Email,
+  Book,
 } from "@mui/icons-material";
 import { CoreModule, coreModuleRoute, getCoreModuleRoute } from "lib/router";
 import { SidebarLinkButton } from "./sidebar-link-button";
@@ -84,6 +86,14 @@ export const Sidebar = () => {
       <List component="nav" subheader={<ListSubheaderStyled>MARKETING</ListSubheaderStyled>}>
         <ListItem>
           <SidebarLinkButton
+            title="Email templates"
+            to={getCoreModuleRoute(CoreModule.emailTemplates)}
+            Icon={Email}
+            selected={moduleName === CoreModule.emailTemplates}
+          />
+        </ListItem>
+        <ListItem>
+          <SidebarLinkButton
             title="Unsubscribes"
             to={getCoreModuleRoute(CoreModule.unsubscribes)}
             Icon={Unsubscribe}
@@ -92,6 +102,14 @@ export const Sidebar = () => {
         </ListItem>
       </List>
       <List component="nav" subheader={<ListSubheaderStyled>General</ListSubheaderStyled>}>
+        <ListItem>
+          <SidebarLinkButton
+            title="Activity logs"
+            to={getCoreModuleRoute(CoreModule.activityLogs)}
+            Icon={Book}
+            selected={moduleName === CoreModule.activityLogs}
+          />
+        </ListItem>
         <ListItem>
           <SidebarLinkButton
             title="Users"

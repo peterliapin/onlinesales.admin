@@ -73,7 +73,6 @@ export const UserEdit = () => {
       response = await client.api.usersPartialUpdate(id, values);
     }
     helpers.setValues(response.data);
-    notificationsService.success(`Successfully ${values?.id ? "updated" : "created"} user`);
     if (id === userInfo?.details?.id){
       userInfo?.refresh();
     }
