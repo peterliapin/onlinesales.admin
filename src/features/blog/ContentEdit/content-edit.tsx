@@ -11,6 +11,7 @@ import { useRequestContext } from "@providers/request-provider";
 import { ContentEditContainer } from "../index.styled";
 import {
   Autocomplete,
+  Box,
   Button,
   Card,
   CardContent,
@@ -53,6 +54,11 @@ import { ModuleWrapper } from "@components/module-wrapper";
 import { RemoteAutocomplete } from "@components/RemoteAutocomplete";
 import { RemoteValues } from "@components/RemoteAutocomplete/types";
 import { SavingBar } from "@components/SavingBar";
+import { ErrorDetailsModal } from "@components/ErrorDetails";
+import { set } from "lodash";
+import networkErrorToStringArray from "utils/networkErrorToStringArray";
+import { useErrorDetailsModal } from "@providers/error-details-modal-provider";
+import { LanguageAutocomplete } from "@components/LanguageAutocomplete";
 
 interface ContentEditProps {
   readonly?: boolean;
@@ -60,7 +66,7 @@ interface ContentEditProps {
 
 export const ContentEdit = (props: ContentEditProps) => {
   const { setSaving, setBusy } = useModuleWrapperContext();
-
+  const { Show: showErrorModal } = useErrorDetailsModal()!;
   const { notificationsService } = useNotificationsService();
   const networkContext = useRequestContext();
   const [editorLocalStorage, setEditorLocalStorage] = useLocalStorage<ContentEditData>(
@@ -102,82 +108,91 @@ export const ContentEdit = (props: ContentEditProps) => {
     });
   }, 3000); ///TODO: User Settings
 
-  const submit = async (values: ContentDetails, helpers: FormikHelpers<ContentDetails>) => {
+  const submitFunc = async (values: ContentDetails, helpers: FormikHelpers<ContentDetails>) => {
     let response: HttpResponse<ContentDetailsDto, void | ProblemDetails>;
     let coverUrl = values.coverImageUrl;
-    notificationsService.info(`${values?.id ? "Updating" : "Creating"} a post...`);
-    try {
-      setIsSaving(true);
-      if (frontmatterState !== null) {
-        notificationsService.error(
-          "Frontmatter validation error. Check preview window for details"
-        );
-        return;
-      }
-      if (coverWasModified) {
-        const blob = await (await fetch(values.coverImagePending.url!)).blob();
-        const file = new File([blob], values.coverImagePending.fileName);
-        const { data } = await client.api.mediaCreate({
-          Image: file,
-          ScopeUid: values.slug,
-        });
-        if (data.location === null) {
-          const errMessage = "imageupload.data.location is null";
-          notificationsService.error(
-            `Failed to ${values?.id ? "update" : "create"} post (${errMessage})`
-          );
-        }
-        coverUrl = data.location as string;
-      }
-      if (values?.id) {
-        const content = Automapper.map<ContentDetails, ContentUpdateDto>(
-          values,
-          "ContentDetails",
-          "ContentUpdateDto"
-        );
-        response = await client.api.contentPartialUpdate(Number(values.id), {
-          ...content,
-          coverImageUrl: coverUrl,
-        });
-      } else {
-        const content = Automapper.map<ContentDetails, ContentCreateDto>(
-          values,
-          "ContentDetails",
-          "ContentCreateDto"
-        );
-        response = await client.api.contentCreate({
-          ...content,
-          coverImageUrl: coverUrl,
-        });
-      }
-      helpers.setValues(
-        Automapper.map<ContentDetailsDto, ContentDetails>(
-          response.data,
-          "ContentDetailsDto",
-          "ContentDetails"
-        )
-      );
-      await helpers.setFieldValue("coverImagePending", {
-        url: buildAbsoluteUrl(response.data.coverImageUrl!),
-        fileName: "",
-      });
-      notificationsService.success(`Successfully ${values?.id ? "updated" : "created"} post`);
-
-      setWasModified(false);
-      setCoverWasModified(false);
-      const localStorageSnapshot = { ...editorLocalStorage };
-      localStorageSnapshot.data = localStorageSnapshot.data.filter((data) => data.id !== id);
-      setEditorLocalStorage(localStorageSnapshot);
-    } catch (data: any) {
-      const errMessage = data.error && data.error.title;
-      notificationsService.error(
-        `Failed to ${values?.id ? "update" : "create"} post (${errMessage})`
-      );
-    } finally {
-      setIsSaving(false);
-      helpers.setSubmitting(false);
+    setIsSaving(true);
+    if (frontmatterState !== null) {
+      throw Error("Frontmatter validation error. Check preview window for details");
     }
+    if (coverWasModified) {
+      const blob = await (await fetch(values.coverImagePending.url!)).blob();
+      const file = new File([blob], values.coverImagePending.fileName);
+      const imageUploadingResponse = await client.api.mediaCreate({
+        Image: file,
+        ScopeUid: values.slug,
+      });
+      if (imageUploadingResponse.error){
+        throw Error(imageUploadingResponse.error.title as string);
+      }
+      if (imageUploadingResponse.data.location === null) {
+        throw Error("imageupload.data.location is null");
+      }
+      coverUrl = imageUploadingResponse.data.location as string;
+    }
+    if (values?.id) {
+      const content = Automapper.map<ContentDetails, ContentUpdateDto>(
+        values,
+        "ContentDetails",
+        "ContentUpdateDto"
+      );
+      response = await client.api.contentPartialUpdate(Number(values.id), {
+        ...content,
+        coverImageUrl: coverUrl,
+      });
+    } else {
+      const content = Automapper.map<ContentDetails, ContentCreateDto>(
+        values,
+        "ContentDetails",
+        "ContentCreateDto"
+      );
+      response = await client.api.contentCreate({
+        ...content,
+        coverImageUrl: coverUrl,
+      });
+    }
+    helpers.setValues(
+      Automapper.map<ContentDetailsDto, ContentDetails>(
+        response.data,
+        "ContentDetailsDto",
+        "ContentDetails"
+      )
+    );
+    await helpers.setFieldValue("coverImagePending", {
+      url: buildAbsoluteUrl(response.data.coverImageUrl!),
+      fileName: "",
+    });
+
+    setWasModified(false);
+    setCoverWasModified(false);
+    const localStorageSnapshot = { ...editorLocalStorage };
+    localStorageSnapshot.data = localStorageSnapshot.data.filter((data) => data.id !== id);
+    setEditorLocalStorage(localStorageSnapshot);
+    setIsSaving(false);
+    helpers.setSubmitting(false);
   };
+
+  const submit = async (values: ContentDetails, helpers: FormikHelpers<ContentDetails>) => {
+    notificationsService.promise(submitFunc(values, helpers), {
+      pending: `${values?.id ? "Updating" : "Creating"} a post...`,
+      success: `Successfully ${values?.id ? "updated" : "created"} post`,
+      error: (error) => {
+        const errMessage: string =
+          (error.data.error && error.data.error.title) ||
+          (error.data.message && error.data.message) ||
+          "unknown";
+        const errDetails : string[] = [];
+        if (error.data.error && error.data.error.errors){
+          errDetails.push(...networkErrorToStringArray(error.data.error.errors));
+        }
+        return {
+          title: errMessage,
+          onClick: () => {showErrorModal(errDetails);}
+        };
+      },
+    });
+  };
+
   const formik = useFormik({
     validationSchema: toFormikValidationSchema(ContentEditValidationScheme),
     initialValues: ContentEditDefaultValues[0].defaultValues,
@@ -291,7 +306,6 @@ export const ContentEdit = (props: ContentEditProps) => {
             : setRestoreDataState(ContentEditRestoreState.Rejected)
         }
       />
-
       <ContentEditContainer>
         {isSaving && <div>Saving...</div>}
         <form onSubmit={formik.handleSubmit}>
@@ -419,13 +433,9 @@ export const ContentEdit = (props: ContentEditProps) => {
                   />
                 </Grid>
                 <Grid xs={6} sm={6} item>
-                  <Autocomplete
-                    freeSolo
-                    autoSelect
-                    disabled={props.readonly}
+                  <LanguageAutocomplete
                     value={formik.values.language}
-                    onChange={(ev, val) => autoCompleteValueUpdate<string | null>("language", val)}
-                    options={ContentEditAvailableLanguages}
+                    onChange={(val) => autoCompleteValueUpdate<string | null>("language", val)}
                     renderInput={(params) => (
                       <TextField
                         {...params}

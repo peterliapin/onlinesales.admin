@@ -1,3 +1,4 @@
+import { useErrorDetailsModal } from "@providers/error-details-modal-provider";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -5,8 +6,23 @@ export interface NotificationOptions {
   autoClose?: number;
 }
 
+export interface ErrorData {
+  title: string;
+  onClick?: () => void;
+}
+
+export interface PromiseNotificationOptions {
+  pending: React.ReactNode;
+  success: React.ReactNode;
+  error: (data: any) => React.ReactNode | ErrorData;
+}
+
 export interface NotificationsServiceSettings {
   defaultAutoClose?: number;
+}
+
+function instanceOfErrorData(object: any): object is ErrorData {
+  return true;
 }
 
 class NotificationsService {
@@ -44,6 +60,38 @@ class NotificationsService {
   success(msg: string, options: NotificationOptions = {}) {
     toast.success(msg, {
       autoClose: options.autoClose ?? this.defaultAutoClose,
+    });
+  }
+
+  promise(promise: Promise<unknown>, options: PromiseNotificationOptions) {
+    toast.promise(promise, {
+      pending: {
+        render() {
+          return options.pending;
+        },
+      },
+      success: {
+        render() {
+          return options.success;
+        },
+      },
+      error: {
+        render(data) {
+          const err = options.error(data);
+          if (instanceOfErrorData(err)){
+            return (
+              <div onClick={
+                () => {
+                  data.closeToast && data.closeToast();
+                  err.onClick && err.onClick();
+                }
+              }>
+                {(err as ErrorData).title}
+              </div>
+            );
+          }
+        },
+      },
     });
   }
 }

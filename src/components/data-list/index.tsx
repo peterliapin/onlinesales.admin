@@ -22,6 +22,8 @@ type dataListProps = {
   defaultFilterOrderDirection: string;
   initialGridState: GridInitialStateCommunity | undefined;
   getModelDataList: (mainQuery: string, exportQuery?: string) => any;
+  showEditButton?: boolean;
+  showViewButton?: boolean;
 };
 
 export const DataList = ({
@@ -32,6 +34,8 @@ export const DataList = ({
   defaultFilterOrderDirection,
   initialGridState,
   getModelDataList,
+  showEditButton = true,
+  showViewButton = true,
 }: dataListProps) => {
   const { notificationsService } = useNotificationsService();
   const [modelData, setModelData] = useState<any[] | undefined>([]);
@@ -213,8 +217,8 @@ export const DataList = ({
         disableColumnFilter={false}
         disablePagination={false}
         showActionsColumn={true}
-        disableEditRoute={false}
-        disableViewRoute={false}
+        disableEditRoute={!showEditButton}
+        disableViewRoute={!showViewButton}
       />
     </DataListContainer>
   ) : null;

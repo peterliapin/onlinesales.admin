@@ -10,6 +10,9 @@ export const enum CoreModule {
   domains = "domains",
   unsubscribes = "unsubscribes",
   users = "users",
+  about = "about",
+  emailTemplates = "email-templates",
+  activityLogs = "activity-logs",
 }
 
 const coreModuleParser: Parser<CoreModule> = {

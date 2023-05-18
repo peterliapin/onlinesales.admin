@@ -1,12 +1,13 @@
-import { ListItem, ListItemText, styled } from "@mui/material";
+import { ListItem, styled } from "@mui/material";
+import ListItemText from "@mui/material/ListItemText";
 
-export const AccountListItem = styled(ListItem)({
+export const UserNameListItem = styled(ListItem)({
   alignItems: "center",
   paddingLeft: "0",
   disablePadding: true,
 });
 
-export const AccountListItemText = styled(ListItemText)`
+export const UserNameListItemText = styled(ListItemText)`
   .MuiListItemText-primary {
     font-size: ${({ theme }) => theme.typography.body2.fontSize};
     font-weight: 500;
@@ -14,9 +15,4 @@ export const AccountListItemText = styled(ListItemText)`
   .MuiListItemText-secondary {
     font-size: ${({ theme }) => theme.typography.body2.fontSize};
   }
-`;
-
-export const AccountUrlHref = styled("a")`
-  text-decoration: none;
-  color: inherit;
 `;

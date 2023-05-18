@@ -8,6 +8,9 @@ import {
   Comment,
   Unsubscribe,
   Person,
+  Info,
+  Email,
+  Book,
 } from "@mui/icons-material";
 import { CoreModule, coreModuleRoute, getCoreModuleRoute } from "lib/router";
 import { SidebarLinkButton } from "./sidebar-link-button";
@@ -79,6 +82,34 @@ export const Sidebar = () => {
             selected={moduleName === CoreModule.domains}
           />
         </ListItem>
+      </List>
+      <List component="nav" subheader={<ListSubheaderStyled>MARKETING</ListSubheaderStyled>}>
+        <ListItem>
+          <SidebarLinkButton
+            title="Email templates"
+            to={getCoreModuleRoute(CoreModule.emailTemplates)}
+            Icon={Email}
+            selected={moduleName === CoreModule.emailTemplates}
+          />
+        </ListItem>
+        <ListItem>
+          <SidebarLinkButton
+            title="Unsubscribes"
+            to={getCoreModuleRoute(CoreModule.unsubscribes)}
+            Icon={Unsubscribe}
+            selected={moduleName === CoreModule.unsubscribes}
+          />
+        </ListItem>
+      </List>
+      <List component="nav" subheader={<ListSubheaderStyled>General</ListSubheaderStyled>}>
+        <ListItem>
+          <SidebarLinkButton
+            title="Activity logs"
+            to={getCoreModuleRoute(CoreModule.activityLogs)}
+            Icon={Book}
+            selected={moduleName === CoreModule.activityLogs}
+          />
+        </ListItem>
         <ListItem>
           <SidebarLinkButton
             title="Users"
@@ -87,14 +118,12 @@ export const Sidebar = () => {
             selected={moduleName === CoreModule.users}
           />
         </ListItem>
-      </List>
-      <List component="nav" subheader={<ListSubheaderStyled>MARKETING</ListSubheaderStyled>}>
         <ListItem>
           <SidebarLinkButton
-            title="Unsubscribes"
-            to={getCoreModuleRoute(CoreModule.unsubscribes)}
-            Icon={Unsubscribe}
-            selected={moduleName === CoreModule.unsubscribes}
+            title="About"
+            to={getCoreModuleRoute(CoreModule.about)}
+            Icon={Info}
+            selected={moduleName === CoreModule.about}
           />
         </ListItem>
       </List>
