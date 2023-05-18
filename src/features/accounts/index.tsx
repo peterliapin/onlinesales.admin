@@ -1,7 +1,7 @@
 import { Avatar, Button, ListItemAvatar } from "@mui/material";
 import { AccountDetailsDto, AccountImportDto } from "lib/network/swagger-client";
 import { useRequestContext } from "providers/request-provider";
-import { AccountListItem, AccountListItemText } from "./index.styled";
+import { AccountListItem, AccountListItemText, AccountUrlHref } from "./index.styled";
 import {
   accountGridSettingsStorageKey,
   accountListCurrentBreadcrumb,
@@ -88,7 +88,14 @@ export const Accounts = () => {
           <ListItemAvatar>
             <Avatar src={row.logoUrl || ""}></Avatar>
           </ListItemAvatar>
-          <AccountListItemText primary={`${row.name || ""}`} secondary={row.siteUrl} />
+          <AccountListItemText
+            primary={`${row.name || ""}`}
+            secondary={
+              <AccountUrlHref href={row.siteUrl || ""} target="_blank">
+                {row.siteUrl}
+              </AccountUrlHref>
+            }
+          />
         </AccountListItem>
       ),
     },

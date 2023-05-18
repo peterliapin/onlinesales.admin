@@ -46,6 +46,11 @@ export const ContactNameListItemText = styled(ListItemText)`
   }
 `;
 
+export const ContactEmailHref = styled("a")`
+  text-decoration: none;
+  color: inherit;
+`;
+
 export const ContactRowGrid = styled(Grid)({
   minHeight: 60,
   alignItems: "center",

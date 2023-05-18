@@ -15,3 +15,8 @@ export const AccountListItemText = styled(ListItemText)`
     font-size: ${({ theme }) => theme.typography.body2.fontSize};
   }
 `;
+
+export const AccountUrlHref = styled("a")`
+  text-decoration: none;
+  color: inherit;
+`;
