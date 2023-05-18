@@ -90,7 +90,9 @@ export const ContactView = () => {
   return (
     <>
       <Grid container spacing={3}>
-        <DataView header="Contact details" rows={contactViewData}></DataView>
+        <Grid xs={12} sm={6} item>
+          <DataView header="Contact details" rows={contactViewData}></DataView>
+        </Grid>
         <Grid xs={12} sm={6} item>
           <Card>
             <CardContent>

@@ -1,7 +1,7 @@
 import { RequestContextType } from "@providers/request-provider";
 import { CoreModule, getCoreModuleRoute } from "lib/router";
 import { useNavigate } from "react-router-dom";
-import { countryListStorageKey } from "./constants";
+import { continentListStorageKey, countryListStorageKey } from "./constants";
 
 export const useCoreModuleNavigation = () => {
   const navigate = useNavigate();
@@ -38,6 +38,31 @@ export const getCountryByCode = async (context: RequestContextType, code: string
   if (countries) {
     const countryList = Object.entries(countries).map(([code, name]) => ({ code, name }));
     return countryList.find((c) => c.code === code)!.name;
+  } else {
+    return null;
+  }
+};
+
+export const getContinentList = async (context: RequestContextType) => {
+  const continents = localStorage.getItem(continentListStorageKey);
+  if (continents) {
+    return JSON.parse(continents) as Record<string, string>;
+  } else {
+    try {
+      const { data } = await context.client.api.continentsList();
+      localStorage.setItem(continentListStorageKey, JSON.stringify(data));
+      return data;
+    } catch (e) {
+      return null;
+    }
+  }
+};
+
+export const getContinentByCode = async (context: RequestContextType, code: string) => {
+  const continents = await getContinentList(context);
+  if (continents) {
+    const continentList = Object.entries(continents).map(([code, name]) => ({ code, name }));
+    return continentList.find((c) => c.code === code)!.name;
   } else {
     return null;
   }
