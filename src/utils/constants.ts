@@ -6,3 +6,5 @@ export const dataListBreadcrumbLinks: BreadcrumbLink[] = [
 ];
 
 export const countryListStorageKey = "countryList";
+
+export const continentListStorageKey = "continentList";

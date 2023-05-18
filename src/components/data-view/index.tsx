@@ -4,17 +4,17 @@ import { Fragment } from "react";
 
 type dataViewProps = {
   header: string;
-  rows: { label: string; value: any }[];
+  rows: { label: string; value: any }[] | undefined;
 };
 
 export const DataView = ({ header, rows }: dataViewProps) => {
   return (
-    <Grid xs={12} sm={6} item>
-      <Card>
-        <CardContent>
-          <ContactCardHeader title={header}></ContactCardHeader>
-          <Divider variant="fullWidth" />
-          {rows.map(({ label, value }, index) => (
+    <Card>
+      <CardContent>
+        <ContactCardHeader title={header}></ContactCardHeader>
+        <Divider variant="fullWidth" />
+        {rows &&
+          rows.map(({ label, value }, index) => (
             <Fragment key={index}>
               <ContactRowGrid container>
                 <Grid item xs={2}>
@@ -27,8 +27,7 @@ export const DataView = ({ header, rows }: dataViewProps) => {
               <Divider variant="fullWidth" />
             </Fragment>
           ))}
-        </CardContent>
-      </Card>
-    </Grid>
+      </CardContent>
+    </Card>
   );
 };
