@@ -3617,11 +3617,6 @@ export interface DomainUpdateDto {
    */
   faviconUrl?: string | null;
   /**
-   * Http Check
-   * @example true
-   */
-  httpCheck?: boolean | null;
-  /**
    * Free
    * @example true
    */
@@ -3636,13 +3631,6 @@ export interface DomainUpdateDto {
    * @example true
    */
   catchAll?: boolean | null;
-  /** Dns Records */
-  dnsRecords?: DnsRecord[] | null;
-  /**
-   * Dns Check
-   * @example true
-   */
-  dnsCheck?: boolean | null;
 }
 
 export interface EmailGroupCreateDto {
@@ -4982,7 +4970,7 @@ export class HttpClient<SecurityDataType = unknown> {
 
 /**
  * @title OnlineSales API
- * @version 1.2.4.0
+ * @version 1.2.5.0
  */
 export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
   api = {
