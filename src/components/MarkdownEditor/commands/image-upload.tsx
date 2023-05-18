@@ -64,7 +64,7 @@ export const ImageUpload = (contentDetails: ContentDetails, isInToolbar: boolean
           start: textPosStart,
           end: replaceText.length + textPosStart,
         });
-        api.replaceSelection(`![${selectedFile.name}](${imageUploadingResponse.data.location})`);
+        api.replaceSelection(`![alt](${imageUploadingResponse.data.location})`);
         document.body.removeChild(inputElement);
       });
       document.body.appendChild(inputElement);
