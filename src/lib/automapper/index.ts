@@ -77,19 +77,6 @@ createMap<ContentDetailsDto, ContentDetails>(
   "ContentDetailsDto",
   "ContentDetails",
   forMember(
-    (d) => d.language,
-    mapFrom((s) => {
-      switch (s.language) {
-        case "ru-RU":
-          return "Russian";
-        case "en-US":
-          return "English";
-        default:
-          return "Unknown";
-      }
-    })
-  ),
-  forMember(
     (d) => d.type,
     mapFrom((s) => {
       switch (s.type) {
@@ -108,19 +95,6 @@ createMap<ContentDetails, ContentUpdateDto>(
   "ContentDetails",
   "ContentUpdateDto",
   forMember(
-    (d) => d.language,
-    mapFrom((s) => {
-      switch (s.language) {
-        case "Russian":
-          return "ru-RU";
-        case "English":
-          return "en-US";
-        default:
-          return s.language;
-      }
-    })
-  ),
-  forMember(
     (d) => d.type,
     mapFrom((s) => {
       switch (s.type) {
@@ -138,19 +112,6 @@ createMap<ContentDetails, ContentCreateDto>(
   Automapper,
   "ContentDetails",
   "ContentCreateDto",
-  forMember(
-    (d) => d.language,
-    mapFrom((s) => {
-      switch (s.language) {
-        case "Russian":
-          return "ru-RU";
-        case "English":
-          return "en-US";
-        default:
-          return s.language;
-      }
-    })
-  ),
   forMember(
     (d) => d.type,
     mapFrom((s) => {
