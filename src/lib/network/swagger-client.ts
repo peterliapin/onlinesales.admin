@@ -3665,11 +3665,6 @@ export interface DomainUpdateDto {
    */
   faviconUrl?: string | null;
   /**
-   * Http Check
-   * @example true
-   */
-  httpCheck?: boolean | null;
-  /**
    * Free
    * @example true
    */
@@ -3684,13 +3679,6 @@ export interface DomainUpdateDto {
    * @example true
    */
   catchAll?: boolean | null;
-  /** Dns Records */
-  dnsRecords?: DnsRecord[] | null;
-  /**
-   * Dns Check
-   * @example true
-   */
-  dnsCheck?: boolean | null;
 }
 
 export interface EmailGroupCreateDto {
