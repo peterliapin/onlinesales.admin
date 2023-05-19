@@ -28,7 +28,7 @@ import { LanguageAutocomplete } from "@components/LanguageAutocomplete";
 import { EmailGroupAutocomplete } from "@components/EmailGroupAutocomplete";
 import { CatchingPokemonSharp } from "@mui/icons-material";
 
-const API_KEY = process.env.TINYMCEAPIKEY || undefined;
+const TINYMCE_API_KEY = process.env.TINYMCE_API_KEY || undefined;
 
 export const EmailTemplateEdit = () => {
   const editorRef = useRef<TinyMCEEditor | null>(null);
@@ -293,7 +293,7 @@ export const EmailTemplateEdit = () => {
                 onEditorChange={
                   (currentValue, editor) => formik.setFieldValue("bodyTemplate", currentValue)
                 }
-                apiKey={API_KEY}
+                apiKey={TINYMCE_API_KEY}
                 init={{
                   height: 500,
                   menubar: "file edit view insert format tools table help",
