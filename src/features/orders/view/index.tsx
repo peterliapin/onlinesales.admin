@@ -140,7 +140,9 @@ export const OrderViewBase = () => {
   return (
     <ModuleWrapper breadcrumbs={orderFormBreadcrumbLinks} currentBreadcrumb="View Order">
       <Grid container spacing={3}>
-        {order && <DataView header="Order Info" rows={orderViewData}></DataView>}
+        <Grid xs={12} sm={6} item>
+          {order && <DataView header="Order Info" rows={orderViewData}></DataView>}
+        </Grid>
         <Grid xs={12} sm={6} item>
           <Card>
             <CardContent>

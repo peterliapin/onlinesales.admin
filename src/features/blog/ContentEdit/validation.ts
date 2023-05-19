@@ -1,8 +1,5 @@
 import zod from "zod";
 import { TypeDefaultValues } from "./types";
-import { ImageData } from "@components/FileDropdown";
-
-export const ContentEditAvailableLanguages = ["English", "Russian"] as const;
 
 export const ContentEditAvailableTypes = ["Blog Post", "Release Note"] as const;
 
@@ -63,7 +60,7 @@ export const ContentEditValidationScheme = zod.object({
   coverImageAlt: zod.string(),
   slug: zod.string(),
   author: zod.string(),
-  language: zod.enum(ContentEditAvailableLanguages),
+  language: zod.string(),
   allowComments: zod.boolean(),
   tags: zod.string().array().optional(),
   category: zod.string(),

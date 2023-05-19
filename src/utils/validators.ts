@@ -15,3 +15,11 @@ export const isValidNumber = (value: any) => {
     numberValidator.safeParse(value).success
   );
 };
+
+export const isNotEmpty = (value: string) => {
+  return requiredValidator.safeParse(value).success;
+};
+
+export const isValidOrEmptyNumber = (value: any) => {
+  return value === 0 || value === undefined || numberValidator.safeParse(value).success;
+};

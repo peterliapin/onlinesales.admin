@@ -38,7 +38,7 @@ const EditorViewFunc = (
         Image: file,
         ScopeUid: imageCtx.contentDetails.slug,
       });
-      const imageBlock = `![${file.name}](${resp.data.location})`;
+      const imageBlock = `![alt](${resp.data.location})`;
       editorCtx.commandOrchestrator?.textApi.replaceSelection(imageBlock);
     };
     func(imageCtx.currentFile);
