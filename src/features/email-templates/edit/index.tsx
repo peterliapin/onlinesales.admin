@@ -120,7 +120,7 @@ export const EmailTemplateEdit = () => {
       subject: "",
       language: "",
       bodyTemplate: "",
-      groupId: 0,
+      emailGroupId: 0,
     } as EmailTemplateDetailsDto,
     onSubmit: submit,
     validateOnChange: false,
@@ -259,11 +259,11 @@ export const EmailTemplateEdit = () => {
                 <Grid item xs={6} sm={6}>
                   <EmailGroupAutocomplete
                     label="Group ID"
-                    value={formik.values.groupId}
-                    error={formik.touched.groupId && Boolean(formik.errors.groupId)}
-                    helperText={formik.touched.groupId && formik.errors.groupId}
+                    value={formik.values.emailGroupId}
+                    error={formik.touched.emailGroupId && Boolean(formik.errors.emailGroupId)}
+                    helperText={formik.touched.emailGroupId && formik.errors.emailGroupId}
                     placeholder="Enter group id"
-                    onChange={(value) => formik.setFieldValue("groupId", value)}
+                    onChange={(value) => formik.setFieldValue("emailGroupId", value)}
                   />
                 </Grid>
                 <Grid item xs={6} sm={6}>

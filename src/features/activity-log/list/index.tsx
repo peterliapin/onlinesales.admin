@@ -1,7 +1,7 @@
 import { DataList } from "@components/data-list";
 import { ModuleWrapper } from "@components/module-wrapper";
 import { SearchBar } from "@components/search-bar";
-import { ActivityLogDto } from "@lib/network/swagger-client";
+import { ActivityLogDetailsDto } from "@lib/network/swagger-client";
 import { GridColDef } from "@mui/x-data-grid";
 import { useRequestContext } from "@providers/request-provider";
 import { useState } from "react";
@@ -16,7 +16,7 @@ import {
 } from "../constants";
 import { dataListBreadcrumbLinks } from "utils/constants";
 
-const columns: GridColDef<ActivityLogDto>[] = [
+const columns: GridColDef<ActivityLogDetailsDto>[] = [
   {
     field: "source",
     headerName: "Source",
