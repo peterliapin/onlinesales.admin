@@ -47,6 +47,7 @@ export const useAuthState = () => {
       const { idToken } = await instance.acquireTokenSilent({
         scopes: ["User.Read"],
         account,
+        forceRefresh: true,
       });
 
       return idToken;

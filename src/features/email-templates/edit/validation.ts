@@ -7,5 +7,5 @@ export const EmailTemplateEditValidationScheme = zod.object({
   fromEmail: zod.string().email(),
   fromName: zod.string(),
   language: zod.string(),
-  groupId: zod.number().optional(),
+  emailGroupId: zod.number().optional(),
 });
