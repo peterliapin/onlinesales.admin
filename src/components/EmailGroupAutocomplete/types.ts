@@ -14,4 +14,6 @@ export interface EmailGroupOption{
 
 export interface CreateNewEmailGroupProps {
   onChange: (value: EmailGroupOption) => void;
+  isOpen: boolean;
+  onClose: () => void;
 }
