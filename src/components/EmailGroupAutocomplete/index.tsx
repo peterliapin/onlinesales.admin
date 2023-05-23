@@ -67,7 +67,9 @@ export function EmailGroupAutocomplete({
   useEffect(() => {
     setValue({
       id: value,
-      label: isLoaded ? options.filter((v) => v.id === value)[0].label : "Loading...",
+      label: isLoaded ? 
+        options.filter((v) => v.id === value)[0]?.label || "Not selected" :
+        "Loading...",
     });
   }, [value]);
 
