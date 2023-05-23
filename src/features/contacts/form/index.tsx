@@ -76,7 +76,7 @@ export const ContactForm = ({ contact, updateContact, handleSave, isEdit }: Cont
         setIsInvalidNumber(true);
       } else {
         try {
-          handleSave();
+          await handleSave();
           handleSuccess();
         } catch (e) {
           console.log(e);

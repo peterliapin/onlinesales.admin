@@ -49,7 +49,6 @@ export const useAuthState = () => {
         account,
         forceRefresh: true,
       });
-
       return idToken;
     } catch {
       await instance.loginRedirect();

@@ -78,11 +78,8 @@ export const ContentList = () => {
         const totalCount = Number(headers.get(totalCountHeaderName)) || dataList.length;
         const promises: Promise<void>[] = [];
         let i = dataList.length;
-        console.log(totalCount);
         while (i < totalCount) {
-          console.log(i);
           const toLoadChunkLen = i + chunkLength < totalCount ? chunkLength : totalCount - i;
-          console.log(toLoadChunkLen);
           promises.push(
             (async () => {
               const filterWithPagination = {
