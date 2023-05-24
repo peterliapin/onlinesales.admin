@@ -25,6 +25,7 @@ export const OrderForm = ({ order, updateOrder, handleSave, isEdit }: OrderFormP
   const { client } = useRequestContext();
   const { setSaving } = useModuleWrapperContext();
   const handleNavigation = useCoreModuleNavigation();
+  const { setBusy } = useModuleWrapperContext();
 
   const [isLoading, setIsLoading] = useState(true);
   const [contactList, setContactList] = useState<ContactDetailsDto[]>([]);
@@ -40,7 +41,7 @@ export const OrderForm = ({ order, updateOrder, handleSave, isEdit }: OrderFormP
   const header = isEdit ? orderEditHeader : orderAddHeader;
 
   useEffect(() => {
-    (async () => {
+    setBusy(async () => {
       try {
         const { data } = await client.api.contactsDetail(order!.contactId);
         setSelectedContact(data);
@@ -48,7 +49,7 @@ export const OrderForm = ({ order, updateOrder, handleSave, isEdit }: OrderFormP
       } catch (e) {
         console.log(e);
       }
-    })();
+    });
   }, [order]);
 
   useEffect(() => {

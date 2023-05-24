@@ -34,12 +34,14 @@ import { ActionButtonContainer } from "@components/data-table/index.styled";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { isNotEmpty, isValidNumber, isValidOrEmptyNumber } from "utils/validators";
+import { useModuleWrapperContext } from "@providers/module-wrapper-provider";
 
 export const OrderViewBase = () => {
   const context = useRequestContext();
   const { client } = context;
   const { id } = useRouteParams(viewFormRoute);
   const { notificationsService } = useNotificationsService();
+  const { setBusy } = useModuleWrapperContext();
 
   const [order, setOrder] = useState<OrderDetailsDto | undefined>();
   const [contact, setContact] = useState<ContactDetailsDto>();
@@ -55,7 +57,7 @@ export const OrderViewBase = () => {
   const [isValidQuantity, setIsValidQuantity] = useState(true);
 
   useEffect(() => {
-    (async () => {
+    setBusy(async () => {
       try {
         const { data } = await client.api.ordersDetail(id);
         setContactState(data.contactId);
@@ -64,7 +66,7 @@ export const OrderViewBase = () => {
       } catch (e) {
         console.log(e);
       }
-    })();
+    });
   }, [client]);
 
   const setContactState = async (id: number) => {
