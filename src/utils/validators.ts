@@ -16,7 +16,7 @@ export const isValidNumber = (value: any) => {
   );
 };
 
-export const isNotEmpty = (value: string) => {
+export const isNotEmpty = (value: string | undefined | null) => {
   return requiredValidator.safeParse(value).success;
 };
 

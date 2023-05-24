@@ -18,3 +18,7 @@ export const orderFormBreadcrumbLinks: BreadcrumbLink[] = [
 ];
 
 export const orderGridSettingsStorageKey = "orderDataListSettings";
+
+export const orderEditHeader = "Edit Order";
+
+export const orderAddHeader = "Add Order";
