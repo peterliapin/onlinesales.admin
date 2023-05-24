@@ -1,3 +1,29 @@
+import { useState } from "react";
+import {
+  OrderCreateDto,
+  OrderDetailsDto,
+  OrderItemCreateDto,
+  OrderItemDetailsDto,
+} from "lib/network/swagger-client";
+import { useRequestContext } from "providers/request-provider";
+import { OrderForm } from "../form";
+
 export const OrderAdd = () => {
-  return <div>Add Order</div>;
+  const { client } = useRequestContext();
+
+  const [order, setOrder] = useState<OrderDetailsDto>({
+    contactId: 0,
+    currency: "",
+    exchangeRate: 0,
+    refNo: "",
+  });
+
+  const handleSave = async () => {
+    const createDto: OrderCreateDto = {
+      ...order,
+    };
+    const { data } = await client.api.ordersCreate(createDto!);
+  };
+
+  return <OrderForm order={order} updateOrder={setOrder} handleSave={handleSave} isEdit={false} />;
 };

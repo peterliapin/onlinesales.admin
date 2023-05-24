@@ -1,113 +1,153 @@
 import { ModuleWrapper } from "@components/module-wrapper";
 import { SavingBar } from "@components/SavingBar";
 import { useNotificationsService } from "@hooks";
-import {
-  AccountDetailsDto,
-  OrderDetailsDto,
-  OrderItemDetailsDto,
-} from "@lib/network/swagger-client";
+import { ContactDetailsDto, OrderDetailsDto } from "@lib/network/swagger-client";
+import { defaultFilterLimit } from "@lib/query";
 import { CoreModule } from "@lib/router";
-import { Autocomplete, Button, Card, CardContent, Divider, Grid, TextField } from "@mui/material";
+import { Autocomplete, Button, Card, CardContent, Grid, TextField } from "@mui/material";
 import { useModuleWrapperContext } from "@providers/module-wrapper-provider";
 import { useRequestContext } from "@providers/request-provider";
-import { ChangeEvent, SyntheticEvent, useEffect, useState } from "react";
-import { getContinentList, getCountryList, useCoreModuleNavigation } from "utils/helper";
-import { isNotEmpty, isValidOrEmptyNumber } from "utils/validators";
+import { truncate } from "fs";
+import { SyntheticEvent, useEffect, useState } from "react";
+import { useCoreModuleNavigation } from "utils/helper";
+import { isNotEmpty, isValidNumber, isValidOrEmptyNumber } from "utils/validators";
 import { orderAddHeader, orderEditHeader, orderFormBreadcrumbLinks } from "../constants";
 
 interface OrderFormProps {
-  order: OrderDetailsDto;
-  orderItems: OrderItemDetailsDto[];
+  order: OrderDetailsDto | undefined;
   updateOrder: (order: OrderDetailsDto) => void;
   handleSave: () => void;
   isEdit: boolean;
 }
 
-type Country = {
-  code: string;
-  name: string;
-};
-
-type Continent = {
-  code: string;
-  name: string;
-};
-
-export const OrderForm = ({
-  order,
-  orderItems,
-  updateOrder,
-  handleSave,
-  isEdit,
-}: OrderFormProps) => {
+export const OrderForm = ({ order, updateOrder, handleSave, isEdit }: OrderFormProps) => {
   const { notificationsService } = useNotificationsService();
-  const context = useRequestContext();
+  const { client } = useRequestContext();
   const { setSaving } = useModuleWrapperContext();
   const handleNavigation = useCoreModuleNavigation();
 
-  const [countryList, setCountryList] = useState<Country[]>([]);
-  const [continentList, setContinentList] = useState<Continent[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [newSocialMediaKey, setNewSocialMediaKey] = useState("");
-  const [newSocialMediaValue, setNewSocialMediaValue] = useState("");
-  const [nameIsEmpty, setNameIsEmpty] = useState(false);
-  const [isValidRevenue, setIsValidRevenue] = useState(true);
-
+  const [contactList, setContactList] = useState<ContactDetailsDto[]>([]);
+  const [timer, setTimer] = useState<NodeJS.Timeout | null>(null);
+  const [open, setOpen] = useState(false);
+  const [selectedContact, setSelectedContact] = useState<ContactDetailsDto>();
+  const [isValidRefNo, setIsValidRefNo] = useState(true);
+  const [isValidOrderNo, setIsValidOrderNo] = useState(true);
+  const [isValidContactId, setIsValidContactId] = useState(true);
+  const [isValidCurrency, setIsValidCurrency] = useState(true);
+  const [isValidExchangeRate, setIsValidExchangeRate] = useState(true);
+  const loading = open && contactList.length === 0;
   const header = isEdit ? orderEditHeader : orderAddHeader;
 
   useEffect(() => {
     (async () => {
-      const countries = await getCountryList(context);
-      const continents = await getContinentList(context);
-      if (countries) {
-        setCountryList(Object.entries(countries).map(([code, name]) => ({ code, name })));
-      } else {
-        notificationsService.error("Server error: country list not available.");
+      try {
+        const { data } = await client.api.contactsDetail(order!.contactId);
+        setSelectedContact(data);
+        setIsLoading(false);
+      } catch (e) {
+        console.log(e);
       }
-      if (continents) {
-        setContinentList(Object.entries(continents).map(([code, name]) => ({ code, name })));
-      } else {
-        notificationsService.error("Server error: continents list not available.");
-      }
-      setIsLoading(false);
     })();
-  }, []);
+  }, [order]);
+
+  useEffect(() => {
+    if (!open) {
+      setContactList([]);
+    }
+  }, [open]);
+
+  const loadContacts = async (e: SyntheticEvent<Element, Event>, text: string) => {
+    if (e.type != "change") return;
+
+    if (timer) {
+      clearTimeout(timer);
+    }
+    setTimer(
+      setTimeout(async () => {
+        const { data } = await client.api.contactsList({
+          query: `${text}&filter[limit]=${defaultFilterLimit}`,
+        });
+        setContactList(data);
+        setIsLoading(false);
+      }, 800)
+    );
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+    const updatedOrder: OrderDetailsDto = {
+      ...order!,
+      [name]: value,
+    };
+    updateOrder(updatedOrder);
   };
 
-  const handleTagInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target;
-  };
+  const validateAndSave = () =>
+    setSaving(async () => {
+      try {
+        if (isValid()) {
+          await handleSave();
+          handleSuccess();
+        }
+      } catch (e) {
+        console.log(e);
+        notificationsService.error("Server error occurred.");
+      }
+    });
 
-  const validateAndSave = () => setSaving(async () => {});
+  const isValid = () => {
+    setIsValidRefNo(true);
+    setIsValidOrderNo(true);
+    setIsValidContactId(true);
+    setIsValidCurrency(true);
+    setIsValidExchangeRate(true);
+
+    if (!isValidNumber(order && order.contactId)) {
+      setIsValidContactId(false);
+      return false;
+    }
+    if (!isNotEmpty(order && order.refNo)) {
+      setIsValidRefNo(false);
+      return false;
+    }
+    if (!isNotEmpty(order && order.orderNumber)) {
+      setIsValidOrderNo(false);
+      return false;
+    }
+    if (!isNotEmpty(order && order.currency)) {
+      setIsValidCurrency(false);
+      return false;
+    }
+    if (!isValidOrEmptyNumber(order && order.exchangeRate)) {
+      setIsValidExchangeRate(false);
+      return false;
+    }
+    return true;
+  };
 
   const handleSuccess = () => {
-    notificationsService.success(`Account ${isEdit ? "updated" : "added"} successfully.`);
-    handleNavigation(CoreModule.accounts);
+    notificationsService.success(`Order ${isEdit ? "updated" : "added"} successfully.`);
+    handleNavigation(CoreModule.orders);
   };
 
   const handleCancel = () => {
-    handleNavigation(CoreModule.accounts);
+    handleNavigation(CoreModule.orders);
   };
 
-  const handleCountryChange = (
-    e: SyntheticEvent<Element, Event>,
-    value: { code: string; name: string } | null
-  ) => {
-    if (value) {
-    }
+  const handleContactChange = (value: ContactDetailsDto) => {
+    setSelectedContact(value);
+    const updatedOrder: OrderDetailsDto = {
+      ...order!,
+      ["contactId"]: value.id!,
+    };
+    updateOrder(updatedOrder);
   };
 
-  const handleOrderItemChange = (
-    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-    index: number
-  ) => {};
-
-  const handleOrderItemRemove = (index: number) => {};
-
-  const handleOrderItemAdd = () => {};
+  const getOptionLabel = (contact: ContactDetailsDto) => {
+    if (contact.firstName || contact.lastName) return `${contact.firstName} ${contact.lastName}`;
+    else return contact.email;
+  };
 
   return (
     <ModuleWrapper
@@ -115,155 +155,147 @@ export const OrderForm = ({
       currentBreadcrumb={header}
       saveIndicatorElement={<SavingBar />}
     >
-      <Card>
-        <CardContent>
-          <Grid container spacing={3}>
-            <Grid xs={12} sm={6} item>
-              <TextField
-                label="Contact Name"
-                name="contactId"
-                value={order.contactId || ""}
-                placeholder="Enter Contact Name"
-                variant="outlined"
-                onChange={handleInputChange}
-                fullWidth
-              ></TextField>
-            </Grid>
-            <Grid xs={12} sm={6} item>
-              <TextField
-                label="Ref No"
-                name="refNo"
-                value={order.refNo || ""}
-                placeholder="Enter Ref No"
-                variant="outlined"
-                onChange={handleInputChange}
-                fullWidth
-              ></TextField>
-            </Grid>
-            <Grid xs={12} sm={6} item>
-              <TextField
-                label="Order No"
-                name="orderNumber"
-                value={order.orderNumber || ""}
-                placeholder="Enter Order Number"
-                variant="outlined"
-                onChange={handleInputChange}
-                fullWidth
-              ></TextField>
-            </Grid>
-            <Grid xs={12} sm={6} item>
-              <TextField
-                label="Affiliate Name"
-                name="affiliateName"
-                value={""}
-                placeholder="Enter Affiliate Name"
-                variant="outlined"
-                onChange={handleInputChange}
-                fullWidth
-              ></TextField>
-            </Grid>
-            <Grid xs={12} sm={6} item>
-              <TextField
-                label="Exchange Rate"
-                name="exchangeRate"
-                value={order.exchangeRate || ""}
-                placeholder="Enter Exchange Rate"
-                variant="outlined"
-                onChange={handleInputChange}
-                fullWidth
-              ></TextField>
-            </Grid>
-            <Grid xs={12} sm={6} item>
-              <TextField
-                label="Currency"
-                name="currency"
-                value={order.currency || ""}
-                placeholder="Enter Currency"
-                variant="outlined"
-                onChange={handleInputChange}
-                fullWidth
-              ></TextField>
-            </Grid>
-            <Grid xs={12} sm={6} item>
-              <TextField
-                label="Data"
-                name="data"
-                value={order.data}
-                placeholder="Enter Data"
-                variant="outlined"
-                onChange={handleTagInputChange}
-                fullWidth
-              ></TextField>
-            </Grid>
-            <Grid xs={12} sm={6} item>
-              <TextField
-                label="Source"
-                name="source"
-                value={order.source || ""}
-                placeholder="Enter Source"
-                variant="outlined"
-                onChange={handleInputChange}
-                fullWidth
-              ></TextField>
-            </Grid>
-            <Grid xs={12} sm={6} item></Grid>
-            <Grid xs={12} sm={12} item>
-              <Divider textAlign="left">Order Items</Divider>
+      {isEdit && isLoading ? (
+        <div>Loading...</div>
+      ) : (
+        order && (
+          <Card>
+            <CardContent>
               <Grid container spacing={3}>
-                {orderItems.map((item, index) => (
-                  <>
-                    <Grid key={index} xs={12} sm={4} item>
+                <Grid xs={12} sm={6} item>
+                  <Autocomplete
+                    disablePortal
+                    open={open}
+                    onOpen={() => {
+                      setOpen(true);
+                    }}
+                    onClose={() => {
+                      setOpen(false);
+                    }}
+                    options={contactList}
+                    getOptionLabel={(option) => getOptionLabel(option)}
+                    value={selectedContact || null}
+                    onChange={(event, value) => handleContactChange(value!)}
+                    onInputChange={(event, value) => {
+                      loadContacts(event, value);
+                    }}
+                    loading={loading}
+                    filterOptions={(x) => x}
+                    fullWidth
+                    renderInput={(params) => (
                       <TextField
-                        label="Product Name"
-                        value={item.productName}
-                        variant="outlined"
-                        fullWidth
-                        disabled
+                        {...params}
+                        label="Contact Name"
+                        error={!isValidContactId}
+                        helperText={!isValidContactId ? "Contact cannot be empty" : ""}
                       />
-                    </Grid>
-                    <Grid key={index} xs={12} sm={4} item>
-                      <TextField
-                        label="License Code"
-                        value={item.licenseCode}
-                        fullWidth
-                        onChange={(event) => handleOrderItemChange(event, index)}
-                      />
-                    </Grid>
-                    <Grid key={index} xs={12} sm={4} item>
-                      <Button onClick={() => handleOrderItemRemove(index)}>Remove</Button>
-                    </Grid>
-                  </>
-                ))}
-                <Grid xs={12} sm={4} item>
-                  <Button onClick={handleOrderItemAdd}>Add</Button>
+                    )}
+                  />
+                </Grid>
+                <Grid xs={12} sm={6} item>
+                  <TextField
+                    label="Ref No"
+                    name="refNo"
+                    value={order.refNo || ""}
+                    placeholder="Enter Ref No"
+                    variant="outlined"
+                    onChange={handleInputChange}
+                    error={!isValidRefNo}
+                    helperText={!isValidRefNo ? "Ref No cannot be empty" : ""}
+                    fullWidth
+                  ></TextField>
+                </Grid>
+                <Grid xs={12} sm={6} item>
+                  <TextField
+                    label="Order No"
+                    name="orderNumber"
+                    value={order.orderNumber || ""}
+                    placeholder="Enter Order Number"
+                    variant="outlined"
+                    error={!isValidOrderNo}
+                    helperText={!isValidOrderNo ? "Order Number cannot be empty" : ""}
+                    onChange={handleInputChange}
+                    fullWidth
+                  ></TextField>
+                </Grid>
+                <Grid xs={12} sm={6} item>
+                  <TextField
+                    label="Affiliate Name"
+                    name="affiliateName"
+                    value={order.affiliateName || ""}
+                    placeholder="Enter Affiliate Name"
+                    variant="outlined"
+                    onChange={handleInputChange}
+                    fullWidth
+                  ></TextField>
+                </Grid>
+                <Grid xs={12} sm={6} item>
+                  <TextField
+                    label="Exchange Rate"
+                    name="exchangeRate"
+                    value={order.exchangeRate || ""}
+                    placeholder="Enter Exchange Rate"
+                    variant="outlined"
+                    error={!isValidExchangeRate}
+                    helperText={
+                      !isValidExchangeRate ? "Exchange rate should be a valid number" : ""
+                    }
+                    onChange={handleInputChange}
+                    fullWidth
+                  ></TextField>
+                </Grid>
+                <Grid xs={12} sm={6} item>
+                  <TextField
+                    label="Currency"
+                    name="currency"
+                    value={order.currency || ""}
+                    placeholder="Enter Currency"
+                    variant="outlined"
+                    error={!isValidCurrency}
+                    helperText={!isValidCurrency ? "Currency cannot be empty" : ""}
+                    onChange={handleInputChange}
+                    fullWidth
+                  ></TextField>
+                </Grid>
+                <Grid xs={12} sm={6} item>
+                  <TextField
+                    label="Source"
+                    name="source"
+                    value={order.source || ""}
+                    placeholder="Enter Source"
+                    variant="outlined"
+                    onChange={handleInputChange}
+                    fullWidth
+                  ></TextField>
+                </Grid>
+                <Grid xs={12} sm={6} item></Grid>
+                <Grid item xs={6}>
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    color="primary"
+                    onClick={handleCancel}
+                    fullWidth
+                  >
+                    Cancel
+                  </Button>
+                </Grid>
+                <Grid item xs={6}>
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    color="primary"
+                    onClick={validateAndSave}
+                    fullWidth
+                  >
+                    Save
+                  </Button>
                 </Grid>
               </Grid>
-            </Grid>
-            <Grid item xs={6}>
-              <Button
-                type="submit"
-                variant="contained"
-                color="primary"
-                onClick={handleCancel}
-                fullWidth
-              >
-                Cancel
-              </Button>
-            </Grid>
-            <Grid item xs={6}>
-              <Button
-                type="submit"
-                variant="contained"
-                color="primary"
-                onClick={validateAndSave}
-                fullWidth
-              >
-                Save
-              </Button>
-            </Grid>
-          </Grid>
-        </CardContent>
-      </Card>
+            </CardContent>
+          </Card>
+        )
+      )}
     </ModuleWrapper>
   );
 };
