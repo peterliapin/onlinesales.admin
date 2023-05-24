@@ -80,6 +80,12 @@ export const Contacts = () => {
 
   const columns: GridColDef<ContactDetailsDto>[] = [
     {
+      field: "prefix",
+      headerName: "Prefix",
+      flex: 1,
+      type: "string",
+    },    
+    {
       field: "firstName",
       headerName: "Name",
       flex: 4,
@@ -99,8 +105,43 @@ export const Contacts = () => {
       ),
     },
     {
+      field: "middleName",
+      headerName: "Middle Name",
+      flex: 2,
+      type: "string",
+    },
+    {
       field: "lastName",
       headerName: "Last Name",
+      flex: 2,
+      type: "string",
+    },
+    {
+      field: "birthday",
+      headerName: "Birthday",
+      flex: 2,
+      type: "date",
+      valueGetter: (params) => {
+        const birthday = params.value as string;
+        const formattedDate = new Date(birthday).toLocaleDateString();
+        return formattedDate;
+      },
+    },
+    {
+      field: "jobTitle",
+      headerName: "Job Title",
+      flex: 2,
+      type: "string",
+    },
+    {
+      field: "companyName",
+      headerName: "Company Name",
+      flex: 2,
+      type: "string",
+    },
+    {
+      field: "department",
+      headerName: "Department",
       flex: 2,
       type: "string",
     },
@@ -112,7 +153,12 @@ export const Contacts = () => {
     },
     {
       field: "address1",
-      headerName: "Address",
+      headerName: "Address 1",
+      flex: 4,
+    },
+    {
+      field: "address2",
+      headerName: "Address 2",
       flex: 4,
     },
     {

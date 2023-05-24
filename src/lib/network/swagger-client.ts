@@ -1636,15 +1636,32 @@ export interface CommentUpdateDto {
 
 export interface ContactCreateDto {
   /**
-   * Last Name
+   * Prefix
    * @example "string"
    */
-  lastName?: string | null;
+  prefix?: string | null;
   /**
    * First Name
    * @example "string"
    */
   firstName?: string | null;
+  /**
+   * Middle Name
+   * @example "string"
+   */
+  middleName?: string | null;
+  /**
+   * Last Name
+   * @example "string"
+   */
+  lastName?: string | null;
+  /**
+   * Birthday
+   * @format date-time
+   * @pattern ^(\d{4})-(1[0-2]|0[1-9])-(3[01]|[12][0-9]|0[1-9])T(2[0-4]|1[0-9]|0[1-9]):(2[0-4]|1[0-9]|0[1-9]):([1-5]?0[0-9]).(\d{7})Z$
+   * @example "2023-04-18T12:00:00.0000000Z"
+   */
+  birthday?: string | null;
   /**
    * Continent Code
    * @example "ZZ"
@@ -1922,6 +1939,21 @@ export interface ContactCreateDto {
    */
   address2?: string | null;
   /**
+   * Job Title
+   * @example "string"
+   */
+  jobTitle?: string | null;
+  /**
+   * Company Name
+   * @example "string"
+   */
+  companyName?: string | null;
+  /**
+   * Department
+   * @example "string"
+   */
+  department?: string | null;
+  /**
    * State
    * @example "string"
    */
@@ -1947,6 +1979,11 @@ export interface ContactCreateDto {
    * @example "string"
    */
   language?: string | null;
+  /**
+   * Social Media
+   * @example {"key1":"value1","key2":"value2"}
+   */
+  socialMedia?: Record<string, string>;
   /**
    * Unsubscribe Id
    * @format int32
@@ -1970,15 +2007,32 @@ export interface ContactCreateDto {
 
 export interface ContactDetailsDto {
   /**
-   * Last Name
+   * Prefix
    * @example "string"
    */
-  lastName?: string | null;
+  prefix?: string | null;
   /**
    * First Name
    * @example "string"
    */
   firstName?: string | null;
+  /**
+   * Middle Name
+   * @example "string"
+   */
+  middleName?: string | null;
+  /**
+   * Last Name
+   * @example "string"
+   */
+  lastName?: string | null;
+  /**
+   * Birthday
+   * @format date-time
+   * @pattern ^(\d{4})-(1[0-2]|0[1-9])-(3[01]|[12][0-9]|0[1-9])T(2[0-4]|1[0-9]|0[1-9]):(2[0-4]|1[0-9]|0[1-9]):([1-5]?0[0-9]).(\d{7})Z$
+   * @example "2023-04-18T12:00:00.0000000Z"
+   */
+  birthday?: string | null;
   /**
    * Continent Code
    * @example "ZZ"
@@ -2256,6 +2310,21 @@ export interface ContactDetailsDto {
    */
   address2?: string | null;
   /**
+   * Job Title
+   * @example "string"
+   */
+  jobTitle?: string | null;
+  /**
+   * Company Name
+   * @example "string"
+   */
+  companyName?: string | null;
+  /**
+   * Department
+   * @example "string"
+   */
+  department?: string | null;
+  /**
    * State
    * @example "string"
    */
@@ -2281,6 +2350,11 @@ export interface ContactDetailsDto {
    * @example "string"
    */
   language?: string | null;
+  /**
+   * Social Media
+   * @example {"key1":"value1","key2":"value2"}
+   */
+  socialMedia?: Record<string, string>;
   /**
    * Unsubscribe Id
    * @format int32
@@ -2397,15 +2471,32 @@ export interface ContactImportDto {
    */
   email?: string | null;
   /**
-   * Last Name
+   * Prefix
    * @example "string"
    */
-  lastName?: string | null;
+  prefix?: string | null;
   /**
    * First Name
    * @example "string"
    */
   firstName?: string | null;
+  /**
+   * Middle Name
+   * @example "string"
+   */
+  middleName?: string | null;
+  /**
+   * Last Name
+   * @example "string"
+   */
+  lastName?: string | null;
+  /**
+   * Birthday
+   * @format date-time
+   * @pattern ^(\d{4})-(1[0-2]|0[1-9])-(3[01]|[12][0-9]|0[1-9])T(2[0-4]|1[0-9]|0[1-9]):(2[0-4]|1[0-9]|0[1-9]):([1-5]?0[0-9]).(\d{7})Z$
+   * @example "2023-04-18T12:00:00.0000000Z"
+   */
+  birthday?: string | null;
   /**
    * Continent Code
    * @example "ZZ"
@@ -2683,6 +2774,21 @@ export interface ContactImportDto {
    */
   address2?: string | null;
   /**
+   * Job Title
+   * @example "string"
+   */
+  jobTitle?: string | null;
+  /**
+   * Company Name
+   * @example "string"
+   */
+  companyName?: string | null;
+  /**
+   * Department
+   * @example "string"
+   */
+  department?: string | null;
+  /**
    * State
    * @example "string"
    */
@@ -2708,6 +2814,11 @@ export interface ContactImportDto {
    * @example "string"
    */
   language?: string | null;
+  /**
+   * Social Media
+   * @example {"key1":"value1","key2":"value2"}
+   */
+  socialMedia?: Record<string, string>;
   /**
    * Unsubscribe Id
    * @format int32
@@ -2735,15 +2846,32 @@ export interface ContactImportDto {
 
 export interface ContactUpdateDto {
   /**
-   * Last Name
+   * Prefix
    * @example "string"
    */
-  lastName?: string | null;
+  prefix?: string | null;
   /**
    * First Name
    * @example "string"
    */
   firstName?: string | null;
+  /**
+   * Middle Name
+   * @example "string"
+   */
+  middleName?: string | null;
+  /**
+   * Last Name
+   * @example "string"
+   */
+  lastName?: string | null;
+  /**
+   * Birthday
+   * @format date-time
+   * @pattern ^(\d{4})-(1[0-2]|0[1-9])-(3[01]|[12][0-9]|0[1-9])T(2[0-4]|1[0-9]|0[1-9]):(2[0-4]|1[0-9]|0[1-9]):([1-5]?0[0-9]).(\d{7})Z$
+   * @example "2023-04-18T12:00:00.0000000Z"
+   */
+  birthday?: string | null;
   /**
    * Continent Code
    * @example "ZZ"
@@ -3021,6 +3149,21 @@ export interface ContactUpdateDto {
    */
   address2?: string | null;
   /**
+   * Job Title
+   * @example "string"
+   */
+  jobTitle?: string | null;
+  /**
+   * Company Name
+   * @example "string"
+   */
+  companyName?: string | null;
+  /**
+   * Department
+   * @example "string"
+   */
+  department?: string | null;
+  /**
    * State
    * @example "string"
    */
@@ -3046,6 +3189,11 @@ export interface ContactUpdateDto {
    * @example "string"
    */
   language?: string | null;
+  /**
+   * Social Media
+   * @example {"key1":"value1","key2":"value2"}
+   */
+  socialMedia?: Record<string, string>;
   /**
    * Unsubscribe Id
    * @format int32
@@ -3915,6 +4063,113 @@ export interface EmailTemplateUpdateDto {
    * @example 1
    */
   emailGroupId?: number | null;
+}
+
+export interface ImapAccountCreateDto {
+  /**
+   * Host
+   * @minLength 1
+   * @example "string"
+   */
+  host: string;
+  /**
+   * User Name
+   * @minLength 1
+   * @example "string"
+   */
+  userName: string;
+  /**
+   * Port
+   * @format int32
+   * @example 1
+   */
+  port: number;
+  /**
+   * Use Ssl
+   * @example true
+   */
+  useSsl: boolean;
+  /**
+   * Password
+   * @minLength 1
+   * @example "string"
+   */
+  password: string;
+}
+
+export interface ImapAccountDetailsDto {
+  /**
+   * Host
+   * @minLength 1
+   * @example "string"
+   */
+  host: string;
+  /**
+   * User Name
+   * @minLength 1
+   * @example "string"
+   */
+  userName: string;
+  /**
+   * Port
+   * @format int32
+   * @example 1
+   */
+  port: number;
+  /**
+   * Use Ssl
+   * @example true
+   */
+  useSsl: boolean;
+  /**
+   * Id
+   * @format int32
+   * @example 1
+   */
+  id?: number;
+  /**
+   * Created At
+   * @format date-time
+   * @pattern ^(\d{4})-(1[0-2]|0[1-9])-(3[01]|[12][0-9]|0[1-9])T(2[0-4]|1[0-9]|0[1-9]):(2[0-4]|1[0-9]|0[1-9]):([1-5]?0[0-9]).(\d{7})Z$
+   * @example "2023-04-18T12:00:00.0000000Z"
+   */
+  createdAt?: string;
+  /**
+   * Updated At
+   * @format date-time
+   * @pattern ^(\d{4})-(1[0-2]|0[1-9])-(3[01]|[12][0-9]|0[1-9])T(2[0-4]|1[0-9]|0[1-9]):(2[0-4]|1[0-9]|0[1-9]):([1-5]?0[0-9]).(\d{7})Z$
+   * @example "2023-04-18T12:00:00.0000000Z"
+   */
+  updatedAt?: string | null;
+}
+
+export interface ImapAccountUpdateDto {
+  /**
+   * Host
+   * @example "string"
+   */
+  host?: string | null;
+  /**
+   * User Name
+   * @example "string"
+   */
+  userName?: string | null;
+  /**
+   * Password
+   * @example "string"
+   */
+  password?: string | null;
+  /**
+   * Port
+   * @format int32
+   * @example 1
+   */
+  port?: number | null;
+  /**
+   * Use Ssl
+   * @example true
+   */
+  useSsl?: boolean | null;
 }
 
 export interface ImportError {
@@ -6133,6 +6388,101 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         method: "GET",
         query: query,
         secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Users
+     * @name UsersImapAccountsDetail
+     * @request GET:/api/users/{userId}/imap-accounts/{id}
+     * @secure
+     */
+    usersImapAccountsDetail: (userId: string, id: number, params: RequestParams = {}) =>
+      this.request<ImapAccountDetailsDto, void | ProblemDetails>({
+        path: `/api/users/${userId}/imap-accounts/${id}`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Users
+     * @name UsersImapAccountsPartialUpdate
+     * @request PATCH:/api/users/{userId}/imap-accounts/{id}
+     * @secure
+     */
+    usersImapAccountsPartialUpdate: (
+      userId: string,
+      id: number,
+      data: ImapAccountUpdateDto,
+      params: RequestParams = {},
+    ) =>
+      this.request<ImapAccountDetailsDto, void | ProblemDetails>({
+        path: `/api/users/${userId}/imap-accounts/${id}`,
+        method: "PATCH",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Users
+     * @name UsersImapAccountsDelete
+     * @request DELETE:/api/users/{userId}/imap-accounts/{id}
+     * @secure
+     */
+    usersImapAccountsDelete: (userId: string, id: number, params: RequestParams = {}) =>
+      this.request<void, void | ProblemDetails>({
+        path: `/api/users/${userId}/imap-accounts/${id}`,
+        method: "DELETE",
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Users
+     * @name UsersImapAccountsDetail2
+     * @request GET:/api/users/{userId}/imap-accounts
+     * @originalName usersImapAccountsDetail
+     * @duplicate
+     * @secure
+     */
+    usersImapAccountsDetail2: (userId: string, params: RequestParams = {}) =>
+      this.request<ImapAccountDetailsDto[], void | ProblemDetails>({
+        path: `/api/users/${userId}/imap-accounts`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Users
+     * @name UsersImapAccountsCreate
+     * @request POST:/api/users/{userId}/imap-accounts
+     * @secure
+     */
+    usersImapAccountsCreate: (userId: string, data: ImapAccountCreateDto, params: RequestParams = {}) =>
+      this.request<ImapAccountDetailsDto, void | ProblemDetails>({
+        path: `/api/users/${userId}/imap-accounts`,
+        method: "POST",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
         ...params,
       }),
 
