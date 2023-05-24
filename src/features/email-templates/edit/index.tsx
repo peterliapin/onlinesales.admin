@@ -286,42 +286,47 @@ export const EmailTemplateEdit = () => {
                     )}
                   />
                 </Grid>
+                <Grid item xs={12} sm={12}>
+                  <Editor
+                    onInit={(evt, editor) => editorRef.current = editor}
+                    value={formik.values.bodyTemplate}
+                    onEditorChange={
+                      (currentValue, editor) => formik.setFieldValue("bodyTemplate", currentValue)
+                    }
+                    apiKey={TINYMCE_API_KEY}
+                    init={{
+                      height: 500,
+                      menubar: "file edit view insert format tools table help",
+                      plugins: 
+                        `print preview paste importcss searchreplace autolink
+                        autosave save directionality code visualblocks visualchars fullscreen
+                        image link media template codesample table charmap hr pagebreak
+                        nonbreaking anchor toc insertdatetime advlist lists wordcount
+                        imagetools textpattern noneditable help charmap quickbars emoticons`,
+                      toolbar: 
+                        `undo redo | bold italic underline strikethrough | fontselect
+                        fontsizeselect formatselect | alignleft aligncenter alignright
+                        alignjustify | outdent indent |  numlist bullist | forecolor
+                        backcolor removeformat | pagebreak | charmap emoticons | 
+                        fullscreen  preview save print | insertfile image media template
+                        link anchor codesample | ltr rtl`,
+                      content_style: `body { font-family:Helvetica,Arial,sans-serif;
+                                             font-size:14px }`
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={6} sm={6}>
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    sx={{
+                      marginTop: "1rem",
+                    }}
+                  >
+                    Save
+                  </Button>
+                </Grid>
               </Grid>
-              <Editor
-                onInit={(evt, editor) => editorRef.current = editor}
-                value={formik.values.bodyTemplate}
-                onEditorChange={
-                  (currentValue, editor) => formik.setFieldValue("bodyTemplate", currentValue)
-                }
-                apiKey={TINYMCE_API_KEY}
-                init={{
-                  height: 500,
-                  menubar: "file edit view insert format tools table help",
-                  plugins: 
-                    `print preview paste importcss searchreplace autolink
-                     autosave save directionality code visualblocks visualchars fullscreen
-                     image link media template codesample table charmap hr pagebreak
-                     nonbreaking anchor toc insertdatetime advlist lists wordcount
-                     imagetools textpattern noneditable help charmap quickbars emoticons`,
-                  toolbar: 
-                    `undo redo | bold italic underline strikethrough | fontselect
-                     fontsizeselect formatselect | alignleft aligncenter alignright
-                     alignjustify | outdent indent |  numlist bullist | forecolor
-                     backcolor removeformat | pagebreak | charmap emoticons | 
-                     fullscreen  preview save print | insertfile image media template
-                     link anchor codesample | ltr rtl`,
-                  content_style: "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }"
-                }}
-              />
-              <Button
-                type="submit"
-                variant="contained"
-                sx={{
-                  marginTop: "1rem",
-                }}
-              >
-                Save
-              </Button>
             </form>
           </CardContent>
         </Card>

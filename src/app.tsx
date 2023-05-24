@@ -12,6 +12,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { UserProvider } from "@providers/user-provider";
 import { ErrorDetailsModalProvider } from "@providers/error-details-modal-provider";
+import "react-toastify/dist/ReactToastify.css";
 
 export const App = () => {
   return (

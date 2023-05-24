@@ -7,12 +7,31 @@ import {
   useMemo,
   useState,
 } from "react";
-import { Api } from "lib/network/swagger-client";
+import { Api, ApiConfig } from "lib/network/swagger-client";
 import { useAuthState } from "./auth-provider";
 
 type getTokenFn = () => Promise<string | undefined>;
 
-const client = new Api<getTokenFn>({
+
+class ApiExtended<getTokenFn> extends Api<getTokenFn>{
+  constructor(apiConfig? : ApiConfig<getTokenFn>){
+    super(apiConfig);
+    Object.keys(this.api).forEach((key) => {
+      const oldFunc = (this.api as unknown as any)[key];
+      (this.api as unknown as any)[key] = (...args: any[]) => {
+        const response = oldFunc(...args);
+        if (response.error){
+          throw response.error;
+        }
+        return response;
+      };
+    });
+  }
+  refreshFunc?: () => void;
+}
+
+
+const client = new ApiExtended<getTokenFn>({
   baseUrl: process.env.CORE_API,
   securityWorker: async (getToken) => {
     const token = await getToken?.();
@@ -30,7 +49,7 @@ const client = new Api<getTokenFn>({
 });
 
 export type RequestContextType = {
-  client: Api<getTokenFn>;
+  client: ApiExtended<getTokenFn>;
 };
 
 const requestContext = createContext<RequestContextType>({ client });
@@ -38,7 +57,6 @@ const requestContext = createContext<RequestContextType>({ client });
 export const RequestProvider = memo(function RequestProvider({ children }: PropsWithChildren) {
   const { getToken } = useAuthState();
   const [isReady, setIsReady] = useState<boolean>(false);
-
   useEffect(() => {
     client.setSecurityData(getToken);
     setIsReady(true);

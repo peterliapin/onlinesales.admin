@@ -29,15 +29,13 @@ const Transition = React.forwardRef(function Transition(
 });
 
 export const CreateNewEmailGroup = ({
-  onChange
+  onChange,
+  isOpen,
+  onClose,
 }: CreateNewEmailGroupProps) => {
   const { notificationsService } = useNotificationsService();
   const { Show: showErrorModal } = useErrorDetailsModal()!;
   const { client } = useRequestContext();
-  const [isOpen, setOpen] = useState<boolean>(false);
-  const onClose = () => {
-    setOpen(false);
-  };
   
 
   const submitFunc = async (
@@ -125,11 +123,6 @@ export const CreateNewEmailGroup = ({
           </DialogActions>
         </form>
       </Dialog>
-      <Button
-        onClick={() => setOpen(true)}
-      >
-        Create new group
-      </Button>
     </>
   );
 };

@@ -79,7 +79,7 @@ export const ContactView = () => {
     setOpenConfirmation(false);
     try {
       await client.api.contactsDelete(contact.id!);
-      notificationsService.success("Contact deleted!.");
+      notificationsService.success("Contact deleted");
       handleNavigation(CoreModule.contacts);
     } catch (error) {
       console.log(error);

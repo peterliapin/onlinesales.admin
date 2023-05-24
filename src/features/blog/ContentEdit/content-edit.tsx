@@ -186,7 +186,7 @@ export const ContentEdit = (props: ContentEditProps) => {
         }
         return {
           title: errMessage,
-          onClick: () => {showErrorModal(errDetails);}
+          onClick: errDetails.length > 0 ? () => {showErrorModal(errDetails);} : undefined,
         };
       },
     });
