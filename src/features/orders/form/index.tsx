@@ -157,7 +157,7 @@ export const OrderForm = ({ order, updateOrder, handleSave, isEdit }: OrderFormP
       saveIndicatorElement={<SavingBar />}
     >
       {isEdit && isLoading ? (
-        <div>Loading...</div>
+        <div />
       ) : (
         order && (
           <Card>

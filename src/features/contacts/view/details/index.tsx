@@ -22,11 +22,14 @@ import { getCountryList, useCoreModuleNavigation } from "utils/helper";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useNotificationsService } from "@hooks";
 import { DataView } from "components/data-view";
+import { useModuleWrapperContext } from "@providers/module-wrapper-provider";
 
 export const ContactView = () => {
   const { notificationsService } = useNotificationsService();
   const context = useRequestContext();
   const handleNavigation = useCoreModuleNavigation();
+  const { setBusy } = useModuleWrapperContext();
+
   const { client } = context;
   const { id } = useRouteParams(viewFormRoute);
   const [contact, setContact] = useState<ContactDetailsDto>({
@@ -44,7 +47,7 @@ export const ContactView = () => {
   ];
 
   useEffect(() => {
-    (async () => {
+    setBusy(async () => {
       try {
         const { data } = await client.api.contactsDetail(id);
         setCountry(data.countryCode);
@@ -52,7 +55,7 @@ export const ContactView = () => {
       } catch (e) {
         console.log(e);
       }
-    })();
+    });
   }, [client]);
 
   const setCountry = async (countryCode: string | null | undefined) => {

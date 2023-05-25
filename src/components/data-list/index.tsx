@@ -13,6 +13,7 @@ import { DataTableGrid } from "@components/data-table";
 import useLocalStorage from "use-local-storage";
 import { dataListSettings, GridDataFilterState } from "utils/types";
 import { useNotificationsService } from "@hooks";
+import { useModuleWrapperContext } from "@providers/module-wrapper-provider";
 
 type dataListProps = {
   columns: GridColDef<any>[];
@@ -38,6 +39,7 @@ export const DataList = ({
   showViewButton = true,
 }: dataListProps) => {
   const { notificationsService } = useNotificationsService();
+  const { setBusy } = useModuleWrapperContext();
   const [modelData, setModelData] = useState<any[] | undefined>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [totalRowCount, setTotalRowCount] = useState(0);
@@ -156,7 +158,7 @@ export const DataList = ({
   };
 
   const getDataListAsync = () => {
-    (async () => {
+    setBusy(async () => {
       const result = await getModelDataList(
         `${searchTerm}&${basicFilterQuery}${whereFilterQuery}`,
         `${searchTerm}&${basicExportFilterQuery}${whereFilterQuery}`
@@ -168,7 +170,7 @@ export const DataList = ({
       } else {
         setModelData(undefined);
       }
-    })();
+    });
   };
 
   const updateGridSettings = (gridSettings: dataListSettings) => {

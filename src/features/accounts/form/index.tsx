@@ -31,7 +31,7 @@ type Continent = {
 export const AccountForm = ({ account, updateAccount, handleSave, isEdit }: AccountFormProps) => {
   const { notificationsService } = useNotificationsService();
   const context = useRequestContext();
-  const { setSaving } = useModuleWrapperContext();
+  const { setSaving, setBusy } = useModuleWrapperContext();
   const handleNavigation = useCoreModuleNavigation();
 
   const [countryList, setCountryList] = useState<Country[]>([]);
@@ -45,7 +45,7 @@ export const AccountForm = ({ account, updateAccount, handleSave, isEdit }: Acco
   const header = isEdit ? accountEditHeader : accountAddHeader;
 
   useEffect(() => {
-    (async () => {
+    setBusy(async () => {
       const countries = await getCountryList(context);
       const continents = await getContinentList(context);
       if (countries) {
@@ -59,7 +59,7 @@ export const AccountForm = ({ account, updateAccount, handleSave, isEdit }: Acco
         notificationsService.error("Server error: continents list not available.");
       }
       setIsLoading(false);
-    })();
+    });
   }, []);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
