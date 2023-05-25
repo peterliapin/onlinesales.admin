@@ -61,5 +61,11 @@ export const useAuthState = () => {
     }
   }, [instance, account]);
 
-  return { account, getToken, logout };
+  const reLogin = useCallback(async () => {
+    if (instance && account) {
+      await instance.loginRedirect();
+    }
+  }, [instance, account]);
+
+  return { account, getToken, logout, reLogin };
 };

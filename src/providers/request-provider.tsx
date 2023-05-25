@@ -18,16 +18,28 @@ class ApiExtended<getTokenFn> extends Api<getTokenFn>{
     super(apiConfig);
     Object.keys(this.api).forEach((key) => {
       const oldFunc = (this.api as unknown as any)[key];
-      (this.api as unknown as any)[key] = (...args: any[]) => {
-        const response = oldFunc(...args);
-        if (response.error){
-          throw response.error;
+      (this.api as unknown as any)[key] = async (...args: any[]) => {
+        try{
+          const response = await oldFunc(...args);
+          if (response.error){
+            if (response.status == 401 && this.logoutFunc){
+              this.logoutFunc();
+            }
+            throw response.error;
+          }
+          return response;
+        }catch(e: any){
+          if (e.error){
+            if (e.status == 401 && this.logoutFunc){
+              this.logoutFunc();
+            }
+            throw e;
+          }
         }
-        return response;
       };
     });
   }
-  refreshFunc?: () => void;
+  logoutFunc?: () => Promise<void>;
 }
 
 
@@ -55,13 +67,13 @@ export type RequestContextType = {
 const requestContext = createContext<RequestContextType>({ client });
 
 export const RequestProvider = memo(function RequestProvider({ children }: PropsWithChildren) {
-  const { getToken } = useAuthState();
+  const { getToken, reLogin } = useAuthState();
   const [isReady, setIsReady] = useState<boolean>(false);
   useEffect(() => {
     client.setSecurityData(getToken);
     setIsReady(true);
   }, [getToken]);
-
+  client.logoutFunc = reLogin;
   const value = useMemo(() => ({ client }), []);
 
   return <requestContext.Provider value={value}>{isReady && children}</requestContext.Provider>;
