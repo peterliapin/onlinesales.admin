@@ -13,21 +13,21 @@ const getValidator = (fields: DtoField[]) => {
 
     switch (field.type) {
       case "string":
-        shapeItem = z.string();
+        if (field.nullable) shapeItem = z.nullable(z.string());
+        else shapeItem = z.string();
 
         if (typeof field.minLength !== "undefined") {
-          shapeItem = shapeItem.min(field.minLength);
+          shapeItem = z.string().min(field.minLength);
         }
 
         if (typeof field.maxLength !== "undefined") {
-          shapeItem = shapeItem.max(field.maxLength);
+          shapeItem = z.string().max(field.maxLength);
         }
 
         if (field.pattern) {
-          shapeItem = shapeItem.regex(
-            RegExp(field.pattern),
-            `Doesn't match regexp "${field.pattern}"`
-          );
+          shapeItem = z
+            .string()
+            .regex(RegExp(field.pattern), `Doesn't match regexp "${field.pattern}"`);
         }
 
         shape[field.name] = field.required ? shapeItem : shapeItem.optional();
