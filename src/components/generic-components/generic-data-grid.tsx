@@ -225,11 +225,16 @@ export function GenericDataGrid<T extends BasicTypeForGeneric>(
     });
   }, [sortDirection, sortColumn, columnVisibilityModel]);
 
+  const customLocaleText = {
+    noRowsLabel: "",
+  };
+
   return (
     <DataGrid
       columns={columns || []}
       rows={items || []}
       loading={false}
+      localeText={customLocaleText}
       checkboxSelection={false}
       autoHeight={false}
       rowCount={totalItemsCount}

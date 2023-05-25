@@ -6,6 +6,7 @@ import { useRouteParams } from "typesafe-routes";
 import { DataView } from "components/data-view";
 import { getContinentByCode, getCountryByCode } from "utils/helper";
 import { Grid } from "@mui/material";
+import { useModuleWrapperContext } from "@providers/module-wrapper-provider";
 
 interface DataViewRow {
   label: string;
@@ -14,6 +15,7 @@ interface DataViewRow {
 
 export const AccountView = () => {
   const context = useRequestContext();
+  const { setBusy } = useModuleWrapperContext();
   const { client } = context;
   const { id } = useRouteParams(viewFormRoute);
   const [account, setAccount] = useState<AccountDetailsDto>();
@@ -21,7 +23,7 @@ export const AccountView = () => {
   const [continent, setContinent] = useState<string>();
 
   useEffect(() => {
-    (async () => {
+    setBusy(async () => {
       try {
         const { data } = await client.api.accountsDetail(id);
         setAccount(data);
@@ -32,7 +34,7 @@ export const AccountView = () => {
       } catch (e) {
         console.log(e);
       }
-    })();
+    });
   }, [client]);
 
   const accountSiteUrl = account && (
