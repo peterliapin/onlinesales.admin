@@ -63,7 +63,7 @@ const columns: GridColDef<EmailTemplateDetailsDto>[] = [
     flex: 2,
     valueGetter: (params) => {
       const createdAt = params.value as string | undefined;
-      if (createdAt === undefined){
+      if (createdAt === undefined || createdAt === ""){
         return "-";
       }
       return new Date(createdAt).toLocaleDateString();
@@ -74,9 +74,11 @@ const columns: GridColDef<EmailTemplateDetailsDto>[] = [
     headerName: "Updated At",
     flex: 2,
     valueGetter: (params) => {
-      const updatedAt = params.value as string;
-      const formattedDate = new Date(updatedAt).toLocaleDateString();
-      return formattedDate;
+      const createdAt = params.value as string | undefined;
+      if (createdAt === undefined || createdAt === ""){
+        return "-";
+      }
+      return new Date(createdAt).toLocaleDateString();
     },
   },
 ];
