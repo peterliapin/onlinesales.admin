@@ -30,7 +30,7 @@ const SavingBarEnd = React.forwardRef<HTMLDivElement>((props, ref) => {
           <SaveIcon sx={{ fontSize: 14 }} />
         </Grid>
         <Grid item>
-          <Typography>Saved to local storage</Typography>
+          <Typography>Draft saved locally</Typography>
         </Grid>
       </Grid>
     </div>
