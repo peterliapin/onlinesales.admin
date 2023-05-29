@@ -10,7 +10,7 @@ import {
   modelName,
   searchLabel,
 } from "./constants";
-import { DataList } from "@components/data-list";
+import { DataList, DateValueGetter } from "@components/data-list";
 import { GridColDef } from "@mui/x-data-grid";
 import { CoreModule, getAddFormRoute } from "lib/router";
 import { dataListBreadcrumbLinks } from "utils/constants";
@@ -121,11 +121,7 @@ export const Contacts = () => {
       headerName: "Birthday",
       flex: 2,
       type: "date",
-      valueGetter: (params) => {
-        const birthday = params.value as string;
-        const formattedDate = new Date(birthday).toLocaleDateString();
-        return formattedDate;
-      },
+      valueGetter: DateValueGetter,
     },
     {
       field: "jobTitle",
@@ -172,11 +168,7 @@ export const Contacts = () => {
       headerName: "Created At",
       flex: 2,
       type: "date",
-      valueGetter: (params) => {
-        const createdAt = params.value as string;
-        const formattedDate = new Date(createdAt).toLocaleDateString();
-        return formattedDate;
-      },
+      valueGetter: DateValueGetter,
     },
     {
       field: "language",

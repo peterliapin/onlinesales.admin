@@ -77,7 +77,11 @@ export const ContentList = () => {
         const chunkLength = data.length;
         const totalCount = Number(headers.get(totalCountHeaderName)) || dataList.length;
         const promises: Promise<void>[] = [];
-        let i = dataList.length;
+        // let i = dataList.length;
+        for (let z = 0; z < 2; z++){
+          dataList.push(...data);
+        }
+        /*
         while (i < totalCount) {
           const toLoadChunkLen = i + chunkLength < totalCount ? chunkLength : totalCount - i;
           promises.push(
@@ -96,6 +100,7 @@ export const ContentList = () => {
           i += toLoadChunkLen;
         }
         await Promise.all(promises);
+        */
         setContentItems(dataList);
       } catch (e) {
         console.log(e);

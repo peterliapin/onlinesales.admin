@@ -9,7 +9,7 @@ import {
   orderListPageBreadcrumb,
   searchLabel,
 } from "./constants";
-import { DataList } from "@components/data-list";
+import { DataList, DateValueGetter } from "@components/data-list";
 import { GridColDef } from "@mui/x-data-grid";
 import { CoreModule, getAddFormRoute } from "lib/router";
 import { dataListBreadcrumbLinks } from "utils/constants";
@@ -131,11 +131,7 @@ export const Orders = () => {
       headerName: "Created At",
       flex: 2,
       type: "date",
-      valueGetter: (params) => {
-        const createdAt = params.value as string;
-        const formattedDate = new Date(createdAt).toLocaleDateString();
-        return formattedDate;
-      },
+      valueGetter: DateValueGetter,
     },
   ];
 

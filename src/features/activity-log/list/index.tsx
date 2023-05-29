@@ -1,4 +1,4 @@
-import { DataList } from "@components/data-list";
+import { DataList, DateValueGetter } from "@components/data-list";
 import { ModuleWrapper } from "@components/module-wrapper";
 import { SearchBar } from "@components/search-bar";
 import { ActivityLogDetailsDto } from "@lib/network/swagger-client";
@@ -51,11 +51,7 @@ const columns: GridColDef<ActivityLogDetailsDto>[] = [
     field: "createdAt",
     headerName: "Created At",
     flex: 2,
-    valueGetter: (params) => {
-      const createdAt = params.value as string;
-      const formattedDate = new Date(createdAt).toLocaleDateString();
-      return formattedDate;
-    },
+    valueGetter: DateValueGetter,
   },
 ];
 
