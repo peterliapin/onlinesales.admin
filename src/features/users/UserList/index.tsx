@@ -1,4 +1,4 @@
-import { DataList } from "@components/data-list";
+import { DataList, DateValueFormatter } from "@components/data-list";
 import { ModuleWrapper } from "@components/module-wrapper";
 import { GridColDef } from "@mui/x-data-grid";
 import {
@@ -44,21 +44,13 @@ const columns: GridColDef<UserDetailsDto>[] = [
     field: "createdAt",
     headerName: "Created At",
     flex: 2,
-    valueGetter: (params) => {
-      const createdAt = params.value as string;
-      const formattedDate = new Date(createdAt).toLocaleDateString();
-      return formattedDate;
-    },
+    valueGetter: DateValueFormatter,
   },
   {
     field: "lastTimeLoggedIn",
     headerName: "Last Active",
     flex: 2,
-    valueGetter: (params) => {
-      const lastTimeLoggedIn = params.value as string;
-      const formattedDate = new Date(lastTimeLoggedIn).toLocaleDateString();
-      return formattedDate;
-    },
+    valueGetter: DateValueFormatter,
   },
   {
     field: "userName",

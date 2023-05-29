@@ -10,7 +10,7 @@ import {
   modelName,
   searchLabel,
 } from "./constants";
-import { DataList } from "@components/data-list";
+import { DataList, DateValueFormatter } from "@components/data-list";
 import { GridColDef } from "@mui/x-data-grid";
 import { CoreModule, getAddFormRoute } from "lib/router";
 import { ModuleWrapper } from "@components/module-wrapper";
@@ -115,11 +115,7 @@ export const Accounts = () => {
       field: "createdAt",
       headerName: "Created At",
       flex: 2,
-      valueGetter: (params) => {
-        const createdAt = params.value as string;
-        const formattedDate = new Date(createdAt).toLocaleDateString();
-        return formattedDate;
-      },
+      valueGetter: DateValueFormatter,
       type: "date",
     },
     {
