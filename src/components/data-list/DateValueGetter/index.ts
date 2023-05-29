@@ -1,9 +1,9 @@
 const DateValueGetter = (params: any) => {
-  const createdAt = params.value as string | undefined;
-  if (createdAt === undefined || createdAt === ""){
+  const value = params.value as string | undefined;
+  if (value === undefined || value === ""){
     return "-";
   }
-  return new Date(createdAt).toLocaleDateString();
+  return new Date(value).toLocaleDateString();
 };
 
 export default DateValueGetter;
