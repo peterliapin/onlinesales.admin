@@ -10,7 +10,7 @@ import {
   domainGridSettingsStorageKey,
   domainListPageBreadcrumb,
 } from "./constants";
-import { DataList, DateValueGetter } from "@components/data-list";
+import { DataList, DateValueFormatter } from "@components/data-list";
 import { GridColDef } from "@mui/x-data-grid";
 import { CoreModule, getAddFormRoute } from "lib/router";
 import { dataListBreadcrumbLinks } from "utils/constants";
@@ -142,7 +142,7 @@ export const Domains = () => {
       headerName: "Created At",
       flex: 2,
       type: "date",
-      valueGetter: DateValueGetter,
+      valueGetter: DateValueFormatter,
     },
   ];
 

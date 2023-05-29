@@ -10,7 +10,7 @@ import {
   modelName,
   searchLabel,
 } from "./constants";
-import { DataList, DateValueGetter } from "@components/data-list";
+import { DataList, DateValueFormatter } from "@components/data-list";
 import { GridColDef } from "@mui/x-data-grid";
 import { CoreModule, getAddFormRoute } from "lib/router";
 import { ModuleWrapper } from "@components/module-wrapper";
@@ -115,7 +115,7 @@ export const Accounts = () => {
       field: "createdAt",
       headerName: "Created At",
       flex: 2,
-      valueGetter: DateValueGetter,
+      valueGetter: DateValueFormatter,
       type: "date",
     },
     {

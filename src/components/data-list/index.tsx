@@ -227,4 +227,4 @@ export const DataList = ({
 };
 
 
-export { default as DateValueGetter } from "./DateValueGetter";
+export { default as DateValueFormatter } from "./DateValueFormatter";

@@ -1,4 +1,4 @@
-const DateValueGetter = (params: any) => {
+const DateValueFormatter = (params: any) => {
   const value = params.value as string | undefined;
   if (value === undefined || value === ""){
     return "-";
@@ -6,4 +6,4 @@ const DateValueGetter = (params: any) => {
   return new Date(value).toLocaleDateString();
 };
 
-export default DateValueGetter;
+export default DateValueFormatter;
