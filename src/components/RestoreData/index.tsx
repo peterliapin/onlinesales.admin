@@ -41,8 +41,8 @@ export const RestoreDataModal = ({ isOpen, onClose }: RestoreDataProps) => {
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={() => onClose(false)}>No</Button>
-        <Button onClick={() => onClose(true)}>Yes</Button>
+        <Button onClick={() => onClose(false)}>Cancel</Button>
+        <Button onClick={() => onClose(true)}>Restore</Button>
       </DialogActions>
     </Dialog>
   );
