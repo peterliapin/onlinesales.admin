@@ -77,7 +77,7 @@ export const ModuleWrapper = ({
         </ActionsContainer>
       )}
       <ModuleContentContainer>
-        <ScrollContainer>{children}</ScrollContainer>
+        <ScrollContainer id="scrollTarget">{children}</ScrollContainer>
         {isBusy && (
           <>
             <LoadingIndicatorContainer />
