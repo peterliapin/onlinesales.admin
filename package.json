@@ -1,6 +1,6 @@
 {
   "name": "onlinesales.admin",
-  "version": "1.2.6-pre",
+  "version": "1.2.7-pre",
   "private": true,
   "description": "React based Admin UI for OnlineSales (lightweight, extendable headless CMS for product websites)",
   "keywords": [
