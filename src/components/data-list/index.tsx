@@ -6,7 +6,7 @@ import {
   getWhereFilterQuery,
   totalCountHeaderName,
 } from "lib/query";
-import { GridColDef, GridColumnVisibilityModel, GridSortDirection } from "@mui/x-data-grid";
+import { GridColDef, GridSortDirection } from "@mui/x-data-grid";
 import { GridInitialStateCommunity } from "@mui/x-data-grid/models/gridStateCommunity";
 import { DataListContainer } from "./index.styled";
 import { DataTableGrid } from "@components/data-table";
@@ -42,7 +42,7 @@ export const DataList = ({
   const { setBusy } = useModuleWrapperContext();
   const [modelData, setModelData] = useState<any[] | undefined>([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [totalRowCount, setTotalRowCount] = useState(0);
+  const [totalRowCount, setTotalRowCount] = useState<number>();
 
   const [filterState, setFilterState] = useState<GridDataFilterState>({
     filterLimit: defaultFilterLimit,
@@ -203,7 +203,7 @@ export const DataList = ({
     else setTotalRowCount(-1);
   };
 
-  return gridSettingsLoaded ? (
+  return gridSettingsLoaded && totalRowCount != undefined ? (
     <DataListContainer>
       <DataTableGrid
         columns={columns}
@@ -225,6 +225,5 @@ export const DataList = ({
     </DataListContainer>
   ) : null;
 };
-
 
 export { default as DateValueFormatter } from "./DateValueFormatter";
