@@ -58,6 +58,7 @@ import { set } from "lodash";
 import networkErrorToStringArray from "utils/networkErrorToStringArray";
 import { useErrorDetailsModal } from "@providers/error-details-modal-provider";
 import { LanguageAutocomplete } from "@components/LanguageAutocomplete";
+import { execSubmitWithToast } from "utils/formikHelpers";
 
 interface ContentEditProps {
   readonly?: boolean;
@@ -102,7 +103,7 @@ export const ContentEdit = (props: ContentEditProps) => {
       (reference.latestAutoSave = new Date()), (reference.savedData = value);
     }
     setEditorLocalStorage(localStorageSnapshot);
-    setSaving(async () => {
+    !isSaving && setSaving(async () => {
       await new Promise<void>((resolve) => setTimeout(() => resolve(), 3000));
     });
   }, 3000); ///TODO: User Settings
@@ -172,24 +173,14 @@ export const ContentEdit = (props: ContentEditProps) => {
   };
 
   const submit = async (values: ContentDetails, helpers: FormikHelpers<ContentDetails>) => {
-    notificationsService.promise(submitFunc(values, helpers), {
-      pending: `${values?.id ? "Updating" : "Creating"} a post...`,
-      success: `Successfully ${values?.id ? "updated" : "created"} post`,
-      error: (error) => {
-        const errMessage: string =
-          (error.data.error && error.data.error.title) ||
-          (error.data.message && error.data.message) ||
-          "unknown";
-        const errDetails : string[] = [];
-        if (error.data.error && error.data.error.errors){
-          errDetails.push(...networkErrorToStringArray(error.data.error.errors));
-        }
-        return {
-          title: errMessage,
-          onClick: errDetails.length > 0 ? () => {showErrorModal(errDetails);} : undefined,
-        };
-      },
-    });
+    execSubmitWithToast<ContentDetails>(
+      values,
+      helpers,
+      submitFunc,
+      notificationsService,
+      showErrorModal,
+      "post",
+    );
   };
 
   const formik = useFormik({
