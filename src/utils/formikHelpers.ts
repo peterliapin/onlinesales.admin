@@ -10,9 +10,14 @@ export async function execSubmitWithToast<T>(
   showErrorModalFunc: (value: string[]) => void,
   entityName: string,
 ): Promise<void> {
+  const nameWithCapFirstLetter =
+     entityName.charAt(0).toUpperCase() +
+     entityName.slice(1).toLowerCase();
+  const nameWithMinFirstLetter = entityName.toLowerCase();
+  
   notificationsService.promise(submitFunc(values, helpers), {
-    pending: `Saving a ${entityName}...`,
-    success: `${entityName} saved successfully`,
+    pending: `Saving ${nameWithMinFirstLetter}...`,
+    success: `${nameWithCapFirstLetter} saved successfully`,
     error: (error) => {
       const errMessage = `Unable to save ${entityName}. An error occurred.`;
       const errDetails : string[] = [];
