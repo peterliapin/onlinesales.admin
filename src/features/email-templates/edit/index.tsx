@@ -27,6 +27,7 @@ import { SavingBar } from "@components/SavingBar";
 import { LanguageAutocomplete } from "@components/LanguageAutocomplete";
 import { EmailGroupAutocomplete } from "@components/EmailGroupAutocomplete";
 import { CatchingPokemonSharp } from "@mui/icons-material";
+import { execSubmitWithToast } from "utils/formikHelpers";
 
 const TINYMCE_API_KEY = process.env.TINYMCE_API_KEY || undefined;
 
@@ -93,24 +94,14 @@ export const EmailTemplateEdit = () => {
     values: EmailTemplateDetailsDto, 
     helpers: FormikHelpers<EmailTemplateDetailsDto>
   ) => {
-    notificationsService.promise(submitFunc(values, helpers), {
-      pending: `${values?.id ? "Updating" : "Creating"} a template...`,
-      success: `Successfully ${values?.id ? "updated" : "created"} template`,
-      error: (error) => {
-        const errMessage: string =
-          (error.data.error && error.data.error.title) ||
-          (error.data.message && error.data.message) ||
-          "unknown";
-        const errDetails : string[] = [];
-        if (error.data.error && error.data.error.errors){
-          errDetails.push(...networkErrorToStringArray(error.data.error.errors));
-        }
-        return {
-          title: errMessage,
-          onClick: () => {showErrorModal(errDetails);}
-        };
-      },
-    });
+    execSubmitWithToast<EmailTemplateDetailsDto>(
+      values,
+      helpers,
+      submitFunc,
+      notificationsService,
+      showErrorModal,
+      "email template",
+    );
   };
 
   const formik = useFormik({

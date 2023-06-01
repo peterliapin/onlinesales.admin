@@ -29,6 +29,7 @@ import { buildAbsoluteUrl } from "@lib/network/utils";
 import { useUserInfo } from "@providers/user-provider";
 import networkErrorToStringArray from "utils/networkErrorToStringArray";
 import { useErrorDetailsModal } from "@providers/error-details-modal-provider";
+import { execSubmitWithToast } from "utils/formikHelpers";
 
 const tabProps = (index: number) => {
   return {
@@ -80,24 +81,14 @@ export const UserEdit = () => {
   };
 
   const submit = async (values: UserDetailsDto, helpers: FormikHelpers<UserDetailsDto>) => {
-    notificationsService.promise(submitFunc(values, helpers), {
-      pending: `${values?.id ? "Updating" : "Creating"} a user...`,
-      success: `Successfully ${values?.id ? "updated" : "created"} user`,
-      error: (error) => {
-        const errMessage: string =
-          (error.data.error && error.data.error.title) ||
-          (error.data.message && error.data.message) ||
-          "unknown";
-        const errDetails : string[] = [];
-        if (error.data.error && error.data.error.errors){
-          errDetails.push(...networkErrorToStringArray(error.data.error.errors));
-        }
-        return {
-          title: errMessage,
-          onClick: () => {showErrorModal(errDetails);}
-        };
-      },
-    });
+    execSubmitWithToast<UserDetailsDto>(
+      values,
+      helpers,
+      submitFunc,
+      notificationsService,
+      showErrorModal,
+      "user",
+    );
   };
 
   const allowedToModify = true; // TODO: For now, until permission system wouldn't be ready.

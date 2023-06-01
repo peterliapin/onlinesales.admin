@@ -36,7 +36,7 @@ export const ErrorDetailsModal = ({ isOpen, onClose, errorDetails }: ErrorDetail
       </DialogTitle>
       <DialogContent>{errorDetails}</DialogContent>
       <DialogActions>
-        <Button onClick={() => onClose()}>Close</Button>
+        <Button onClick={() => onClose()}>OK</Button>
       </DialogActions>
     </Dialog>
   );
