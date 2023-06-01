@@ -52,7 +52,7 @@ export function GenericDataGrid<T extends BasicTypeForGeneric>(
   }: GenericDataGridProps<T>,
   ref: Ref<GenericDataGridRef>
 ) {
-  const { setBusy } = useModuleWrapperContext();
+  const { setBusy, isBusy } = useModuleWrapperContext();
 
   const [gridSettings, setGridSettings] = useLocalStorage<GenericDataGridSettings>(
     `data-grid-${key}`,
@@ -226,7 +226,7 @@ export function GenericDataGrid<T extends BasicTypeForGeneric>(
   }, [sortDirection, sortColumn, columnVisibilityModel]);
 
   const customLocaleText = {
-    noRowsLabel: "",
+    noRowsLabel: isBusy ? "" : "No rows",
   };
 
   return (

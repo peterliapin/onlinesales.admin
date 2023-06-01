@@ -1,7 +1,5 @@
-import { useMemo } from "react";
 import {
   DataGrid,
-  getGridStringOperators,
   GridColDef,
   GridColumnVisibilityModel,
   GridFilterModel,
@@ -159,17 +157,12 @@ export const DataTableGrid = ({
 
   const gridFinalizedColumns = showActionsColumn ? columns.concat(actionsColumn) : columns;
 
-  const customLocaleText = {
-    noRowsLabel: "",
-  };
-
   return (
     <DataTableContainer>
       <DataGrid
         columns={gridFinalizedColumns}
         rows={data ?? empty}
         loading={!data}
-        localeText={customLocaleText}
         checkboxSelection={false}
         autoHeight={autoHeight}
         rowCount={totalRowCount}
