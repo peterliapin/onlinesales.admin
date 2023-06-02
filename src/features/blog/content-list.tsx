@@ -12,27 +12,24 @@ import { ContentDetailsDto } from "@lib/network/swagger-client";
 import {
   ContentListContainer,
   TimestampContainer,
-  ContentListWrapper,
   DummyDiv,
 } from "./index.styled";
-import React, { useEffect, useState, useMemo } from "react";
+import { useEffect, useState } from "react";
 import { Add, Upload, Download } from "@mui/icons-material";
 import { useRequestContext } from "@providers/request-provider";
 import { SearchBar } from "@components/search-bar";
 import { useModuleWrapperContext } from "@providers/module-wrapper-provider";
 import { blogBreadcrumbLinks } from "@features/blog/constants";
 import { ModuleWrapper } from "@components/module-wrapper";
-import { FixedSizeGrid as VirtualizedGrid } from "react-window";
-import AutoSizer from "react-virtualized-auto-sizer";
+import InfiniteScroll from "react-infinite-scroll-component";
 import { totalCountHeaderName } from "@lib/query";
-
-const coreApi = process.env.CORE_API;
-const PADDING_SIZE = 15;
+import { buildAbsoluteUrl } from "@lib/network/utils";
 
 export const ContentList = () => {
   const { setBusy } = useModuleWrapperContext();
   const { client } = useRequestContext();
   const [contentItems, setContentItems] = useState<ContentDetailsDto[]>([]);
+  const [contentItemsCount, setContentItemsCount] = useState<number>(0);
   const [searchText, setSearchText] = useState<string>("");
 
   const searchBar = (
@@ -58,45 +55,26 @@ export const ContentList = () => {
     </Button>
   );
 
+  const fetchData = async () => {
+    const filter = searchText ?
+        { query: searchText, "filter[skip]": contentItems.length } :
+        { "filter[order]": "createdAt desc", "filter[skip]": contentItems.length };
+    const { data } = await client.api.contentList(filter);
+    setContentItems((current) => [...current, ...data]);
+  };
+
   useEffect(() => {
     const controller = new AbortController();
 
     setBusy(async () => {
       try {
-        setContentItems([]);
-        // todo: uncomment and improve after [where][like] implementation
-        // const filter = searchText
-        //   ? { "filter[where][title][like]=": searchText }
-        //   : {}
-        const dataList: ContentDetailsDto[] = [];
         const filter = searchText ? { query: searchText } : { "filter[order]": "createdAt desc" };
         const { data, headers } = await client.api.contentList(filter, {
           signal: controller.signal,
         });
-        dataList.push(...data);
-        const chunkLength = data.length;
-        const totalCount = Number(headers.get(totalCountHeaderName)) || dataList.length;
-        const promises: Promise<void>[] = [];
-        let i = dataList.length;
-        while (i < totalCount) {
-          const toLoadChunkLen = i + chunkLength < totalCount ? chunkLength : totalCount - i;
-          promises.push(
-            (async () => {
-              const filterWithPagination = {
-                ...filter,
-                "filter[skip]": String(i),
-                "filter[limit]": String(toLoadChunkLen),
-              };
-              const { data } = await client.api.contentList(filterWithPagination, {
-                signal: controller.signal,
-              });
-              dataList.push(...data);
-            })()
-          );
-          i += toLoadChunkLen;
-        }
-        await Promise.all(promises);
-        setContentItems(dataList);
+        const totalCount = Number(headers.get(totalCountHeaderName));
+        setContentItemsCount(totalCount);
+        setContentItems(data);
       } catch (e) {
         console.log(e);
       }
@@ -106,7 +84,6 @@ export const ContentList = () => {
       controller.abort();
     };
   }, [client, searchText]);
-
   return (
     <ModuleWrapper
       breadcrumbs={blogBreadcrumbLinks}
@@ -116,43 +93,31 @@ export const ContentList = () => {
       addButtonContainerChildren={addButton}
     >
       <ContentListContainer>
-        {contentItems.length > 0 && (
-          <AutoSizer>
-            {({ height, width }) => {
-              const columnsCount = Math.floor(width! / (345 + PADDING_SIZE * 2));
-              const rowsCount = Math.ceil(contentItems.length / columnsCount);
-              return (
-                <VirtualizedGrid
-                  columnCount={columnsCount}
-                  rowCount={rowsCount}
-                  columnWidth={345 + PADDING_SIZE}
-                  rowHeight={500 + PADDING_SIZE}
-                  height={height!}
-                  width={width!}
-                >
-                  {({ rowIndex, columnIndex, style }) => {
-                    return (
-                      <ContentListWrapper
-                        style={{
-                          ...style,
-                          left: (style.left as number) + PADDING_SIZE,
-                          top: (style.top as number) + PADDING_SIZE,
-                          width: (style.width as number) - PADDING_SIZE,
-                          height: (style.height as number) - PADDING_SIZE,
-                        }}
-                      >
-                        <ItemCard
-                          style={{}}
-                          item={contentItems[rowIndex * columnsCount + columnIndex]}
-                          index={rowIndex * columnsCount + columnIndex}
-                        />
-                      </ContentListWrapper>
-                    );
-                  }}
-                </VirtualizedGrid>
-              );
-            }}
-          </AutoSizer>
+        {contentItemsCount > 0 && (
+          <InfiniteScroll
+            dataLength={contentItems.length}
+            next={fetchData}
+            hasMore={contentItemsCount !== contentItems.length}
+            loader={<h4>Loading...</h4>}
+            hasChildren={true}
+            scrollableTarget="scrollTarget"
+            style={{ overflow: "unset" }}
+          >
+            <Grid
+              container
+              spacing={10}
+            >
+              {
+                contentItems.map((item, index) => (
+                  <ItemCard
+                    key={index}
+                    item={item}
+                    index={index}
+                  />
+                ))
+              }
+            </Grid>
+          </InfiniteScroll>
         )}
       </ContentListContainer>
     </ModuleWrapper>
@@ -162,34 +127,14 @@ export const ContentList = () => {
 interface ItemProps {
   index: number;
   item: ContentDetailsDto;
-  style: React.CSSProperties;
 }
 
-interface InnerFuncProps {
-  style: React.CSSProperties;
-  rest: any;
-}
-
-const innerElementType = React.forwardRef(function innerFunc(props: InnerFuncProps, ref) {
-  return (
-    <div
-      ref={ref}
-      style={{
-        ...props.style,
-        paddingLeft: PADDING_SIZE,
-        paddingTop: PADDING_SIZE,
-      }}
-      {...props.rest}
-    />
-  );
-});
-
-const ItemCard = ({ item, index, style }: ItemProps) => {
+const ItemCard = ({ item, index }: ItemProps) => {
   if (!item || !item.id) {
     return <DummyDiv />;
   }
   return (
-    <Grid item key={`card-${index}`} sm="auto" xs="auto" style={style}>
+    <Grid item key={`card-${index}`} sm="auto" xs="auto">
       <Card
         sx={{ width: 345, height: 500 }}
         style={{
@@ -201,7 +146,7 @@ const ItemCard = ({ item, index, style }: ItemProps) => {
           <CardMedia
             component="img"
             height="140"
-            image={coreApi + "" + item.coverImageUrl || ""}
+            image={buildAbsoluteUrl(item.coverImageUrl)}
             alt={item.coverImageAlt || ""}
           />
           <CardContent>

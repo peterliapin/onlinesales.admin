@@ -25,7 +25,7 @@ function instanceOfErrorData(object: any): object is ErrorData {
   return true;
 }
 
-class NotificationsService {
+export class NotificationsService {
   defaultAutoClose: number;
 
   constructor(settings: NotificationsServiceSettings = {}) {

@@ -8,6 +8,7 @@ import {
 } from "@mui/material";
 
 export const SidebarStyled = styled(Drawer)`
+  overflow: hidden;
   grid-area: sidebar;
 
   & .MuiDrawer-paper {
