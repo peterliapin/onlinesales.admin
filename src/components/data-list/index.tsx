@@ -40,11 +40,17 @@ export const DataList = ({
 }: dataListProps) => {
   const { notificationsService } = useNotificationsService();
   const { setBusy } = useModuleWrapperContext();
+  const [gridSettings, setGridSettings] = useLocalStorage<dataListSettings | undefined>(
+    gridSettingsStorageKey,
+    undefined
+  );
   const [modelData, setModelData] = useState<any[] | undefined>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [totalRowCount, setTotalRowCount] = useState<number>();
 
-  const [filterState, setFilterState] = useState<GridDataFilterState>({
+  const [filterState, setFilterState] = useState<GridDataFilterState>();
+
+  const defaultFilterState = {
     filterLimit: defaultFilterLimit,
     sortColumn: defaultFilterOrderColumn,
     sortOrder: defaultFilterOrderDirection,
@@ -54,42 +60,25 @@ export const DataList = ({
     skipLimit: 0,
     pageNumber: 0,
     columnVisibilityModel: initialGridState?.columns?.columnVisibilityModel,
-  });
+  };
 
-  const [gridSettingsLoaded, setGridSettingsLoaded] = useState(false);
-  const [gridState, setGridState] = useState(initialGridState);
-
-  const whereFilterQuery = getWhereFilterQuery(
-    filterState.whereField!,
-    filterState.whereFieldValue!,
-    filterState.whereOperator!
-  );
-  const basicFilterQuery = getBasicFilterQuery(
-    filterState.filterLimit!,
-    filterState.sortColumn!,
-    filterState.sortOrder!,
-    filterState.skipLimit!
-  );
-  const basicExportFilterQuery = getBasicExportFilterQuery(
-    filterState.sortColumn!,
-    filterState.sortOrder!
-  );
-
-  const [gridSettings, setGridSettings] = useLocalStorage<dataListSettings | undefined>(
-    gridSettingsStorageKey,
-    undefined
-  );
-
-  useEffect(() => {
-    setSearchTerm(searchText);
-  }, [searchText]);
-
-  useEffect(() => {
-    if (gridSettingsLoaded) {
-      saveGridStateInLocalStorage();
-      getDataListAsync();
-    }
-  }, [searchTerm, filterState, gridSettingsLoaded]);
+  const whereFilterQuery =
+    filterState &&
+    getWhereFilterQuery(
+      filterState.whereField!,
+      filterState.whereFieldValue!,
+      filterState.whereOperator!
+    );
+  const basicFilterQuery =
+    filterState &&
+    getBasicFilterQuery(
+      filterState.filterLimit!,
+      filterState.sortColumn!,
+      filterState.sortOrder!,
+      filterState.skipLimit!
+    );
+  const basicExportFilterQuery =
+    filterState && getBasicExportFilterQuery(filterState.sortColumn!, filterState.sortOrder!);
 
   useEffect(() => {
     if (gridSettings) {
@@ -117,10 +106,21 @@ export const DataList = ({
         columnVisibilityModel: columnVisibilityModel,
       });
       setSearchTerm(searchTerm);
-      updateGridSettings(gridSettings);
+    } else {
+      setFilterState(defaultFilterState);
     }
-    setGridSettingsLoaded(true);
   }, []);
+
+  useEffect(() => {
+    setSearchTerm(searchText);
+  }, [searchText]);
+
+  useEffect(() => {
+    if (filterState) {
+      saveGridStateInLocalStorage();
+      getDataListAsync();
+    }
+  }, [searchTerm, filterState]);
 
   useEffect(() => {
     if (totalRowCount === -1) {
@@ -135,18 +135,19 @@ export const DataList = ({
   }, [modelData]);
 
   const saveGridStateInLocalStorage = () => {
-    setGridSettings({
-      searchTerm,
-      filterLimit: filterState.filterLimit!,
-      skipLimit: filterState.skipLimit!,
-      sortColumn: filterState.sortColumn!,
-      sortOrder: filterState.sortOrder!,
-      whereField: filterState.whereField!,
-      whereFieldValue: filterState.whereFieldValue!,
-      whereOperator: filterState.whereOperator!,
-      pageNumber: filterState.pageNumber!,
-      columnVisibilityModel: filterState.columnVisibilityModel!,
-    });
+    filterState &&
+      setGridSettings({
+        searchTerm,
+        filterLimit: filterState.filterLimit!,
+        skipLimit: filterState.skipLimit!,
+        sortColumn: filterState.sortColumn!,
+        sortOrder: filterState.sortOrder!,
+        whereField: filterState.whereField!,
+        whereFieldValue: filterState.whereFieldValue!,
+        whereOperator: filterState.whereOperator!,
+        pageNumber: filterState.pageNumber!,
+        columnVisibilityModel: filterState.columnVisibilityModel!,
+      });
   };
 
   const updateFilterState = (state: GridDataFilterState) => {
@@ -173,8 +174,13 @@ export const DataList = ({
     });
   };
 
-  const updateGridSettings = (gridSettings: dataListSettings) => {
-    initialGridState!.filter = {
+  const setTotalResultsCount = (headerCount: string | null) => {
+    if (headerCount) setTotalRowCount(parseInt(headerCount, 10));
+    else setTotalRowCount(-1);
+  };
+
+  const gridInitialState = gridSettings && {
+    filter: {
       filterModel: {
         items: [
           {
@@ -184,26 +190,20 @@ export const DataList = ({
           },
         ],
       },
-    };
-    initialGridState!.sorting = {
+    },
+    sorting: {
       sortModel: [
         { field: gridSettings.sortColumn, sort: gridSettings.sortOrder as GridSortDirection },
       ],
-    };
-    initialGridState!.pagination = {
+    },
+    pagination: {
       page: gridSettings.pageNumber,
       pageSize: gridSettings.filterLimit,
-    };
-    initialGridState!.columns = { columnVisibilityModel: gridSettings.columnVisibilityModel };
-    setGridState(initialGridState);
+    },
+    columns: { columnVisibilityModel: gridSettings.columnVisibilityModel },
   };
 
-  const setTotalResultsCount = (headerCount: string | null) => {
-    if (headerCount) setTotalRowCount(parseInt(headerCount, 10));
-    else setTotalRowCount(-1);
-  };
-
-  return gridSettingsLoaded && totalRowCount != undefined ? (
+  return filterState && totalRowCount != undefined ? (
     <DataListContainer>
       <DataTableGrid
         columns={columns}
@@ -215,7 +215,7 @@ export const DataList = ({
         pageNumber={filterState.pageNumber}
         dataViewMode="server"
         setFilterState={updateFilterState}
-        initialState={gridState}
+        initialState={gridInitialState}
         disableColumnFilter={false}
         disablePagination={false}
         showActionsColumn={true}
