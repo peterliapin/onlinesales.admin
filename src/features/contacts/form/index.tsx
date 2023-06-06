@@ -199,6 +199,7 @@ export const ContactForm = ({ contact, handleSave, isEdit }: ContactFormProps) =
                       disablePortal
                       options={countryList}
                       getOptionLabel={(option) => option.name}
+                      value={countryList.find((c) => c.code === formik.values.countryCode) || null}
                       onChange={handleCountryChange}
                       fullWidth
                       renderInput={(params) => (
