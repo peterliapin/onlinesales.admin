@@ -23,9 +23,9 @@ export const OrderEdit = () => {
     })();
   }, [client]);
 
-  const handleSave = async () => {
+  const handleSave = async (newOrder: OrderDetailsDto) => {
     const updateDto: OrderUpdateDto = {
-      ...order!,
+      ...newOrder!,
     };
     await client.api.ordersPartialUpdate(id, updateDto!);
   };

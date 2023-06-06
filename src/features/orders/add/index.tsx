@@ -18,9 +18,9 @@ export const OrderAdd = () => {
     refNo: "",
   });
 
-  const handleSave = async () => {
+  const handleSave = async (newOrder: OrderDetailsDto) => {
     const createDto: OrderCreateDto = {
-      ...order,
+      ...newOrder,
     };
     const { data } = await client.api.ordersCreate(createDto!);
   };
