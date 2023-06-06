@@ -75,9 +75,7 @@ export const ContactForm = ({ contact, handleSave, isEdit }: ContactFormProps) =
     values: ContactDetailsDto,
     helpers: FormikHelpers<ContactDetailsDto>
   ) => {
-    setSaving(async () => {
-      await handleSave(values);
-    });
+    await handleSave(values);
   };
 
   const ContactEditValidationScheme = zod.object({
