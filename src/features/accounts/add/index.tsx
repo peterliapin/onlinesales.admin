@@ -8,19 +8,12 @@ export const AccountAdd = () => {
 
   const [account, setAccount] = useState<AccountDetailsDto>({ name: "" });
 
-  const handleSave = async () => {
+  const handleSave = async (newAccount: AccountDetailsDto) => {
     const createDto: AccountCreateDto = {
-      ...account,
+      ...newAccount,
     };
     await client.api.accountsCreate(createDto!);
   };
 
-  return (
-    <AccountForm
-      account={account}
-      updateAccount={setAccount}
-      handleSave={handleSave}
-      isEdit={false}
-    />
-  );
+  return <AccountForm account={account} handleSave={handleSave} isEdit={false} />;
 };
