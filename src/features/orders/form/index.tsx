@@ -34,7 +34,6 @@ export const OrderForm = ({ order, updateOrder, handleSave, isEdit }: OrderFormP
   const [contactList, setContactList] = useState<ContactDetailsDto[]>([]);
   const [timer, setTimer] = useState<NodeJS.Timeout | null>(null);
   const [open, setOpen] = useState(false);
-  const [selectedContact, setSelectedContact] = useState<ContactDetailsDto>();
   const loading = open && contactList.length === 0;
   const header = isEdit ? orderEditHeader : orderAddHeader;
 
@@ -44,7 +43,7 @@ export const OrderForm = ({ order, updateOrder, handleSave, isEdit }: OrderFormP
         try {
           formik.setValues(order);
           const { data } = await client.api.contactsDetail(order.contactId);
-          setSelectedContact(data);
+          formik.setFieldValue("contact", data);
           setIsLoading(false);
         } catch (e) {
           console.log(e);
@@ -82,6 +81,7 @@ export const OrderForm = ({ order, updateOrder, handleSave, isEdit }: OrderFormP
 
   const handleContactChange = (value: ContactDetailsDto) => {
     formik.setFieldValue("contactId", value.id);
+    formik.setFieldValue("contact", value);
   };
 
   const getOptionLabel = (contact: ContactDetailsDto) => {
@@ -106,7 +106,7 @@ export const OrderForm = ({ order, updateOrder, handleSave, isEdit }: OrderFormP
   };
 
   const OrderEditValidationScheme = zod.object({
-    contactId: zod.number().positive(),
+    contactId: zod.number().positive("Select a contact"),
     refNo: zod.string(),
     exchangeRate: zod.number().nullable().optional(),
     currency: zod.string(),
@@ -150,7 +150,7 @@ export const OrderForm = ({ order, updateOrder, handleSave, isEdit }: OrderFormP
                       }}
                       options={contactList}
                       getOptionLabel={(option) => getOptionLabel(option)}
-                      value={selectedContact || null}
+                      value={formik.values.contact || null}
                       onChange={(event, value) => handleContactChange(value!)}
                       onInputChange={(event, value) => {
                         loadContacts(event, value);
@@ -162,6 +162,7 @@ export const OrderForm = ({ order, updateOrder, handleSave, isEdit }: OrderFormP
                         <TextField
                           {...params}
                           label="Contact Name"
+                          value={formik.values.contact || null}
                           error={formik.touched.contactId && Boolean(formik.errors.contactId)}
                           helperText={formik.touched.contactId && formik.errors.contactId}
                         />
