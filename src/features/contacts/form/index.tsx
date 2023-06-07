@@ -17,7 +17,7 @@ import { useErrorDetailsModal } from "@providers/error-details-modal-provider";
 
 interface ContactFormProps {
   contact: ContactDetailsDto;
-  handleSave: (contact: ContactDetailsDto) => void;
+  handleSave: (contact: ContactDetailsDto) => Promise<void>;
   isEdit: boolean;
 }
 
@@ -64,11 +64,7 @@ export const ContactForm = ({ contact, handleSave, isEdit }: ContactFormProps) =
       notificationsService,
       showErrorModal,
       "contact"
-    )
-      .then(() => {
-        handleNavigation(CoreModule.contacts);
-      })
-      .catch();
+    );
   };
 
   const submitFunc = async (
@@ -76,6 +72,7 @@ export const ContactForm = ({ contact, handleSave, isEdit }: ContactFormProps) =
     helpers: FormikHelpers<ContactDetailsDto>
   ) => {
     await handleSave(values);
+    handleNavigation(CoreModule.contacts);
   };
 
   const ContactEditValidationScheme = zod.object({

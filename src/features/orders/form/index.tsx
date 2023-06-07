@@ -19,7 +19,7 @@ import { useErrorDetailsModal } from "@providers/error-details-modal-provider";
 interface OrderFormProps {
   order: OrderDetailsDto | undefined;
   updateOrder: (order: OrderDetailsDto) => void;
-  handleSave: (order: OrderDetailsDto) => void;
+  handleSave: (order: OrderDetailsDto) => Promise<void>;
   isEdit: boolean;
 }
 
@@ -91,6 +91,7 @@ export const OrderForm = ({ order, updateOrder, handleSave, isEdit }: OrderFormP
 
   const submitFunc = async (values: OrderDetailsDto, helpers: FormikHelpers<OrderDetailsDto>) => {
     await handleSave(values);
+    handleNavigation(CoreModule.orders);
   };
 
   const submit = (values: OrderDetailsDto, helpers: FormikHelpers<OrderDetailsDto>) => {
@@ -101,11 +102,7 @@ export const OrderForm = ({ order, updateOrder, handleSave, isEdit }: OrderFormP
       notificationsService,
       showErrorModal,
       "order"
-    )
-      .then(() => {
-        handleNavigation(CoreModule.orders);
-      })
-      .catch();
+    );
   };
 
   const OrderEditValidationScheme = zod.object({

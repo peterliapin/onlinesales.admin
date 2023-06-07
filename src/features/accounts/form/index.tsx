@@ -26,7 +26,7 @@ import { useErrorDetailsModal } from "@providers/error-details-modal-provider";
 
 interface AccountFormProps {
   account: AccountDetailsDto;
-  handleSave: (account: AccountDetailsDto) => void;
+  handleSave: (account: AccountDetailsDto) => Promise<void>;
   isEdit: boolean;
 }
 
@@ -139,6 +139,7 @@ export const AccountForm = ({ account, handleSave, isEdit }: AccountFormProps) =
     helpers: FormikHelpers<AccountDetailsDto>
   ) => {
     await handleSave(values);
+    handleNavigation(CoreModule.accounts);
   };
 
   const submit = (values: AccountDetailsDto, helpers: FormikHelpers<AccountDetailsDto>) => {
@@ -149,11 +150,7 @@ export const AccountForm = ({ account, handleSave, isEdit }: AccountFormProps) =
       notificationsService,
       showErrorModal,
       "account"
-    )
-      .then(() => {
-        handleNavigation(CoreModule.accounts);
-      })
-      .catch();
+    );
   };
 
   const AccountEditValidationScheme = zod.object({
