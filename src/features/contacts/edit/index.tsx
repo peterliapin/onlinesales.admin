@@ -26,19 +26,12 @@ export const ContactEdit = () => {
     })();
   }, [client]);
 
-  const handleSave = async () => {
+  const handleSave = async (newContact: ContactDetailsDto) => {
     const updateDto: ContactUpdateDto = {
-      ...contact,
+      ...newContact,
     };
     await client.api.contactsPartialUpdate(id, updateDto);
   };
 
-  return (
-    <ContactForm
-      contact={contact}
-      updateContact={setContact}
-      handleSave={handleSave}
-      isEdit={true}
-    />
-  );
+  return <ContactForm contact={contact} handleSave={handleSave} isEdit={true} />;
 };

@@ -8,19 +8,12 @@ export const ContactAdd = () => {
 
   const [contact, setContact] = useState<ContactDetailsDto>({ email: "" });
 
-  const handleSave = async () => {
+  const handleSave = async (newContact: ContactDetailsDto) => {
     const createDto: ContactCreateDto = {
-      ...contact,
+      ...newContact,
     };
     await client.api.contactsCreate(createDto);
   };
 
-  return (
-    <ContactForm
-      contact={contact}
-      updateContact={setContact}
-      handleSave={handleSave}
-      isEdit={false}
-    />
-  );
+  return <ContactForm contact={contact} handleSave={handleSave} isEdit={false} />;
 };

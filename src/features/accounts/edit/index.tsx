@@ -23,19 +23,12 @@ export const AccountEdit = () => {
     })();
   }, [client]);
 
-  const handleSave = async () => {
+  const handleSave = async (newAccount: AccountDetailsDto) => {
     const updateDto: AccountUpdateDto = {
-      ...account,
+      ...newAccount,
     };
     await client.api.accountsPartialUpdate(id, updateDto!);
   };
 
-  return (
-    <AccountForm
-      account={account}
-      updateAccount={setAccount}
-      handleSave={handleSave}
-      isEdit={true}
-    />
-  );
+  return <AccountForm account={account} handleSave={handleSave} isEdit={true} />;
 };

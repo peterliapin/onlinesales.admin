@@ -4,52 +4,52 @@ import { useNotificationsService } from "@hooks";
 import { ContactDetailsDto, OrderDetailsDto } from "@lib/network/swagger-client";
 import { defaultFilterLimit } from "@lib/query";
 import { CoreModule } from "@lib/router";
-import { Autocomplete, Button, Card, CardContent, Grid, TextField } from "@mui/material";
+import { Autocomplete, Button, Card, CardContent, Grid, TextField, Tooltip } from "@mui/material";
 import { useModuleWrapperContext } from "@providers/module-wrapper-provider";
 import { useRequestContext } from "@providers/request-provider";
-import { truncate } from "fs";
 import { SyntheticEvent, useEffect, useState } from "react";
 import { useCoreModuleNavigation } from "utils/helper";
-import { isNotEmpty, isValidNumber, isValidOrEmptyNumber } from "utils/validators";
 import { orderAddHeader, orderEditHeader, orderFormBreadcrumbLinks } from "../constants";
+import { useFormik, FormikHelpers } from "formik";
+import zod from "zod";
+import { toFormikValidationSchema } from "zod-formik-adapter";
+import { execSubmitWithToast } from "utils/formikHelpers";
+import { useErrorDetailsModal } from "@providers/error-details-modal-provider";
 
 interface OrderFormProps {
   order: OrderDetailsDto | undefined;
   updateOrder: (order: OrderDetailsDto) => void;
-  handleSave: () => void;
+  handleSave: (order: OrderDetailsDto) => Promise<void>;
   isEdit: boolean;
 }
 
 export const OrderForm = ({ order, updateOrder, handleSave, isEdit }: OrderFormProps) => {
   const { notificationsService } = useNotificationsService();
   const { client } = useRequestContext();
-  const { setSaving } = useModuleWrapperContext();
+  const { setSaving, setBusy } = useModuleWrapperContext();
   const handleNavigation = useCoreModuleNavigation();
-  const { setBusy } = useModuleWrapperContext();
+  const { Show: showErrorModal } = useErrorDetailsModal()!;
 
   const [isLoading, setIsLoading] = useState(true);
   const [contactList, setContactList] = useState<ContactDetailsDto[]>([]);
   const [timer, setTimer] = useState<NodeJS.Timeout | null>(null);
   const [open, setOpen] = useState(false);
-  const [selectedContact, setSelectedContact] = useState<ContactDetailsDto>();
-  const [isValidRefNo, setIsValidRefNo] = useState(true);
-  const [isValidOrderNo, setIsValidOrderNo] = useState(true);
-  const [isValidContactId, setIsValidContactId] = useState(true);
-  const [isValidCurrency, setIsValidCurrency] = useState(true);
-  const [isValidExchangeRate, setIsValidExchangeRate] = useState(true);
   const loading = open && contactList.length === 0;
   const header = isEdit ? orderEditHeader : orderAddHeader;
 
   useEffect(() => {
-    setBusy(async () => {
-      try {
-        const { data } = await client.api.contactsDetail(order!.contactId);
-        setSelectedContact(data);
-        setIsLoading(false);
-      } catch (e) {
-        console.log(e);
-      }
-    });
+    if (order) {
+      setBusy(async () => {
+        try {
+          formik.setValues(order);
+          const { data } = await client.api.contactsDetail(order.contactId);
+          formik.setFieldValue("contact", data);
+          setIsLoading(false);
+        } catch (e) {
+          console.log(e);
+        }
+      });
+    }
   }, [order]);
 
   useEffect(() => {
@@ -75,80 +75,59 @@ export const OrderForm = ({ order, updateOrder, handleSave, isEdit }: OrderFormP
     );
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    const updatedOrder: OrderDetailsDto = {
-      ...order!,
-      [name]: value,
-    };
-    updateOrder(updatedOrder);
-  };
-
-  const validateAndSave = () =>
-    setSaving(async () => {
-      try {
-        if (isValid()) {
-          await handleSave();
-          handleSuccess();
-        }
-      } catch (e) {
-        console.log(e);
-        notificationsService.error("Server error occurred.");
-      }
-    });
-
-  const isValid = () => {
-    setIsValidRefNo(true);
-    setIsValidOrderNo(true);
-    setIsValidContactId(true);
-    setIsValidCurrency(true);
-    setIsValidExchangeRate(true);
-
-    if (!isValidNumber(order && order.contactId)) {
-      setIsValidContactId(false);
-      return false;
-    }
-    if (!isNotEmpty(order && order.refNo)) {
-      setIsValidRefNo(false);
-      return false;
-    }
-    if (!isNotEmpty(order && order.orderNumber)) {
-      setIsValidOrderNo(false);
-      return false;
-    }
-    if (!isNotEmpty(order && order.currency)) {
-      setIsValidCurrency(false);
-      return false;
-    }
-    if (!isValidOrEmptyNumber(order && order.exchangeRate)) {
-      setIsValidExchangeRate(false);
-      return false;
-    }
-    return true;
-  };
-
-  const handleSuccess = () => {
-    notificationsService.success(`Order ${isEdit ? "updated" : "added"} successfully.`);
-    handleNavigation(CoreModule.orders);
-  };
-
   const handleCancel = () => {
     handleNavigation(CoreModule.orders);
   };
 
   const handleContactChange = (value: ContactDetailsDto) => {
-    setSelectedContact(value);
-    const updatedOrder: OrderDetailsDto = {
-      ...order!,
-      ["contactId"]: value.id!,
-    };
-    updateOrder(updatedOrder);
+    formik.setFieldValue("contactId", value.id);
+    formik.setFieldValue("contact", value);
   };
 
   const getOptionLabel = (contact: ContactDetailsDto) => {
     if (contact.firstName || contact.lastName) return `${contact.firstName} ${contact.lastName}`;
     else return contact.email;
   };
+
+  const submitFunc = async (values: OrderDetailsDto, helpers: FormikHelpers<OrderDetailsDto>) => {
+    try {
+      await handleSave(values);
+      handleNavigation(CoreModule.orders);
+    } catch (error) {
+      formik.setSubmitting(false);
+      throw error;
+    }
+  };
+
+  const submit = (values: OrderDetailsDto, helpers: FormikHelpers<OrderDetailsDto>) => {
+    execSubmitWithToast<OrderDetailsDto>(
+      values,
+      helpers,
+      submitFunc,
+      notificationsService,
+      showErrorModal,
+      "order"
+    );
+  };
+
+  const OrderEditValidationScheme = zod.object({
+    contactId: zod.number().positive("Select a contact"),
+    refNo: zod.string(),
+    exchangeRate: zod.number().nullable().optional(),
+    currency: zod.string(),
+  });
+
+  const formik = useFormik({
+    validationSchema: toFormikValidationSchema(OrderEditValidationScheme),
+    initialValues: {
+      contactId: 0,
+      refNo: "",
+      exchangeRate: 0,
+      currency: "",
+    },
+    onSubmit: submit,
+    validateOnChange: false,
+  });
 
   return (
     <ModuleWrapper
@@ -160,141 +139,151 @@ export const OrderForm = ({ order, updateOrder, handleSave, isEdit }: OrderFormP
         <div />
       ) : (
         order && (
-          <Card>
-            <CardContent>
-              <Grid container spacing={3}>
-                <Grid xs={12} sm={6} item>
-                  <Autocomplete
-                    disablePortal
-                    open={open}
-                    onOpen={() => {
-                      setOpen(true);
-                    }}
-                    onClose={() => {
-                      setOpen(false);
-                    }}
-                    options={contactList}
-                    getOptionLabel={(option) => getOptionLabel(option)}
-                    value={selectedContact || null}
-                    onChange={(event, value) => handleContactChange(value!)}
-                    onInputChange={(event, value) => {
-                      loadContacts(event, value);
-                    }}
-                    loading={loading}
-                    filterOptions={(x) => x}
-                    fullWidth
-                    renderInput={(params) => (
+          <form onSubmit={formik.handleSubmit}>
+            <Card>
+              <CardContent>
+                <Grid container spacing={3}>
+                  <Grid xs={12} sm={6} item>
+                    <Autocomplete
+                      disabled={formik.isSubmitting}
+                      disablePortal
+                      open={open}
+                      onOpen={() => {
+                        setOpen(true);
+                      }}
+                      onClose={() => {
+                        setOpen(false);
+                      }}
+                      options={contactList}
+                      getOptionLabel={(option) => getOptionLabel(option)}
+                      value={formik.values.contact || null}
+                      onChange={(event, value) => handleContactChange(value!)}
+                      onInputChange={(event, value) => {
+                        loadContacts(event, value);
+                      }}
+                      loading={loading}
+                      filterOptions={(x) => x}
+                      fullWidth
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          label="Contact Name"
+                          value={formik.values.contact || null}
+                          error={formik.touched.contactId && Boolean(formik.errors.contactId)}
+                          helperText={formik.touched.contactId && formik.errors.contactId}
+                        />
+                      )}
+                    />
+                  </Grid>
+                  <Grid xs={12} sm={6} item>
+                    <TextField
+                      disabled={formik.isSubmitting}
+                      label="Ref No"
+                      name="refNo"
+                      value={formik.values.refNo || ""}
+                      placeholder="Enter Ref No"
+                      variant="outlined"
+                      onChange={formik.handleChange}
+                      error={formik.touched.refNo && Boolean(formik.errors.refNo)}
+                      helperText={formik.touched.refNo && formik.errors.refNo}
+                      fullWidth
+                    ></TextField>
+                  </Grid>
+                  <Grid xs={12} sm={6} item>
+                    <TextField
+                      disabled={formik.isSubmitting}
+                      label="Order No"
+                      name="orderNumber"
+                      value={formik.values.orderNumber || ""}
+                      placeholder="Enter Order Number"
+                      variant="outlined"
+                      onChange={formik.handleChange}
+                      fullWidth
+                    ></TextField>
+                  </Grid>
+                  <Grid xs={12} sm={6} item>
+                    <TextField
+                      disabled={formik.isSubmitting}
+                      label="Affiliate Name"
+                      name="affiliateName"
+                      value={formik.values.affiliateName || ""}
+                      placeholder="Enter Affiliate Name"
+                      variant="outlined"
+                      onChange={formik.handleChange}
+                      fullWidth
+                    ></TextField>
+                  </Grid>
+                  <Grid xs={12} sm={6} item>
+                    <Tooltip title="Exchange Rate field must contain only numbers">
                       <TextField
-                        {...params}
-                        label="Contact Name"
-                        error={!isValidContactId}
-                        helperText={!isValidContactId ? "Contact cannot be empty" : ""}
-                      />
-                    )}
-                  />
+                        disabled={formik.isSubmitting}
+                        label="Exchange Rate"
+                        name="exchangeRate"
+                        type="number"
+                        value={formik.values.exchangeRate || ""}
+                        placeholder="Enter Exchange Rate"
+                        variant="outlined"
+                        error={formik.touched.exchangeRate && Boolean(formik.errors.exchangeRate)}
+                        helperText={formik.touched.exchangeRate && formik.errors.exchangeRate}
+                        onChange={formik.handleChange}
+                        fullWidth
+                      ></TextField>
+                    </Tooltip>
+                  </Grid>
+                  <Grid xs={12} sm={6} item>
+                    <TextField
+                      disabled={formik.isSubmitting}
+                      label="Currency"
+                      name="currency"
+                      value={formik.values.currency || ""}
+                      placeholder="Enter Currency"
+                      variant="outlined"
+                      error={formik.touched.currency && Boolean(formik.errors.currency)}
+                      helperText={formik.touched.currency && formik.errors.currency}
+                      onChange={formik.handleChange}
+                      fullWidth
+                    ></TextField>
+                  </Grid>
+                  <Grid xs={12} sm={6} item>
+                    <TextField
+                      disabled={formik.isSubmitting}
+                      label="Source"
+                      name="source"
+                      value={formik.values.source || ""}
+                      placeholder="Enter Source"
+                      variant="outlined"
+                      onChange={formik.handleChange}
+                      fullWidth
+                    ></TextField>
+                  </Grid>
+                  <Grid xs={12} sm={6} item></Grid>
+                  <Grid item xs={6}>
+                    <Button
+                      disabled={formik.isSubmitting}
+                      type="submit"
+                      variant="contained"
+                      color="primary"
+                      onClick={handleCancel}
+                      fullWidth
+                    >
+                      Cancel
+                    </Button>
+                  </Grid>
+                  <Grid item xs={6}>
+                    <Button
+                      type="submit"
+                      disabled={formik.isSubmitting}
+                      variant="contained"
+                      color="primary"
+                      fullWidth
+                    >
+                      Save
+                    </Button>
+                  </Grid>
                 </Grid>
-                <Grid xs={12} sm={6} item>
-                  <TextField
-                    label="Ref No"
-                    name="refNo"
-                    value={order.refNo || ""}
-                    placeholder="Enter Ref No"
-                    variant="outlined"
-                    onChange={handleInputChange}
-                    error={!isValidRefNo}
-                    helperText={!isValidRefNo ? "Ref No cannot be empty" : ""}
-                    fullWidth
-                  ></TextField>
-                </Grid>
-                <Grid xs={12} sm={6} item>
-                  <TextField
-                    label="Order No"
-                    name="orderNumber"
-                    value={order.orderNumber || ""}
-                    placeholder="Enter Order Number"
-                    variant="outlined"
-                    error={!isValidOrderNo}
-                    helperText={!isValidOrderNo ? "Order Number cannot be empty" : ""}
-                    onChange={handleInputChange}
-                    fullWidth
-                  ></TextField>
-                </Grid>
-                <Grid xs={12} sm={6} item>
-                  <TextField
-                    label="Affiliate Name"
-                    name="affiliateName"
-                    value={order.affiliateName || ""}
-                    placeholder="Enter Affiliate Name"
-                    variant="outlined"
-                    onChange={handleInputChange}
-                    fullWidth
-                  ></TextField>
-                </Grid>
-                <Grid xs={12} sm={6} item>
-                  <TextField
-                    label="Exchange Rate"
-                    name="exchangeRate"
-                    value={order.exchangeRate || ""}
-                    placeholder="Enter Exchange Rate"
-                    variant="outlined"
-                    error={!isValidExchangeRate}
-                    helperText={
-                      !isValidExchangeRate ? "Exchange rate should be a valid number" : ""
-                    }
-                    onChange={handleInputChange}
-                    fullWidth
-                  ></TextField>
-                </Grid>
-                <Grid xs={12} sm={6} item>
-                  <TextField
-                    label="Currency"
-                    name="currency"
-                    value={order.currency || ""}
-                    placeholder="Enter Currency"
-                    variant="outlined"
-                    error={!isValidCurrency}
-                    helperText={!isValidCurrency ? "Currency cannot be empty" : ""}
-                    onChange={handleInputChange}
-                    fullWidth
-                  ></TextField>
-                </Grid>
-                <Grid xs={12} sm={6} item>
-                  <TextField
-                    label="Source"
-                    name="source"
-                    value={order.source || ""}
-                    placeholder="Enter Source"
-                    variant="outlined"
-                    onChange={handleInputChange}
-                    fullWidth
-                  ></TextField>
-                </Grid>
-                <Grid xs={12} sm={6} item></Grid>
-                <Grid item xs={6}>
-                  <Button
-                    type="submit"
-                    variant="contained"
-                    color="primary"
-                    onClick={handleCancel}
-                    fullWidth
-                  >
-                    Cancel
-                  </Button>
-                </Grid>
-                <Grid item xs={6}>
-                  <Button
-                    type="submit"
-                    variant="contained"
-                    color="primary"
-                    onClick={validateAndSave}
-                    fullWidth
-                  >
-                    Save
-                  </Button>
-                </Grid>
-              </Grid>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+          </form>
         )
       )}
     </ModuleWrapper>

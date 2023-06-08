@@ -1,20 +1,23 @@
 import { SyntheticEvent, useEffect, useState } from "react";
-import { Autocomplete, Button, Card, CardContent, Grid, TextField } from "@mui/material";
+import { Autocomplete, Button, Card, CardContent, Grid, TextField, Tooltip } from "@mui/material";
 import { ContactDetailsDto } from "lib/network/swagger-client";
 import { CoreModule } from "lib/router";
 import { contactAddHeader, contactEditHeader, contactFormBreadcrumbLinks } from "../constants";
 import { getCountryList, useCoreModuleNavigation } from "utils/helper";
-import { isValidEmail, isValidNumber } from "utils/validators";
 import { useRequestContext } from "@providers/request-provider";
 import { useNotificationsService } from "@hooks";
 import { ModuleWrapper } from "@components/module-wrapper";
 import { useModuleWrapperContext } from "@providers/module-wrapper-provider";
 import { SavingBar } from "@components/SavingBar";
+import { useFormik, FormikHelpers } from "formik";
+import zod from "zod";
+import { toFormikValidationSchema } from "zod-formik-adapter";
+import { execSubmitWithToast } from "utils/formikHelpers";
+import { useErrorDetailsModal } from "@providers/error-details-modal-provider";
 
 interface ContactFormProps {
   contact: ContactDetailsDto;
-  updateContact: (contact: ContactDetailsDto | any) => void;
-  handleSave: () => void;
+  handleSave: (contact: ContactDetailsDto) => Promise<void>;
   isEdit: boolean;
 }
 
@@ -23,14 +26,13 @@ type Country = {
   name: string;
 };
 
-export const ContactForm = ({ contact, updateContact, handleSave, isEdit }: ContactFormProps) => {
+export const ContactForm = ({ contact, handleSave, isEdit }: ContactFormProps) => {
   const { notificationsService } = useNotificationsService();
   const context = useRequestContext();
   const handleNavigation = useCoreModuleNavigation();
   const { setSaving, setBusy } = useModuleWrapperContext();
+  const { Show: showErrorModal } = useErrorDetailsModal()!;
 
-  const [isInvalidEmail, setIsInvalidEmail] = useState(false);
-  const [isInvalidNumber, setIsInvalidNumber] = useState(false);
   const [countryList, setCountryList] = useState<Country[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -48,46 +50,59 @@ export const ContactForm = ({ contact, updateContact, handleSave, isEdit }: Cont
     });
   }, []);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    updateContact((currentContact: ContactDetailsDto) => ({ ...currentContact, [name]: value }));
+  useEffect(() => {
+    if (contact.email) {
+      formik.setValues(contact);
+    }
+  }, [contact]);
+
+  const submit = (values: ContactDetailsDto, helpers: FormikHelpers<ContactDetailsDto>) => {
+    execSubmitWithToast<ContactDetailsDto>(
+      values,
+      helpers,
+      submitFunc,
+      notificationsService,
+      showErrorModal,
+      "contact"
+    );
   };
+
+  const submitFunc = async (
+    values: ContactDetailsDto,
+    helpers: FormikHelpers<ContactDetailsDto>
+  ) => {
+    try {
+      await handleSave(values);
+      handleNavigation(CoreModule.contacts);
+    } catch (error) {
+      formik.setSubmitting(false);
+      throw error;
+    }
+  };
+
+  const ContactEditValidationScheme = zod.object({
+    email: zod.string().email(),
+    timezone: zod.number().nullable().optional(),
+    firstName: zod.string().optional(),
+  });
+
+  const formik = useFormik({
+    validationSchema: toFormikValidationSchema(ContactEditValidationScheme),
+    initialValues: {
+      email: "",
+      timezone: null,
+    },
+    onSubmit: submit,
+    validateOnChange: false,
+  });
 
   const handleCountryChange = (
     e: SyntheticEvent<Element, Event>,
     value: { code: string; name: string } | null
   ) => {
     if (value) {
-      updateContact((currentContact: ContactDetailsDto) => ({
-        ...currentContact,
-        ["countryCode"]: value.code,
-      }));
+      formik.setFieldValue("countryCode", value.code);
     }
-  };
-
-  const validateAndSave = () =>
-    setSaving(async () => {
-      setIsInvalidEmail(false);
-      setIsInvalidNumber(false);
-
-      if (!isValidEmail(contact.email)) {
-        setIsInvalidEmail(true);
-      } else if (!isValidNumber(contact.timezone)) {
-        setIsInvalidNumber(true);
-      } else {
-        try {
-          await handleSave();
-          handleSuccess();
-        } catch (e) {
-          console.log(e);
-          notificationsService.error("Server error occurred.");
-        }
-      }
-    });
-
-  const handleSuccess = () => {
-    notificationsService.success(`Contact ${isEdit ? "updated" : "added"} successfully.`);
-    handleNavigation(CoreModule.contacts);
   };
 
   const handleCancel = () => {
@@ -103,174 +118,202 @@ export const ContactForm = ({ contact, updateContact, handleSave, isEdit }: Cont
       {isLoading ? (
         <div />
       ) : (
-        <Card>
-          <CardContent>
-            <Grid container spacing={3}>
-              <Grid xs={12} sm={6} item>
-                <TextField
-                  label="First Name"
-                  name="firstName"
-                  value={contact.firstName || ""}
-                  placeholder="Enter first name"
-                  variant="outlined"
-                  onChange={handleInputChange}
-                  fullWidth
-                ></TextField>
-              </Grid>
-              <Grid xs={12} sm={6} item>
-                <TextField
-                  label="Last Name"
-                  name="lastName"
-                  value={contact.lastName || ""}
-                  placeholder="Enter last name"
-                  variant="outlined"
-                  onChange={handleInputChange}
-                  fullWidth
-                ></TextField>
-              </Grid>
-              <Grid xs={12} sm={6} item>
-                <TextField
-                  label="Email Address"
-                  name="email"
-                  value={contact.email || ""}
-                  placeholder="Enter email address"
-                  type="email"
-                  variant="outlined"
-                  onChange={handleInputChange}
-                  fullWidth
-                  error={isInvalidEmail}
-                  helperText={isInvalidEmail ? "Enter a valid email address" : ""}
-                ></TextField>
-              </Grid>
-              <Grid xs={12} sm={6} item>
-                <TextField
-                  label="Phone"
-                  name="phone"
-                  value={contact.phone || ""}
-                  placeholder="Enter phone number"
-                  variant="outlined"
-                  onChange={handleInputChange}
-                  fullWidth
-                ></TextField>
-              </Grid>
-              <Grid xs={12} sm={6} item>
-                <TextField
-                  label="Address 1"
-                  name="address1"
-                  value={contact.address1 || ""}
-                  placeholder="Enter address"
-                  variant="outlined"
-                  onChange={handleInputChange}
-                  fullWidth
-                ></TextField>
-              </Grid>
-              <Grid xs={12} sm={6} item>
-                <TextField
-                  label="Address 2"
-                  name="address2"
-                  value={contact.address2 || ""}
-                  placeholder="Enter address"
-                  variant="outlined"
-                  onChange={handleInputChange}
-                  fullWidth
-                ></TextField>
-              </Grid>
-              <Grid xs={12} sm={6} item>
-                {!isLoading && (
-                  <Autocomplete
-                    disablePortal
-                    options={countryList}
-                    getOptionLabel={(option) => option.name}
-                    value={countryList.find((c) => c.code === contact.countryCode) || null}
-                    onChange={handleCountryChange}
+        <form onSubmit={formik.handleSubmit}>
+          <Card>
+            <CardContent>
+              <Grid container spacing={3}>
+                <Grid xs={12} sm={6} item>
+                  <TextField
+                    disabled={formik.isSubmitting}
+                    label="First Name"
+                    name="firstName"
+                    value={formik.values.firstName || ""}
+                    placeholder="Enter first name"
+                    variant="outlined"
+                    onChange={formik.handleChange}
+                    error={formik.touched.firstName && Boolean(formik.errors.firstName)}
+                    helperText={formik.touched.firstName && formik.errors.firstName}
                     fullWidth
-                    renderInput={(params) => <TextField {...params} label="Country" />}
-                  />
-                )}
+                  ></TextField>
+                </Grid>
+                <Grid xs={12} sm={6} item>
+                  <TextField
+                    disabled={formik.isSubmitting}
+                    label="Last Name"
+                    name="lastName"
+                    value={formik.values.lastName || ""}
+                    placeholder="Enter last name"
+                    variant="outlined"
+                    onChange={formik.handleChange}
+                    fullWidth
+                  ></TextField>
+                </Grid>
+                <Grid xs={12} sm={6} item>
+                  <TextField
+                    disabled={formik.isSubmitting}
+                    label="Email Address"
+                    name="email"
+                    value={formik.values.email}
+                    placeholder="Enter email address"
+                    type="email"
+                    variant="outlined"
+                    onChange={formik.handleChange}
+                    fullWidth
+                    error={formik.touched.email && Boolean(formik.errors.email)}
+                    helperText={formik.touched.email && formik.errors.email}
+                  ></TextField>
+                </Grid>
+                <Grid xs={12} sm={6} item>
+                  <TextField
+                    disabled={formik.isSubmitting}
+                    label="Phone"
+                    name="phone"
+                    value={formik.values.phone || ""}
+                    placeholder="Enter phone number"
+                    variant="outlined"
+                    onChange={formik.handleChange}
+                    fullWidth
+                  ></TextField>
+                </Grid>
+                <Grid xs={12} sm={6} item>
+                  <TextField
+                    disabled={formik.isSubmitting}
+                    label="Address 1"
+                    name="address1"
+                    value={formik.values.address1 || ""}
+                    placeholder="Enter address"
+                    variant="outlined"
+                    onChange={formik.handleChange}
+                    fullWidth
+                  ></TextField>
+                </Grid>
+                <Grid xs={12} sm={6} item>
+                  <TextField
+                    disabled={formik.isSubmitting}
+                    label="Address 2"
+                    name="address2"
+                    value={formik.values.address2 || ""}
+                    placeholder="Enter address"
+                    variant="outlined"
+                    onChange={formik.handleChange}
+                    fullWidth
+                  ></TextField>
+                </Grid>
+                <Grid xs={12} sm={6} item>
+                  {!isLoading && (
+                    <Autocomplete
+                      disabled={formik.isSubmitting}
+                      disablePortal
+                      options={countryList}
+                      getOptionLabel={(option) => option.name}
+                      value={countryList.find((c) => c.code === formik.values.countryCode) || null}
+                      onChange={handleCountryChange}
+                      fullWidth
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          label="Country"
+                          value={
+                            countryList.find((c) => c.code === formik.values.countryCode) || null
+                          }
+                          onChange={formik.handleChange}
+                        />
+                      )}
+                    />
+                  )}
+                </Grid>
+                <Grid xs={12} sm={6} item>
+                  <TextField
+                    disabled={formik.isSubmitting}
+                    label="City"
+                    name="cityName"
+                    value={formik.values.cityName || ""}
+                    placeholder="Enter state"
+                    variant="outlined"
+                    onChange={formik.handleChange}
+                    fullWidth
+                  ></TextField>
+                </Grid>
+                <Grid xs={12} sm={6} item>
+                  <TextField
+                    disabled={formik.isSubmitting}
+                    label="State"
+                    name="state"
+                    value={formik.values.state || ""}
+                    placeholder="Enter state"
+                    variant="outlined"
+                    onChange={formik.handleChange}
+                    fullWidth
+                  ></TextField>
+                </Grid>
+                <Grid xs={12} sm={6} item>
+                  <TextField
+                    disabled={formik.isSubmitting}
+                    label="Zip"
+                    name="zip"
+                    value={formik.values.zip || ""}
+                    placeholder="Enter zip"
+                    variant="outlined"
+                    onChange={formik.handleChange}
+                    fullWidth
+                  ></TextField>
+                </Grid>
+                <Grid xs={12} sm={6} item>
+                  <Tooltip title="Timezone field must contain only numbers">
+                    <TextField
+                      disabled={formik.isSubmitting}
+                      label="Timezone"
+                      name="timezone"
+                      type="number"
+                      value={formik.values.timezone || ""}
+                      placeholder="Enter timezone"
+                      variant="outlined"
+                      onChange={formik.handleChange}
+                      fullWidth
+                      error={formik.touched.timezone && Boolean(formik.errors.timezone)}
+                      helperText={formik.touched.timezone && formik.errors.timezone}
+                    ></TextField>
+                  </Tooltip>
+                </Grid>
+                <Grid xs={12} sm={6} item>
+                  <TextField
+                    disabled={formik.isSubmitting}
+                    label="Language"
+                    name="language"
+                    value={formik.values.language || ""}
+                    placeholder="Enter language"
+                    variant="outlined"
+                    onChange={formik.handleChange}
+                    fullWidth
+                  ></TextField>
+                </Grid>
+                <Grid item xs={6}>
+                  <Button
+                    disabled={formik.isSubmitting}
+                    type="submit"
+                    variant="contained"
+                    color="primary"
+                    onClick={handleCancel}
+                    fullWidth
+                  >
+                    Cancel
+                  </Button>
+                </Grid>
+                <Grid item xs={6}>
+                  <Button
+                    type="submit"
+                    disabled={formik.isSubmitting}
+                    variant="contained"
+                    color="primary"
+                    fullWidth
+                  >
+                    Save
+                  </Button>
+                </Grid>
               </Grid>
-              <Grid xs={12} sm={6} item>
-                <TextField
-                  label="City"
-                  name="cityName"
-                  value={contact.cityName || ""}
-                  placeholder="Enter state"
-                  variant="outlined"
-                  onChange={handleInputChange}
-                  fullWidth
-                ></TextField>
-              </Grid>
-              <Grid xs={12} sm={6} item>
-                <TextField
-                  label="State"
-                  name="state"
-                  value={contact.state || ""}
-                  placeholder="Enter state"
-                  variant="outlined"
-                  onChange={handleInputChange}
-                  fullWidth
-                ></TextField>
-              </Grid>
-              <Grid xs={12} sm={6} item>
-                <TextField
-                  label="Zip"
-                  name="zip"
-                  value={contact.zip || ""}
-                  placeholder="Enter zip"
-                  variant="outlined"
-                  onChange={handleInputChange}
-                  fullWidth
-                ></TextField>
-              </Grid>
-              <Grid xs={12} sm={6} item>
-                <TextField
-                  label="Timezone"
-                  name="timezone"
-                  type="text"
-                  value={contact.timezone || ""}
-                  placeholder="Enter timezone"
-                  variant="outlined"
-                  onChange={handleInputChange}
-                  fullWidth
-                  error={isInvalidNumber}
-                  helperText={isInvalidNumber ? "Timezone should be a number" : ""}
-                ></TextField>
-              </Grid>
-              <Grid xs={12} sm={6} item>
-                <TextField
-                  label="Language"
-                  name="language"
-                  value={contact.language || ""}
-                  placeholder="Enter language"
-                  variant="outlined"
-                  onChange={handleInputChange}
-                  fullWidth
-                ></TextField>
-              </Grid>
-              <Grid item xs={6}>
-                <Button
-                  type="submit"
-                  variant="contained"
-                  color="primary"
-                  onClick={handleCancel}
-                  fullWidth
-                >
-                  Cancel
-                </Button>
-              </Grid>
-              <Grid item xs={6}>
-                <Button
-                  type="submit"
-                  variant="contained"
-                  color="primary"
-                  onClick={validateAndSave}
-                  fullWidth
-                >
-                  Save
-                </Button>
-              </Grid>
-            </Grid>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        </form>
       )}
     </ModuleWrapper>
   );
