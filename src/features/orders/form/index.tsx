@@ -1,5 +1,5 @@
 import { ModuleWrapper } from "@components/module-wrapper";
-import { SavingBar } from "@components/SavingBar";
+import { SavingBar } from "@components/saving-bar";
 import { useNotificationsService } from "@hooks";
 import { ContactDetailsDto, OrderDetailsDto } from "@lib/network/swagger-client";
 import { defaultFilterLimit } from "@lib/query";
@@ -13,7 +13,7 @@ import { orderAddHeader, orderEditHeader, orderFormBreadcrumbLinks } from "../co
 import { useFormik, FormikHelpers } from "formik";
 import zod from "zod";
 import { toFormikValidationSchema } from "zod-formik-adapter";
-import { execSubmitWithToast } from "utils/formikHelpers";
+import { execSubmitWithToast } from "utils/formik-helpers";
 import { useErrorDetailsModal } from "@providers/error-details-modal-provider";
 
 interface OrderFormProps {

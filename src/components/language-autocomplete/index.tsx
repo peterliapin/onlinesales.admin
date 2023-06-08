@@ -2,14 +2,11 @@ import Autocomplete, { AutocompleteRenderInputParams } from "@mui/material/Autoc
 import Locale from "locale-codes";
 
 interface LanguageAutocompleteProps {
-  value: string,
+  value: string;
   onChange: (value: string | null) => void;
   renderInput: (params: AutocompleteRenderInputParams) => React.ReactNode;
 }
-const AvailableLanguages = [
-  "ru-RU",
-  "en-US",
-];
+const AvailableLanguages = ["ru-RU", "en-US"];
 
 const muiOptions = AvailableLanguages.map((value) => {
   return {
@@ -31,7 +28,11 @@ const prepValue = (languageCode: string | null | undefined) => {
   };
 };
 
-export const LanguageAutocomplete = ({value, onChange, renderInput}: LanguageAutocompleteProps) => {
+export const LanguageAutocomplete = ({
+  value,
+  onChange,
+  renderInput,
+}: LanguageAutocompleteProps) => {
   return (
     <Autocomplete
       autoSelect

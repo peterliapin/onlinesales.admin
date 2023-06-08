@@ -14,9 +14,9 @@ export const activityLogListPageBreadcrumb = "Activity Logs";
 
 export const activityLogFormBreadcrumbLinks: BreadcrumbLink[] = [
   ...dataListBreadcrumbLinks,
-  { 
-    linkText: activityLogListPageBreadcrumb, 
-    toRoute: getCoreModuleRoute(CoreModule.emailTemplates)
+  {
+    linkText: activityLogListPageBreadcrumb,
+    toRoute: getCoreModuleRoute(CoreModule.emailTemplates),
   },
 ];
 

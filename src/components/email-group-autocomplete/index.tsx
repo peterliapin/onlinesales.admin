@@ -6,7 +6,6 @@ import { ProblemDetails } from "@lib/network/swagger-client";
 import { useNotificationsService } from "@hooks";
 import { CreateNewEmailGroup } from "./create-new";
 
-
 export function EmailGroupAutocomplete({
   label,
   placeholder,
@@ -34,7 +33,7 @@ export function EmailGroupAutocomplete({
       data = response.data.map((value) => {
         return {
           id: value.id as number,
-          label: value.name
+          label: value.name,
         };
       });
     } catch (e) {
@@ -48,13 +47,13 @@ export function EmailGroupAutocomplete({
   };
 
   useEffect(() => {
-    if (isLoaded){
+    if (isLoaded) {
       const matchedOption = options.filter((v) => v.id === value)[0];
       setValue({
         id: value,
         label: (matchedOption && matchedOption.label) || "Not selected",
-      });  
-    }else{
+      });
+    } else {
       requestData();
     }
   }, [isLoaded]);
@@ -62,9 +61,9 @@ export function EmailGroupAutocomplete({
   useEffect(() => {
     setValue({
       id: value,
-      label: isLoaded ? 
-        options.filter((v) => v.id === value)[0]?.label || "Not selected" :
-        "Loading...",
+      label: isLoaded
+        ? options.filter((v) => v.id === value)[0]?.label || "Not selected"
+        : "Loading...",
     });
   }, [value]);
 
@@ -77,12 +76,10 @@ export function EmailGroupAutocomplete({
       <CreateNewEmailGroup
         isOpen={isGroupCreatorOpen}
         onClose={() => setGroupCreatorOpen(false)}
-        onChange={
-          (value) => { 
-            setValue(value);
-            setIsLoaded(false);
-          }
-        }
+        onChange={(value) => {
+          setValue(value);
+          setIsLoaded(false);
+        }}
       />
       <Autocomplete
         open={isOpen}
@@ -97,16 +94,12 @@ export function EmailGroupAutocomplete({
         getOptionLabel={(option) => option.label}
         loading={isLoading}
         value={valueState}
-        onChange={(_, value) => onChange( (value && value.id) || -1)}
+        onChange={(_, value) => onChange((value && value.id) || -1)}
         PaperComponent={({ children }) => {
           return (
             <>
               <Paper>
-                <Button
-                  onMouseDown={() => setGroupCreatorOpen(true)}
-                >
-                  Create new group
-                </Button>
+                <Button onMouseDown={() => setGroupCreatorOpen(true)}>Create new group</Button>
                 {children}
               </Paper>
             </>

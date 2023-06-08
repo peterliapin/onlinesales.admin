@@ -28,7 +28,7 @@ export const AboutModule = () => {
           <Card sx={{ minWidth: 275 }}>
             <CardContent>
               <Typography>
-                Backend version: 
+                Backend version:
                 {backendVersion ? (
                   backendVersion
                 ) : (

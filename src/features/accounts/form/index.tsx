@@ -1,5 +1,5 @@
 import { ModuleWrapper } from "@components/module-wrapper";
-import { SavingBar } from "@components/SavingBar";
+import { SavingBar } from "@components/saving-bar";
 import { useNotificationsService } from "@hooks";
 import { AccountDetailsDto } from "@lib/network/swagger-client";
 import { CoreModule } from "@lib/router";
@@ -21,7 +21,7 @@ import { accountAddHeader, accountEditHeader, accountFormBreadcrumbLinks } from 
 import { useFormik, FormikHelpers } from "formik";
 import zod from "zod";
 import { toFormikValidationSchema } from "zod-formik-adapter";
-import { execSubmitWithToast } from "utils/formikHelpers";
+import { execSubmitWithToast } from "utils/formik-helpers";
 import { useErrorDetailsModal } from "@providers/error-details-modal-provider";
 
 interface AccountFormProps {

@@ -14,7 +14,7 @@ import {
   TitleContainer,
 } from "./index.styled";
 import { Chip } from "@mui/material";
-import MarkdownViewer from "@components/MarkdownViewer";
+import MarkdownViewer from "@components/markdown-viewer";
 import { CommentList } from "./comment/comment-list";
 import graymatter from "gray-matter";
 import { useModuleWrapperContext } from "@providers/module-wrapper-provider";

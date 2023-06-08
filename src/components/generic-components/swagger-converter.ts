@@ -15,7 +15,7 @@ const convertSchemaToDtoSchema = (
   if (schema.properties && dtoSchema.properties) {
     for (const [key, value] of Object.entries(schema.properties)) {
       const refName = (value.$ref && value.$ref.replace("#/components/schemas/", "")) || undefined;
-      const refSchema = (refName && allSchemas[refName] ) || undefined;
+      const refSchema = (refName && allSchemas[refName]) || undefined;
       if (refSchema && refSchema !== schema) {
         const refDtoSchema = convertSchemaToDtoSchema(refSchema, allSchemas);
         if (refDtoSchema.type === "string") {

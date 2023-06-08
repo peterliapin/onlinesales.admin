@@ -7,10 +7,10 @@ export interface EmailGroupAutoCompleteProps {
   onChange: (value: number) => void;
 }
 
-export interface EmailGroupOption{
+export interface EmailGroupOption {
   id: number;
   label: string;
-};
+}
 
 export interface CreateNewEmailGroupProps {
   onChange: (value: EmailGroupOption) => void;

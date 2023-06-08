@@ -27,9 +27,9 @@ import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
 import { TabPanelProps } from "./types";
 import { buildAbsoluteUrl } from "@lib/network/utils";
 import { useUserInfo } from "@providers/user-provider";
-import networkErrorToStringArray from "utils/networkErrorToStringArray";
+import networkErrorToStringArray from "utils/network-error-to-string-array";
 import { useErrorDetailsModal } from "@providers/error-details-modal-provider";
-import { execSubmitWithToast } from "utils/formikHelpers";
+import { execSubmitWithToast } from "utils/formik-helpers";
 
 const tabProps = (index: number) => {
   return {
@@ -74,7 +74,7 @@ export const UserEdit = () => {
       response = await client.api.usersPartialUpdate(id, values);
     }
     helpers.setValues(response.data);
-    if (id === userInfo?.details?.id){
+    if (id === userInfo?.details?.id) {
       userInfo?.refresh();
     }
     helpers.setSubmitting(false);
@@ -87,7 +87,7 @@ export const UserEdit = () => {
       submitFunc,
       notificationsService,
       showErrorModal,
-      "user",
+      "user"
     );
   };
 
@@ -129,10 +129,8 @@ export const UserEdit = () => {
         Image: file,
         ScopeUid: "UserAvatarStorage",
       });
-      if (imageUploadingResponse.error){
-        notificationsService.error(
-          `Failed to upload image ${imageUploadingResponse.error.detail}`
-        );
+      if (imageUploadingResponse.error) {
+        notificationsService.error(`Failed to upload image ${imageUploadingResponse.error.detail}`);
       }
       input.remove();
       await formik.setFieldValue("avatarUrl", imageUploadingResponse.data.location);

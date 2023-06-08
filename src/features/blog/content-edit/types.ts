@@ -1,4 +1,4 @@
-import { ImageData } from "@components/FileDropdown";
+import { ImageData } from "@components/file-dropdown";
 
 export interface ContentDetails {
   id: string | null;

@@ -9,11 +9,7 @@ import {
   Typography,
 } from "@mui/material";
 import { ContentDetailsDto } from "@lib/network/swagger-client";
-import {
-  ContentListContainer,
-  TimestampContainer,
-  DummyDiv,
-} from "./index.styled";
+import { ContentListContainer, TimestampContainer, DummyDiv } from "./index.styled";
 import { useEffect, useState } from "react";
 import { Add, Upload, Download } from "@mui/icons-material";
 import { useRequestContext } from "@providers/request-provider";
@@ -56,9 +52,9 @@ export const ContentList = () => {
   );
 
   const fetchData = async () => {
-    const filter = searchText ?
-        { query: searchText, "filter[skip]": contentItems.length } :
-        { "filter[order]": "createdAt desc", "filter[skip]": contentItems.length };
+    const filter = searchText
+      ? { query: searchText, "filter[skip]": contentItems.length }
+      : { "filter[order]": "createdAt desc", "filter[skip]": contentItems.length };
     const { data } = await client.api.contentList(filter);
     setContentItems((current) => [...current, ...data]);
   };
@@ -103,19 +99,10 @@ export const ContentList = () => {
             scrollableTarget="scrollTarget"
             style={{ overflow: "unset" }}
           >
-            <Grid
-              container
-              spacing={10}
-            >
-              {
-                contentItems.map((item, index) => (
-                  <ItemCard
-                    key={index}
-                    item={item}
-                    index={index}
-                  />
-                ))
-              }
+            <Grid container spacing={10}>
+              {contentItems.map((item, index) => (
+                <ItemCard key={index} item={item} index={index} />
+              ))}
             </Grid>
           </InfiniteScroll>
         )}

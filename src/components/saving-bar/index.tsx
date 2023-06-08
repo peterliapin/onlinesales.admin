@@ -48,18 +48,14 @@ export const SavingBar = () => {
   return (
     <Box minWidth={200}>
       <Grid container justifyContent={"flex-end"}>
-        <Grid item sx={{position: "absolute"}}>
-          <Fade 
-            in={state}
-          >
-            <SavingBarEnd/>
+        <Grid item sx={{ position: "absolute" }}>
+          <Fade in={state}>
+            <SavingBarEnd />
           </Fade>
         </Grid>
-        <Grid item sx={{position: "absolute"}}>
-          <Fade 
-            in={!state}
-          >
-            <SavingBarBegin/>
+        <Grid item sx={{ position: "absolute" }}>
+          <Fade in={!state}>
+            <SavingBarBegin />
           </Fade>
         </Grid>
       </Grid>

@@ -38,7 +38,7 @@ import { useModuleWrapperContext } from "@providers/module-wrapper-provider";
 import { useFormik, FormikHelpers } from "formik";
 import zod from "zod";
 import { toFormikValidationSchema } from "zod-formik-adapter";
-import { execSubmitWithToast } from "utils/formikHelpers";
+import { execSubmitWithToast } from "utils/formik-helpers";
 import { useErrorDetailsModal } from "@providers/error-details-modal-provider";
 
 export const OrderViewBase = () => {

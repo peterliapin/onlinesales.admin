@@ -1,7 +1,6 @@
 import { styled } from "@mui/material";
 
-export const ContentListContainer = styled("div")`
-`;
+export const ContentListContainer = styled("div")``;
 
 export const ContentEditContainer = styled("div")`
   flex-grow: 1;
