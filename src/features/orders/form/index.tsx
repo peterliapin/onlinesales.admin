@@ -90,8 +90,13 @@ export const OrderForm = ({ order, updateOrder, handleSave, isEdit }: OrderFormP
   };
 
   const submitFunc = async (values: OrderDetailsDto, helpers: FormikHelpers<OrderDetailsDto>) => {
-    await handleSave(values);
-    handleNavigation(CoreModule.orders);
+    try {
+      await handleSave(values);
+      handleNavigation(CoreModule.orders);
+    } catch (error) {
+      formik.setSubmitting(false);
+      throw error;
+    }
   };
 
   const submit = (values: OrderDetailsDto, helpers: FormikHelpers<OrderDetailsDto>) => {
@@ -140,6 +145,7 @@ export const OrderForm = ({ order, updateOrder, handleSave, isEdit }: OrderFormP
                 <Grid container spacing={3}>
                   <Grid xs={12} sm={6} item>
                     <Autocomplete
+                      disabled={formik.isSubmitting}
                       disablePortal
                       open={open}
                       onOpen={() => {
@@ -171,6 +177,7 @@ export const OrderForm = ({ order, updateOrder, handleSave, isEdit }: OrderFormP
                   </Grid>
                   <Grid xs={12} sm={6} item>
                     <TextField
+                      disabled={formik.isSubmitting}
                       label="Ref No"
                       name="refNo"
                       value={formik.values.refNo || ""}
@@ -184,6 +191,7 @@ export const OrderForm = ({ order, updateOrder, handleSave, isEdit }: OrderFormP
                   </Grid>
                   <Grid xs={12} sm={6} item>
                     <TextField
+                      disabled={formik.isSubmitting}
                       label="Order No"
                       name="orderNumber"
                       value={formik.values.orderNumber || ""}
@@ -195,6 +203,7 @@ export const OrderForm = ({ order, updateOrder, handleSave, isEdit }: OrderFormP
                   </Grid>
                   <Grid xs={12} sm={6} item>
                     <TextField
+                      disabled={formik.isSubmitting}
                       label="Affiliate Name"
                       name="affiliateName"
                       value={formik.values.affiliateName || ""}
@@ -207,6 +216,7 @@ export const OrderForm = ({ order, updateOrder, handleSave, isEdit }: OrderFormP
                   <Grid xs={12} sm={6} item>
                     <Tooltip title="Exchange Rate field must contain only numbers">
                       <TextField
+                        disabled={formik.isSubmitting}
                         label="Exchange Rate"
                         name="exchangeRate"
                         type="number"
@@ -222,6 +232,7 @@ export const OrderForm = ({ order, updateOrder, handleSave, isEdit }: OrderFormP
                   </Grid>
                   <Grid xs={12} sm={6} item>
                     <TextField
+                      disabled={formik.isSubmitting}
                       label="Currency"
                       name="currency"
                       value={formik.values.currency || ""}
@@ -235,6 +246,7 @@ export const OrderForm = ({ order, updateOrder, handleSave, isEdit }: OrderFormP
                   </Grid>
                   <Grid xs={12} sm={6} item>
                     <TextField
+                      disabled={formik.isSubmitting}
                       label="Source"
                       name="source"
                       value={formik.values.source || ""}
@@ -247,6 +259,7 @@ export const OrderForm = ({ order, updateOrder, handleSave, isEdit }: OrderFormP
                   <Grid xs={12} sm={6} item></Grid>
                   <Grid item xs={6}>
                     <Button
+                      disabled={formik.isSubmitting}
                       type="submit"
                       variant="contained"
                       color="primary"
@@ -257,7 +270,13 @@ export const OrderForm = ({ order, updateOrder, handleSave, isEdit }: OrderFormP
                     </Button>
                   </Grid>
                   <Grid item xs={6}>
-                    <Button type="submit" variant="contained" color="primary" fullWidth>
+                    <Button
+                      type="submit"
+                      disabled={formik.isSubmitting}
+                      variant="contained"
+                      color="primary"
+                      fullWidth
+                    >
                       Save
                     </Button>
                   </Grid>

@@ -71,8 +71,13 @@ export const ContactForm = ({ contact, handleSave, isEdit }: ContactFormProps) =
     values: ContactDetailsDto,
     helpers: FormikHelpers<ContactDetailsDto>
   ) => {
-    await handleSave(values);
-    handleNavigation(CoreModule.contacts);
+    try {
+      await handleSave(values);
+      handleNavigation(CoreModule.contacts);
+    } catch (error) {
+      formik.setSubmitting(false);
+      throw error;
+    }
   };
 
   const ContactEditValidationScheme = zod.object({
@@ -119,6 +124,7 @@ export const ContactForm = ({ contact, handleSave, isEdit }: ContactFormProps) =
               <Grid container spacing={3}>
                 <Grid xs={12} sm={6} item>
                   <TextField
+                    disabled={formik.isSubmitting}
                     label="First Name"
                     name="firstName"
                     value={formik.values.firstName || ""}
@@ -132,6 +138,7 @@ export const ContactForm = ({ contact, handleSave, isEdit }: ContactFormProps) =
                 </Grid>
                 <Grid xs={12} sm={6} item>
                   <TextField
+                    disabled={formik.isSubmitting}
                     label="Last Name"
                     name="lastName"
                     value={formik.values.lastName || ""}
@@ -143,6 +150,7 @@ export const ContactForm = ({ contact, handleSave, isEdit }: ContactFormProps) =
                 </Grid>
                 <Grid xs={12} sm={6} item>
                   <TextField
+                    disabled={formik.isSubmitting}
                     label="Email Address"
                     name="email"
                     value={formik.values.email}
@@ -157,6 +165,7 @@ export const ContactForm = ({ contact, handleSave, isEdit }: ContactFormProps) =
                 </Grid>
                 <Grid xs={12} sm={6} item>
                   <TextField
+                    disabled={formik.isSubmitting}
                     label="Phone"
                     name="phone"
                     value={formik.values.phone || ""}
@@ -168,6 +177,7 @@ export const ContactForm = ({ contact, handleSave, isEdit }: ContactFormProps) =
                 </Grid>
                 <Grid xs={12} sm={6} item>
                   <TextField
+                    disabled={formik.isSubmitting}
                     label="Address 1"
                     name="address1"
                     value={formik.values.address1 || ""}
@@ -179,6 +189,7 @@ export const ContactForm = ({ contact, handleSave, isEdit }: ContactFormProps) =
                 </Grid>
                 <Grid xs={12} sm={6} item>
                   <TextField
+                    disabled={formik.isSubmitting}
                     label="Address 2"
                     name="address2"
                     value={formik.values.address2 || ""}
@@ -191,6 +202,7 @@ export const ContactForm = ({ contact, handleSave, isEdit }: ContactFormProps) =
                 <Grid xs={12} sm={6} item>
                   {!isLoading && (
                     <Autocomplete
+                      disabled={formik.isSubmitting}
                       disablePortal
                       options={countryList}
                       getOptionLabel={(option) => option.name}
@@ -212,6 +224,7 @@ export const ContactForm = ({ contact, handleSave, isEdit }: ContactFormProps) =
                 </Grid>
                 <Grid xs={12} sm={6} item>
                   <TextField
+                    disabled={formik.isSubmitting}
                     label="City"
                     name="cityName"
                     value={formik.values.cityName || ""}
@@ -223,6 +236,7 @@ export const ContactForm = ({ contact, handleSave, isEdit }: ContactFormProps) =
                 </Grid>
                 <Grid xs={12} sm={6} item>
                   <TextField
+                    disabled={formik.isSubmitting}
                     label="State"
                     name="state"
                     value={formik.values.state || ""}
@@ -234,6 +248,7 @@ export const ContactForm = ({ contact, handleSave, isEdit }: ContactFormProps) =
                 </Grid>
                 <Grid xs={12} sm={6} item>
                   <TextField
+                    disabled={formik.isSubmitting}
                     label="Zip"
                     name="zip"
                     value={formik.values.zip || ""}
@@ -246,6 +261,7 @@ export const ContactForm = ({ contact, handleSave, isEdit }: ContactFormProps) =
                 <Grid xs={12} sm={6} item>
                   <Tooltip title="Timezone field must contain only numbers">
                     <TextField
+                      disabled={formik.isSubmitting}
                       label="Timezone"
                       name="timezone"
                       type="number"
@@ -261,6 +277,7 @@ export const ContactForm = ({ contact, handleSave, isEdit }: ContactFormProps) =
                 </Grid>
                 <Grid xs={12} sm={6} item>
                   <TextField
+                    disabled={formik.isSubmitting}
                     label="Language"
                     name="language"
                     value={formik.values.language || ""}
@@ -272,6 +289,7 @@ export const ContactForm = ({ contact, handleSave, isEdit }: ContactFormProps) =
                 </Grid>
                 <Grid item xs={6}>
                   <Button
+                    disabled={formik.isSubmitting}
                     type="submit"
                     variant="contained"
                     color="primary"
@@ -282,7 +300,13 @@ export const ContactForm = ({ contact, handleSave, isEdit }: ContactFormProps) =
                   </Button>
                 </Grid>
                 <Grid item xs={6}>
-                  <Button type="submit" variant="contained" color="primary" fullWidth>
+                  <Button
+                    type="submit"
+                    disabled={formik.isSubmitting}
+                    variant="contained"
+                    color="primary"
+                    fullWidth
+                  >
                     Save
                   </Button>
                 </Grid>

@@ -21,6 +21,7 @@ import {
   IconButton,
   Link,
   TextField,
+  Tooltip,
 } from "@mui/material";
 import { DataGrid, GridCellParams, GridColDef } from "@mui/x-data-grid";
 import { useRequestContext } from "@providers/request-provider";
@@ -245,12 +246,16 @@ export const OrderViewBase = () => {
     values: OrderItemDetailsDto,
     helpers: FormikHelpers<OrderItemDetailsDto>
   ) => {
-    if (values?.id) {
-      await client.api.orderItemsPartialUpdate(values.id!, values!);
-    } else await client.api.orderItemsCreate(values!);
-
-    setOrderItems(await getOrderItems(order!.id!));
-    setIsEdit(false);
+    try {
+      if (values?.id) {
+        await client.api.orderItemsPartialUpdate(values.id!, values!);
+      } else await client.api.orderItemsCreate(values!);
+      setOrderItems(await getOrderItems(order!.id!));
+      setIsEdit(false);
+    } catch (error) {
+      formik.setSubmitting(false);
+      throw error;
+    }
   };
 
   const submit = (values: OrderItemDetailsDto, helpers: FormikHelpers<OrderItemDetailsDto>) => {
@@ -324,6 +329,7 @@ export const OrderViewBase = () => {
                   <Grid container spacing={3}>
                     <Grid xs={12} sm={12} item>
                       <TextField
+                        disabled={formik.isSubmitting}
                         label="Product Name"
                         name="productName"
                         value={formik.values.productName || ""}
@@ -336,6 +342,7 @@ export const OrderViewBase = () => {
                     </Grid>
                     <Grid xs={12} sm={12} item>
                       <TextField
+                        disabled={formik.isSubmitting}
                         label="License Code"
                         name="licenseCode"
                         value={formik.values.licenseCode || ""}
@@ -346,19 +353,23 @@ export const OrderViewBase = () => {
                       />
                     </Grid>
                     <Grid xs={12} sm={12} item>
-                      <TextField
-                        label="Unit Price"
-                        name="unitPrice"
-                        type="number"
-                        value={formik.values.unitPrice || ""}
-                        fullWidth
-                        error={formik.touched.unitPrice && Boolean(formik.errors.unitPrice)}
-                        helperText={formik.touched.unitPrice && formik.errors.unitPrice}
-                        onChange={formik.handleChange}
-                      />
+                      <Tooltip title="Unit Price field must contain only numbers">
+                        <TextField
+                          disabled={formik.isSubmitting}
+                          label="Unit Price"
+                          name="unitPrice"
+                          type="number"
+                          value={formik.values.unitPrice || ""}
+                          fullWidth
+                          error={formik.touched.unitPrice && Boolean(formik.errors.unitPrice)}
+                          helperText={formik.touched.unitPrice && formik.errors.unitPrice}
+                          onChange={formik.handleChange}
+                        />
+                      </Tooltip>
                     </Grid>
                     <Grid xs={12} sm={12} item>
                       <TextField
+                        disabled={formik.isSubmitting}
                         label="Currency"
                         name="currency"
                         value={formik.values.currency || ""}
@@ -369,19 +380,23 @@ export const OrderViewBase = () => {
                       />
                     </Grid>
                     <Grid xs={12} sm={12} item>
-                      <TextField
-                        label="Quantity"
-                        name="quantity"
-                        type="number"
-                        value={formik.values.quantity || ""}
-                        fullWidth
-                        error={formik.touched.quantity && Boolean(formik.errors.quantity)}
-                        helperText={formik.touched.quantity && formik.errors.quantity}
-                        onChange={formik.handleChange}
-                      />
+                      <Tooltip title="Quantity field must contain only numbers">
+                        <TextField
+                          disabled={formik.isSubmitting}
+                          label="Quantity"
+                          name="quantity"
+                          type="number"
+                          value={formik.values.quantity || ""}
+                          fullWidth
+                          error={formik.touched.quantity && Boolean(formik.errors.quantity)}
+                          helperText={formik.touched.quantity && formik.errors.quantity}
+                          onChange={formik.handleChange}
+                        />
+                      </Tooltip>
                     </Grid>
                     <Grid xs={12} sm={12} item>
                       <TextField
+                        disabled={formik.isSubmitting}
                         label="Source"
                         name="source"
                         value={formik.values.source || ""}
@@ -391,6 +406,7 @@ export const OrderViewBase = () => {
                     </Grid>
                     <Grid item xs={6}>
                       <Button
+                        disabled={formik.isSubmitting}
                         type="submit"
                         variant="contained"
                         color="primary"
@@ -401,7 +417,13 @@ export const OrderViewBase = () => {
                       </Button>
                     </Grid>
                     <Grid item xs={6}>
-                      <Button type="submit" variant="contained" color="primary" fullWidth>
+                      <Button
+                        type="submit"
+                        disabled={formik.isSubmitting}
+                        variant="contained"
+                        color="primary"
+                        fullWidth
+                      >
                         Save
                       </Button>
                     </Grid>
