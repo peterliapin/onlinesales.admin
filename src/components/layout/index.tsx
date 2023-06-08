@@ -13,11 +13,7 @@ export const AppLayoutContainerStyled = styled(Box)`
 `;
 
 export const AppLayoutContainer = ({ children }: PropsWithChildren) => {
-  return (
-    <AppLayoutContainerStyled>
-      {children}
-    </AppLayoutContainerStyled>
-  );
+  return <AppLayoutContainerStyled>{children}</AppLayoutContainerStyled>;
 };
 
 export const MainContentContainer = styled(Box)`

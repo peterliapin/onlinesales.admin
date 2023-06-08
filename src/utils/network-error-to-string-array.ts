@@ -1,5 +1,5 @@
 const networkErrorToStringArray = (error: any) => {
-  if (error === undefined || error === null){
+  if (error === undefined || error === null) {
     return [];
   }
   const output: string[] = [];

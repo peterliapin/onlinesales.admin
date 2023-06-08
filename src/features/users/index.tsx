@@ -1,6 +1,6 @@
-import { UserEdit } from "./UserEdit";
+import { UserEdit } from "./user-edit";
 import { Route, Routes } from "react-router-dom";
-import { UserList } from "./UserList";
+import { UserList } from "./user-list";
 
 export const UserModule = () => {
   return (

@@ -13,7 +13,7 @@ import { useRequestContext } from "@providers/request-provider";
 import { FormikHelpers, useFormik } from "formik";
 import React from "react";
 import { useState } from "react";
-import networkErrorToStringArray from "utils/networkErrorToStringArray";
+import networkErrorToStringArray from "utils/network-error-to-string-array";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 import { EmailGroupEditValidationScheme } from "./validation";
 import { TextField } from "@mui/material";
@@ -28,21 +28,16 @@ const Transition = React.forwardRef(function Transition(
   return <Fade ref={ref} {...props} />;
 });
 
-export const CreateNewEmailGroup = ({
-  onChange,
-  isOpen,
-  onClose,
-}: CreateNewEmailGroupProps) => {
+export const CreateNewEmailGroup = ({ onChange, isOpen, onClose }: CreateNewEmailGroupProps) => {
   const { notificationsService } = useNotificationsService();
   const { Show: showErrorModal } = useErrorDetailsModal()!;
   const { client } = useRequestContext();
-  
 
   const submitFunc = async (
     values: EmailGroupCreateDto,
     helpers: FormikHelpers<EmailGroupCreateDto>
   ) => {
-    const { data } =await client.api.emailGroupsCreate(values);
+    const { data } = await client.api.emailGroupsCreate(values);
     onChange({
       id: data.id as number,
       label: data.name,
@@ -52,7 +47,7 @@ export const CreateNewEmailGroup = ({
   };
 
   const submit = async (
-    values: EmailGroupCreateDto, 
+    values: EmailGroupCreateDto,
     helpers: FormikHelpers<EmailGroupCreateDto>
   ) => {
     notificationsService.promise(submitFunc(values, helpers), {
@@ -63,13 +58,15 @@ export const CreateNewEmailGroup = ({
           (error.data.error && error.data.error.title) ||
           (error.data.message && error.data.message) ||
           "unknown";
-        const errDetails : string[] = [];
-        if (error.data.error && error.data.error.errors){
+        const errDetails: string[] = [];
+        if (error.data.error && error.data.error.errors) {
           errDetails.push(...networkErrorToStringArray(error.data.error.errors));
         }
         return {
           title: errMessage,
-          onClick: () => {showErrorModal(errDetails);}
+          onClick: () => {
+            showErrorModal(errDetails);
+          },
         };
       },
     });
@@ -88,10 +85,9 @@ export const CreateNewEmailGroup = ({
     formik.handleChange(event);
   };
 
-
   return (
     <>
-      <Dialog  disableRestoreFocus open={isOpen} onClose={onClose} TransitionComponent={Transition}>
+      <Dialog disableRestoreFocus open={isOpen} onClose={onClose} TransitionComponent={Transition}>
         <form onSubmit={formik.handleSubmit}>
           <DialogTitle>
             <Typography>Create email group</Typography>
@@ -118,7 +114,7 @@ export const CreateNewEmailGroup = ({
                 marginTop: "1rem",
               }}
             >
-                  Save
+              Save
             </Button>
           </DialogActions>
         </form>

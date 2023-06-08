@@ -1,6 +1,6 @@
 import { GenericForm, GenericFormProps } from "@components/generic-components";
 import { ModuleWrapper } from "@components/module-wrapper";
-import { SavingBar } from "@components/SavingBar";
+import { SavingBar } from "@components/saving-bar";
 import { DomainCreateDto, DomainDetailsDto, DomainUpdateDto } from "@lib/network/swagger-client";
 import { domainFormBreadcrumbLinks } from "../constants";
 

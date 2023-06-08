@@ -12,12 +12,12 @@ import { useRequestContext } from "@providers/request-provider";
 import { Fragment, useRef, useState } from "react";
 import useLocalStorage from "use-local-storage";
 import { dataListSettings } from "utils/types";
-import { 
-  defaultFilterOrderColumn, 
-  defaultFilterOrderDirection, 
-  emailTemplateGridSettingsStorageKey, 
-  emailTemplateListPageBreadcrumb, 
-  searchLabel
+import {
+  defaultFilterOrderColumn,
+  defaultFilterOrderDirection,
+  emailTemplateGridSettingsStorageKey,
+  emailTemplateListPageBreadcrumb,
+  searchLabel,
 } from "../constants";
 import { dataListBreadcrumbLinks } from "utils/constants";
 
@@ -72,7 +72,6 @@ const columns: GridColDef<EmailTemplateDetailsDto>[] = [
 ];
 
 export const EmailTemplatesList = () => {
-
   const { client } = useRequestContext();
   const [gridSettings, setGridSettings] = useLocalStorage<dataListSettings | undefined>(
     emailTemplateGridSettingsStorageKey,
@@ -82,7 +81,6 @@ export const EmailTemplatesList = () => {
   const [searchTerm, setSearchTerm] = useState(gridSettings?.searchTerm ?? "");
   const [openExport, setOpenExport] = useState(false);
   const dataExportQuery = useRef("");
-
 
   const getContactList = async (mainQuery: string, exportQuery?: string) => {
     try {

@@ -7,12 +7,12 @@ import { useRequestContext } from "@providers/request-provider";
 import { useState } from "react";
 import useLocalStorage from "use-local-storage";
 import { dataListSettings } from "utils/types";
-import { 
-  activityLogGridSettingsStorageKey, 
-  activityLogListPageBreadcrumb, 
-  defaultFilterOrderColumn, 
-  defaultFilterOrderDirection, 
-  searchLabel 
+import {
+  activityLogGridSettingsStorageKey,
+  activityLogListPageBreadcrumb,
+  defaultFilterOrderColumn,
+  defaultFilterOrderDirection,
+  searchLabel,
 } from "../constants";
 import { dataListBreadcrumbLinks } from "utils/constants";
 

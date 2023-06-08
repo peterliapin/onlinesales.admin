@@ -2,7 +2,7 @@ import ImageIcon from "@mui/icons-material/Image";
 import { Button } from "@mui/material";
 import { ExtendedCommandBase } from "../types";
 import { RequestContextType, useRequestContext } from "@providers/request-provider";
-import { ContentDetails } from "@features/blog/ContentEdit/types";
+import { ContentDetails } from "@features/blog/content-edit/types";
 import { useNotificationsService } from "@hooks";
 
 export const ImageUpload = (contentDetails: ContentDetails, isInToolbar: boolean) => {
@@ -55,7 +55,7 @@ export const ImageUpload = (contentDetails: ContentDetails, isInToolbar: boolean
           Image: selectedFile,
           ScopeUid: this.contentDetails.slug,
         });
-        if (imageUploadingResponse.error){
+        if (imageUploadingResponse.error) {
           notificationsService.error(
             `Failed to upload image ${imageUploadingResponse.error.detail}`
           );

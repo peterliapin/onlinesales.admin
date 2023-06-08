@@ -78,14 +78,14 @@ export class NotificationsService {
       error: {
         render(data) {
           const err = options.error(data);
-          if (instanceOfErrorData(err)){
+          if (instanceOfErrorData(err)) {
             return (
-              <div onClick={
-                () => {
+              <div
+                onClick={() => {
                   data.closeToast && data.closeToast();
                   err.onClick && err.onClick();
-                }
-              }>
+                }}
+              >
                 {(err as ErrorData).title}
               </div>
             );

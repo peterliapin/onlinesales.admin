@@ -14,9 +14,9 @@ export const emailTemplateListPageBreadcrumb = "Email Templates";
 
 export const emailTemplateFormBreadcrumbLinks: BreadcrumbLink[] = [
   ...dataListBreadcrumbLinks,
-  { 
-    linkText: emailTemplateListPageBreadcrumb, 
-    toRoute: getCoreModuleRoute(CoreModule.emailTemplates)
+  {
+    linkText: emailTemplateListPageBreadcrumb,
+    toRoute: getCoreModuleRoute(CoreModule.emailTemplates),
   },
 ];
 

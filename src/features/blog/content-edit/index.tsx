@@ -38,27 +38,27 @@ import {
 } from "./validation";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 import { Automapper } from "@lib/automapper";
-import MarkdownEditor from "@components/MarkdownEditor";
-import FileDropdown from "@components/FileDropdown";
+import MarkdownEditor from "@components/markdown-editor";
+import FileDropdown from "@components/file-dropdown";
 import { buildAbsoluteUrl } from "@lib/network/utils";
 import useLocalStorage from "use-local-storage";
-import { RestoreDataModal } from "@components/RestoreData";
+import { RestoreDataModal } from "@components/restore-data";
 import { useDebouncedCallback } from "use-debounce";
 import { ValidateFrontmatterError } from "utils/frontmatter-validator";
-import { ImageData } from "@components/FileDropdown";
+import { ImageData } from "@components/file-dropdown";
 import { useNotificationsService } from "@hooks";
 import { useModuleWrapperContext } from "@providers/module-wrapper-provider";
 import { blogFormBreadcrumbLinks } from "@features/blog/constants";
 import { ModuleWrapper } from "@components/module-wrapper";
-import { RemoteAutocomplete } from "@components/RemoteAutocomplete";
-import { RemoteValues } from "@components/RemoteAutocomplete/types";
-import { SavingBar } from "@components/SavingBar";
-import { ErrorDetailsModal } from "@components/ErrorDetails";
+import { RemoteAutocomplete } from "@components/remote-autocomplete";
+import { RemoteValues } from "@components/remote-autocomplete/types";
+import { SavingBar } from "@components/saving-bar";
+import { ErrorDetailsModal } from "@components/error-details";
 import { set } from "lodash";
-import networkErrorToStringArray from "utils/networkErrorToStringArray";
+import networkErrorToStringArray from "utils/network-error-to-string-array";
 import { useErrorDetailsModal } from "@providers/error-details-modal-provider";
-import { LanguageAutocomplete } from "@components/LanguageAutocomplete";
-import { execSubmitWithToast } from "utils/formikHelpers";
+import { LanguageAutocomplete } from "@components/language-autocomplete";
+import { execSubmitWithToast } from "utils/formik-helpers";
 
 interface ContentEditProps {
   readonly?: boolean;
@@ -103,9 +103,10 @@ export const ContentEdit = (props: ContentEditProps) => {
       (reference.latestAutoSave = new Date()), (reference.savedData = value);
     }
     setEditorLocalStorage(localStorageSnapshot);
-    !isSaving && setSaving(async () => {
-      await new Promise<void>((resolve) => setTimeout(() => resolve(), 3000));
-    });
+    !isSaving &&
+      setSaving(async () => {
+        await new Promise<void>((resolve) => setTimeout(() => resolve(), 3000));
+      });
   }, 3000); ///TODO: User Settings
 
   const submitFunc = async (values: ContentDetails, helpers: FormikHelpers<ContentDetails>) => {
@@ -122,7 +123,7 @@ export const ContentEdit = (props: ContentEditProps) => {
         Image: file,
         ScopeUid: values.slug,
       });
-      if (imageUploadingResponse.error){
+      if (imageUploadingResponse.error) {
         throw Error(imageUploadingResponse.error.title as string);
       }
       if (imageUploadingResponse.data.location === null) {
@@ -179,7 +180,7 @@ export const ContentEdit = (props: ContentEditProps) => {
       submitFunc,
       notificationsService,
       showErrorModal,
-      "post",
+      "post"
     );
   };
 

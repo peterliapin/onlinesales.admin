@@ -33,10 +33,7 @@ const columns: GridColDef<UserDetailsDto>[] = [
         <ListItemAvatar>
           <Avatar src={buildAbsoluteUrl(row.avatarUrl)}></Avatar>
         </ListItemAvatar>
-        <UserNameListItemText
-          primary={row.displayName || ""}
-          secondary={row.email}
-        />
+        <UserNameListItemText primary={row.displayName || ""} secondary={row.email} />
       </UserNameListItem>
     ),
   },

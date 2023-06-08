@@ -8,7 +8,7 @@ import { useRequestContext } from "@providers/request-provider";
 import { useParams } from "react-router-dom";
 import { EmailTemplateDetailsDto, HttpResponse, ProblemDetails } from "@lib/network/swagger-client";
 import { FormikHelpers, useFormik } from "formik";
-import networkErrorToStringArray from "utils/networkErrorToStringArray";
+import networkErrorToStringArray from "utils/network-error-to-string-array";
 import { EmailTemplateEditValidationScheme } from "./validation";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 import { ModuleWrapper } from "@components/module-wrapper";
@@ -16,18 +16,18 @@ import { emailTemplateFormBreadcrumbLinks } from "../constants";
 import { EmailTemplateEditContainer } from "./index.styled";
 import { Autocomplete, Button, Card, CardContent, Grid, TextField } from "@mui/material";
 import useLocalStorage from "use-local-storage";
-import { 
-  EmailTemplateEditData, 
+import {
+  EmailTemplateEditData,
   EmailTemplateEditRestoreState,
   EmailTemplateEditorAutoSave,
 } from "./types";
 import { useDebouncedCallback } from "use-debounce";
-import { RestoreDataModal } from "@components/RestoreData";
-import { SavingBar } from "@components/SavingBar";
-import { LanguageAutocomplete } from "@components/LanguageAutocomplete";
-import { EmailGroupAutocomplete } from "@components/EmailGroupAutocomplete";
+import { RestoreDataModal } from "@components/restore-data";
+import { SavingBar } from "@components/saving-bar";
+import { LanguageAutocomplete } from "@components/language-autocomplete";
+import { EmailGroupAutocomplete } from "@components/email-group-autocomplete";
 import { CatchingPokemonSharp } from "@mui/icons-material";
-import { execSubmitWithToast } from "utils/formikHelpers";
+import { execSubmitWithToast } from "utils/formik-helpers";
 
 const TINYMCE_API_KEY = process.env.TINYMCE_API_KEY || undefined;
 
@@ -91,7 +91,7 @@ export const EmailTemplateEdit = () => {
   };
 
   const submit = async (
-    values: EmailTemplateDetailsDto, 
+    values: EmailTemplateDetailsDto,
     helpers: FormikHelpers<EmailTemplateDetailsDto>
   ) => {
     execSubmitWithToast<EmailTemplateDetailsDto>(
@@ -100,7 +100,7 @@ export const EmailTemplateEdit = () => {
       submitFunc,
       notificationsService,
       showErrorModal,
-      "email template",
+      "email template"
     );
   };
 
@@ -279,30 +279,28 @@ export const EmailTemplateEdit = () => {
                 </Grid>
                 <Grid item xs={12} sm={12}>
                   <Editor
-                    onInit={(evt, editor) => editorRef.current = editor}
+                    onInit={(evt, editor) => (editorRef.current = editor)}
                     value={formik.values.bodyTemplate}
-                    onEditorChange={
-                      (currentValue, editor) => formik.setFieldValue("bodyTemplate", currentValue)
+                    onEditorChange={(currentValue, editor) =>
+                      formik.setFieldValue("bodyTemplate", currentValue)
                     }
                     apiKey={TINYMCE_API_KEY}
                     init={{
                       height: 500,
                       menubar: "file edit view insert format tools table help",
-                      plugins: 
-                        `print preview paste importcss searchreplace autolink
+                      plugins: `print preview paste importcss searchreplace autolink
                         autosave save directionality code visualblocks visualchars fullscreen
                         image link media template codesample table charmap hr pagebreak
                         nonbreaking anchor toc insertdatetime advlist lists wordcount
                         imagetools textpattern noneditable help charmap quickbars emoticons`,
-                      toolbar: 
-                        `undo redo | bold italic underline strikethrough | fontselect
+                      toolbar: `undo redo | bold italic underline strikethrough | fontselect
                         fontsizeselect formatselect | alignleft aligncenter alignright
                         alignjustify | outdent indent |  numlist bullist | forecolor
                         backcolor removeformat | pagebreak | charmap emoticons | 
                         fullscreen  preview save print | insertfile image media template
                         link anchor codesample | ltr rtl`,
                       content_style: `body { font-family:Helvetica,Arial,sans-serif;
-                                             font-size:14px }`
+                                             font-size:14px }`,
                     }}
                   />
                 </Grid>

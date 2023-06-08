@@ -84,7 +84,7 @@ export const Contacts = () => {
       headerName: "Prefix",
       flex: 1,
       type: "string",
-    },    
+    },
     {
       field: "firstName",
       headerName: "Name",

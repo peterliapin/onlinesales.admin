@@ -1,7 +1,7 @@
 import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
 import { ThemeProvider } from "providers/theme-provider";
 import { AppHeader } from "components/app-header";
-import { Sidebar } from "components/sidebar";
+import { Sidebar } from "@components/side-bar";
 import { AppLayoutContainer, MainContentContainer } from "components/layout";
 import { coreModuleRoute, rootRoute } from "@lib/router";
 import { ModuleLoader } from "@features/module-loader";

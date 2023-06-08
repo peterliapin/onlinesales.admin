@@ -12,25 +12,24 @@ import { useAuthState } from "./auth-provider";
 
 type getTokenFn = () => Promise<string | undefined>;
 
-
-class ApiExtended<getTokenFn> extends Api<getTokenFn>{
-  constructor(apiConfig? : ApiConfig<getTokenFn>){
+class ApiExtended<getTokenFn> extends Api<getTokenFn> {
+  constructor(apiConfig?: ApiConfig<getTokenFn>) {
     super(apiConfig);
     Object.keys(this.api).forEach((key) => {
       const oldFunc = (this.api as unknown as any)[key];
       (this.api as unknown as any)[key] = async (...args: any[]) => {
-        try{
+        try {
           const response = await oldFunc(...args);
-          if (response.error){
-            if (response.status == 401 && this.logoutFunc){
+          if (response.error) {
+            if (response.status == 401 && this.logoutFunc) {
               this.logoutFunc();
             }
             throw response.error;
           }
           return response;
-        }catch(e: any){
-          if (e.error){
-            if (e.status == 401 && this.logoutFunc){
+        } catch (e: any) {
+          if (e.error) {
+            if (e.status == 401 && this.logoutFunc) {
               this.logoutFunc();
             }
             throw e;
@@ -41,7 +40,6 @@ class ApiExtended<getTokenFn> extends Api<getTokenFn>{
   }
   logoutFunc?: () => Promise<void>;
 }
-
 
 const client = new ApiExtended<getTokenFn>({
   baseUrl: process.env.CORE_API,

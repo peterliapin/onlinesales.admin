@@ -24,9 +24,8 @@ export const DropdownMenu = () => {
 
   const displayName = (userInfo && userInfo?.details?.displayName) || "Unknown";
   const avatarUrl =
-    (userInfo && 
-    userInfo?.details?.avatarUrl &&
-    buildAbsoluteUrl(userInfo?.details.avatarUrl)) || undefined;
+    (userInfo && userInfo?.details?.avatarUrl && buildAbsoluteUrl(userInfo?.details.avatarUrl)) ||
+    undefined;
 
   const [anchorElement, setAnchorElement] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorElement);

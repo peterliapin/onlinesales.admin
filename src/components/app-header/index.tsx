@@ -2,7 +2,7 @@ import { Typography } from "@mui/material";
 import { rootRoute } from "lib/router";
 import { GhostLink } from "components/ghost-link";
 import { AppBarStyled, AppBarToolbar, LogoComponent } from "./index.styled";
-import { DropdownMenu } from "./DropdownMenu";
+import { DropdownMenu } from "./dropdown-menu";
 
 export const AppHeader = () => {
   return (

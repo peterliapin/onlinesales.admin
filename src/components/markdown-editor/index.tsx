@@ -3,13 +3,13 @@ import { ImageUpload } from "./commands";
 import AppsIcon from "@mui/icons-material/Apps";
 import { ImageUploadingContext, MarkdownEditorProps, onFrontmatterErrorChangeFunc } from "./types";
 import { useEffect, useState, useContext, createContext } from "react";
-import { MarkdownViewerFunc } from "@components/MarkdownViewer";
+import { MarkdownViewerFunc } from "@components/markdown-viewer";
 import CodeEditor from "@uiw/react-textarea-code-editor";
 import { validateFrontmatter, ValidateFrontmatterError } from "utils/frontmatter-validator";
 import Dropzone, { Accept, FileRejection } from "react-dropzone";
 import "./styles.css";
 import { useNotificationsService } from "@hooks";
-import { ContentEditMaximumImageSize } from "@features/blog/ContentEdit/validation";
+import { ContentEditMaximumImageSize } from "@features/blog/content-edit/validation";
 import { useRequestContext } from "@providers/request-provider";
 import { useUserInfo } from "@providers/user-provider";
 
@@ -90,10 +90,9 @@ const MarkdownEditor = ({
 }: MarkdownEditorProps) => {
   const { notificationsService } = useNotificationsService();
   const [currentError, setCurrentError] = useState<string>("");
-  const [
-    currentImageCtxValue, 
-    setCurrentImageCtxValue
-  ] = useState<ImageUploadingContext | null>(null);
+  const [currentImageCtxValue, setCurrentImageCtxValue] = useState<ImageUploadingContext | null>(
+    null
+  );
 
   const customCommands = commands.getCommands().concat([
     commands.group([ImageUpload(contentDetails, false)], {
