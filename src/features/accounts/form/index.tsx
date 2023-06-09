@@ -1,6 +1,6 @@
 import { ModuleWrapper } from "@components/module-wrapper";
 import { SavingBar } from "@components/saving-bar";
-import { useNotificationsService } from "@hooks";
+import { useCoreModuleNavigation, useNotificationsService } from "@hooks";
 import { AccountDetailsDto } from "@lib/network/swagger-client";
 import { CoreModule } from "@lib/router";
 import {
@@ -16,12 +16,12 @@ import {
 import { useModuleWrapperContext } from "@providers/module-wrapper-provider";
 import { useRequestContext } from "@providers/request-provider";
 import { ChangeEvent, Fragment, SyntheticEvent, useEffect, useState } from "react";
-import { getContinentList, getCountryList, useCoreModuleNavigation } from "utils/helper";
+import { getContinentList, getCountryList } from "utils/general-helper";
 import { accountAddHeader, accountEditHeader, accountFormBreadcrumbLinks } from "../constants";
 import { useFormik, FormikHelpers } from "formik";
 import zod from "zod";
 import { toFormikValidationSchema } from "zod-formik-adapter";
-import { execSubmitWithToast } from "utils/formik-helpers";
+import { execSubmitWithToast } from "utils/formik-helper";
 import { useErrorDetailsModal } from "@providers/error-details-modal-provider";
 
 interface AccountFormProps {

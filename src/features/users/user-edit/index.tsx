@@ -29,7 +29,7 @@ import { buildAbsoluteUrl } from "@lib/network/utils";
 import { useUserInfo } from "@providers/user-provider";
 import networkErrorToStringArray from "utils/network-error-to-string-array";
 import { useErrorDetailsModal } from "@providers/error-details-modal-provider";
-import { execSubmitWithToast } from "utils/formik-helpers";
+import { execSubmitWithToast } from "utils/formik-helper";
 
 const tabProps = (index: number) => {
   return {

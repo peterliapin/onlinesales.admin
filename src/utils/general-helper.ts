@@ -1,22 +1,5 @@
 import { RequestContextType } from "@providers/request-provider";
-import { CoreModule, getCoreModuleRoute } from "lib/router";
-import { useNavigate } from "react-router-dom";
 import { continentListStorageKey, countryListStorageKey } from "./constants";
-
-export const useCoreModuleNavigation = () => {
-  const navigate = useNavigate();
-
-  const handleNavigation = (endRoute: string) => {
-    const toRoute = getCoreModuleRoute(endRoute as CoreModule);
-    if (location.pathname === toRoute) {
-      window.location.reload();
-    } else {
-      navigate(toRoute);
-    }
-  };
-
-  return handleNavigation;
-};
 
 export const getCountryList = async (context: RequestContextType) => {
   const countries = localStorage.getItem(countryListStorageKey);

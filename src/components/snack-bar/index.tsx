@@ -3,7 +3,7 @@ import Stack from "@mui/material/Stack";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert, { AlertColor, AlertProps } from "@mui/material/Alert";
 import { CoreModule } from "lib/router";
-import { useCoreModuleNavigation } from "utils/helper";
+import { useCoreModuleNavigation } from "@hooks";
 
 interface SnackbarProps {
   message: string;

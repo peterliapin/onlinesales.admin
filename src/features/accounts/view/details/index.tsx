@@ -4,7 +4,7 @@ import { useRequestContext } from "@providers/request-provider";
 import { useEffect, useState } from "react";
 import { useRouteParams } from "typesafe-routes";
 import { DataView } from "components/data-view";
-import { getContinentByCode, getCountryByCode } from "utils/helper";
+import { getContinentByCode, getCountryByCode } from "utils/general-helper";
 import { Grid } from "@mui/material";
 import { useModuleWrapperContext } from "@providers/module-wrapper-provider";
 

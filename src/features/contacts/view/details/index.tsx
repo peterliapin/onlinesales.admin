@@ -18,9 +18,9 @@ import { CoreModule, viewFormRoute } from "lib/router";
 import { useRequestContext } from "providers/request-provider";
 import { useRouteParams } from "typesafe-routes";
 import { ContactCardHeader, DeleteButtonContainer } from "../../index.styled";
-import { getCountryList, useCoreModuleNavigation } from "utils/helper";
+import { getCountryList } from "utils/general-helper";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { useNotificationsService } from "@hooks";
+import { useCoreModuleNavigation, useNotificationsService } from "@hooks";
 import { DataView } from "components/data-view";
 import { useModuleWrapperContext } from "@providers/module-wrapper-provider";
 

@@ -58,7 +58,7 @@ import { set } from "lodash";
 import networkErrorToStringArray from "utils/network-error-to-string-array";
 import { useErrorDetailsModal } from "@providers/error-details-modal-provider";
 import { LanguageAutocomplete } from "@components/language-autocomplete";
-import { execSubmitWithToast } from "utils/formik-helpers";
+import { execSubmitWithToast } from "utils/formik-helper";
 
 interface ContentEditProps {
   readonly?: boolean;

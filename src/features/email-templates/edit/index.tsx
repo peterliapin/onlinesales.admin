@@ -27,7 +27,7 @@ import { SavingBar } from "@components/saving-bar";
 import { LanguageAutocomplete } from "@components/language-autocomplete";
 import { EmailGroupAutocomplete } from "@components/email-group-autocomplete";
 import { CatchingPokemonSharp } from "@mui/icons-material";
-import { execSubmitWithToast } from "utils/formik-helpers";
+import { execSubmitWithToast } from "utils/formik-helper";
 
 const TINYMCE_API_KEY = process.env.TINYMCE_API_KEY || undefined;
 
