@@ -55,7 +55,7 @@ import { RemoteValues } from "@components/remote-autocomplete/types";
 import { SavingBar } from "@components/saving-bar";
 import { ErrorDetailsModal } from "@components/error-details";
 import { set } from "lodash";
-import networkErrorToStringArray from "utils/network-error-to-string-array";
+import { networkErrorToStringArray } from "utils/general-helper";
 import { useErrorDetailsModal } from "@providers/error-details-modal-provider";
 import { LanguageAutocomplete } from "@components/language-autocomplete";
 import { execSubmitWithToast } from "utils/formik-helper";

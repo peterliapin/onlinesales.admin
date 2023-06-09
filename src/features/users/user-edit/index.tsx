@@ -27,7 +27,7 @@ import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
 import { TabPanelProps } from "./types";
 import { buildAbsoluteUrl } from "@lib/network/utils";
 import { useUserInfo } from "@providers/user-provider";
-import networkErrorToStringArray from "utils/network-error-to-string-array";
+import { networkErrorToStringArray } from "utils/general-helper";
 import { useErrorDetailsModal } from "@providers/error-details-modal-provider";
 import { execSubmitWithToast } from "utils/formik-helper";
 

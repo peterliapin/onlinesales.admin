@@ -8,7 +8,7 @@ import { useRequestContext } from "@providers/request-provider";
 import { useParams } from "react-router-dom";
 import { EmailTemplateDetailsDto, HttpResponse, ProblemDetails } from "@lib/network/swagger-client";
 import { FormikHelpers, useFormik } from "formik";
-import networkErrorToStringArray from "utils/network-error-to-string-array";
+import { networkErrorToStringArray } from "utils/general-helper";
 import { EmailTemplateEditValidationScheme } from "./validation";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 import { ModuleWrapper } from "@components/module-wrapper";
