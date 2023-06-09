@@ -12,7 +12,7 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { useNavigate } from "react-router-dom";
 import { getEditFormRoute, getViewFormRoute } from "lib/router";
 import { IconButton } from "@mui/material";
-import { GridDataFilterState } from "utils/types";
+import { GridDataFilterState } from "types";
 
 type DataTableProps = {
   columns: GridColDef[];

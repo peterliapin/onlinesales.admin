@@ -1,6 +1,6 @@
 import { NotificationsService } from "@hooks";
 import { FormikHelpers } from "formik";
-import networkErrorToStringArray from "./network-error-to-string-array";
+import { networkErrorToStringArray } from "./general-helper";
 
 export async function execSubmitWithToast<T>(
   values: T,

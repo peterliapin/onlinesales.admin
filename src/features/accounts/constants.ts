@@ -1,5 +1,5 @@
 import { CoreModule, getCoreModuleRoute, rootRoute } from "lib/router";
-import { BreadcrumbLink } from "utils/types";
+import { BreadcrumbLink } from "types";
 
 export const defaultFilterOrderColumn = "name";
 

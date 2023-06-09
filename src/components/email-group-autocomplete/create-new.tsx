@@ -13,7 +13,7 @@ import { useRequestContext } from "@providers/request-provider";
 import { FormikHelpers, useFormik } from "formik";
 import React from "react";
 import { useState } from "react";
-import networkErrorToStringArray from "utils/network-error-to-string-array";
+import { networkErrorToStringArray } from "utils/general-helper";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 import { EmailGroupEditValidationScheme } from "./validation";
 import { TextField } from "@mui/material";

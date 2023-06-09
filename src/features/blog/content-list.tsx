@@ -18,7 +18,7 @@ import { useModuleWrapperContext } from "@providers/module-wrapper-provider";
 import { blogBreadcrumbLinks } from "@features/blog/constants";
 import { ModuleWrapper } from "@components/module-wrapper";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { totalCountHeaderName } from "@lib/query";
+import { totalCountHeaderName } from "@providers/query-provider";
 import { buildAbsoluteUrl } from "@lib/network/utils";
 
 export const ContentList = () => {

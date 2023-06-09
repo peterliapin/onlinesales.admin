@@ -8,7 +8,7 @@ import { useRequestContext } from "@providers/request-provider";
 import { useParams } from "react-router-dom";
 import { EmailTemplateDetailsDto, HttpResponse, ProblemDetails } from "@lib/network/swagger-client";
 import { FormikHelpers, useFormik } from "formik";
-import networkErrorToStringArray from "utils/network-error-to-string-array";
+import { networkErrorToStringArray } from "utils/general-helper";
 import { EmailTemplateEditValidationScheme } from "./validation";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 import { ModuleWrapper } from "@components/module-wrapper";
@@ -27,7 +27,7 @@ import { SavingBar } from "@components/saving-bar";
 import { LanguageAutocomplete } from "@components/language-autocomplete";
 import { EmailGroupAutocomplete } from "@components/email-group-autocomplete";
 import { CatchingPokemonSharp } from "@mui/icons-material";
-import { execSubmitWithToast } from "utils/formik-helpers";
+import { execSubmitWithToast } from "utils/formik-helper";
 
 const TINYMCE_API_KEY = process.env.TINYMCE_API_KEY || undefined;
 

@@ -21,14 +21,14 @@ import { Add, Download, Upload } from "@mui/icons-material";
 import { CsvImport } from "@components/spreadsheet-import";
 import { CsvExport } from "@components/export";
 import useLocalStorage from "use-local-storage";
-import { dataListSettings } from "utils/types";
+import { DataListSettings } from "types";
 import { getModelByName } from "@lib/network/swagger-models";
 import { Result } from "@wavepoint/react-spreadsheet-import/types/types";
 import { GhostLink } from "@components/ghost-link";
 
 export const Accounts = () => {
   const { client } = useRequestContext();
-  const [gridSettings, setGridSettings] = useLocalStorage<dataListSettings | undefined>(
+  const [gridSettings, setGridSettings] = useLocalStorage<DataListSettings | undefined>(
     accountGridSettingsStorageKey,
     undefined
   );

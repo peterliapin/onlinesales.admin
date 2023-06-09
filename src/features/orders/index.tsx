@@ -14,7 +14,7 @@ import { GridColDef } from "@mui/x-data-grid";
 import { CoreModule, getAddFormRoute } from "lib/router";
 import { dataListBreadcrumbLinks } from "utils/constants";
 import useLocalStorage from "use-local-storage";
-import { dataListSettings } from "utils/types";
+import { DataListSettings } from "types";
 import { getModelByName } from "@lib/network/swagger-models";
 import { Result } from "@wavepoint/react-spreadsheet-import/types/types";
 import { SearchBar } from "@components/search-bar";
@@ -27,7 +27,7 @@ import { ModuleWrapper } from "@components/module-wrapper";
 
 export const Orders = () => {
   const { client } = useRequestContext();
-  const [gridSettings, setGridSettings] = useLocalStorage<dataListSettings | undefined>(
+  const [gridSettings, setGridSettings] = useLocalStorage<DataListSettings | undefined>(
     orderGridSettingsStorageKey,
     undefined
   );

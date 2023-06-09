@@ -11,7 +11,7 @@ import { GridColDef } from "@mui/x-data-grid";
 import { useRequestContext } from "@providers/request-provider";
 import { Fragment, useRef, useState } from "react";
 import useLocalStorage from "use-local-storage";
-import { dataListSettings } from "utils/types";
+import { DataListSettings } from "types";
 import {
   defaultFilterOrderColumn,
   defaultFilterOrderDirection,
@@ -73,7 +73,7 @@ const columns: GridColDef<EmailTemplateDetailsDto>[] = [
 
 export const EmailTemplatesList = () => {
   const { client } = useRequestContext();
-  const [gridSettings, setGridSettings] = useLocalStorage<dataListSettings | undefined>(
+  const [gridSettings, setGridSettings] = useLocalStorage<DataListSettings | undefined>(
     emailTemplateGridSettingsStorageKey,
     undefined
   );

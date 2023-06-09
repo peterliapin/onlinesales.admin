@@ -18,7 +18,7 @@ import {
   ScrollContainer,
 } from "./index.styled";
 import { useModuleWrapperContext } from "@providers/module-wrapper-provider";
-import { BreadcrumbLink } from "../../utils/types";
+import { BreadcrumbLink } from "../../types";
 import { Grid } from "@mui/material";
 
 export interface ModuleWrapperProps extends PropsWithChildren {
