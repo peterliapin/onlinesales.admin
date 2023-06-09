@@ -12,7 +12,7 @@ import {
 import { SearchBar } from "@components/search-bar";
 import { UserDetailsDto } from "@lib/network/swagger-client";
 import useLocalStorage from "use-local-storage";
-import { dataListSettings } from "utils/types";
+import { DataListSettings } from "types";
 import { Add, Download, Upload } from "@mui/icons-material";
 import { Fragment, useState } from "react";
 import { Avatar, Button, ListItemAvatar } from "@mui/material";
@@ -63,7 +63,7 @@ const columns: GridColDef<UserDetailsDto>[] = [
 
 export const UserList = () => {
   const { client } = useRequestContext();
-  const [gridSettings, setGridSettings] = useLocalStorage<dataListSettings | undefined>(
+  const [gridSettings, setGridSettings] = useLocalStorage<DataListSettings | undefined>(
     UserGridStorageKey,
     undefined
   );

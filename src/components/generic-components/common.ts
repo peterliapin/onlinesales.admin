@@ -1,4 +1,4 @@
-import { BreadcrumbLink } from "../../utils/types";
+import { BreadcrumbLink } from "../../types";
 import { dataListBreadcrumbLinks } from "../../utils/constants";
 import { CoreModule, getCoreModuleRoute } from "@lib/router";
 import { GridColumnVisibilityModel } from "@mui/x-data-grid";

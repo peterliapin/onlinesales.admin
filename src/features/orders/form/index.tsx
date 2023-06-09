@@ -2,7 +2,7 @@ import { ModuleWrapper } from "@components/module-wrapper";
 import { SavingBar } from "@components/saving-bar";
 import { useNotificationsService } from "@hooks";
 import { ContactDetailsDto, OrderDetailsDto } from "@lib/network/swagger-client";
-import { defaultFilterLimit } from "@lib/query";
+import { defaultFilterLimit } from "@providers/query-provider";
 import { CoreModule } from "@lib/router";
 import { Autocomplete, Button, Card, CardContent, Grid, TextField, Tooltip } from "@mui/material";
 import { useModuleWrapperContext } from "@providers/module-wrapper-provider";

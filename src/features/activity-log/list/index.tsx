@@ -6,7 +6,7 @@ import { GridColDef } from "@mui/x-data-grid";
 import { useRequestContext } from "@providers/request-provider";
 import { useState } from "react";
 import useLocalStorage from "use-local-storage";
-import { dataListSettings } from "utils/types";
+import { DataListSettings } from "types";
 import {
   activityLogGridSettingsStorageKey,
   activityLogListPageBreadcrumb,
@@ -57,7 +57,7 @@ const columns: GridColDef<ActivityLogDetailsDto>[] = [
 
 export const ActivityLogList = () => {
   const { client } = useRequestContext();
-  const [gridSettings, setGridSettings] = useLocalStorage<dataListSettings | undefined>(
+  const [gridSettings, setGridSettings] = useLocalStorage<DataListSettings | undefined>(
     activityLogGridSettingsStorageKey,
     undefined
   );

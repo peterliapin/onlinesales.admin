@@ -5,13 +5,13 @@ import {
   getBasicFilterQuery,
   getWhereFilterQuery,
   totalCountHeaderName,
-} from "lib/query";
+} from "@providers/query-provider";
 import { GridColDef, GridSortDirection } from "@mui/x-data-grid";
 import { GridInitialStateCommunity } from "@mui/x-data-grid/models/gridStateCommunity";
 import { DataListContainer } from "./index.styled";
 import { DataTableGrid } from "@components/data-table";
 import useLocalStorage from "use-local-storage";
-import { dataListSettings, GridDataFilterState } from "utils/types";
+import { DataListSettings, GridDataFilterState } from "types";
 import { useNotificationsService } from "@hooks";
 import { useModuleWrapperContext } from "@providers/module-wrapper-provider";
 
@@ -40,7 +40,7 @@ export const DataList = ({
 }: dataListProps) => {
   const { notificationsService } = useNotificationsService();
   const { setBusy } = useModuleWrapperContext();
-  const [gridSettings, setGridSettings] = useLocalStorage<dataListSettings | undefined>(
+  const [gridSettings, setGridSettings] = useLocalStorage<DataListSettings | undefined>(
     gridSettingsStorageKey,
     undefined
   );

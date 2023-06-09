@@ -24,11 +24,11 @@ import { getModelByName } from "lib/network/swagger-models";
 import { Result } from "@wavepoint/react-spreadsheet-import/types/types";
 import { CsvExport } from "@components/export";
 import useLocalStorage from "use-local-storage";
-import { dataListSettings } from "utils/types";
+import { DataListSettings } from "types";
 
 export const Contacts = () => {
   const { client } = useRequestContext();
-  const [gridSettings, setGridSettings] = useLocalStorage<dataListSettings | undefined>(
+  const [gridSettings, setGridSettings] = useLocalStorage<DataListSettings | undefined>(
     contactGridSettingsStorageKey,
     undefined
   );

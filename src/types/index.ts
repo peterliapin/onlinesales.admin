@@ -5,7 +5,7 @@ export interface BreadcrumbLink {
   toRoute: string;
 }
 
-export type dataListSettings = {
+export type DataListSettings = {
   searchTerm: string;
   filterLimit: number;
   skipLimit: number;

@@ -6,7 +6,7 @@ import {
   OrderDetailsDto,
   OrderItemDetailsDto,
 } from "@lib/network/swagger-client";
-import { getWhereFilterQuery } from "@lib/query";
+import { getWhereFilterQuery } from "@providers/query-provider";
 import { CoreModule, getCoreModuleRoute, getViewFormRoute, viewFormRoute } from "@lib/router";
 import {
   Button,

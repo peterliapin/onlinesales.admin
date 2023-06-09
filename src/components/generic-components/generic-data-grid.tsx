@@ -9,7 +9,7 @@ import {
   GridFilterModel,
   GridSortModel,
 } from "@mui/x-data-grid";
-import { totalCountHeaderName } from "@lib/query";
+import { totalCountHeaderName } from "@providers/query-provider";
 import {
   DtoSchema,
   camelCaseToTitleCase,

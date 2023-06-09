@@ -1,4 +1,4 @@
-import { BreadcrumbLink } from "../../utils/types";
+import { BreadcrumbLink } from "../../types";
 import { CoreModule, getCoreModuleRoute, rootRoute } from "@lib/router";
 
 export const defaultFilterOrderColumn = "createdAt";
