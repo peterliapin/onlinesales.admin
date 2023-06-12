@@ -1393,7 +1393,7 @@ export interface ActivityLogDetailsDto {
   data?: string;
 }
 
-export interface CommentCreateDto {
+export interface CommentCreateBaseDto {
   /**
    * Author Email
    * @format email
@@ -1413,12 +1413,6 @@ export interface CommentCreateDto {
    * @example "string"
    */
   body: string;
-  /**
-   * Content Id
-   * @format int32
-   * @example 1
-   */
-  contentId: number;
   /**
    * Contact Id
    * @format int32
@@ -1441,6 +1435,62 @@ export interface CommentCreateDto {
    * @example "string"
    */
   language?: string;
+}
+
+export interface CommentCreateDto {
+  /**
+   * Author Email
+   * @format email
+   * @minLength 1
+   * @pattern ^([\w\.\-]+)@([\w\-]+)((\.(\w){1,63})+)$
+   * @example "example@example.com"
+   */
+  authorEmail: string;
+  /**
+   * Author Name
+   * @example "string"
+   */
+  authorName?: string;
+  /**
+   * Body
+   * @minLength 1
+   * @example "string"
+   */
+  body: string;
+  /**
+   * Contact Id
+   * @format int32
+   * @example 1
+   */
+  contactId?: number | null;
+  /**
+   * Parent Id
+   * @format int32
+   * @example 1
+   */
+  parentId?: number | null;
+  /**
+   * Source
+   * @example "string"
+   */
+  source?: string | null;
+  /**
+   * Language
+   * @example "string"
+   */
+  language?: string;
+  /**
+   * Commentable Id
+   * @format int32
+   * @example 1
+   */
+  commentableId: number;
+  /**
+   * Commentable Type
+   * @minLength 1
+   * @example "string"
+   */
+  commentableType: string;
 }
 
 export interface CommentDetailsDto {
@@ -1481,11 +1531,16 @@ export interface CommentDetailsDto {
    */
   updatedAt?: string | null;
   /**
-   * Content Id
+   * Commentable Id
    * @format int32
    * @example 1
    */
-  contentId?: number;
+  commentableId?: number;
+  /**
+   * Commentable Type
+   * @example "string"
+   */
+  commentableType?: string;
   /**
    * Avatar Url
    * @example "string"
@@ -1597,16 +1652,16 @@ export interface CommentImportDto {
    */
   language?: string | null;
   /**
-   * Content Id
+   * Commentable Id
    * @format int32
    * @example 1
    */
-  contentId?: number | null;
+  commentableId?: number;
   /**
-   * Content Slug
+   * Commentable Type
    * @example "string"
    */
-  contentSlug?: string | null;
+  commentableType?: string;
   /**
    * Parent Id
    * @format int32
@@ -3568,6 +3623,309 @@ export interface ContentUpdateDto {
   source?: string | null;
 }
 
+export interface DealCreateDto {
+  /**
+   * Account Id
+   * @format int32
+   * @example 1
+   */
+  accountId?: number | null;
+  /**
+   * Deal Pipeline Id
+   * @format int32
+   * @example 1
+   */
+  dealPipelineId: number;
+  /**
+   * Deal Value
+   * @format double
+   * @example 1
+   */
+  dealValue?: number | null;
+  /**
+   * Deal Currency
+   * @pattern ^(DJF|ERN|ETB|NAD|ZAR|XAF|GHS|ETB||AED|BHD|DJF|DZD|EGP|ERN|ILS|IQD|JOD|KMF|KWD|LBP|LYD|MAD|MRU|OMR|ILS|QAR|SAR|SDG|SOS|SSP|SYP|XAF|TND|YER|CLP|INR|TZS|EUR|AZN|AZN|RUB|XAF|BYN|ZMW|TZS|BGN|XOF|BDT|INR|CNY|INR|EUR|INR|BAM|BAM|ERN|EUR|EUR|EUR|EUR|EUR|BDT|INR|RUB|PHP|UGX|USD|IQD|IRR|EUR|CZK|RUB|GBP|DKK|DKK|KES|EUR|EUR|CHF|EUR|EUR|CHF|EUR|XOF|EUR|XAF|MVR|XOF|BTN|KES|GHS|XOF|EUR|EUR|||AED|XCD|XCD|USD|EUR|AUD|BBD|EUR|BIF|BMD|BSD|BWP|BZD|CAD|AUD|CHF|NZD|XAF|AUD|EUR|EUR|DKK|XCD|ERN|EUR|FJD|FKP|USD|GBP|XCD|GBP|GHS|GIP|GMD|USD|GYD|HKD|EUR|ILS|GBP|INR|USD|GBP|JMD|KES|AUD|XCD|KYD|XCD|LRD|ZAR|MGA|USD|MOP|USD|XCD|EUR|MUR|MWK|MYR|NAD|AUD|NGN|EUR|AUD|NZD|NZD|PGK|PHP|PKR|NZD|USD|USD|RWF|SBD|SCR|SDG|SEK|SGD|SHP|EUR|SLL|SSP|ANG|SZL|USD|NZD|TOP|TTD|AUD|TZS|UGX|USD|USD|USD|XCD|USD|USD|VUV|WST|ZAR|ZMW|USD|||ARS|BOB|BRL|BZD|CLP|COP|CRC|CUP|DOP|USD|EUR|XAF|GTQ|HNL|MXN|NIO|PAB|PEN|PHP|USD|PYG|USD|USD|UYU|VES|EUR|EUR|XAF|AFN|IRR|XOF|XAF|GHS|GMD|GNF|XOF|LRD|MRU|XOF|NGN|SLL|XOF|EUR|PHP|DKK|DKK|EUR|XOF|BIF|XOF|EUR|CAD|CDF|XAF|XAF|CHF|XOF|XAF|DJF|DZD|EUR|XAF|EUR|GNF|EUR|XAF|HTG|KMF|EUR|MAD|EUR|EUR|MGA|XOF|EUR|MRU|MUR|XPF|XOF|XPF|EUR|EUR|RWF|SCR|XOF|SYP|XAF|XOF|TND|VUV|XPF|EUR|EUR|EUR|EUR|GBP|EUR|PYG|CHF|EUR|CHF|INR|KES|GBP|GHS|XOF|NGN|USD|ILS|INR|BAM|HRK|EUR|HUF|AMD||IDR|NGN|CNY|ISK|CHF|EUR|EUR|EUR|CAD|CAD|JPY|XAF|TZS|IDR|GEL|DZD|KES|TZS|CVE|XOF|KES|KZT|XAF|DKK|KES|KHR|INR|KPW|KRW|INR|INR|TZS|XAF|EUR|GBP|KGS|TZS|EUR|UGX|USD|AOA|CDF|XAF|XAF|LAK|IQD|IRR|EUR|CDF|KES|KES|EUR|KES|TZS|KES|MUR|MGA|MZN|XAF|NZD|MKD|INR|MNT|CNY|MNT|CAD|INR|BND|MYR|SGD|EUR|XAF|MMK|IRR|NAD|NOK|NOK|USD|EUR|EUR|INR|NPR|AWG|EUR|USD|ANG|EUR|SRD|ANG|XAF|NOK|XAF|GNF|ZAR|ZAR|SSP|UGX|EUR|ETB|KES|INR|GEL|RUB|PKR|INR|PLN||AFN|PKR|AOA|BRL|CHF|CVE|XAF|XOF|EUR|MOP|MZN|EUR|STN|USD|BOB|USD|PEN|GTQ|CHF|BIF|MDL|RON|TZS|BYN|KGS|KZT|MDL|RUB|UAH|RWF|TZS|INR|RUB|KES|TZS|PKR|EUR|NOK|SEK|MZN|XOF|XAF|MAD|MAD|LKR|EUR|EUR|NOK|SEK|NOK|SEK|EUR|EUR|USD|DJF|ETB|KES|SOS|ALL|MKD|EUR|BAM|EUR|RSD|EUR|BAM|EUR|RSD|EUR|SZL|ZAR|ERN|ZAR|ZAR|EUR|EUR|SEK|CDF|KES|TZS|UGX|SYP|INR|LKR|MYR|SGD|INR|KES|UGX|TJS|THB|ERN|ETB|ERN|TMT|BWP|ZAR|TOP|EUR|TRY|ZAR|RUB|XOF|MAD|CNY|UAH|INR|PKR|AFN|UZS|UZS|LRD|LRD|ZAR|VND||TZS|CHF|ETB|XOF|ZAR|UGX|XAF||XOF|NGN|MAD|CNY|HKD|MOP|SGD|HKD|MOP|TWD|ZAR)$
+   * @example "USD"
+   */
+  dealCurrency?: string | null;
+  /**
+   * Expected Close Date
+   * @format date-time
+   * @pattern ^(\d{4})-(1[0-2]|0[1-9])-(3[01]|[12][0-9]|0[1-9])T(2[0-4]|1[0-9]|0[1-9]):(2[0-4]|1[0-9]|0[1-9]):([1-5]?0[0-9]).(\d{7})Z$
+   * @example "2023-04-18T12:00:00.0000000Z"
+   */
+  expectedCloseDate?: string | null;
+  /**
+   * Actual Close Date
+   * @format date-time
+   * @pattern ^(\d{4})-(1[0-2]|0[1-9])-(3[01]|[12][0-9]|0[1-9])T(2[0-4]|1[0-9]|0[1-9]):(2[0-4]|1[0-9]|0[1-9]):([1-5]?0[0-9]).(\d{7})Z$
+   * @example "2023-04-18T12:00:00.0000000Z"
+   */
+  actualCloseDate?: string | null;
+  /**
+   * User Id
+   * @minLength 1
+   * @example "string"
+   */
+  userId: string;
+  /**
+   * Contact Ids
+   * @uniqueItems true
+   */
+  contactIds?: number[];
+}
+
+export interface DealDetailsDto {
+  /**
+   * Account Id
+   * @format int32
+   * @example 1
+   */
+  accountId?: number | null;
+  /**
+   * Deal Pipeline Id
+   * @format int32
+   * @example 1
+   */
+  dealPipelineId: number;
+  /**
+   * Deal Value
+   * @format double
+   * @example 1
+   */
+  dealValue?: number | null;
+  /**
+   * Deal Currency
+   * @pattern ^(DJF|ERN|ETB|NAD|ZAR|XAF|GHS|ETB||AED|BHD|DJF|DZD|EGP|ERN|ILS|IQD|JOD|KMF|KWD|LBP|LYD|MAD|MRU|OMR|ILS|QAR|SAR|SDG|SOS|SSP|SYP|XAF|TND|YER|CLP|INR|TZS|EUR|AZN|AZN|RUB|XAF|BYN|ZMW|TZS|BGN|XOF|BDT|INR|CNY|INR|EUR|INR|BAM|BAM|ERN|EUR|EUR|EUR|EUR|EUR|BDT|INR|RUB|PHP|UGX|USD|IQD|IRR|EUR|CZK|RUB|GBP|DKK|DKK|KES|EUR|EUR|CHF|EUR|EUR|CHF|EUR|XOF|EUR|XAF|MVR|XOF|BTN|KES|GHS|XOF|EUR|EUR|||AED|XCD|XCD|USD|EUR|AUD|BBD|EUR|BIF|BMD|BSD|BWP|BZD|CAD|AUD|CHF|NZD|XAF|AUD|EUR|EUR|DKK|XCD|ERN|EUR|FJD|FKP|USD|GBP|XCD|GBP|GHS|GIP|GMD|USD|GYD|HKD|EUR|ILS|GBP|INR|USD|GBP|JMD|KES|AUD|XCD|KYD|XCD|LRD|ZAR|MGA|USD|MOP|USD|XCD|EUR|MUR|MWK|MYR|NAD|AUD|NGN|EUR|AUD|NZD|NZD|PGK|PHP|PKR|NZD|USD|USD|RWF|SBD|SCR|SDG|SEK|SGD|SHP|EUR|SLL|SSP|ANG|SZL|USD|NZD|TOP|TTD|AUD|TZS|UGX|USD|USD|USD|XCD|USD|USD|VUV|WST|ZAR|ZMW|USD|||ARS|BOB|BRL|BZD|CLP|COP|CRC|CUP|DOP|USD|EUR|XAF|GTQ|HNL|MXN|NIO|PAB|PEN|PHP|USD|PYG|USD|USD|UYU|VES|EUR|EUR|XAF|AFN|IRR|XOF|XAF|GHS|GMD|GNF|XOF|LRD|MRU|XOF|NGN|SLL|XOF|EUR|PHP|DKK|DKK|EUR|XOF|BIF|XOF|EUR|CAD|CDF|XAF|XAF|CHF|XOF|XAF|DJF|DZD|EUR|XAF|EUR|GNF|EUR|XAF|HTG|KMF|EUR|MAD|EUR|EUR|MGA|XOF|EUR|MRU|MUR|XPF|XOF|XPF|EUR|EUR|RWF|SCR|XOF|SYP|XAF|XOF|TND|VUV|XPF|EUR|EUR|EUR|EUR|GBP|EUR|PYG|CHF|EUR|CHF|INR|KES|GBP|GHS|XOF|NGN|USD|ILS|INR|BAM|HRK|EUR|HUF|AMD||IDR|NGN|CNY|ISK|CHF|EUR|EUR|EUR|CAD|CAD|JPY|XAF|TZS|IDR|GEL|DZD|KES|TZS|CVE|XOF|KES|KZT|XAF|DKK|KES|KHR|INR|KPW|KRW|INR|INR|TZS|XAF|EUR|GBP|KGS|TZS|EUR|UGX|USD|AOA|CDF|XAF|XAF|LAK|IQD|IRR|EUR|CDF|KES|KES|EUR|KES|TZS|KES|MUR|MGA|MZN|XAF|NZD|MKD|INR|MNT|CNY|MNT|CAD|INR|BND|MYR|SGD|EUR|XAF|MMK|IRR|NAD|NOK|NOK|USD|EUR|EUR|INR|NPR|AWG|EUR|USD|ANG|EUR|SRD|ANG|XAF|NOK|XAF|GNF|ZAR|ZAR|SSP|UGX|EUR|ETB|KES|INR|GEL|RUB|PKR|INR|PLN||AFN|PKR|AOA|BRL|CHF|CVE|XAF|XOF|EUR|MOP|MZN|EUR|STN|USD|BOB|USD|PEN|GTQ|CHF|BIF|MDL|RON|TZS|BYN|KGS|KZT|MDL|RUB|UAH|RWF|TZS|INR|RUB|KES|TZS|PKR|EUR|NOK|SEK|MZN|XOF|XAF|MAD|MAD|LKR|EUR|EUR|NOK|SEK|NOK|SEK|EUR|EUR|USD|DJF|ETB|KES|SOS|ALL|MKD|EUR|BAM|EUR|RSD|EUR|BAM|EUR|RSD|EUR|SZL|ZAR|ERN|ZAR|ZAR|EUR|EUR|SEK|CDF|KES|TZS|UGX|SYP|INR|LKR|MYR|SGD|INR|KES|UGX|TJS|THB|ERN|ETB|ERN|TMT|BWP|ZAR|TOP|EUR|TRY|ZAR|RUB|XOF|MAD|CNY|UAH|INR|PKR|AFN|UZS|UZS|LRD|LRD|ZAR|VND||TZS|CHF|ETB|XOF|ZAR|UGX|XAF||XOF|NGN|MAD|CNY|HKD|MOP|SGD|HKD|MOP|TWD|ZAR)$
+   * @example "USD"
+   */
+  dealCurrency?: string | null;
+  /**
+   * Expected Close Date
+   * @format date-time
+   * @pattern ^(\d{4})-(1[0-2]|0[1-9])-(3[01]|[12][0-9]|0[1-9])T(2[0-4]|1[0-9]|0[1-9]):(2[0-4]|1[0-9]|0[1-9]):([1-5]?0[0-9]).(\d{7})Z$
+   * @example "2023-04-18T12:00:00.0000000Z"
+   */
+  expectedCloseDate?: string | null;
+  /**
+   * Actual Close Date
+   * @format date-time
+   * @pattern ^(\d{4})-(1[0-2]|0[1-9])-(3[01]|[12][0-9]|0[1-9])T(2[0-4]|1[0-9]|0[1-9]):(2[0-4]|1[0-9]|0[1-9]):([1-5]?0[0-9]).(\d{7})Z$
+   * @example "2023-04-18T12:00:00.0000000Z"
+   */
+  actualCloseDate?: string | null;
+  /**
+   * User Id
+   * @minLength 1
+   * @example "string"
+   */
+  userId: string;
+  /**
+   * Id
+   * @format int32
+   * @example 1
+   */
+  id?: number;
+  /**
+   * Created At
+   * @format date-time
+   * @pattern ^(\d{4})-(1[0-2]|0[1-9])-(3[01]|[12][0-9]|0[1-9])T(2[0-4]|1[0-9]|0[1-9]):(2[0-4]|1[0-9]|0[1-9]):([1-5]?0[0-9]).(\d{7})Z$
+   * @example "2023-04-18T12:00:00.0000000Z"
+   */
+  createdAt?: string;
+  /**
+   * Updated At
+   * @format date-time
+   * @pattern ^(\d{4})-(1[0-2]|0[1-9])-(3[01]|[12][0-9]|0[1-9])T(2[0-4]|1[0-9]|0[1-9]):(2[0-4]|1[0-9]|0[1-9]):([1-5]?0[0-9]).(\d{7})Z$
+   * @example "2023-04-18T12:00:00.0000000Z"
+   */
+  updatedAt?: string | null;
+  account?: AccountDetailsDto;
+  dealPipeline?: DealPipelineDetailsDto;
+  pipelineStage?: DealPipelineStageDetailsDto;
+  /** Contacts */
+  contacts?: ContactDetailsDto[] | null;
+}
+
+export interface DealPipelineCreateDto {
+  /**
+   * Name
+   * @minLength 1
+   * @example "string"
+   */
+  name: string;
+}
+
+export interface DealPipelineDetailsDto {
+  /**
+   * Name
+   * @minLength 1
+   * @example "string"
+   */
+  name: string;
+  /**
+   * Id
+   * @format int32
+   * @example 1
+   */
+  id?: number;
+  /**
+   * Created At
+   * @format date-time
+   * @pattern ^(\d{4})-(1[0-2]|0[1-9])-(3[01]|[12][0-9]|0[1-9])T(2[0-4]|1[0-9]|0[1-9]):(2[0-4]|1[0-9]|0[1-9]):([1-5]?0[0-9]).(\d{7})Z$
+   * @example "2023-04-18T12:00:00.0000000Z"
+   */
+  createdAt?: string;
+  /**
+   * Updated At
+   * @format date-time
+   * @pattern ^(\d{4})-(1[0-2]|0[1-9])-(3[01]|[12][0-9]|0[1-9])T(2[0-4]|1[0-9]|0[1-9]):(2[0-4]|1[0-9]|0[1-9]):([1-5]?0[0-9]).(\d{7})Z$
+   * @example "2023-04-18T12:00:00.0000000Z"
+   */
+  updatedAt?: string | null;
+  /** Pipeline Stages */
+  pipelineStages?: DealPipelineStageDetailsDto[] | null;
+}
+
+export interface DealPipelineStageCreateDto {
+  /**
+   * Name
+   * @minLength 1
+   * @example "string"
+   */
+  name: string;
+  /**
+   * Deal Pipeline Id
+   * @format int32
+   * @example 1
+   */
+  dealPipelineId: number;
+  /**
+   * Order
+   * @format int32
+   * @example 1
+   */
+  order: number;
+}
+
+export interface DealPipelineStageDetailsDto {
+  /**
+   * Name
+   * @minLength 1
+   * @example "string"
+   */
+  name: string;
+  /**
+   * Deal Pipeline Id
+   * @format int32
+   * @example 1
+   */
+  dealPipelineId: number;
+  /**
+   * Order
+   * @format int32
+   * @example 1
+   */
+  order: number;
+  /**
+   * Id
+   * @format int32
+   * @example 1
+   */
+  id?: number;
+  /**
+   * Created At
+   * @format date-time
+   * @pattern ^(\d{4})-(1[0-2]|0[1-9])-(3[01]|[12][0-9]|0[1-9])T(2[0-4]|1[0-9]|0[1-9]):(2[0-4]|1[0-9]|0[1-9]):([1-5]?0[0-9]).(\d{7})Z$
+   * @example "2023-04-18T12:00:00.0000000Z"
+   */
+  createdAt?: string;
+  /**
+   * Updated At
+   * @format date-time
+   * @pattern ^(\d{4})-(1[0-2]|0[1-9])-(3[01]|[12][0-9]|0[1-9])T(2[0-4]|1[0-9]|0[1-9]):(2[0-4]|1[0-9]|0[1-9]):([1-5]?0[0-9]).(\d{7})Z$
+   * @example "2023-04-18T12:00:00.0000000Z"
+   */
+  updatedAt?: string | null;
+  dealPipeline?: DealPipelineDetailsDto;
+}
+
+export interface DealPipelineStageUpdateDto {
+  /**
+   * Name
+   * @minLength 1
+   * @example "string"
+   */
+  name?: string | null;
+  /**
+   * Order
+   * @format int32
+   * @example 1
+   */
+  order?: number | null;
+}
+
+export interface DealPipelineUpdateDto {
+  /**
+   * Name
+   * @minLength 1
+   * @example "string"
+   */
+  name: string;
+}
+
+export interface DealUpdateDto {
+  /**
+   * Account Id
+   * @format int32
+   * @example 1
+   */
+  accountId?: number | null;
+  /**
+   * Deal Pipeline Id
+   * @format int32
+   * @example 1
+   */
+  dealPipelineId?: number | null;
+  /**
+   * Contact Ids
+   * @uniqueItems true
+   */
+  contactIds?: number[] | null;
+  /**
+   * Deal Value
+   * @format double
+   * @example 1
+   */
+  dealValue?: number | null;
+  /**
+   * Deal Currency
+   * @minLength 1
+   * @pattern ^(DJF|ERN|ETB|NAD|ZAR|XAF|GHS|ETB||AED|BHD|DJF|DZD|EGP|ERN|ILS|IQD|JOD|KMF|KWD|LBP|LYD|MAD|MRU|OMR|ILS|QAR|SAR|SDG|SOS|SSP|SYP|XAF|TND|YER|CLP|INR|TZS|EUR|AZN|AZN|RUB|XAF|BYN|ZMW|TZS|BGN|XOF|BDT|INR|CNY|INR|EUR|INR|BAM|BAM|ERN|EUR|EUR|EUR|EUR|EUR|BDT|INR|RUB|PHP|UGX|USD|IQD|IRR|EUR|CZK|RUB|GBP|DKK|DKK|KES|EUR|EUR|CHF|EUR|EUR|CHF|EUR|XOF|EUR|XAF|MVR|XOF|BTN|KES|GHS|XOF|EUR|EUR|||AED|XCD|XCD|USD|EUR|AUD|BBD|EUR|BIF|BMD|BSD|BWP|BZD|CAD|AUD|CHF|NZD|XAF|AUD|EUR|EUR|DKK|XCD|ERN|EUR|FJD|FKP|USD|GBP|XCD|GBP|GHS|GIP|GMD|USD|GYD|HKD|EUR|ILS|GBP|INR|USD|GBP|JMD|KES|AUD|XCD|KYD|XCD|LRD|ZAR|MGA|USD|MOP|USD|XCD|EUR|MUR|MWK|MYR|NAD|AUD|NGN|EUR|AUD|NZD|NZD|PGK|PHP|PKR|NZD|USD|USD|RWF|SBD|SCR|SDG|SEK|SGD|SHP|EUR|SLL|SSP|ANG|SZL|USD|NZD|TOP|TTD|AUD|TZS|UGX|USD|USD|USD|XCD|USD|USD|VUV|WST|ZAR|ZMW|USD|||ARS|BOB|BRL|BZD|CLP|COP|CRC|CUP|DOP|USD|EUR|XAF|GTQ|HNL|MXN|NIO|PAB|PEN|PHP|USD|PYG|USD|USD|UYU|VES|EUR|EUR|XAF|AFN|IRR|XOF|XAF|GHS|GMD|GNF|XOF|LRD|MRU|XOF|NGN|SLL|XOF|EUR|PHP|DKK|DKK|EUR|XOF|BIF|XOF|EUR|CAD|CDF|XAF|XAF|CHF|XOF|XAF|DJF|DZD|EUR|XAF|EUR|GNF|EUR|XAF|HTG|KMF|EUR|MAD|EUR|EUR|MGA|XOF|EUR|MRU|MUR|XPF|XOF|XPF|EUR|EUR|RWF|SCR|XOF|SYP|XAF|XOF|TND|VUV|XPF|EUR|EUR|EUR|EUR|GBP|EUR|PYG|CHF|EUR|CHF|INR|KES|GBP|GHS|XOF|NGN|USD|ILS|INR|BAM|HRK|EUR|HUF|AMD||IDR|NGN|CNY|ISK|CHF|EUR|EUR|EUR|CAD|CAD|JPY|XAF|TZS|IDR|GEL|DZD|KES|TZS|CVE|XOF|KES|KZT|XAF|DKK|KES|KHR|INR|KPW|KRW|INR|INR|TZS|XAF|EUR|GBP|KGS|TZS|EUR|UGX|USD|AOA|CDF|XAF|XAF|LAK|IQD|IRR|EUR|CDF|KES|KES|EUR|KES|TZS|KES|MUR|MGA|MZN|XAF|NZD|MKD|INR|MNT|CNY|MNT|CAD|INR|BND|MYR|SGD|EUR|XAF|MMK|IRR|NAD|NOK|NOK|USD|EUR|EUR|INR|NPR|AWG|EUR|USD|ANG|EUR|SRD|ANG|XAF|NOK|XAF|GNF|ZAR|ZAR|SSP|UGX|EUR|ETB|KES|INR|GEL|RUB|PKR|INR|PLN||AFN|PKR|AOA|BRL|CHF|CVE|XAF|XOF|EUR|MOP|MZN|EUR|STN|USD|BOB|USD|PEN|GTQ|CHF|BIF|MDL|RON|TZS|BYN|KGS|KZT|MDL|RUB|UAH|RWF|TZS|INR|RUB|KES|TZS|PKR|EUR|NOK|SEK|MZN|XOF|XAF|MAD|MAD|LKR|EUR|EUR|NOK|SEK|NOK|SEK|EUR|EUR|USD|DJF|ETB|KES|SOS|ALL|MKD|EUR|BAM|EUR|RSD|EUR|BAM|EUR|RSD|EUR|SZL|ZAR|ERN|ZAR|ZAR|EUR|EUR|SEK|CDF|KES|TZS|UGX|SYP|INR|LKR|MYR|SGD|INR|KES|UGX|TJS|THB|ERN|ETB|ERN|TMT|BWP|ZAR|TOP|EUR|TRY|ZAR|RUB|XOF|MAD|CNY|UAH|INR|PKR|AFN|UZS|UZS|LRD|LRD|ZAR|VND||TZS|CHF|ETB|XOF|ZAR|UGX|XAF||XOF|NGN|MAD|CNY|HKD|MOP|SGD|HKD|MOP|TWD|ZAR)$
+   * @example "USD"
+   */
+  dealCurrency?: string | null;
+  /**
+   * Expected Close Date
+   * @format date-time
+   * @pattern ^(\d{4})-(1[0-2]|0[1-9])-(3[01]|[12][0-9]|0[1-9])T(2[0-4]|1[0-9]|0[1-9]):(2[0-4]|1[0-9]|0[1-9]):([1-5]?0[0-9]).(\d{7})Z$
+   * @example "2023-04-18T12:00:00.0000000Z"
+   */
+  expectedCloseDate?: string | null;
+  /**
+   * Actual Close Date
+   * @format date-time
+   * @pattern ^(\d{4})-(1[0-2]|0[1-9])-(3[01]|[12][0-9]|0[1-9])T(2[0-4]|1[0-9]|0[1-9]):(2[0-4]|1[0-9]|0[1-9]):([1-5]?0[0-9]).(\d{7})Z$
+   * @example "2023-04-18T12:00:00.0000000Z"
+   */
+  actualCloseDate?: string | null;
+  /**
+   * User Id
+   * @example "string"
+   */
+  userId?: string | null;
+}
+
 export interface DnsRecord {
   /**
    * Domain Name
@@ -3652,6 +4010,11 @@ export interface DomainCreateDto {
    */
   dnsCheck?: boolean | null;
   /**
+   * Mx Check
+   * @example true
+   */
+  mxCheck?: boolean | null;
+  /**
    * Source
    * @example "string"
    */
@@ -3712,6 +4075,11 @@ export interface DomainDetailsDto {
    * @example true
    */
   dnsCheck?: boolean | null;
+  /**
+   * Mx Check
+   * @example true
+   */
+  mxCheck?: boolean | null;
   /**
    * Source
    * @example "string"
@@ -3821,6 +4189,11 @@ export interface DomainImportDto {
    * @example true
    */
   dnsCheck?: boolean | null;
+  /**
+   * Mx Check
+   * @example true
+   */
+  mxCheck?: boolean | null;
 }
 
 export interface DomainUpdateDto {
@@ -4283,6 +4656,69 @@ export interface LinkDetailsDto {
    * @example "2023-04-18T12:00:00.0000000Z"
    */
   updatedAt?: string | null;
+}
+
+export interface LinkImportDto {
+  /**
+   * Id
+   * @format int32
+   * @example 1
+   */
+  id?: number | null;
+  /**
+   * Source
+   * @example "string"
+   */
+  source?: string | null;
+  /**
+   * Created At
+   * @format date-time
+   * @pattern ^(\d{4})-(1[0-2]|0[1-9])-(3[01]|[12][0-9]|0[1-9])T(2[0-4]|1[0-9]|0[1-9]):(2[0-4]|1[0-9]|0[1-9]):([1-5]?0[0-9]).(\d{7})Z$
+   * @example "2023-04-18T12:00:00.0000000Z"
+   */
+  createdAt?: string | null;
+  /**
+   * Updated At
+   * @format date-time
+   * @pattern ^(\d{4})-(1[0-2]|0[1-9])-(3[01]|[12][0-9]|0[1-9])T(2[0-4]|1[0-9]|0[1-9]):(2[0-4]|1[0-9]|0[1-9]):([1-5]?0[0-9]).(\d{7})Z$
+   * @example "2023-04-18T12:00:00.0000000Z"
+   */
+  updatedAt?: string | null;
+  /**
+   * Created By Ip
+   * @example "string"
+   */
+  createdByIp?: string | null;
+  /**
+   * Created By User Agent
+   * @example "string"
+   */
+  createdByUserAgent?: string | null;
+  /**
+   * Updated By Ip
+   * @example "string"
+   */
+  updatedByIp?: string | null;
+  /**
+   * Updated By User Agent
+   * @example "string"
+   */
+  updatedByUserAgent?: string | null;
+  /**
+   * Uid
+   * @example "string"
+   */
+  uid?: string | null;
+  /**
+   * Destination
+   * @example "string"
+   */
+  destination?: string | null;
+  /**
+   * Name
+   * @example "string"
+   */
+  name?: string | null;
 }
 
 export interface LinkUpdateDto {
@@ -5312,10 +5748,46 @@ export class HttpClient<SecurityDataType = unknown> {
 
 /**
  * @title OnlineSales API
- * @version 1.2.6.0
+ * @version 1.2.8.0
  */
 export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
   api = {
+    /**
+     * No description
+     *
+     * @tags Accounts
+     * @name AccountsCommentsDetail
+     * @request GET:/api/accounts/{id}/comments
+     * @secure
+     */
+    accountsCommentsDetail: (id: number, params: RequestParams = {}) =>
+      this.request<CommentDetailsDto[], void | ProblemDetails>({
+        path: `/api/accounts/${id}/comments`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Accounts
+     * @name AccountsCommentsCreate
+     * @request POST:/api/accounts/{id}/comments
+     * @secure
+     */
+    accountsCommentsCreate: (id: number, data: CommentCreateBaseDto, params: RequestParams = {}) =>
+      this.request<CommentDetailsDto, void | ProblemDetails>({
+        path: `/api/accounts/${id}/comments`,
+        method: "POST",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
     /**
      * No description
      *
@@ -5707,6 +6179,42 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * No description
      *
      * @tags Contacts
+     * @name ContactsCommentsDetail
+     * @request GET:/api/contacts/{id}/comments
+     * @secure
+     */
+    contactsCommentsDetail: (id: number, params: RequestParams = {}) =>
+      this.request<CommentDetailsDto[], void | ProblemDetails>({
+        path: `/api/contacts/${id}/comments`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Contacts
+     * @name ContactsCommentsCreate
+     * @request POST:/api/contacts/{id}/comments
+     * @secure
+     */
+    contactsCommentsCreate: (id: number, data: CommentCreateBaseDto, params: RequestParams = {}) =>
+      this.request<CommentDetailsDto, void | ProblemDetails>({
+        path: `/api/contacts/${id}/comments`,
+        method: "POST",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Contacts
      * @name ContactsImportCreate
      * @request POST:/api/contacts/import
      * @secure
@@ -5876,6 +6384,42 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * No description
      *
      * @tags Content
+     * @name ContentCommentsDetail
+     * @request GET:/api/content/{id}/comments
+     * @secure
+     */
+    contentCommentsDetail: (id: number, params: RequestParams = {}) =>
+      this.request<CommentDetailsDto[], void | ProblemDetails>({
+        path: `/api/content/${id}/comments`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Content
+     * @name ContentCommentsCreate
+     * @request POST:/api/content/{id}/comments
+     * @secure
+     */
+    contentCommentsCreate: (id: number, data: CommentCreateBaseDto, params: RequestParams = {}) =>
+      this.request<CommentDetailsDto, void | ProblemDetails>({
+        path: `/api/content/${id}/comments`,
+        method: "POST",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Content
      * @name ContentImportCreate
      * @request POST:/api/content/import
      * @secure
@@ -5950,15 +6494,371 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
+     * @tags DealPipelines
+     * @name DealPipelinesDetail
+     * @request GET:/api/deal-pipelines/{id}
+     * @secure
+     */
+    dealPipelinesDetail: (id: number, params: RequestParams = {}) =>
+      this.request<DealPipelineDetailsDto, void | ProblemDetails>({
+        path: `/api/deal-pipelines/${id}`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags DealPipelines
+     * @name DealPipelinesPartialUpdate
+     * @request PATCH:/api/deal-pipelines/{id}
+     * @secure
+     */
+    dealPipelinesPartialUpdate: (id: number, data: DealPipelineUpdateDto, params: RequestParams = {}) =>
+      this.request<DealPipelineDetailsDto, void | ProblemDetails>({
+        path: `/api/deal-pipelines/${id}`,
+        method: "PATCH",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags DealPipelines
+     * @name DealPipelinesDelete
+     * @request DELETE:/api/deal-pipelines/{id}
+     * @secure
+     */
+    dealPipelinesDelete: (id: number, params: RequestParams = {}) =>
+      this.request<void, void | ProblemDetails>({
+        path: `/api/deal-pipelines/${id}`,
+        method: "DELETE",
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags DealPipelines
+     * @name DealPipelinesCreate
+     * @request POST:/api/deal-pipelines
+     * @secure
+     */
+    dealPipelinesCreate: (data: DealPipelineCreateDto, params: RequestParams = {}) =>
+      this.request<DealPipelineDetailsDto, void | ProblemDetails>({
+        path: `/api/deal-pipelines`,
+        method: "POST",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags DealPipelines
+     * @name DealPipelinesList
+     * @request GET:/api/deal-pipelines
+     * @secure
+     */
+    dealPipelinesList: (
+      query?: {
+        query?: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<DealPipelineDetailsDto[], void | ProblemDetails>({
+        path: `/api/deal-pipelines`,
+        method: "GET",
+        query: query,
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags DealPipelines
+     * @name DealPipelinesExportList
+     * @request GET:/api/deal-pipelines/export
+     * @secure
+     */
+    dealPipelinesExportList: (
+      query?: {
+        query?: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<any, void | ProblemDetails>({
+        path: `/api/deal-pipelines/export`,
+        method: "GET",
+        query: query,
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags DealPipelineStages
+     * @name DealPipelineStagesCreate
+     * @request POST:/api/deal-pipeline-stages
+     * @secure
+     */
+    dealPipelineStagesCreate: (data: DealPipelineStageCreateDto, params: RequestParams = {}) =>
+      this.request<DealPipelineStageDetailsDto, void | ProblemDetails>({
+        path: `/api/deal-pipeline-stages`,
+        method: "POST",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags DealPipelineStages
+     * @name DealPipelineStagesList
+     * @request GET:/api/deal-pipeline-stages
+     * @secure
+     */
+    dealPipelineStagesList: (
+      query?: {
+        query?: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<DealPipelineStageDetailsDto[], void | ProblemDetails>({
+        path: `/api/deal-pipeline-stages`,
+        method: "GET",
+        query: query,
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags DealPipelineStages
+     * @name DealPipelineStagesPartialUpdate
+     * @request PATCH:/api/deal-pipeline-stages/{id}
+     * @secure
+     */
+    dealPipelineStagesPartialUpdate: (id: number, data: DealPipelineStageUpdateDto, params: RequestParams = {}) =>
+      this.request<DealPipelineStageDetailsDto, void | ProblemDetails>({
+        path: `/api/deal-pipeline-stages/${id}`,
+        method: "PATCH",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags DealPipelineStages
+     * @name DealPipelineStagesDetail
+     * @request GET:/api/deal-pipeline-stages/{id}
+     * @secure
+     */
+    dealPipelineStagesDetail: (id: number, params: RequestParams = {}) =>
+      this.request<DealPipelineStageDetailsDto, void | ProblemDetails>({
+        path: `/api/deal-pipeline-stages/${id}`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags DealPipelineStages
+     * @name DealPipelineStagesDelete
+     * @request DELETE:/api/deal-pipeline-stages/{id}
+     * @secure
+     */
+    dealPipelineStagesDelete: (id: number, params: RequestParams = {}) =>
+      this.request<void, void | ProblemDetails>({
+        path: `/api/deal-pipeline-stages/${id}`,
+        method: "DELETE",
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags DealPipelineStages
+     * @name DealPipelineStagesExportList
+     * @request GET:/api/deal-pipeline-stages/export
+     * @secure
+     */
+    dealPipelineStagesExportList: (
+      query?: {
+        query?: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<any, void | ProblemDetails>({
+        path: `/api/deal-pipeline-stages/export`,
+        method: "GET",
+        query: query,
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Deals
+     * @name DealsCreate
+     * @request POST:/api/deals
+     * @secure
+     */
+    dealsCreate: (data: DealCreateDto, params: RequestParams = {}) =>
+      this.request<DealDetailsDto, void | ProblemDetails>({
+        path: `/api/deals`,
+        method: "POST",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Deals
+     * @name DealsList
+     * @request GET:/api/deals
+     * @secure
+     */
+    dealsList: (
+      query?: {
+        query?: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<DealDetailsDto[], void | ProblemDetails>({
+        path: `/api/deals`,
+        method: "GET",
+        query: query,
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Deals
+     * @name DealsPartialUpdate
+     * @request PATCH:/api/deals/{id}
+     * @secure
+     */
+    dealsPartialUpdate: (id: number, data: DealUpdateDto, params: RequestParams = {}) =>
+      this.request<DealDetailsDto, void | ProblemDetails>({
+        path: `/api/deals/${id}`,
+        method: "PATCH",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Deals
+     * @name DealsDetail
+     * @request GET:/api/deals/{id}
+     * @secure
+     */
+    dealsDetail: (id: number, params: RequestParams = {}) =>
+      this.request<DealDetailsDto, void | ProblemDetails>({
+        path: `/api/deals/${id}`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Deals
+     * @name DealsDelete
+     * @request DELETE:/api/deals/{id}
+     * @secure
+     */
+    dealsDelete: (id: number, params: RequestParams = {}) =>
+      this.request<void, void | ProblemDetails>({
+        path: `/api/deals/${id}`,
+        method: "DELETE",
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Deals
+     * @name DealsExportList
+     * @request GET:/api/deals/export
+     * @secure
+     */
+    dealsExportList: (
+      query?: {
+        query?: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<any, void | ProblemDetails>({
+        path: `/api/deals/export`,
+        method: "GET",
+        query: query,
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
      * @tags Domains
      * @name DomainsVerifyDetail
      * @request GET:/api/domains/verify/{name}
      * @secure
      */
-    domainsVerifyDetail: (name: string, params: RequestParams = {}) =>
+    domainsVerifyDetail: (
+      name: string,
+      query?: {
+        /** @default false */
+        force?: boolean;
+      },
+      params: RequestParams = {},
+    ) =>
       this.request<DomainDetailsDto, void | ProblemDetails>({
         path: `/api/domains/verify/${name}`,
         method: "GET",
+        query: query,
         secure: true,
         format: "json",
         ...params,
@@ -6532,6 +7432,25 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * No description
      *
      * @tags Links
+     * @name LinksImportCreate
+     * @request POST:/api/links/import
+     * @secure
+     */
+    linksImportCreate: (data: LinkImportDto[], params: RequestParams = {}) =>
+      this.request<ImportResult, void | ProblemDetails>({
+        path: `/api/links/import`,
+        method: "POST",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Links
      * @name LinksDetail
      * @request GET:/api/links/{id}
      * @secure
@@ -6825,6 +7744,42 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         method: "GET",
         query: query,
         secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Orders
+     * @name OrdersCommentsDetail
+     * @request GET:/api/orders/{id}/comments
+     * @secure
+     */
+    ordersCommentsDetail: (id: number, params: RequestParams = {}) =>
+      this.request<CommentDetailsDto[], void | ProblemDetails>({
+        path: `/api/orders/${id}/comments`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Orders
+     * @name OrdersCommentsCreate
+     * @request POST:/api/orders/{id}/comments
+     * @secure
+     */
+    ordersCommentsCreate: (id: number, data: CommentCreateBaseDto, params: RequestParams = {}) =>
+      this.request<CommentDetailsDto, void | ProblemDetails>({
+        path: `/api/orders/${id}/comments`,
+        method: "POST",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
         ...params,
       }),
 
