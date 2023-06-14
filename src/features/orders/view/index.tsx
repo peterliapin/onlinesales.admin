@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { ContactCardHeader } from "@features/contacts/index.styled";
 import { useNotificationsService } from "@hooks";
 import {
@@ -12,11 +12,6 @@ import {
   Button,
   Card,
   CardContent,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
   Grid,
   IconButton,
   Link,
@@ -27,7 +22,7 @@ import { DataGrid, GridCellParams, GridColDef } from "@mui/x-data-grid";
 import { useRequestContext } from "@providers/request-provider";
 import { DataView } from "components/data-view";
 import { useRouteParams } from "typesafe-routes";
-import { getCountryByCode, getFormattedDateTime } from "utils/general-helper";
+import { execDeleteWithToast, getCountryByCode, getFormattedDateTime } from "utils/general-helper";
 import { orderFormBreadcrumbLinks } from "../constants";
 import { ModuleWrapper } from "@components/module-wrapper";
 import { GhostLink } from "@components/ghost-link";
@@ -40,6 +35,7 @@ import zod from "zod";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 import { execSubmitWithToast } from "utils/formik-helper";
 import { useErrorDetailsModal } from "@providers/error-details-modal-provider";
+import { DataDelete, DataDeleteConfirmation } from "@components/data-delete";
 
 export const OrderViewBase = () => {
   const context = useRequestContext();
@@ -56,6 +52,7 @@ export const OrderViewBase = () => {
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const [orderItem, setOrderItem] = useState<OrderItemDetailsDto>();
   const [openConfirmation, setOpenConfirmation] = useState(false);
+  const [isConfirmed, setIsConfirmed] = useState(false);
 
   useEffect(() => {
     setBusy(async () => {
@@ -69,6 +66,20 @@ export const OrderViewBase = () => {
       }
     });
   }, [client]);
+
+  useEffect(() => {
+    if (isConfirmed) {
+      (async () => {
+        await execDeleteWithToast(deleteRecord, notificationsService, "order item", showErrorModal);
+      })();
+    }
+  }, [isConfirmed]);
+
+  const deleteRecord = async () => {
+    await client.api.orderItemsDelete(orderItem!.id!);
+    setOrderItems(await getOrderItems(order!.id!));
+    setIsConfirmed(false);
+  };
 
   const setContactState = async (id: number) => {
     try {
@@ -112,22 +123,6 @@ export const OrderViewBase = () => {
   const handleDelete = (row: any) => {
     setOpenConfirmation(true);
     setOrderItem(orderItems?.find((x) => x.id === row.id));
-  };
-
-  const handleConfirmationClose = () => {
-    setOpenConfirmation(false);
-  };
-
-  const handleConfirmation = async () => {
-    setOpenConfirmation(false);
-    try {
-      await client.api.orderItemsDelete(orderItem!.id!);
-      setOrderItems(await getOrderItems(order!.id!));
-      notificationsService.success("Order item deleted!.");
-    } catch (error) {
-      console.log(error);
-      notificationsService.error("Server error: order item not deleted.");
-    }
   };
 
   const contactRef =
@@ -292,162 +287,173 @@ export const OrderViewBase = () => {
   });
 
   return (
-    <ModuleWrapper breadcrumbs={orderFormBreadcrumbLinks} currentBreadcrumb="View Order">
-      <Grid container spacing={3}>
-        <Grid xs={12} sm={5} item>
-          {order && <DataView header="Order Info" rows={orderViewData}></DataView>}
-        </Grid>
-        <Grid xs={12} sm={7} item>
-          <Card>
-            {orderItems && (
-              <CardContent>
-                <div
-                  style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}
-                >
-                  <ContactCardHeader title="Order Items" />
-                  <Button variant="contained" color="primary" onClick={handleAdd}>
-                    Add Order Item
-                  </Button>
-                </div>
-                <DataGrid
-                  columns={gridFinalizedColumns}
-                  rows={orderItems || []}
-                  loading={!orderItems}
-                  checkboxSelection={false}
-                  autoHeight={true}
-                  pagination={undefined}
-                  hideFooter={true}
-                />
-              </CardContent>
-            )}
-          </Card>
-          {isEdit && (
-            <form onSubmit={formik.handleSubmit}>
+    <>
+      {order && (
+        <ModuleWrapper breadcrumbs={orderFormBreadcrumbLinks} currentBreadcrumb="View Order">
+          <Grid container spacing={3}>
+            <Grid xs={12} sm={5} item>
+              <DataView header="Order Info" rows={orderViewData}></DataView>
+            </Grid>
+            <Grid xs={12} sm={7} item>
               <Card>
-                <CardContent>
-                  <ContactCardHeader title="Edit Order Item"></ContactCardHeader>
-                  <Grid container spacing={3}>
-                    <Grid xs={12} sm={12} item>
-                      <TextField
-                        disabled={formik.isSubmitting}
-                        label="Product Name"
-                        name="productName"
-                        value={formik.values.productName || ""}
-                        variant="outlined"
-                        fullWidth
-                        error={formik.touched.productName && Boolean(formik.errors.productName)}
-                        helperText={formik.touched.productName && formik.errors.productName}
-                        onChange={formik.handleChange}
-                      />
-                    </Grid>
-                    <Grid xs={12} sm={12} item>
-                      <TextField
-                        disabled={formik.isSubmitting}
-                        label="License Code"
-                        name="licenseCode"
-                        value={formik.values.licenseCode || ""}
-                        fullWidth
-                        error={formik.touched.licenseCode && Boolean(formik.errors.licenseCode)}
-                        helperText={formik.touched.licenseCode && formik.errors.licenseCode}
-                        onChange={formik.handleChange}
-                      />
-                    </Grid>
-                    <Grid xs={12} sm={12} item>
-                      <Tooltip title="Unit Price field must contain only numbers">
-                        <TextField
-                          disabled={formik.isSubmitting}
-                          label="Unit Price"
-                          name="unitPrice"
-                          type="number"
-                          value={formik.values.unitPrice || ""}
-                          fullWidth
-                          error={formik.touched.unitPrice && Boolean(formik.errors.unitPrice)}
-                          helperText={formik.touched.unitPrice && formik.errors.unitPrice}
-                          onChange={formik.handleChange}
-                        />
-                      </Tooltip>
-                    </Grid>
-                    <Grid xs={12} sm={12} item>
-                      <TextField
-                        disabled={formik.isSubmitting}
-                        label="Currency"
-                        name="currency"
-                        value={formik.values.currency || ""}
-                        error={formik.touched.currency && Boolean(formik.errors.currency)}
-                        helperText={formik.touched.currency && formik.errors.currency}
-                        fullWidth
-                        onChange={formik.handleChange}
-                      />
-                    </Grid>
-                    <Grid xs={12} sm={12} item>
-                      <Tooltip title="Quantity field must contain only numbers">
-                        <TextField
-                          disabled={formik.isSubmitting}
-                          label="Quantity"
-                          name="quantity"
-                          type="number"
-                          value={formik.values.quantity || ""}
-                          fullWidth
-                          error={formik.touched.quantity && Boolean(formik.errors.quantity)}
-                          helperText={formik.touched.quantity && formik.errors.quantity}
-                          onChange={formik.handleChange}
-                        />
-                      </Tooltip>
-                    </Grid>
-                    <Grid xs={12} sm={12} item>
-                      <TextField
-                        disabled={formik.isSubmitting}
-                        label="Source"
-                        name="source"
-                        value={formik.values.source || ""}
-                        fullWidth
-                        onChange={formik.handleChange}
-                      />
-                    </Grid>
-                    <Grid item xs={6}>
-                      <Button
-                        disabled={formik.isSubmitting}
-                        type="submit"
-                        variant="contained"
-                        color="primary"
-                        onClick={handleCancel}
-                        fullWidth
-                      >
-                        Cancel
+                {orderItems && (
+                  <CardContent>
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <ContactCardHeader title="Order Items" />
+                      <Button variant="contained" color="primary" onClick={handleAdd}>
+                        Add Order Item
                       </Button>
-                    </Grid>
-                    <Grid item xs={6}>
-                      <Button
-                        type="submit"
-                        disabled={formik.isSubmitting}
-                        variant="contained"
-                        color="primary"
-                        fullWidth
-                      >
-                        Save
-                      </Button>
-                    </Grid>
-                  </Grid>
-                </CardContent>
+                    </div>
+                    <DataGrid
+                      columns={gridFinalizedColumns}
+                      rows={orderItems || []}
+                      loading={!orderItems}
+                      checkboxSelection={false}
+                      autoHeight={true}
+                      pagination={undefined}
+                      hideFooter={true}
+                    />
+                  </CardContent>
+                )}
               </Card>
-            </form>
-          )}
-        </Grid>
-      </Grid>
-      <Dialog open={openConfirmation} onClose={handleConfirmationClose}>
-        <DialogTitle>{`Deleting order item ${orderItem?.productName}`}</DialogTitle>
-        <DialogContent>
-          <DialogContentText>Are you sure you want to delete this order item?</DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleConfirmationClose} autoFocus variant="outlined">
-            No
-          </Button>
-          <Button onClick={handleConfirmation} autoFocus variant="outlined" color="error">
-            Yes
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </ModuleWrapper>
+              {isEdit && (
+                <form onSubmit={formik.handleSubmit}>
+                  <Card>
+                    <CardContent>
+                      <ContactCardHeader title="Edit Order Item"></ContactCardHeader>
+                      <Grid container spacing={3}>
+                        <Grid xs={12} sm={12} item>
+                          <TextField
+                            disabled={formik.isSubmitting}
+                            label="Product Name"
+                            name="productName"
+                            value={formik.values.productName || ""}
+                            variant="outlined"
+                            fullWidth
+                            error={formik.touched.productName && Boolean(formik.errors.productName)}
+                            helperText={formik.touched.productName && formik.errors.productName}
+                            onChange={formik.handleChange}
+                          />
+                        </Grid>
+                        <Grid xs={12} sm={12} item>
+                          <TextField
+                            disabled={formik.isSubmitting}
+                            label="License Code"
+                            name="licenseCode"
+                            value={formik.values.licenseCode || ""}
+                            fullWidth
+                            error={formik.touched.licenseCode && Boolean(formik.errors.licenseCode)}
+                            helperText={formik.touched.licenseCode && formik.errors.licenseCode}
+                            onChange={formik.handleChange}
+                          />
+                        </Grid>
+                        <Grid xs={12} sm={12} item>
+                          <Tooltip title="Unit Price field must contain only numbers">
+                            <TextField
+                              disabled={formik.isSubmitting}
+                              label="Unit Price"
+                              name="unitPrice"
+                              type="number"
+                              value={formik.values.unitPrice || ""}
+                              fullWidth
+                              error={formik.touched.unitPrice && Boolean(formik.errors.unitPrice)}
+                              helperText={formik.touched.unitPrice && formik.errors.unitPrice}
+                              onChange={formik.handleChange}
+                            />
+                          </Tooltip>
+                        </Grid>
+                        <Grid xs={12} sm={12} item>
+                          <TextField
+                            disabled={formik.isSubmitting}
+                            label="Currency"
+                            name="currency"
+                            value={formik.values.currency || ""}
+                            error={formik.touched.currency && Boolean(formik.errors.currency)}
+                            helperText={formik.touched.currency && formik.errors.currency}
+                            fullWidth
+                            onChange={formik.handleChange}
+                          />
+                        </Grid>
+                        <Grid xs={12} sm={12} item>
+                          <Tooltip title="Quantity field must contain only numbers">
+                            <TextField
+                              disabled={formik.isSubmitting}
+                              label="Quantity"
+                              name="quantity"
+                              type="number"
+                              value={formik.values.quantity || ""}
+                              fullWidth
+                              error={formik.touched.quantity && Boolean(formik.errors.quantity)}
+                              helperText={formik.touched.quantity && formik.errors.quantity}
+                              onChange={formik.handleChange}
+                            />
+                          </Tooltip>
+                        </Grid>
+                        <Grid xs={12} sm={12} item>
+                          <TextField
+                            disabled={formik.isSubmitting}
+                            label="Source"
+                            name="source"
+                            value={formik.values.source || ""}
+                            fullWidth
+                            onChange={formik.handleChange}
+                          />
+                        </Grid>
+                        <Grid item xs={6}>
+                          <Button
+                            disabled={formik.isSubmitting}
+                            type="submit"
+                            variant="contained"
+                            color="primary"
+                            onClick={handleCancel}
+                            fullWidth
+                          >
+                            Cancel
+                          </Button>
+                        </Grid>
+                        <Grid item xs={6}>
+                          <Button
+                            type="submit"
+                            disabled={formik.isSubmitting}
+                            variant="contained"
+                            color="primary"
+                            fullWidth
+                          >
+                            Save
+                          </Button>
+                        </Grid>
+                      </Grid>
+                    </CardContent>
+                  </Card>
+                </form>
+              )}
+            </Grid>
+            <Grid xs={12} sm={5} item>
+              <DataDelete
+                header="Data Management"
+                description="Please be aware that what
+            has been deleted can never be brought back."
+                entity="order"
+                handleDeleteAsync={client.api.ordersDelete}
+                itemId={id}
+                successNavigationRoute={CoreModule.orders}
+              ></DataDelete>
+            </Grid>
+          </Grid>
+          <DataDeleteConfirmation
+            entity="order item"
+            openConfirmation={openConfirmation}
+            setIsConfirmed={setIsConfirmed}
+            setOpenConfirmation={setOpenConfirmation}
+          ></DataDeleteConfirmation>
+        </ModuleWrapper>
+      )}
+    </>
   );
 };

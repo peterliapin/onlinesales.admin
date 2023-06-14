@@ -13,7 +13,7 @@ import { EmailTemplateEditValidationScheme } from "./validation";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 import { ModuleWrapper } from "@components/module-wrapper";
 import { emailTemplateFormBreadcrumbLinks } from "../constants";
-import { EmailTemplateEditContainer } from "./index.styled";
+import { EmailTemplateDeleteContainer, EmailTemplateEditContainer } from "./index.styled";
 import { Autocomplete, Button, Card, CardContent, Grid, TextField } from "@mui/material";
 import useLocalStorage from "use-local-storage";
 import {
@@ -28,6 +28,8 @@ import { LanguageAutocomplete } from "@components/language-autocomplete";
 import { EmailGroupAutocomplete } from "@components/email-group-autocomplete";
 import { CatchingPokemonSharp } from "@mui/icons-material";
 import { execSubmitWithToast } from "utils/formik-helper";
+import { DataDelete } from "@components/data-delete";
+import { CoreModule } from "@lib/router";
 
 const TINYMCE_API_KEY = process.env.TINYMCE_API_KEY || undefined;
 
@@ -320,6 +322,19 @@ export const EmailTemplateEdit = () => {
           </CardContent>
         </Card>
       </EmailTemplateEditContainer>
+      {id && (
+        <EmailTemplateDeleteContainer>
+          <DataDelete
+            header="Data Management"
+            description="Please be aware that what
+            has been deleted can never be brought back."
+            entity="email template"
+            handleDeleteAsync={client.api.emailTemplatesDelete}
+            itemId={+id!}
+            successNavigationRoute={CoreModule.emailTemplates}
+          ></DataDelete>
+        </EmailTemplateDeleteContainer>
+      )}
     </ModuleWrapper>
   );
 };

@@ -6,6 +6,10 @@ export const ContentEditContainer = styled("div")`
   flex-grow: 1;
 `;
 
+export const ContentDeleteContainer = styled("div")`
+  margin-top: ${({ theme }) => theme.spacing(2)};
+`;
+
 export const ContentItemContainer = styled("div")`
   padding: 0 5%;
 `;
