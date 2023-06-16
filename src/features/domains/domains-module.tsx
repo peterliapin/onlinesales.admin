@@ -8,10 +8,7 @@ import {
   viewFormRoute,
 } from "lib/router";
 import { Outlet, Route, Routes, useNavigate, useParams } from "react-router-dom";
-import { DomainAdd } from "./add";
-import { DomainEdit } from "./edit";
 import { DomainsLazy } from "./lazy";
-import { DomainViewBase } from "./view";
 import swaggerJson from "@lib/network/swagger.json";
 import { useRequestContext } from "@providers/request-provider";
 import { DomainForm } from "./form";
