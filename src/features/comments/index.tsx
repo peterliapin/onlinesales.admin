@@ -87,6 +87,14 @@ export const CommentsModule = () => {
     },
   };
 
+  const deleteProps = {
+    header: "Data Management",
+    description: "Please be aware that what has been deleted can never be brought back.",
+    entity: "comment",
+    listRoute: CoreModule.comments,
+    deleteItemFn: client.api.commentsDelete,
+  };
+
   const module = GenericModule({
     moduleName: "Comments",
     modulePath: CoreModule.comments,
@@ -107,6 +115,7 @@ export const CommentsModule = () => {
       ...formProps,
       mode: "details",
       editable: false,
+      deleteOptionProps: deleteProps,
       getItemId: () => {
         const params = useParams();
         return Number(params && params["*"] && params["*"].match(/^(\d+)\/view$/)?.[1]);
