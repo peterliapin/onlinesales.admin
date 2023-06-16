@@ -38,6 +38,14 @@ export const UnsubscribesModule = () => {
     },
   };
 
+  const deleteProps = {
+    header: "Data Management",
+    description: "Please be aware that what has been deleted can never be brought back.",
+    entity: "unsubscribe",
+    listRoute: CoreModule.unsubscribes,
+    deleteItemFn: client.api.unsubscribesDelete,
+  };
+
   const module = GenericModule({
     moduleName: "Unsubscribes",
     modulePath: CoreModule.unsubscribes,
@@ -57,6 +65,7 @@ export const UnsubscribesModule = () => {
       ...formProps,
       mode: "details",
       editable: false,
+      deleteOptionProps: deleteProps,
       getItemId: () => {
         const params = useParams();
         return Number(params && params["*"] && params["*"].match(/^(\d+)\/view$/)?.[1]);

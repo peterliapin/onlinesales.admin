@@ -20,6 +20,8 @@ import {
 } from "@components/generic-components/edit-components";
 import { validate } from "@components/generic-components/edit-components/validator";
 import { ArrayEdit } from "./edit-components/array-edit";
+import { DataDelete } from "@components/data-delete";
+import { GenericViewDeleteContainer } from "./index.styled";
 
 export interface DtoField {
   editable: boolean;
@@ -36,6 +38,14 @@ export interface DtoField {
   maxLength?: number;
   pattern?: string;
   example?: any;
+}
+
+export interface DeleteOptionProps {
+  header: string;
+  description: string;
+  entity: string;
+  listRoute: string;
+  deleteItemFn: (id: number) => Promise<HttpResponse<void, void | ProblemDetails>>;
 }
 
 export interface GenericFormProps<TView extends BasicTypeForGeneric, TCreate, TUpdate> {
@@ -56,6 +66,7 @@ export interface GenericFormProps<TView extends BasicTypeForGeneric, TCreate, TU
   detailsSchema: DtoSchema;
   updateSchema: DtoSchema;
   createSchema: DtoSchema;
+  deleteOptionProps?: DeleteOptionProps;
   mode?: "create" | "update" | "details";
   getItemId: () => number | undefined;
   onSaved?: (item: TView) => void;
@@ -72,6 +83,7 @@ export function GenericForm<TView extends BasicTypeForGeneric, TCreate, TUpdate>
   updateSchema,
   createSchema,
   mode,
+  deleteOptionProps,
   getItemId,
   onSaved,
   customDictionaries,
@@ -351,6 +363,18 @@ export function GenericForm<TView extends BasicTypeForGeneric, TCreate, TUpdate>
           </Grid>
         </CardContent>
       </Card>
+      {!editable && deleteOptionProps && (
+        <GenericViewDeleteContainer>
+          <DataDelete
+            header={deleteOptionProps!.header}
+            description={deleteOptionProps!.description}
+            entity={deleteOptionProps!.entity}
+            handleDeleteAsync={deleteOptionProps!.deleteItemFn}
+            itemId={itemId!}
+            successNavigationRoute={deleteOptionProps!.listRoute}
+          ></DataDelete>
+        </GenericViewDeleteContainer>
+      )}
     </>
   );
 }

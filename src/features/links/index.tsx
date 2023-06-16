@@ -39,6 +39,14 @@ export const LinksModule = () => {
     },
   };
 
+  const deleteProps = {
+    header: "Data Management",
+    description: "Please be aware that what has been deleted can never be brought back.",
+    entity: "link",
+    listRoute: CoreModule.links,
+    deleteItemFn: client.api.linksDelete,
+  };
+
   const module = GenericModule({
     moduleName: "Links",
     modulePath: CoreModule.links,
@@ -59,6 +67,7 @@ export const LinksModule = () => {
       ...formProps,
       mode: "details",
       editable: false,
+      deleteOptionProps: deleteProps,
       getItemId: () => {
         const params = useParams();
         return Number(params && params["*"] && params["*"].match(/^(\d+)\/view$/)?.[1]);
