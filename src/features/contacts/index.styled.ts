@@ -59,7 +59,3 @@ export const ContactRowGrid = styled(Grid)({
 export const ContactCardHeader = styled(CardHeader)({
   paddingLeft: 0,
 });
-
-export const DeleteButtonContainer = styled("div")`
-  padding-left: ${({ theme }) => theme.spacing(2)};
-`;

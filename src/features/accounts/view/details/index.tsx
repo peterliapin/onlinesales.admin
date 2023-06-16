@@ -1,5 +1,5 @@
 import { AccountDetailsDto } from "@lib/network/swagger-client";
-import { viewFormRoute } from "@lib/router";
+import { CoreModule, viewFormRoute } from "@lib/router";
 import { useRequestContext } from "@providers/request-provider";
 import { useEffect, useState } from "react";
 import { useRouteParams } from "typesafe-routes";
@@ -7,6 +7,7 @@ import { DataView } from "components/data-view";
 import { getContinentByCode, getCountryByCode } from "utils/general-helper";
 import { Grid } from "@mui/material";
 import { useModuleWrapperContext } from "@providers/module-wrapper-provider";
+import { DataDelete } from "@components/data-delete";
 
 interface DataViewRow {
   label: string;
@@ -64,16 +65,29 @@ export const AccountView = () => {
 
   return (
     <>
-      <Grid container spacing={3}>
-        <Grid xs={12} sm={6} item>
-          {accountViewData && <DataView header="Account details" rows={accountViewData} />}
+      {accountViewData && (
+        <Grid container spacing={3}>
+          <Grid xs={12} sm={6} item>
+            <DataView header="Account details" rows={accountViewData} />
+          </Grid>
+          <Grid xs={12} sm={6} item>
+            {accountSocialMediaData && (
+              <DataView header="Social media" rows={accountSocialMediaData} />
+            )}
+          </Grid>
+          <Grid xs={12} sm={6} item>
+            <DataDelete
+              header="Data Management"
+              description="Please be aware that what
+            has been deleted can never be brought back."
+              entity="account"
+              handleDeleteAsync={client.api.accountsDelete}
+              itemId={id}
+              successNavigationRoute={CoreModule.accounts}
+            ></DataDelete>
+          </Grid>
         </Grid>
-        <Grid xs={12} sm={6} item>
-          {accountSocialMediaData && (
-            <DataView header="Social media" rows={accountSocialMediaData} />
-          )}
-        </Grid>
-      </Grid>
+      )}
     </>
   );
 };

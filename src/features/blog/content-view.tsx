@@ -4,6 +4,7 @@ import { ContentDetailsDto } from "@lib/network/swagger-client";
 import { useRequestContext } from "@providers/request-provider";
 import {
   AuthorContainer,
+  ContentDeleteContainer,
   ContentEditContainer,
   ContentItemContainer,
   CoverImage,
@@ -20,6 +21,8 @@ import graymatter from "gray-matter";
 import { useModuleWrapperContext } from "@providers/module-wrapper-provider";
 import { blogFormBreadcrumbLinks } from "@features/blog/constants";
 import { ModuleWrapper } from "@components/module-wrapper";
+import { DataDelete } from "@components/data-delete";
+import { CoreModule } from "@lib/router";
 
 const coreApi = process.env.CORE_API;
 
@@ -95,6 +98,17 @@ export const ContentView = () => {
           </ContentItemContainer>
         )}
       </ContentEditContainer>
+      <ContentDeleteContainer>
+        <DataDelete
+          header="Data Management"
+          description="Please be aware that what
+            has been deleted can never be brought back."
+          entity="content"
+          handleDeleteAsync={client.api.contentDelete}
+          itemId={+id!}
+          successNavigationRoute={CoreModule.blog}
+        ></DataDelete>
+      </ContentDeleteContainer>
     </ModuleWrapper>
   );
 };

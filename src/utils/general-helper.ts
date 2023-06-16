@@ -1,5 +1,6 @@
 import { RequestContextType } from "@providers/request-provider";
 import { continentListStorageKey, countryListStorageKey } from "./constants";
+import { NotificationsService } from "@hooks";
 
 export const getCountryList = async (context: RequestContextType) => {
   const countries = localStorage.getItem(countryListStorageKey);
@@ -83,4 +84,40 @@ export const networkErrorToStringArray = (error: any) => {
     output.push(`${key}:\u000A${stringValue}`);
   });
   return output;
+};
+
+export const execDeleteWithToast = async (
+  deleteFunc: () => Promise<void>,
+  notificationsService: NotificationsService,
+  entity: string,
+  showErrorModalFunc: (value: string[]) => void
+) => {
+  const entityNameWithCapFirstLetter =
+    entity.charAt(0).toUpperCase() + entity.slice(1).toLowerCase();
+  notificationsService.promise(deleteFunc(), {
+    pending: `Deleting ${entity}`,
+    success: `${entityNameWithCapFirstLetter} deleted successfully`,
+    error: (error) => {
+      const errMessage = `Unable to delete ${entity}. An error occurred.`;
+      const errDetails: string[] = [];
+      if (error.data.error && error.data.error.title) {
+        errDetails.push(error.data.error.title);
+      }
+      if (error.data.message) {
+        errDetails.push(error.data.message);
+      }
+      if (error.data.error && error.data.error.errors) {
+        errDetails.push(...networkErrorToStringArray(error.data.error.errors));
+      }
+      return {
+        title: errMessage,
+        onClick:
+          errDetails.length > 0
+            ? () => {
+                showErrorModalFunc(errDetails);
+              }
+            : undefined,
+      };
+    },
+  });
 };
