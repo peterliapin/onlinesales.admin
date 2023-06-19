@@ -118,6 +118,11 @@ export const DataTableGrid = ({
     }
 
     if (filterModel.items.length === 0) {
+      setFilterState({
+        whereField: undefined,
+        whereFieldValue: undefined,
+        whereOperator: undefined,
+      });
       return;
     }
 
