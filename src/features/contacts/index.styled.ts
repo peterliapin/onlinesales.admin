@@ -1,4 +1,4 @@
-import { CardHeader, Grid, ListItem, ListItemText, Paper, styled } from "@mui/material";
+import { Card, CardHeader, Grid, ListItem, ListItemText, Paper, styled } from "@mui/material";
 
 export const ActionsContainer = styled("div")`
   display: flex;
@@ -24,6 +24,11 @@ export const ExtraActionsContainer = styled("div")`
 
 export const AddButtonContainer = styled("div")`
   margin-left: ${({ theme }) => theme.spacing(10)};
+`;
+
+export const CardContainer = styled(Card)`
+  margin-left: ${({ theme }) => theme.spacing(20)};
+  margin-right: ${({ theme }) => theme.spacing(20)};
 `;
 
 export const ContactsTableContainer = styled(Paper)`
