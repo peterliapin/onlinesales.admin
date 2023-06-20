@@ -263,14 +263,18 @@ export const AccountForm = ({ account, handleSave, isEdit }: AccountFormProps) =
                     disablePortal
                     options={continentList}
                     getOptionLabel={(option) => option.name}
-                    value={continentList.find((c) => c.code === account.continentCode) || null}
+                    value={
+                      continentList.find((c) => c.code === formik.values.continentCode) || null
+                    }
                     onChange={handleContinentChange}
                     fullWidth
                     renderInput={(params) => (
                       <TextField
                         {...params}
                         label="Continent"
-                        value={continentList.find((c) => c.code === account.continentCode) || null}
+                        value={
+                          continentList.find((c) => c.code === formik.values.continentCode) || null
+                        }
                         onChange={formik.handleChange}
                       />
                     )}
