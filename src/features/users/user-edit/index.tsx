@@ -1,4 +1,4 @@
-import { useNotificationsService } from "@hooks";
+import { useCoreModuleNavigation, useNotificationsService } from "@hooks";
 import { HttpResponse, ProblemDetails, UserDetailsDto } from "@lib/network/swagger-client";
 import { useModuleWrapperContext } from "@providers/module-wrapper-provider";
 import { useRequestContext } from "@providers/request-provider";
@@ -30,6 +30,7 @@ import { useUserInfo } from "@providers/user-provider";
 import { networkErrorToStringArray } from "utils/general-helper";
 import { useErrorDetailsModal } from "@providers/error-details-modal-provider";
 import { execSubmitWithToast } from "utils/formik-helper";
+import { CoreModule } from "@lib/router";
 
 const tabProps = (index: number) => {
   return {
@@ -60,6 +61,7 @@ export const UserEdit = () => {
   const { notificationsService } = useNotificationsService();
   const { Show: showErrorModal } = useErrorDetailsModal()!;
   const { client } = useRequestContext();
+  const handleNavigation = useCoreModuleNavigation();
   const userInfo = useUserInfo();
 
   const { id } = useParams();
@@ -78,6 +80,7 @@ export const UserEdit = () => {
       userInfo?.refresh();
     }
     helpers.setSubmitting(false);
+    handleNavigation(CoreModule.blog);
   };
 
   const submit = async (values: UserDetailsDto, helpers: FormikHelpers<UserDetailsDto>) => {
@@ -236,15 +239,37 @@ export const UserEdit = () => {
                     </Grid>
                   )}
                 </Grid>
-                <Button
-                  type="submit"
-                  variant="contained"
+                <Grid 
+                  container 
+                  item 
+                  spacing={3}
                   sx={{
                     marginTop: "1rem",
                   }}
                 >
-                  Save
-                </Button>
+                  <Grid item xs={6}>
+                    <Button
+                      disabled={formik.isSubmitting}
+                      variant="contained"
+                      color="primary"
+                      onClick={() => handleNavigation(CoreModule.users)}
+                      fullWidth
+                      size="large"
+                    >
+                    Cancel
+                    </Button>
+                  </Grid>
+                  <Grid item xs={6}>
+                    <Button
+                      type="submit"
+                      variant="contained"
+                      fullWidth
+                      size="large"
+                    >
+                      Save
+                    </Button>
+                  </Grid>
+                </Grid>
               </TabPanel>
             </CardContent>
           </Card>

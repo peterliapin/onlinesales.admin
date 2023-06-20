@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Editor as TinyMCEEditor } from "tinymce";
 import { Editor } from "@tinymce/tinymce-react";
 import { useModuleWrapperContext } from "@providers/module-wrapper-provider";
-import { useNotificationsService } from "@hooks";
+import { useCoreModuleNavigation, useNotificationsService } from "@hooks";
 import { useErrorDetailsModal } from "@providers/error-details-modal-provider";
 import { useRequestContext } from "@providers/request-provider";
 import { useParams } from "react-router-dom";
@@ -39,6 +39,7 @@ export const EmailTemplateEdit = () => {
   const { notificationsService } = useNotificationsService();
   const { Show: showErrorModal } = useErrorDetailsModal()!;
   const { client } = useRequestContext();
+  const handleNavigation = useCoreModuleNavigation();
   const { id } = useParams();
   const [editorLocalStorage, setEditorLocalStorage] = useLocalStorage<EmailTemplateEditData>(
     "onlinesales_emailTemplateEditor_autosave",
@@ -90,6 +91,7 @@ export const EmailTemplateEdit = () => {
     setEditorLocalStorage(localStorageSnapshot);
     helpers.setValues(response.data);
     helpers.setSubmitting(false);
+    handleNavigation(CoreModule.blog);
   };
 
   const submit = async (
@@ -306,16 +308,29 @@ export const EmailTemplateEdit = () => {
                     }}
                   />
                 </Grid>
-                <Grid item xs={6} sm={6}>
-                  <Button
-                    type="submit"
-                    variant="contained"
-                    sx={{
-                      marginTop: "1rem",
-                    }}
-                  >
-                    Save
-                  </Button>
+                <Grid container item spacing={3}>
+                  <Grid item xs={6}>
+                    <Button
+                      disabled={formik.isSubmitting}
+                      variant="contained"
+                      color="primary"
+                      onClick={() => handleNavigation(CoreModule.emailTemplates)}
+                      fullWidth
+                      size="large"
+                    >
+                    Cancel
+                    </Button>
+                  </Grid>
+                  <Grid item xs={6}>
+                    <Button
+                      type="submit"
+                      variant="contained"
+                      fullWidth
+                      size="large"
+                    >
+                      Save
+                    </Button>
+                  </Grid>
                 </Grid>
               </Grid>
             </form>
