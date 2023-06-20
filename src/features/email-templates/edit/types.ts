@@ -16,3 +16,7 @@ export enum EmailTemplateEditRestoreState {
   Rejected,
   Accepted,
 }
+
+export interface EmailTemplateEditProps {
+  readonly?: boolean;
+}

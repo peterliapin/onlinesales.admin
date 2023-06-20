@@ -13,6 +13,7 @@ export function EmailGroupAutocomplete({
   onChange,
   error,
   helperText,
+  disabled,
 }: EmailGroupAutoCompleteProps) {
   const { client } = useRequestContext();
   const { notificationsService } = useNotificationsService();
@@ -108,6 +109,7 @@ export function EmailGroupAutocomplete({
         renderInput={(params) => (
           <TextField
             {...params}
+            disabled={disabled}
             label={label}
             placeholder={placeholder}
             error={error}

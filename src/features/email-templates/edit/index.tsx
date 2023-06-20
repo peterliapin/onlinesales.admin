@@ -18,6 +18,7 @@ import { Autocomplete, Button, Card, CardContent, Grid, TextField } from "@mui/m
 import useLocalStorage from "use-local-storage";
 import {
   EmailTemplateEditData,
+  EmailTemplateEditProps,
   EmailTemplateEditRestoreState,
   EmailTemplateEditorAutoSave,
 } from "./types";
@@ -26,14 +27,13 @@ import { RestoreDataModal } from "@components/restore-data";
 import { SavingBar } from "@components/saving-bar";
 import { LanguageAutocomplete } from "@components/language-autocomplete";
 import { EmailGroupAutocomplete } from "@components/email-group-autocomplete";
-import { CatchingPokemonSharp } from "@mui/icons-material";
 import { execSubmitWithToast } from "utils/formik-helper";
 import { DataDelete } from "@components/data-delete";
 import { CoreModule } from "@lib/router";
 
 const TINYMCE_API_KEY = process.env.TINYMCE_API_KEY || undefined;
 
-export const EmailTemplateEdit = () => {
+export const EmailTemplateEdit = ({ readonly }: EmailTemplateEditProps) => {
   const editorRef = useRef<TinyMCEEditor | null>(null);
   const { setSaving, setBusy } = useModuleWrapperContext();
   const { notificationsService } = useNotificationsService();
@@ -91,7 +91,7 @@ export const EmailTemplateEdit = () => {
     setEditorLocalStorage(localStorageSnapshot);
     helpers.setValues(response.data);
     helpers.setSubmitting(false);
-    handleNavigation(CoreModule.blog);
+    handleNavigation(CoreModule.emailTemplates);
   };
 
   const submit = async (
@@ -203,6 +203,7 @@ export const EmailTemplateEdit = () => {
               <Grid container direction={"row"} spacing={3}>
                 <Grid item xs={6} sm={6}>
                   <TextField
+                    disabled={readonly}
                     label="Name"
                     name="name"
                     value={formik.values.name}
@@ -216,6 +217,7 @@ export const EmailTemplateEdit = () => {
                 </Grid>
                 <Grid item xs={6} sm={6}>
                   <TextField
+                    disabled={readonly}
                     label="Subject"
                     name="subject"
                     value={formik.values.subject}
@@ -229,6 +231,7 @@ export const EmailTemplateEdit = () => {
                 </Grid>
                 <Grid item xs={6} sm={6}>
                   <TextField
+                    disabled={readonly}
                     label="Sender Email"
                     name="fromEmail"
                     value={formik.values.fromEmail}
@@ -242,6 +245,7 @@ export const EmailTemplateEdit = () => {
                 </Grid>
                 <Grid item xs={6} sm={6}>
                   <TextField
+                    disabled={readonly}
                     label="Sender Name"
                     name="fromName"
                     value={formik.values.fromName}
@@ -255,6 +259,7 @@ export const EmailTemplateEdit = () => {
                 </Grid>
                 <Grid item xs={6} sm={6}>
                   <EmailGroupAutocomplete
+                    disabled={readonly}
                     label="Group ID"
                     value={formik.values.emailGroupId}
                     error={formik.touched.emailGroupId && Boolean(formik.errors.emailGroupId)}
@@ -270,6 +275,7 @@ export const EmailTemplateEdit = () => {
                     renderInput={(params) => (
                       <TextField
                         {...params}
+                        disabled={readonly}
                         label="Language"
                         placeholder="Select language"
                         variant="outlined"
@@ -285,6 +291,7 @@ export const EmailTemplateEdit = () => {
                   <Editor
                     onInit={(evt, editor) => (editorRef.current = editor)}
                     value={formik.values.bodyTemplate}
+                    disabled={readonly}
                     onEditorChange={(currentValue, editor) =>
                       formik.setFieldValue("bodyTemplate", currentValue)
                     }
@@ -323,6 +330,7 @@ export const EmailTemplateEdit = () => {
                   </Grid>
                   <Grid item xs={6}>
                     <Button
+                      disabled={readonly}
                       type="submit"
                       variant="contained"
                       fullWidth

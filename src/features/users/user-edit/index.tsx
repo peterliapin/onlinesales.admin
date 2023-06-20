@@ -24,7 +24,7 @@ import {
   Button,
 } from "@mui/material";
 import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
-import { TabPanelProps } from "./types";
+import { TabPanelProps, UserEditProps } from "./types";
 import { buildAbsoluteUrl } from "@lib/network/utils";
 import { useUserInfo } from "@providers/user-provider";
 import { networkErrorToStringArray } from "utils/general-helper";
@@ -55,7 +55,7 @@ const TabPanel = (props: TabPanelProps) => {
   );
 };
 
-export const UserEdit = () => {
+export const UserEdit = ({ readonly } : UserEditProps) => {
   const { setSaving, setBusy } = useModuleWrapperContext();
 
   const { notificationsService } = useNotificationsService();
@@ -80,7 +80,7 @@ export const UserEdit = () => {
       userInfo?.refresh();
     }
     helpers.setSubmitting(false);
-    handleNavigation(CoreModule.blog);
+    handleNavigation(CoreModule.users);
   };
 
   const submit = async (values: UserDetailsDto, helpers: FormikHelpers<UserDetailsDto>) => {
@@ -93,8 +93,6 @@ export const UserEdit = () => {
       "user"
     );
   };
-
-  const allowedToModify = true; // TODO: For now, until permission system wouldn't be ready.
 
   const formik = useFormik({
     validationSchema: toFormikValidationSchema(UserEditValidationScheme),
@@ -172,10 +170,10 @@ export const UserEdit = () => {
                           width: 96,
                           height: 96,
                         }}
-                        badgeContent={
+                        badgeContent={ !readonly ? (
                           <StyledAvatar onClick={handleImageUpload}>
-                            <AddAPhotoIcon />
-                          </StyledAvatar>
+                            <AddAPhotoIcon/>
+                          </StyledAvatar> ) : undefined
                         }
                       >
                         <Avatar
@@ -199,7 +197,7 @@ export const UserEdit = () => {
                   </Grid>
                   <Grid item xs={6} sm={6}>
                     <TextField
-                      disabled={!allowedToModify}
+                      disabled={readonly}
                       label="Display Name"
                       name="displayName"
                       value={formik.values.displayName}
@@ -212,7 +210,7 @@ export const UserEdit = () => {
                   </Grid>
                   <Grid item xs={6} sm={6}>
                     <TextField
-                      disabled={!allowedToModify}
+                      disabled={readonly}
                       label="Username"
                       name="userName"
                       value={formik.values.userName}
@@ -226,7 +224,7 @@ export const UserEdit = () => {
                   {!id && (
                     <Grid item xs={6} sm={6}>
                       <TextField
-                        disabled={!allowedToModify}
+                        disabled={readonly}
                         label="Email"
                         name="email"
                         value={formik.values.email}
@@ -261,6 +259,7 @@ export const UserEdit = () => {
                   </Grid>
                   <Grid item xs={6}>
                     <Button
+                      disabled={readonly}
                       type="submit"
                       variant="contained"
                       fullWidth
