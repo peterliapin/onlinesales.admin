@@ -1,5 +1,4 @@
-import { ErrorBoundaryProps, FallbackProps } from "react-error-boundary";
-import { ReactElement } from "react-markdown/lib/react-markdown";
+import { FallbackProps } from "react-error-boundary";
 
 export function ErrorBoundaryFallbackPage ({error, resetErrorBoundary} : FallbackProps) {
   return (
