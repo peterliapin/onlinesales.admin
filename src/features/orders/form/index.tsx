@@ -1,3 +1,4 @@
+import { SyntheticEvent, useEffect, useState } from "react";
 import { ModuleWrapper } from "@components/module-wrapper";
 import { SavingBar } from "@components/saving-bar";
 import { useNotificationsService } from "@hooks";
@@ -7,7 +8,6 @@ import { CoreModule } from "@lib/router";
 import { Autocomplete, Button, Card, CardContent, Grid, TextField, Tooltip } from "@mui/material";
 import { useModuleWrapperContext } from "@providers/module-wrapper-provider";
 import { useRequestContext } from "@providers/request-provider";
-import { SyntheticEvent, useEffect, useState } from "react";
 import { useCoreModuleNavigation } from "@hooks";
 import { orderAddHeader, orderEditHeader, orderFormBreadcrumbLinks } from "../constants";
 import { useFormik, FormikHelpers } from "formik";
@@ -23,7 +23,7 @@ interface OrderFormProps {
   isEdit: boolean;
 }
 
-export const OrderForm = ({ order, updateOrder, handleSave, isEdit }: OrderFormProps) => {
+export const OrderForm = ({ order, handleSave, isEdit }: OrderFormProps) => {
   const { notificationsService } = useNotificationsService();
   const { client } = useRequestContext();
   const { setSaving, setBusy } = useModuleWrapperContext();
@@ -34,7 +34,7 @@ export const OrderForm = ({ order, updateOrder, handleSave, isEdit }: OrderFormP
   const [contactList, setContactList] = useState<ContactDetailsDto[]>([]);
   const [timer, setTimer] = useState<NodeJS.Timeout | null>(null);
   const [open, setOpen] = useState(false);
-  const loading = open && contactList.length === 0;
+  const loading = open && isLoading;
   const header = isEdit ? orderEditHeader : orderAddHeader;
 
   useEffect(() => {
@@ -64,12 +64,17 @@ export const OrderForm = ({ order, updateOrder, handleSave, isEdit }: OrderFormP
     if (timer) {
       clearTimeout(timer);
     }
+    setIsLoading(true);
     setTimer(
       setTimeout(async () => {
-        const { data } = await client.api.contactsList({
-          query: `${text}&filter[limit]=${defaultFilterLimit}`,
-        });
-        setContactList(data);
+        if (text) {
+          const { data } = await client.api.contactsList({
+            query: `${text}&filter[limit]=${defaultFilterLimit}`,
+          });
+          setContactList(data);
+        } else {
+          setContactList([]);
+        }
         setIsLoading(false);
       }, 800)
     );
@@ -80,8 +85,10 @@ export const OrderForm = ({ order, updateOrder, handleSave, isEdit }: OrderFormP
   };
 
   const handleContactChange = (value: ContactDetailsDto) => {
-    formik.setFieldValue("contactId", value.id);
-    formik.setFieldValue("contact", value);
+    if (value) {
+      formik.setFieldValue("contactId", value.id);
+      formik.setFieldValue("contact", value);
+    }
   };
 
   const getOptionLabel = (contact: ContactDetailsDto) => {
@@ -135,156 +142,152 @@ export const OrderForm = ({ order, updateOrder, handleSave, isEdit }: OrderFormP
       currentBreadcrumb={header}
       saveIndicatorElement={<SavingBar />}
     >
-      {isEdit && isLoading ? (
-        <div />
-      ) : (
-        order && (
-          <form onSubmit={formik.handleSubmit}>
-            <Card>
-              <CardContent>
-                <Grid container spacing={3}>
-                  <Grid xs={12} sm={6} item>
-                    <Autocomplete
-                      disabled={formik.isSubmitting}
-                      disablePortal
-                      open={open}
-                      onOpen={() => {
-                        setOpen(true);
-                      }}
-                      onClose={() => {
-                        setOpen(false);
-                      }}
-                      options={contactList}
-                      getOptionLabel={(option) => getOptionLabel(option)}
-                      value={formik.values.contact || null}
-                      onChange={(event, value) => handleContactChange(value!)}
-                      onInputChange={(event, value) => {
-                        loadContacts(event, value);
-                      }}
-                      loading={loading}
-                      filterOptions={(x) => x}
-                      fullWidth
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          label="Contact Name"
-                          value={formik.values.contact || null}
-                          error={formik.touched.contactId && Boolean(formik.errors.contactId)}
-                          helperText={formik.touched.contactId && formik.errors.contactId}
-                        />
-                      )}
-                    />
-                  </Grid>
-                  <Grid xs={12} sm={6} item>
-                    <TextField
-                      disabled={formik.isSubmitting}
-                      label="Ref No"
-                      name="refNo"
-                      value={formik.values.refNo || ""}
-                      placeholder="Enter Ref No"
-                      variant="outlined"
-                      onChange={formik.handleChange}
-                      error={formik.touched.refNo && Boolean(formik.errors.refNo)}
-                      helperText={formik.touched.refNo && formik.errors.refNo}
-                      fullWidth
-                    ></TextField>
-                  </Grid>
-                  <Grid xs={12} sm={6} item>
-                    <TextField
-                      disabled={formik.isSubmitting}
-                      label="Order No"
-                      name="orderNumber"
-                      value={formik.values.orderNumber || ""}
-                      placeholder="Enter Order Number"
-                      variant="outlined"
-                      onChange={formik.handleChange}
-                      fullWidth
-                    ></TextField>
-                  </Grid>
-                  <Grid xs={12} sm={6} item>
-                    <TextField
-                      disabled={formik.isSubmitting}
-                      label="Affiliate Name"
-                      name="affiliateName"
-                      value={formik.values.affiliateName || ""}
-                      placeholder="Enter Affiliate Name"
-                      variant="outlined"
-                      onChange={formik.handleChange}
-                      fullWidth
-                    ></TextField>
-                  </Grid>
-                  <Grid xs={12} sm={6} item>
-                    <Tooltip title="Exchange Rate field must contain only numbers">
+      {order && (
+        <form onSubmit={formik.handleSubmit}>
+          <Card>
+            <CardContent>
+              <Grid container spacing={3}>
+                <Grid xs={12} sm={6} item>
+                  <Autocomplete
+                    disabled={formik.isSubmitting}
+                    disablePortal
+                    open={open}
+                    onOpen={() => {
+                      setOpen(true);
+                    }}
+                    onClose={() => {
+                      setOpen(false);
+                    }}
+                    options={contactList}
+                    getOptionLabel={(option) => getOptionLabel(option)}
+                    value={formik.values.contact || null}
+                    onChange={(event, value) => handleContactChange(value!)}
+                    onInputChange={(event, value) => {
+                      loadContacts(event, value);
+                    }}
+                    loading={loading}
+                    filterOptions={(x) => x}
+                    fullWidth
+                    renderInput={(params) => (
                       <TextField
-                        disabled={formik.isSubmitting}
-                        label="Exchange Rate"
-                        name="exchangeRate"
-                        type="number"
-                        value={formik.values.exchangeRate || ""}
-                        placeholder="Enter Exchange Rate"
-                        variant="outlined"
-                        error={formik.touched.exchangeRate && Boolean(formik.errors.exchangeRate)}
-                        helperText={formik.touched.exchangeRate && formik.errors.exchangeRate}
-                        onChange={formik.handleChange}
-                        fullWidth
-                      ></TextField>
-                    </Tooltip>
-                  </Grid>
-                  <Grid xs={12} sm={6} item>
-                    <TextField
-                      disabled={formik.isSubmitting}
-                      label="Currency"
-                      name="currency"
-                      value={formik.values.currency || ""}
-                      placeholder="Enter Currency"
-                      variant="outlined"
-                      error={formik.touched.currency && Boolean(formik.errors.currency)}
-                      helperText={formik.touched.currency && formik.errors.currency}
-                      onChange={formik.handleChange}
-                      fullWidth
-                    ></TextField>
-                  </Grid>
-                  <Grid xs={12} sm={6} item>
-                    <TextField
-                      disabled={formik.isSubmitting}
-                      label="Source"
-                      name="source"
-                      value={formik.values.source || ""}
-                      placeholder="Enter Source"
-                      variant="outlined"
-                      onChange={formik.handleChange}
-                      fullWidth
-                    ></TextField>
-                  </Grid>
-                  <Grid xs={12} sm={6} item></Grid>
-                  <Grid item xs={6}>
-                    <Button
-                      disabled={formik.isSubmitting}
-                      type="submit"
-                      variant="contained"
-                      color="primary"
-                      onClick={handleCancel}
-                      fullWidth
-                    >
-                      Cancel
-                    </Button>
-                  </Grid>
-                  <Grid item xs={6}>
-                    <Button
-                      type="submit"
-                      disabled={formik.isSubmitting}
-                      variant="contained"
-                      color="primary"
-                      fullWidth
-                    >
-                      Save
-                    </Button>
-                  </Grid>
+                        {...params}
+                        label="Contact Name"
+                        value={formik.values.contact || null}
+                        error={formik.touched.contactId && Boolean(formik.errors.contactId)}
+                        helperText={formik.touched.contactId && formik.errors.contactId}
+                      />
+                    )}
+                  />
                 </Grid>
-              </CardContent>
-            </Card>
-          </form>
-        )
+                <Grid xs={12} sm={6} item>
+                  <TextField
+                    disabled={formik.isSubmitting}
+                    label="Ref No"
+                    name="refNo"
+                    value={formik.values.refNo || ""}
+                    placeholder="Enter Ref No"
+                    variant="outlined"
+                    onChange={formik.handleChange}
+                    error={formik.touched.refNo && Boolean(formik.errors.refNo)}
+                    helperText={formik.touched.refNo && formik.errors.refNo}
+                    fullWidth
+                  ></TextField>
+                </Grid>
+                <Grid xs={12} sm={6} item>
+                  <TextField
+                    disabled={formik.isSubmitting}
+                    label="Order No"
+                    name="orderNumber"
+                    value={formik.values.orderNumber || ""}
+                    placeholder="Enter Order Number"
+                    variant="outlined"
+                    onChange={formik.handleChange}
+                    fullWidth
+                  ></TextField>
+                </Grid>
+                <Grid xs={12} sm={6} item>
+                  <TextField
+                    disabled={formik.isSubmitting}
+                    label="Affiliate Name"
+                    name="affiliateName"
+                    value={formik.values.affiliateName || ""}
+                    placeholder="Enter Affiliate Name"
+                    variant="outlined"
+                    onChange={formik.handleChange}
+                    fullWidth
+                  ></TextField>
+                </Grid>
+                <Grid xs={12} sm={6} item>
+                  <Tooltip title="Exchange Rate field must contain only numbers">
+                    <TextField
+                      disabled={formik.isSubmitting}
+                      label="Exchange Rate"
+                      name="exchangeRate"
+                      type="number"
+                      value={formik.values.exchangeRate || ""}
+                      placeholder="Enter Exchange Rate"
+                      variant="outlined"
+                      error={formik.touched.exchangeRate && Boolean(formik.errors.exchangeRate)}
+                      helperText={formik.touched.exchangeRate && formik.errors.exchangeRate}
+                      onChange={formik.handleChange}
+                      fullWidth
+                    ></TextField>
+                  </Tooltip>
+                </Grid>
+                <Grid xs={12} sm={6} item>
+                  <TextField
+                    disabled={formik.isSubmitting}
+                    label="Currency"
+                    name="currency"
+                    value={formik.values.currency || ""}
+                    placeholder="Enter Currency"
+                    variant="outlined"
+                    error={formik.touched.currency && Boolean(formik.errors.currency)}
+                    helperText={formik.touched.currency && formik.errors.currency}
+                    onChange={formik.handleChange}
+                    fullWidth
+                  ></TextField>
+                </Grid>
+                <Grid xs={12} sm={6} item>
+                  <TextField
+                    disabled={formik.isSubmitting}
+                    label="Source"
+                    name="source"
+                    value={formik.values.source || ""}
+                    placeholder="Enter Source"
+                    variant="outlined"
+                    onChange={formik.handleChange}
+                    fullWidth
+                  ></TextField>
+                </Grid>
+                <Grid xs={12} sm={6} item></Grid>
+                <Grid item xs={6}>
+                  <Button
+                    disabled={formik.isSubmitting}
+                    type="submit"
+                    variant="contained"
+                    color="primary"
+                    onClick={handleCancel}
+                    fullWidth
+                  >
+                    Cancel
+                  </Button>
+                </Grid>
+                <Grid item xs={6}>
+                  <Button
+                    type="submit"
+                    disabled={formik.isSubmitting}
+                    variant="contained"
+                    color="primary"
+                    fullWidth
+                  >
+                    Save
+                  </Button>
+                </Grid>
+              </Grid>
+            </CardContent>
+          </Card>
+        </form>
       )}
     </ModuleWrapper>
   );
