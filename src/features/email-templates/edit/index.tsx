@@ -345,7 +345,7 @@ export const EmailTemplateEdit = ({ readonly }: EmailTemplateEditProps) => {
           </CardContent>
         </Card>
       </EmailTemplateEditContainer>
-      {id && (
+      {id && readonly && (
         <EmailTemplateDeleteContainer>
           <DataDelete
             header="Data Management"
