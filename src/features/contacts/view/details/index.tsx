@@ -9,7 +9,7 @@ import { getCountryList } from "utils/general-helper";
 import { useNotificationsService } from "@hooks";
 import { DataView } from "components/data-view";
 import { useModuleWrapperContext } from "@providers/module-wrapper-provider";
-import { DataDelete } from "@components/data-delete";
+import { DataManagementBlock } from "@components/data-management";
 
 export const ContactView = () => {
   const { notificationsService } = useNotificationsService();
@@ -76,16 +76,16 @@ export const ContactView = () => {
           </Card>
         </Grid>
         <Grid xs={12} sm={6} item>
-          <DataDelete
+          <DataManagementBlock
             header="Data Management"
             description="Remove this customer's data if he requested that, 
             if not please be aware that what
             has been deleted can never be brought back."
             entity="contact"
-            handleDeleteAsync={client.api.contactsDelete}
+            handleDeleteAsync={(id) => client.api.contactsDelete(id as number)}
             itemId={contact.id!}
             successNavigationRoute={CoreModule.contacts}
-          ></DataDelete>
+          ></DataManagementBlock>
         </Grid>
       </Grid>
     </>

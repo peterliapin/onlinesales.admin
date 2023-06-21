@@ -7,8 +7,8 @@ export const BlogModule = () => {
   return (
     <Routes>
       <Route path={"/"} element={<ContentList />} />
-      <Route path={"/view/:id"} element={<ContentView />} />
-      <Route path={"/edit/:id"} element={<ContentEdit />} />
+      <Route path={"/:id/view"} element={<ContentView />} />
+      <Route path={"/:id/edit"} element={<ContentEdit />} />
       <Route path={"/new"} element={<ContentEdit />} />
     </Routes>
   );

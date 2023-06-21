@@ -28,7 +28,7 @@ import { SavingBar } from "@components/saving-bar";
 import { LanguageAutocomplete } from "@components/language-autocomplete";
 import { EmailGroupAutocomplete } from "@components/email-group-autocomplete";
 import { execSubmitWithToast } from "utils/formik-helper";
-import { DataDelete } from "@components/data-delete";
+import { DataManagementBlock } from "@components/data-management";
 import { CoreModule } from "@lib/router";
 
 const TINYMCE_API_KEY = process.env.TINYMCE_API_KEY || undefined;
@@ -347,15 +347,16 @@ export const EmailTemplateEdit = ({ readonly }: EmailTemplateEditProps) => {
       </EmailTemplateEditContainer>
       {id && readonly && (
         <EmailTemplateDeleteContainer>
-          <DataDelete
+          <DataManagementBlock
             header="Data Management"
             description="Please be aware that what
             has been deleted can never be brought back."
             entity="email template"
-            handleDeleteAsync={client.api.emailTemplatesDelete}
+            handleDeleteAsync={(id) => client.api.emailTemplatesDelete(id as number)}
             itemId={+id!}
             successNavigationRoute={CoreModule.emailTemplates}
-          ></DataDelete>
+            showEditButton
+          ></DataManagementBlock>
         </EmailTemplateDeleteContainer>
       )}
     </ModuleWrapper>

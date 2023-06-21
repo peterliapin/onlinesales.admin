@@ -20,7 +20,7 @@ import {
 } from "@components/generic-components/edit-components";
 import { validate } from "@components/generic-components/edit-components/validator";
 import { ArrayEdit } from "./edit-components/array-edit";
-import { DataDelete } from "@components/data-delete";
+import { DataManagementBlock } from "@components/data-management";
 import { GenericViewDeleteContainer } from "./index.styled";
 
 export interface DtoField {
@@ -365,14 +365,14 @@ export function GenericForm<TView extends BasicTypeForGeneric, TCreate, TUpdate>
       </Card>
       {!editable && deleteOptionProps && (
         <GenericViewDeleteContainer>
-          <DataDelete
+          <DataManagementBlock
             header={deleteOptionProps!.header}
             description={deleteOptionProps!.description}
             entity={deleteOptionProps!.entity}
-            handleDeleteAsync={deleteOptionProps!.deleteItemFn}
+            handleDeleteAsync={(id) => deleteOptionProps!.deleteItemFn(id as number)}
             itemId={itemId!}
             successNavigationRoute={deleteOptionProps!.listRoute}
-          ></DataDelete>
+          ></DataManagementBlock>
         </GenericViewDeleteContainer>
       )}
     </>

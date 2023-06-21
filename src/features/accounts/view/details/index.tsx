@@ -7,7 +7,7 @@ import { DataView } from "components/data-view";
 import { getContinentByCode, getCountryByCode } from "utils/general-helper";
 import { Grid } from "@mui/material";
 import { useModuleWrapperContext } from "@providers/module-wrapper-provider";
-import { DataDelete } from "@components/data-delete";
+import { DataManagementBlock } from "@components/data-management";
 
 interface DataViewRow {
   label: string;
@@ -76,15 +76,15 @@ export const AccountView = () => {
             )}
           </Grid>
           <Grid xs={12} sm={6} item>
-            <DataDelete
+            <DataManagementBlock
               header="Data Management"
               description="Please be aware that what
             has been deleted can never be brought back."
               entity="account"
-              handleDeleteAsync={client.api.accountsDelete}
+              handleDeleteAsync={(id) => client.api.accountsDelete(id as number)}
               itemId={id}
               successNavigationRoute={CoreModule.accounts}
-            ></DataDelete>
+            ></DataManagementBlock>
           </Grid>
         </Grid>
       )}

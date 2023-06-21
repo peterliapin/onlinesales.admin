@@ -21,7 +21,7 @@ import graymatter from "gray-matter";
 import { useModuleWrapperContext } from "@providers/module-wrapper-provider";
 import { blogFormBreadcrumbLinks } from "@features/blog/constants";
 import { ModuleWrapper } from "@components/module-wrapper";
-import { DataDelete } from "@components/data-delete";
+import { DataManagementBlock } from "@components/data-management";
 import { CoreModule } from "@lib/router";
 
 const coreApi = process.env.CORE_API;
@@ -99,15 +99,15 @@ export const ContentView = () => {
         )}
       </ContentEditContainer>
       <ContentDeleteContainer>
-        <DataDelete
+        <DataManagementBlock
           header="Data Management"
           description="Please be aware that what
             has been deleted can never be brought back."
           entity="content"
-          handleDeleteAsync={client.api.contentDelete}
+          handleDeleteAsync={(id) => client.api.contentDelete(id as number)}
           itemId={+id!}
           successNavigationRoute={CoreModule.blog}
-        ></DataDelete>
+        ></DataManagementBlock>
       </ContentDeleteContainer>
     </ModuleWrapper>
   );

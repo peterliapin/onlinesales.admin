@@ -31,6 +31,7 @@ import { networkErrorToStringArray } from "utils/general-helper";
 import { useErrorDetailsModal } from "@providers/error-details-modal-provider";
 import { execSubmitWithToast } from "utils/formik-helper";
 import { CoreModule } from "@lib/router";
+import { DataManagementBlock } from "@components/data-management";
 
 const tabProps = (index: number) => {
   return {
@@ -268,6 +269,19 @@ export const UserEdit = ({ readonly } : UserEditProps) => {
                       Save
                     </Button>
                   </Grid>
+                  {id && readonly && (
+                    <Grid item xs={12}>
+                      <DataManagementBlock
+                        header="Data Management"
+                        description="Please be aware that what
+                        has been deleted can never be brought back."
+                        entity="user"
+                        handleDeleteAsync={(id) => client.api.usersDelete(id as string)}
+                        itemId={id}
+                        successNavigationRoute={CoreModule.users}
+                      ></DataManagementBlock>
+                    </Grid>
+                  )}
                 </Grid>
               </TabPanel>
             </CardContent>
