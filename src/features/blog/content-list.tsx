@@ -148,10 +148,10 @@ const ItemCard = ({ item, index }: ItemProps) => {
         <CardActions style={{ position: "absolute", bottom: 0, width: "100%" }}>
           <Grid container spacing={1}>
             <Grid item xs={6}>
-              <Button size="small" color="primary" href={`${location}/view/${item.id}`}>
+              <Button size="small" color="primary" href={`${location}/${item.id}/view`}>
                 View
               </Button>
-              <Button size="small" color="primary" href={`${location}/edit/${item.id}`}>
+              <Button size="small" color="primary" href={`${location}/${item.id}/edit`}>
                 Edit
               </Button>
             </Grid>

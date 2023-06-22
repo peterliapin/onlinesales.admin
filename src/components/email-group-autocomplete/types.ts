@@ -1,4 +1,5 @@
 export interface EmailGroupAutoCompleteProps {
+  disabled?: boolean;
   label: string;
   placeholder: string;
   value: number;

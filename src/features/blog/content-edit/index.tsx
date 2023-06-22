@@ -46,7 +46,7 @@ import { RestoreDataModal } from "@components/restore-data";
 import { useDebouncedCallback } from "use-debounce";
 import { ValidateFrontmatterError } from "utils/frontmatter-validator";
 import { ImageData } from "@components/file-dropdown";
-import { useNotificationsService } from "@hooks";
+import { useCoreModuleNavigation, useNotificationsService } from "@hooks";
 import { useModuleWrapperContext } from "@providers/module-wrapper-provider";
 import { blogFormBreadcrumbLinks } from "@features/blog/constants";
 import { ModuleWrapper } from "@components/module-wrapper";
@@ -59,6 +59,7 @@ import { networkErrorToStringArray } from "utils/general-helper";
 import { useErrorDetailsModal } from "@providers/error-details-modal-provider";
 import { LanguageAutocomplete } from "@components/language-autocomplete";
 import { execSubmitWithToast } from "utils/formik-helper";
+import { CoreModule } from "@lib/router";
 
 interface ContentEditProps {
   readonly?: boolean;
@@ -69,6 +70,7 @@ export const ContentEdit = (props: ContentEditProps) => {
   const { Show: showErrorModal } = useErrorDetailsModal()!;
   const { notificationsService } = useNotificationsService();
   const networkContext = useRequestContext();
+  const handleNavigation = useCoreModuleNavigation();
   const [editorLocalStorage, setEditorLocalStorage] = useLocalStorage<ContentEditData>(
     "onlinesales_editor_autosave",
     { data: [] },
@@ -171,6 +173,7 @@ export const ContentEdit = (props: ContentEditProps) => {
     setEditorLocalStorage(localStorageSnapshot);
     setIsSaving(false);
     helpers.setSubmitting(false);
+    handleNavigation(CoreModule.blog);
   };
 
   const submit = async (values: ContentDetails, helpers: FormikHelpers<ContentDetails>) => {
@@ -484,18 +487,34 @@ export const ContentEdit = (props: ContentEditProps) => {
                     freeSolo
                   />
                 </Grid>
-                <Grid item xs={6}>
-                  {!props.readonly && (
-                    <Button
-                      disabled={!(wasModified || coverWasModified)}
-                      type="submit"
-                      variant="contained"
-                      fullWidth
-                      size="large"
-                    >
-                      Save
-                    </Button>
-                  )}
+                <Grid container item spacing={3}>
+                  <Grid item xs={6}>
+                    {!props.readonly && (
+                      <Button
+                        disabled={formik.isSubmitting}
+                        variant="contained"
+                        color="primary"
+                        onClick={() => handleNavigation(CoreModule.blog)}
+                        fullWidth
+                        size="large"
+                      >
+                        Cancel
+                      </Button>
+                    )}
+                  </Grid>
+                  <Grid item xs={6}>
+                    {!props.readonly && (
+                      <Button
+                        disabled={!(wasModified || coverWasModified)}
+                        type="submit"
+                        variant="contained"
+                        fullWidth
+                        size="large"
+                      >
+                        Save
+                      </Button>
+                    )}
+                  </Grid>
                 </Grid>
               </Grid>
             </CardContent>

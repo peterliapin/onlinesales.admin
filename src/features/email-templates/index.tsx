@@ -6,7 +6,7 @@ export const EmailTemplatesModule = () => {
   return (
     <Routes>
       <Route path={"/"} element={<EmailTemplatesList />} />
-      <Route path={"/:id/view"} element={<EmailTemplateEdit />} />
+      <Route path={"/:id/view"} element={<EmailTemplateEdit readonly/>} />
       <Route path={"/:id/edit"} element={<EmailTemplateEdit />} />
       <Route path={"/add"} element={<EmailTemplateEdit />} />
     </Routes>

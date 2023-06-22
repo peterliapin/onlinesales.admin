@@ -13,18 +13,23 @@ import {
 } from "@mui/material";
 import { CardHeaderStyled, DeleteButtonContainer } from "./index.styled";
 import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 import { useCoreModuleNavigation, useNotificationsService } from "@hooks";
 import { HttpResponse, ProblemDetails } from "@lib/network/swagger-client";
 import { useErrorDetailsModal } from "@providers/error-details-modal-provider";
 import { execDeleteWithToast } from "utils/general-helper";
+import { useRouteParams } from "typesafe-routes";
+import { coreModuleRoute } from "@lib/router";
+import { useNavigate } from "react-router-dom";
 
 type DataDeleteProps = {
   header: string;
   description: string;
-  itemId: number;
+  itemId: number | string;
   entity: string;
   successNavigationRoute: string;
-  handleDeleteAsync: (id: number) => Promise<HttpResponse<void, void | ProblemDetails>>;
+  handleDeleteAsync: (id: number | string) => Promise<HttpResponse<void, void | ProblemDetails>>;
+  showEditButton?: boolean;
 };
 
 type DataDeleteConfProps = {
@@ -69,17 +74,20 @@ export const DataDeleteConfirmation = ({
   );
 };
 
-export const DataDelete = ({
+export const DataManagementBlock = ({
   header,
   description,
   itemId,
   entity,
   successNavigationRoute,
   handleDeleteAsync,
+  showEditButton = true,
 }: DataDeleteProps) => {
   const { notificationsService } = useNotificationsService();
   const { Show: showErrorModal } = useErrorDetailsModal()!;
   const handleNavigation = useCoreModuleNavigation();
+  const navigate = useNavigate();
+  const { moduleName } = useRouteParams(coreModuleRoute);
 
   const [openConfirmation, setOpenConfirmation] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -108,6 +116,10 @@ export const DataDelete = ({
     }
   };
 
+  const editRecord = async() => {
+    navigate(`/${moduleName}/${itemId}/edit`);
+  };
+
   return (
     <>
       <Card>
@@ -120,7 +132,6 @@ export const DataDelete = ({
             <Button
               disabled={isDeleting}
               startIcon={<DeleteIcon />}
-              type="submit"
               variant="contained"
               color="error"
               onClick={handleDelete}
@@ -128,6 +139,19 @@ export const DataDelete = ({
               {`Delete ${entity}`}
             </Button>
           </DeleteButtonContainer>
+          {
+            showEditButton && (
+              <DeleteButtonContainer>
+                <Button
+                  startIcon={<EditIcon />}
+                  variant="contained"
+                  onClick={editRecord}
+                >
+                  {`Edit ${entity}`}
+                </Button>
+              </DeleteButtonContainer>
+            )
+          }
         </CardActions>
       </Card>
       <DataDeleteConfirmation

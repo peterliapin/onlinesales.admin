@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Editor as TinyMCEEditor } from "tinymce";
 import { Editor } from "@tinymce/tinymce-react";
 import { useModuleWrapperContext } from "@providers/module-wrapper-provider";
-import { useNotificationsService } from "@hooks";
+import { useCoreModuleNavigation, useNotificationsService } from "@hooks";
 import { useErrorDetailsModal } from "@providers/error-details-modal-provider";
 import { useRequestContext } from "@providers/request-provider";
 import { useParams } from "react-router-dom";
@@ -18,6 +18,7 @@ import { Autocomplete, Button, Card, CardContent, Grid, TextField } from "@mui/m
 import useLocalStorage from "use-local-storage";
 import {
   EmailTemplateEditData,
+  EmailTemplateEditProps,
   EmailTemplateEditRestoreState,
   EmailTemplateEditorAutoSave,
 } from "./types";
@@ -26,19 +27,19 @@ import { RestoreDataModal } from "@components/restore-data";
 import { SavingBar } from "@components/saving-bar";
 import { LanguageAutocomplete } from "@components/language-autocomplete";
 import { EmailGroupAutocomplete } from "@components/email-group-autocomplete";
-import { CatchingPokemonSharp } from "@mui/icons-material";
 import { execSubmitWithToast } from "utils/formik-helper";
-import { DataDelete } from "@components/data-delete";
+import { DataManagementBlock } from "@components/data-management";
 import { CoreModule } from "@lib/router";
 
 const TINYMCE_API_KEY = process.env.TINYMCE_API_KEY || undefined;
 
-export const EmailTemplateEdit = () => {
+export const EmailTemplateEdit = ({ readonly }: EmailTemplateEditProps) => {
   const editorRef = useRef<TinyMCEEditor | null>(null);
   const { setSaving, setBusy } = useModuleWrapperContext();
   const { notificationsService } = useNotificationsService();
   const { Show: showErrorModal } = useErrorDetailsModal()!;
   const { client } = useRequestContext();
+  const handleNavigation = useCoreModuleNavigation();
   const { id } = useParams();
   const [editorLocalStorage, setEditorLocalStorage] = useLocalStorage<EmailTemplateEditData>(
     "onlinesales_emailTemplateEditor_autosave",
@@ -90,6 +91,7 @@ export const EmailTemplateEdit = () => {
     setEditorLocalStorage(localStorageSnapshot);
     helpers.setValues(response.data);
     helpers.setSubmitting(false);
+    handleNavigation(CoreModule.emailTemplates);
   };
 
   const submit = async (
@@ -201,6 +203,7 @@ export const EmailTemplateEdit = () => {
               <Grid container direction={"row"} spacing={3}>
                 <Grid item xs={6} sm={6}>
                   <TextField
+                    disabled={readonly}
                     label="Name"
                     name="name"
                     value={formik.values.name}
@@ -214,6 +217,7 @@ export const EmailTemplateEdit = () => {
                 </Grid>
                 <Grid item xs={6} sm={6}>
                   <TextField
+                    disabled={readonly}
                     label="Subject"
                     name="subject"
                     value={formik.values.subject}
@@ -227,6 +231,7 @@ export const EmailTemplateEdit = () => {
                 </Grid>
                 <Grid item xs={6} sm={6}>
                   <TextField
+                    disabled={readonly}
                     label="Sender Email"
                     name="fromEmail"
                     value={formik.values.fromEmail}
@@ -240,6 +245,7 @@ export const EmailTemplateEdit = () => {
                 </Grid>
                 <Grid item xs={6} sm={6}>
                   <TextField
+                    disabled={readonly}
                     label="Sender Name"
                     name="fromName"
                     value={formik.values.fromName}
@@ -253,6 +259,7 @@ export const EmailTemplateEdit = () => {
                 </Grid>
                 <Grid item xs={6} sm={6}>
                   <EmailGroupAutocomplete
+                    disabled={readonly}
                     label="Group ID"
                     value={formik.values.emailGroupId}
                     error={formik.touched.emailGroupId && Boolean(formik.errors.emailGroupId)}
@@ -268,6 +275,7 @@ export const EmailTemplateEdit = () => {
                     renderInput={(params) => (
                       <TextField
                         {...params}
+                        disabled={readonly}
                         label="Language"
                         placeholder="Select language"
                         variant="outlined"
@@ -283,6 +291,7 @@ export const EmailTemplateEdit = () => {
                   <Editor
                     onInit={(evt, editor) => (editorRef.current = editor)}
                     value={formik.values.bodyTemplate}
+                    disabled={readonly}
                     onEditorChange={(currentValue, editor) =>
                       formik.setFieldValue("bodyTemplate", currentValue)
                     }
@@ -306,33 +315,48 @@ export const EmailTemplateEdit = () => {
                     }}
                   />
                 </Grid>
-                <Grid item xs={6} sm={6}>
-                  <Button
-                    type="submit"
-                    variant="contained"
-                    sx={{
-                      marginTop: "1rem",
-                    }}
-                  >
-                    Save
-                  </Button>
+                <Grid container item spacing={3}>
+                  <Grid item xs={6}>
+                    <Button
+                      disabled={formik.isSubmitting}
+                      variant="contained"
+                      color="primary"
+                      onClick={() => handleNavigation(CoreModule.emailTemplates)}
+                      fullWidth
+                      size="large"
+                    >
+                    Cancel
+                    </Button>
+                  </Grid>
+                  <Grid item xs={6}>
+                    <Button
+                      disabled={readonly}
+                      type="submit"
+                      variant="contained"
+                      fullWidth
+                      size="large"
+                    >
+                      Save
+                    </Button>
+                  </Grid>
                 </Grid>
               </Grid>
             </form>
           </CardContent>
         </Card>
       </EmailTemplateEditContainer>
-      {id && (
+      {id && readonly && (
         <EmailTemplateDeleteContainer>
-          <DataDelete
+          <DataManagementBlock
             header="Data Management"
             description="Please be aware that what
             has been deleted can never be brought back."
             entity="email template"
-            handleDeleteAsync={client.api.emailTemplatesDelete}
+            handleDeleteAsync={(id) => client.api.emailTemplatesDelete(id as number)}
             itemId={+id!}
             successNavigationRoute={CoreModule.emailTemplates}
-          ></DataDelete>
+            showEditButton
+          ></DataManagementBlock>
         </EmailTemplateDeleteContainer>
       )}
     </ModuleWrapper>

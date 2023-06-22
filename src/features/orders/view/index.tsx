@@ -35,7 +35,7 @@ import zod from "zod";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 import { execSubmitWithToast } from "utils/formik-helper";
 import { useErrorDetailsModal } from "@providers/error-details-modal-provider";
-import { DataDelete, DataDeleteConfirmation } from "@components/data-delete";
+import { DataManagementBlock, DataDeleteConfirmation } from "@components/data-management";
 
 export const OrderViewBase = () => {
   const context = useRequestContext();
@@ -435,15 +435,15 @@ export const OrderViewBase = () => {
               )}
             </Grid>
             <Grid xs={12} sm={5} item>
-              <DataDelete
+              <DataManagementBlock
                 header="Data Management"
                 description="Please be aware that what
             has been deleted can never be brought back."
                 entity="order"
-                handleDeleteAsync={client.api.ordersDelete}
+                handleDeleteAsync={(id) => client.api.ordersDelete(id as number)}
                 itemId={id}
                 successNavigationRoute={CoreModule.orders}
-              ></DataDelete>
+              ></DataManagementBlock>
             </Grid>
           </Grid>
           <DataDeleteConfirmation

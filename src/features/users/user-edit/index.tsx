@@ -1,4 +1,4 @@
-import { useNotificationsService } from "@hooks";
+import { useCoreModuleNavigation, useNotificationsService } from "@hooks";
 import { HttpResponse, ProblemDetails, UserDetailsDto } from "@lib/network/swagger-client";
 import { useModuleWrapperContext } from "@providers/module-wrapper-provider";
 import { useRequestContext } from "@providers/request-provider";
@@ -24,12 +24,14 @@ import {
   Button,
 } from "@mui/material";
 import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
-import { TabPanelProps } from "./types";
+import { TabPanelProps, UserEditProps } from "./types";
 import { buildAbsoluteUrl } from "@lib/network/utils";
 import { useUserInfo } from "@providers/user-provider";
 import { networkErrorToStringArray } from "utils/general-helper";
 import { useErrorDetailsModal } from "@providers/error-details-modal-provider";
 import { execSubmitWithToast } from "utils/formik-helper";
+import { CoreModule } from "@lib/router";
+import { DataManagementBlock } from "@components/data-management";
 
 const tabProps = (index: number) => {
   return {
@@ -54,12 +56,13 @@ const TabPanel = (props: TabPanelProps) => {
   );
 };
 
-export const UserEdit = () => {
+export const UserEdit = ({ readonly } : UserEditProps) => {
   const { setSaving, setBusy } = useModuleWrapperContext();
 
   const { notificationsService } = useNotificationsService();
   const { Show: showErrorModal } = useErrorDetailsModal()!;
   const { client } = useRequestContext();
+  const handleNavigation = useCoreModuleNavigation();
   const userInfo = useUserInfo();
 
   const { id } = useParams();
@@ -78,6 +81,7 @@ export const UserEdit = () => {
       userInfo?.refresh();
     }
     helpers.setSubmitting(false);
+    handleNavigation(CoreModule.users);
   };
 
   const submit = async (values: UserDetailsDto, helpers: FormikHelpers<UserDetailsDto>) => {
@@ -90,8 +94,6 @@ export const UserEdit = () => {
       "user"
     );
   };
-
-  const allowedToModify = true; // TODO: For now, until permission system wouldn't be ready.
 
   const formik = useFormik({
     validationSchema: toFormikValidationSchema(UserEditValidationScheme),
@@ -169,10 +171,10 @@ export const UserEdit = () => {
                           width: 96,
                           height: 96,
                         }}
-                        badgeContent={
+                        badgeContent={ !readonly ? (
                           <StyledAvatar onClick={handleImageUpload}>
-                            <AddAPhotoIcon />
-                          </StyledAvatar>
+                            <AddAPhotoIcon/>
+                          </StyledAvatar> ) : undefined
                         }
                       >
                         <Avatar
@@ -196,7 +198,7 @@ export const UserEdit = () => {
                   </Grid>
                   <Grid item xs={6} sm={6}>
                     <TextField
-                      disabled={!allowedToModify}
+                      disabled={readonly}
                       label="Display Name"
                       name="displayName"
                       value={formik.values.displayName}
@@ -209,7 +211,7 @@ export const UserEdit = () => {
                   </Grid>
                   <Grid item xs={6} sm={6}>
                     <TextField
-                      disabled={!allowedToModify}
+                      disabled={readonly}
                       label="Username"
                       name="userName"
                       value={formik.values.userName}
@@ -223,7 +225,7 @@ export const UserEdit = () => {
                   {!id && (
                     <Grid item xs={6} sm={6}>
                       <TextField
-                        disabled={!allowedToModify}
+                        disabled={readonly}
                         label="Email"
                         name="email"
                         value={formik.values.email}
@@ -236,15 +238,51 @@ export const UserEdit = () => {
                     </Grid>
                   )}
                 </Grid>
-                <Button
-                  type="submit"
-                  variant="contained"
+                <Grid 
+                  container 
+                  item 
+                  spacing={3}
                   sx={{
                     marginTop: "1rem",
                   }}
                 >
-                  Save
-                </Button>
+                  <Grid item xs={6}>
+                    <Button
+                      disabled={formik.isSubmitting}
+                      variant="contained"
+                      color="primary"
+                      onClick={() => handleNavigation(CoreModule.users)}
+                      fullWidth
+                      size="large"
+                    >
+                    Cancel
+                    </Button>
+                  </Grid>
+                  <Grid item xs={6}>
+                    <Button
+                      disabled={readonly}
+                      type="submit"
+                      variant="contained"
+                      fullWidth
+                      size="large"
+                    >
+                      Save
+                    </Button>
+                  </Grid>
+                  {id && readonly && (
+                    <Grid item xs={12}>
+                      <DataManagementBlock
+                        header="Data Management"
+                        description="Please be aware that what
+                        has been deleted can never be brought back."
+                        entity="user"
+                        handleDeleteAsync={(id) => client.api.usersDelete(id as string)}
+                        itemId={id}
+                        successNavigationRoute={CoreModule.users}
+                      ></DataManagementBlock>
+                    </Grid>
+                  )}
+                </Grid>
               </TabPanel>
             </CardContent>
           </Card>

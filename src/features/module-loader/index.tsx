@@ -1,8 +1,8 @@
+"use client";
 import React, { Suspense } from "react";
 import { useRouteParams } from "typesafe-routes";
 import { CoreModule, coreModuleRoute, defaultModuleRoute } from "lib/router";
 import { BlogModule } from "features/blog";
-import { ErrorBoundary } from "components/error-boundary";
 import { ContactsModule } from "features/contacts/contacts-module";
 import { AccountsModule } from "features/accounts/accounts-module";
 import { OrdersModule } from "features/orders/orders-module";
@@ -16,13 +16,18 @@ import { AboutModule } from "@features/about";
 import { Navigate } from "react-router-dom";
 import { EmailTemplatesModule } from "@features/email-templates";
 import { ActivityLogModule } from "@features/activity-log";
+import { ErrorBoundary } from "react-error-boundary";
+import { ErrorBoundaryFallbackPage } from "@components/error-boundary-fallback-page";
 
 export const ModuleLoader = () => {
   const { moduleName } = useRouteParams(coreModuleRoute);
 
   return (
     <ModuleWrapperProvider>
-      <ErrorBoundary>
+      <ErrorBoundary
+        FallbackComponent={ErrorBoundaryFallbackPage}
+        resetKeys={[moduleName]}
+      >
         <Suspense fallback="Loading...">
           {moduleName === CoreModule.blog && <BlogModule />}
           {moduleName === CoreModule.contacts && <ContactsModule />}
