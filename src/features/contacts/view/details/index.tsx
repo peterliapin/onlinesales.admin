@@ -1,20 +1,27 @@
 import { useEffect, useState } from "react";
-import { Card, CardContent, Grid } from "@mui/material";
-import { ContactDetailsDto } from "lib/network/swagger-client";
-import { CoreModule, viewFormRoute } from "lib/router";
+import { Card, CardContent, CardHeader, Grid, IconButton, Typography } from "@mui/material";
+import { ContactDetailsDto, OrderDetailsDto } from "lib/network/swagger-client";
+import { CoreModule, getViewFormRoute, viewFormRoute } from "lib/router";
 import { useRequestContext } from "providers/request-provider";
 import { useRouteParams } from "typesafe-routes";
-import { ContactCardHeader } from "../../index.styled";
-import { getCountryList } from "utils/general-helper";
+import { getCountryList, getFormattedDateOnly } from "utils/general-helper";
 import { useNotificationsService } from "@hooks";
-import { DataView } from "components/data-view";
+import { DataView, DataViewNoLabel } from "components/data-view";
 import { useModuleWrapperContext } from "@providers/module-wrapper-provider";
+import { languages, timezones } from "utils/constants";
+import { getWhereFilterQuery } from "@providers/query-provider";
+import { DataGrid, GridCellParams, GridColDef } from "@mui/x-data-grid";
+import { ActionButtonContainer } from "@features/contacts/index.styled";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import { useNavigate } from "react-router-dom";
+import { DateValueFormatter } from "@components/data-list";
 import { DataManagementBlock } from "@components/data-management";
 
 export const ContactView = () => {
   const { notificationsService } = useNotificationsService();
   const context = useRequestContext();
   const { setBusy } = useModuleWrapperContext();
+  const navigate = useNavigate();
 
   const { client } = context;
   const { id } = useRouteParams(viewFormRoute);
@@ -22,14 +29,58 @@ export const ContactView = () => {
     email: "",
   });
   const [selectedCountry, setSelectedCountry] = useState("");
-  const contactViewData = contact && [
+  const [orders, setOrders] = useState<OrderDetailsDto[]>();
+
+  const contactPersonalData = contact && [
+    { label: "Prefix", value: contact.prefix || "" },
+    {
+      label: "Full name",
+      value: `${contact.firstName || ""} ${contact.middleName || ""} ${contact.lastName || ""}`,
+    },
+    {
+      label: "Birthday",
+      value: (contact.birthday && getFormattedDateOnly(contact.birthday)) || "",
+    },
+    { label: "Language", value: languages.find((c) => c.value === contact.language)?.label || "" },
+  ];
+  const contactData = contact && [
     { label: "Email", value: contact.email || "" },
     { label: "Phone", value: contact.phone || "" },
-    { label: "Country", value: selectedCountry || "" },
-    { label: "City", value: contact.cityName || "" },
-    { label: "Address 1", value: contact.address1 || "" },
-    { label: "Address 2", value: contact.address2 || "" },
   ];
+  const contactAddressData = contact && [
+    {
+      label: "Address 1",
+      value: `${contact.address1 || ""}, ${contact.cityName || ""}, ${contact.zip || ""}, ${
+        selectedCountry || ""
+      }`,
+    },
+    { label: "Address 2", value: contact.address2 || "" },
+    { label: "Zip code", value: contact.zip || "" },
+    { label: "Timezone", value: timezones.find((c) => c.value === contact.timezone)?.label || "" },
+  ];
+  const contactJobData = contact && [
+    { label: "Job title", value: contact.jobTitle || "" },
+    { label: "Company name", value: contact.companyName || "" },
+    { label: "Department", value: contact.department || "" },
+  ];
+
+  const contactOtherData = contact && [
+    {
+      label: "Created at",
+      value: (contact.createdAt && getFormattedDateOnly(contact.createdAt)) || "",
+    },
+    {
+      label: "Updated at",
+      value: (contact.updatedAt && getFormattedDateOnly(contact.updatedAt)) || "",
+    },
+    { label: "Domain", value: contact.domain?.name || "" },
+    { label: "Account", value: contact.account?.name || "" },
+  ];
+
+  const contactSocialData =
+    contact &&
+    contact.socialMedia &&
+    Object.entries(contact.socialMedia!).map(([key, value]) => ({ label: "", value: value }));
 
   useEffect(() => {
     setBusy(async () => {
@@ -37,6 +88,7 @@ export const ContactView = () => {
         const { data } = await client.api.contactsDetail(id);
         setCountry(data.countryCode);
         setContact(data);
+        setOrders(await getContactOrders(data.id!));
       } catch (e) {
         console.log(e);
       }
@@ -55,37 +107,137 @@ export const ContactView = () => {
     }
   };
 
+  const getContactOrders = async (contactId: number) => {
+    try {
+      const { data } = await client.api.ordersList({
+        query: getWhereFilterQuery("contactId", contactId.toString(), "equals"),
+      });
+      if (data.length > 0) {
+        return data;
+      } else {
+        notificationsService.info("No orders available for selected contact.");
+        return [];
+      }
+    } catch (error) {
+      console.log(error);
+      notificationsService.error("Server error: could not retrieve orders.");
+    }
+  };
+
+  const handleForwardClick = (row: any) => {
+    navigate(`/orders/${getViewFormRoute(row.id!)}`, { state: row });
+  };
+
+  const columns: GridColDef<OrderDetailsDto>[] = [
+    {
+      field: "orderNumber",
+      headerName: "Order No",
+      flex: 2,
+    },
+    {
+      field: "refNo",
+      headerName: "Ref No",
+      flex: 2,
+    },
+    {
+      field: "createdAt",
+      headerName: "Created Date",
+      flex: 2,
+      type: "date",
+      valueGetter: DateValueFormatter,
+    },
+    {
+      field: "total",
+      headerName: "Amount",
+      flex: 2,
+    },
+    {
+      field: "quantity",
+      headerName: "Quantity",
+      flex: 2,
+    },
+  ];
+
+  const actionsColumn: GridColDef | any = {
+    field: "actions",
+    headerName: "Actions",
+    flex: 1,
+    align: "right",
+    headerAlign: "center",
+    filterable: false,
+    sortable: false,
+    disableColumnMenu: true,
+    renderCell: ({ row }: any) => {
+      return (
+        <ActionButtonContainer>
+          <IconButton onClick={() => handleForwardClick(row)}>
+            <ArrowForwardIcon fontSize="small" />
+          </IconButton>
+        </ActionButtonContainer>
+      );
+    },
+  };
+
+  const gridFinalizedColumns = columns.concat(actionsColumn);
+
   return (
     <>
-      <Grid container spacing={3}>
-        <Grid xs={12} sm={6} item>
-          <DataView header="Contact details" rows={contactViewData}></DataView>
+      <Grid container spacing={3} marginTop={4} paddingRight={4}>
+        <Grid xs={12} sm={4} item>
+          <Grid marginBottom={3}>
+            <DataView header="Personal data" rows={contactPersonalData}></DataView>
+          </Grid>
+          <Grid marginBottom={3}>
+            <DataView header="Contact" rows={contactData}></DataView>
+          </Grid>
+          <Grid marginBottom={3}>
+            <DataView header="Address" rows={contactAddressData}></DataView>
+          </Grid>
+          <Grid marginBottom={3}>
+            <DataView header="Job" rows={contactJobData}></DataView>
+          </Grid>
+          <Grid marginBottom={3}>
+            <DataViewNoLabel header="Social media" rows={contactSocialData}></DataViewNoLabel>
+          </Grid>
+          <Grid marginBottom={3}>
+            <DataView header="Other" rows={contactOtherData}></DataView>
+          </Grid>
         </Grid>
-        <Grid xs={12} sm={6} item>
-          <Card>
-            <CardContent>
-              <ContactCardHeader title="Invoices/Billing"></ContactCardHeader>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid xs={12} sm={6} item>
-          <Card>
-            <CardContent>
-              <ContactCardHeader title="Emails"></ContactCardHeader>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid xs={12} sm={6} item>
-          <DataManagementBlock
-            header="Data Management"
-            description="Remove this customer's data if he requested that, 
+        <Grid xs={12} sm={8} item>
+          <Grid marginBottom={3}>
+            <Card>
+              <CardContent>
+                <Grid marginBottom={4}>
+                  <Typography gutterBottom variant="h6" component="div">
+                    {"Orders"}
+                  </Typography>
+                </Grid>
+                <Grid>
+                  <DataGrid
+                    columns={gridFinalizedColumns}
+                    rows={orders || []}
+                    loading={!orders}
+                    checkboxSelection={false}
+                    autoHeight={true}
+                    pagination={undefined}
+                    hideFooter={true}
+                  />
+                </Grid>
+              </CardContent>
+            </Card>
+          </Grid>
+          <Grid>
+            <DataManagementBlock
+              header="Data Management"
+              description="Remove this customer's data if he requested that, 
             if not please be aware that what
             has been deleted can never be brought back."
-            entity="contact"
-            handleDeleteAsync={(id) => client.api.contactsDelete(id as number)}
-            itemId={contact.id!}
-            successNavigationRoute={CoreModule.contacts}
-          ></DataManagementBlock>
+              entity="contact"
+              handleDeleteAsync={(id) => client.api.contactsDelete(id as number)}
+              itemId={contact.id!}
+              successNavigationRoute={CoreModule.contacts}
+            ></DataManagementBlock>
+          </Grid>
         </Grid>
       </Grid>
     </>

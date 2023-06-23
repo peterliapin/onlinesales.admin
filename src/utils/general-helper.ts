@@ -69,6 +69,16 @@ export const getFormattedDateTime = (dateToConvert: string) => {
   return formattedDateTime;
 };
 
+export const getFormattedDateOnly = (dateToConvert: string) => {
+  const date = new Date(dateToConvert);
+  const formattedDate = date.toLocaleDateString(undefined, {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  });
+  return formattedDate;
+};
+
 export const networkErrorToStringArray = (error: any) => {
   if (error === undefined || error === null) {
     return [];
