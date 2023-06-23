@@ -24,7 +24,6 @@ export const ContactsModule = () => {
         <Route path={viewFormRoute.template} element={<ContactBase />}>
           <Route index element={<ContactView />} />
           <Route path={contactDetailsRoute.template} element={<ContactView />} />
-          <Route path={contactInvoicesRoute.template} element={<ContactInvoices />} />
           <Route path={contactLogsRoute.template} element={<ContactLogs />} />
         </Route>
         <Route path={addFormRoute.template} element={<ContactAdd />} />
