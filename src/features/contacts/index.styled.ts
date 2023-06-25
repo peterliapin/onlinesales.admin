@@ -1,4 +1,13 @@
-import { Card, CardHeader, Grid, ListItem, ListItemText, Paper, styled } from "@mui/material";
+import {
+  Avatar,
+  Card,
+  CardHeader,
+  Grid,
+  ListItem,
+  ListItemText,
+  Paper,
+  styled,
+} from "@mui/material";
 
 export const ActionsContainer = styled("div")`
   display: flex;
@@ -51,6 +60,16 @@ export const ContactNameListItemText = styled(ListItemText)`
   }
 `;
 
+export const ContactNameListItemTextLarge = styled(ListItemText)`
+  .MuiListItemText-primary {
+    font-size: ${({ theme }) => theme.typography.h5};
+    font-weight: 500;
+  }
+  .MuiListItemText-secondary {
+    font-size: ${({ theme }) => theme.typography.body2.fontSize};
+  }
+`;
+
 export const ContactEmailHref = styled("a")`
   text-decoration: none;
   color: inherit;
@@ -64,3 +83,18 @@ export const ContactRowGrid = styled(Grid)({
 export const ContactCardHeader = styled(CardHeader)({
   paddingLeft: 0,
 });
+
+export const CardWithTopMargin = styled(Card)({
+  marginTop: 4,
+});
+
+export const ActionButtonContainer = styled("div")`
+  display: flex;
+  justify-content: flex-end;
+`;
+
+export const AvatarContainer = styled(Avatar)`
+  width: ${({ theme }) => theme.spacing(20)};
+  height: ${({ theme }) => theme.spacing(20)};
+  margin-right: ${({ theme }) => theme.spacing(5)};
+`;

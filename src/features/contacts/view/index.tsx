@@ -1,9 +1,15 @@
-import { useState } from "react";
-import { Tab, Tabs } from "@mui/material";
+import { useEffect, useState } from "react";
+import { Divider, ListItemAvatar, Tab, Tabs } from "@mui/material";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { ContactDetailsDto } from "lib/network/swagger-client";
 import { contactFormBreadcrumbLinks } from "../constants";
 import { ModuleWrapper } from "@components/module-wrapper";
+import {
+  AvatarContainer,
+  ContactEmailHref,
+  ContactNameListItem,
+  ContactNameListItemTextLarge,
+} from "../index.styled";
 
 export const ContactBase = () => {
   const { state } = useLocation();
@@ -15,16 +21,28 @@ export const ContactBase = () => {
 
   const handleChange = (event: React.ChangeEvent<any>, newValue: string) => {
     setTabValue(newValue);
-    navigate(newValue, { state: state });
   };
+
+  useEffect(() => {
+    navigate(tabValue, { state: state });
+  }, [tabValue]);
 
   return (
     <ModuleWrapper breadcrumbs={contactFormBreadcrumbLinks} currentBreadcrumb={contactFullName}>
+      <ContactNameListItem>
+        <ListItemAvatar>
+          <AvatarContainer src={contact.avatarUrl!}></AvatarContainer>
+        </ListItemAvatar>
+        <ContactNameListItemTextLarge
+          primary={`${contact.firstName || ""} ${contact.lastName || ""}`}
+          secondary={`contact_id: ${contact.id}`}
+        />
+      </ContactNameListItem>
       <Tabs value={tabValue} onChange={handleChange}>
         <Tab value="details" label="Details" />
-        <Tab value="invoices" label="Invoices" />
         <Tab value="logs" label="Logs" />
       </Tabs>
+      <Divider></Divider>
       <Outlet />
     </ModuleWrapper>
   );

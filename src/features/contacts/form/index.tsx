@@ -605,7 +605,7 @@ export const ContactForm = ({ contact, handleSave, isEdit }: ContactFormProps) =
                     color="primary"
                     fullWidth
                   >
-                    Add
+                    {isEdit ? "Save" : "Add"}
                   </Button>
                 </Grid>
               </Grid>
