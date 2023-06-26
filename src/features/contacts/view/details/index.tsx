@@ -11,7 +11,7 @@ import { useModuleWrapperContext } from "@providers/module-wrapper-provider";
 import { languages, timezones } from "utils/constants";
 import { getWhereFilterQuery } from "@providers/query-provider";
 import { DataGrid, GridCellParams, GridColDef } from "@mui/x-data-grid";
-import { ActionButtonContainer } from "@features/contacts/index.styled";
+import { ActionButtonContainer, ContactHref } from "@features/contacts/index.styled";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { useNavigate } from "react-router-dom";
 import { DateValueFormatter } from "@components/data-list";
@@ -30,6 +30,16 @@ export const ContactView = () => {
   });
   const [selectedCountry, setSelectedCountry] = useState("");
   const [orders, setOrders] = useState<OrderDetailsDto[]>();
+
+  const getAbsoluteUrl = (url: string) => {
+    const absoluteUrl =
+      url.startsWith("http://") || url.startsWith("https://") ? url : `https://${url}`;
+    return (
+      <ContactHref href={absoluteUrl} target="_blank" rel="noopener noreferrer">
+        {absoluteUrl}
+      </ContactHref>
+    );
+  };
 
   const contactPersonalData = contact && [
     { label: "Prefix", value: contact.prefix || "" },
@@ -80,7 +90,10 @@ export const ContactView = () => {
   const contactSocialData =
     contact &&
     contact.socialMedia &&
-    Object.entries(contact.socialMedia!).map(([key, value]) => ({ label: "", value: value }));
+    Object.entries(contact.socialMedia!).map(([key, value]) => ({
+      label: "",
+      value: getAbsoluteUrl(value),
+    }));
 
   useEffect(() => {
     setBusy(async () => {

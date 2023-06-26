@@ -70,7 +70,7 @@ export const ContactNameListItemTextLarge = styled(ListItemText)`
   }
 `;
 
-export const ContactEmailHref = styled("a")`
+export const ContactHref = styled("a")`
   text-decoration: none;
   color: inherit;
 `;

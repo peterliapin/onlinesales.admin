@@ -10,8 +10,10 @@ import {
   CardContent,
   Divider,
   Grid,
+  IconButton,
   TextField,
   Tooltip,
+  Typography,
 } from "@mui/material";
 import { useModuleWrapperContext } from "@providers/module-wrapper-provider";
 import { useRequestContext } from "@providers/request-provider";
@@ -23,6 +25,9 @@ import zod from "zod";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 import { execSubmitWithToast } from "utils/formik-helper";
 import { useErrorDetailsModal } from "@providers/error-details-modal-provider";
+import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from "@mui/icons-material/Remove";
+import { CardContainer } from "../index.styled";
 
 interface AccountFormProps {
   account: AccountDetailsDto;
@@ -179,10 +184,13 @@ export const AccountForm = ({ account, handleSave, isEdit }: AccountFormProps) =
       saveIndicatorElement={<SavingBar />}
     >
       <form onSubmit={formik.handleSubmit}>
-        <Card>
+        <CardContainer>
           <CardContent>
-            <Grid container spacing={3}>
-              <Grid xs={12} sm={6} item>
+            <Grid container spacing={4} marginBottom={4}>
+              <Grid xs={12} sm={12} item>
+                <Typography variant="h6">About</Typography>
+              </Grid>
+              <Grid xs={12} sm={4} item>
                 <TextField
                   disabled={formik.isSubmitting}
                   label="Name"
@@ -194,9 +202,10 @@ export const AccountForm = ({ account, handleSave, isEdit }: AccountFormProps) =
                   error={formik.touched.name && Boolean(formik.errors.name)}
                   helperText={formik.touched.name && formik.errors.name}
                   fullWidth
+                  size="small"
                 ></TextField>
               </Grid>
-              <Grid xs={12} sm={6} item>
+              <Grid xs={12} sm={4} item>
                 <TextField
                   disabled={formik.isSubmitting}
                   label="Site Url"
@@ -206,9 +215,10 @@ export const AccountForm = ({ account, handleSave, isEdit }: AccountFormProps) =
                   variant="outlined"
                   onChange={formik.handleChange}
                   fullWidth
+                  size="small"
                 ></TextField>
               </Grid>
-              <Grid xs={12} sm={6} item>
+              <Grid xs={12} sm={4} item>
                 <TextField
                   disabled={formik.isSubmitting}
                   label="Logo Url"
@@ -219,69 +229,10 @@ export const AccountForm = ({ account, handleSave, isEdit }: AccountFormProps) =
                   variant="outlined"
                   onChange={formik.handleChange}
                   fullWidth
+                  size="small"
                 ></TextField>
               </Grid>
-              <Grid xs={12} sm={6} item>
-                <TextField
-                  disabled={formik.isSubmitting}
-                  label="City"
-                  name="city"
-                  value={""}
-                  placeholder="Enter City"
-                  variant="outlined"
-                  onChange={formik.handleChange}
-                  fullWidth
-                ></TextField>
-              </Grid>
-              <Grid xs={12} sm={6} item>
-                {!isLoading && (
-                  <Autocomplete
-                    disabled={formik.isSubmitting}
-                    disablePortal
-                    options={countryList}
-                    getOptionLabel={(option) => option.name}
-                    onChange={handleCountryChange}
-                    value={countryList.find((c) => c.code === formik.values.countryCode) || null}
-                    fullWidth
-                    renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        label="Country"
-                        value={
-                          countryList.find((c) => c.code === formik.values.countryCode) || null
-                        }
-                        onChange={formik.handleChange}
-                      />
-                    )}
-                  />
-                )}
-              </Grid>
-              <Grid xs={12} sm={6} item>
-                {!isLoading && (
-                  <Autocomplete
-                    disabled={isEdit || formik.isSubmitting}
-                    disablePortal
-                    options={continentList}
-                    getOptionLabel={(option) => option.name}
-                    value={
-                      continentList.find((c) => c.code === formik.values.continentCode) || null
-                    }
-                    onChange={handleContinentChange}
-                    fullWidth
-                    renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        label="Continent"
-                        value={
-                          continentList.find((c) => c.code === formik.values.continentCode) || null
-                        }
-                        onChange={formik.handleChange}
-                      />
-                    )}
-                  />
-                )}
-              </Grid>
-              <Grid xs={12} sm={6} item>
+              <Grid xs={12} sm={2} item>
                 <TextField
                   disabled={formik.isSubmitting}
                   label="Employees Range"
@@ -291,9 +242,10 @@ export const AccountForm = ({ account, handleSave, isEdit }: AccountFormProps) =
                   variant="outlined"
                   onChange={formik.handleChange}
                   fullWidth
+                  size="small"
                 ></TextField>
               </Grid>
-              <Grid xs={12} sm={6} item>
+              <Grid xs={12} sm={2} item>
                 <Tooltip title="Revenue field must contain only numbers">
                   <TextField
                     disabled={formik.isSubmitting}
@@ -307,10 +259,168 @@ export const AccountForm = ({ account, handleSave, isEdit }: AccountFormProps) =
                     helperText={formik.touched.revenue && formik.errors.revenue}
                     onChange={formik.handleChange}
                     fullWidth
+                    size="small"
                   ></TextField>
                 </Tooltip>
               </Grid>
-              <Grid xs={12} sm={6} item>
+            </Grid>
+            <Divider></Divider>
+            <Grid container spacing={4} marginTop={2} marginBottom={4}>
+              <Grid xs={12} sm={12} item>
+                <Typography variant="h6">Location</Typography>
+              </Grid>
+              <Grid xs={12} sm={3} item>
+                <TextField
+                  disabled={formik.isSubmitting}
+                  label="City"
+                  name="city"
+                  value={formik.values.cityName}
+                  placeholder="Enter City"
+                  variant="outlined"
+                  onChange={formik.handleChange}
+                  fullWidth
+                  size="small"
+                ></TextField>
+              </Grid>
+              <Grid xs={12} sm={3} item>
+                <TextField
+                  disabled={formik.isSubmitting}
+                  label="State"
+                  name="state"
+                  value={formik.values.state}
+                  placeholder="Enter State"
+                  variant="outlined"
+                  onChange={formik.handleChange}
+                  fullWidth
+                  size="small"
+                ></TextField>
+              </Grid>
+              <Grid xs={12} sm={3} item>
+                {!isLoading && (
+                  <Autocomplete
+                    disabled={formik.isSubmitting}
+                    disablePortal
+                    options={countryList}
+                    getOptionLabel={(option) => option.name}
+                    onChange={handleCountryChange}
+                    value={countryList.find((c) => c.code === formik.values.countryCode) || null}
+                    fullWidth
+                    size="small"
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label="Country"
+                        value={
+                          countryList.find((c) => c.code === formik.values.countryCode) || null
+                        }
+                        onChange={formik.handleChange}
+                      />
+                    )}
+                  />
+                )}
+              </Grid>
+              <Grid xs={12} sm={3} item>
+                {!isLoading && (
+                  <Autocomplete
+                    disabled={formik.isSubmitting}
+                    disablePortal
+                    options={continentList}
+                    getOptionLabel={(option) => option.name}
+                    value={
+                      continentList.find((c) => c.code === formik.values.continentCode) || null
+                    }
+                    onChange={handleContinentChange}
+                    fullWidth
+                    size="small"
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label="Continent"
+                        value={
+                          continentList.find((c) => c.code === formik.values.continentCode) || null
+                        }
+                        onChange={formik.handleChange}
+                      />
+                    )}
+                  />
+                )}
+              </Grid>
+            </Grid>
+            <Divider></Divider>
+            <Grid container spacing={4} marginTop={2} marginBottom={4}>
+              <Grid xs={12} sm={12} item>
+                <Typography variant="h6">Social Media</Typography>
+              </Grid>
+              <Grid xs={12} sm={12} item>
+                <Grid container spacing={3}>
+                  {formik.values.socialMedia &&
+                    Object.entries(formik.values.socialMedia || {}).map(([key, value], index) => (
+                      <Fragment key={index}>
+                        <Grid xs={12} sm={2} item>
+                          <TextField
+                            label="Name"
+                            value={key}
+                            variant="outlined"
+                            fullWidth
+                            size="small"
+                            disabled
+                          />
+                        </Grid>
+                        <Grid xs={12} sm={6} item>
+                          <TextField
+                            disabled={formik.isSubmitting}
+                            label="Url"
+                            value={value}
+                            fullWidth
+                            size="small"
+                            onChange={(event) => handleSocialMediaChange(event, key)}
+                          />
+                        </Grid>
+                        <Grid xs={12} sm={4} item>
+                          <Tooltip title="Remove social media">
+                            <IconButton onClick={() => handleSocialMediaRemove(key)}>
+                              <RemoveIcon />
+                            </IconButton>
+                          </Tooltip>
+                        </Grid>
+                      </Fragment>
+                    ))}
+                  <Grid xs={12} sm={2} item>
+                    <TextField
+                      disabled={formik.isSubmitting}
+                      label="Name"
+                      fullWidth
+                      size="small"
+                      value={newSocialMediaKey}
+                      onChange={(event) => setNewSocialMediaKey(event.target.value)}
+                    />
+                  </Grid>
+                  <Grid xs={12} sm={6} item>
+                    <TextField
+                      disabled={formik.isSubmitting}
+                      label="Url"
+                      fullWidth
+                      size="small"
+                      value={newSocialMediaValue}
+                      onChange={(event) => setNewSocialMediaValue(event.target.value)}
+                    />
+                  </Grid>
+                  <Grid xs={12} sm={4} item>
+                    <Tooltip title="Add social media">
+                      <IconButton onClick={handleSocialMediaAdd}>
+                        <AddIcon />
+                      </IconButton>
+                    </Tooltip>
+                  </Grid>
+                </Grid>
+              </Grid>
+            </Grid>
+            <Divider></Divider>
+            <Grid container spacing={4} marginTop={2} marginBottom={4}>
+              <Grid xs={12} sm={12} item>
+                <Typography variant="h6">Other</Typography>
+              </Grid>
+              <Grid xs={12} sm={4} item>
                 <TextField
                   disabled={formik.isSubmitting}
                   label="Tags"
@@ -320,9 +430,10 @@ export const AccountForm = ({ account, handleSave, isEdit }: AccountFormProps) =
                   variant="outlined"
                   onChange={handleTagInputChange}
                   fullWidth
+                  size="small"
                 ></TextField>
               </Grid>
-              <Grid xs={12} sm={6} item>
+              <Grid xs={12} sm={4} item>
                 <TextField
                   disabled={formik.isSubmitting}
                   label="Source"
@@ -331,80 +442,17 @@ export const AccountForm = ({ account, handleSave, isEdit }: AccountFormProps) =
                   placeholder="Enter Source"
                   variant="outlined"
                   onChange={formik.handleChange}
+                  size="small"
                   fullWidth
                 ></TextField>
               </Grid>
-              <Grid xs={12} sm={6} item>
-                <TextField
-                  disabled={formik.isSubmitting}
-                  label="Data"
-                  name="data"
-                  type="text"
-                  value={formik.values.data || ""}
-                  placeholder="Enter Data"
-                  variant="outlined"
-                  onChange={formik.handleChange}
-                  fullWidth
-                ></TextField>
-              </Grid>
-              <Grid xs={12} sm={6} item></Grid>
-              <Grid xs={12} sm={12} item>
-                <Divider textAlign="left">Social Media</Divider>
-                <Grid container spacing={3}>
-                  {formik.values.socialMedia &&
-                    Object.entries(formik.values.socialMedia || {}).map(([key, value], index) => (
-                      <Fragment key={index}>
-                        <Grid xs={12} sm={4} item>
-                          <TextField
-                            label="Name"
-                            value={key}
-                            variant="outlined"
-                            fullWidth
-                            disabled
-                          />
-                        </Grid>
-                        <Grid xs={12} sm={4} item>
-                          <TextField
-                            disabled={formik.isSubmitting}
-                            label="Url"
-                            value={value}
-                            fullWidth
-                            onChange={(event) => handleSocialMediaChange(event, key)}
-                          />
-                        </Grid>
-                        <Grid xs={12} sm={4} item>
-                          <Button onClick={() => handleSocialMediaRemove(key)}>Remove</Button>
-                        </Grid>
-                      </Fragment>
-                    ))}
-                  <Grid xs={12} sm={4} item>
-                    <TextField
-                      disabled={formik.isSubmitting}
-                      label="Name"
-                      fullWidth
-                      value={newSocialMediaKey}
-                      onChange={(event) => setNewSocialMediaKey(event.target.value)}
-                    />
-                  </Grid>
-                  <Grid xs={12} sm={4} item>
-                    <TextField
-                      disabled={formik.isSubmitting}
-                      label="Url"
-                      fullWidth
-                      value={newSocialMediaValue}
-                      onChange={(event) => setNewSocialMediaValue(event.target.value)}
-                    />
-                  </Grid>
-                  <Grid xs={12} sm={4} item>
-                    <Button onClick={handleSocialMediaAdd}>Add</Button>
-                  </Grid>
-                </Grid>
-              </Grid>
-              <Grid item xs={6}>
+            </Grid>
+            <Grid container spacing={4} marginTop={2} marginBottom={4} justifyContent="flex-end">
+              <Grid item xs={1}>
                 <Button
                   disabled={formik.isSubmitting}
                   type="submit"
-                  variant="contained"
+                  variant="outlined"
                   color="primary"
                   onClick={handleCancel}
                   fullWidth
@@ -412,7 +460,7 @@ export const AccountForm = ({ account, handleSave, isEdit }: AccountFormProps) =
                   Cancel
                 </Button>
               </Grid>
-              <Grid item xs={6}>
+              <Grid item xs={1}>
                 <Button
                   type="submit"
                   disabled={formik.isSubmitting}
@@ -420,12 +468,12 @@ export const AccountForm = ({ account, handleSave, isEdit }: AccountFormProps) =
                   color="primary"
                   fullWidth
                 >
-                  Save
+                  {isEdit ? "Save" : "Add"}
                 </Button>
               </Grid>
             </Grid>
           </CardContent>
-        </Card>
+        </CardContainer>
       </form>
     </ModuleWrapper>
   );

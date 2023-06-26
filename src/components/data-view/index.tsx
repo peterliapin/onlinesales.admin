@@ -1,6 +1,6 @@
 import { Card, CardContent, Grid, Typography } from "@mui/material";
 import { Fragment } from "react";
-import { ViewListItemText, ViewRowGrid } from "./index.styled";
+import { CardContainer, ViewListItemText, ViewRowGrid } from "./index.styled";
 
 type dataViewProps = {
   header: string;
@@ -9,7 +9,7 @@ type dataViewProps = {
 
 export const DataView = ({ header, rows }: dataViewProps) => {
   return (
-    <Card>
+    <CardContainer>
       <CardContent>
         <Grid xs={12} sm={12} item>
           <Typography gutterBottom variant="h6" component="div">
@@ -25,13 +25,13 @@ export const DataView = ({ header, rows }: dataViewProps) => {
             </Fragment>
           ))}
       </CardContent>
-    </Card>
+    </CardContainer>
   );
 };
 
 export const DataViewNoLabel = ({ header, rows }: dataViewProps) => {
   return (
-    <Card>
+    <CardContainer>
       <CardContent>
         <Grid xs={12} sm={12} item>
           <Typography gutterBottom variant="h6" component="div">
@@ -45,6 +45,6 @@ export const DataViewNoLabel = ({ header, rows }: dataViewProps) => {
             </Fragment>
           ))}
       </CardContent>
-    </Card>
+    </CardContainer>
   );
 };
