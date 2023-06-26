@@ -1,7 +1,7 @@
 import { Avatar, Button, ListItemAvatar } from "@mui/material";
 import { ContactDetailsDto, ContactImportDto } from "lib/network/swagger-client";
 import { useRequestContext } from "providers/request-provider";
-import { ContactEmailHref, ContactNameListItem, ContactNameListItemText } from "./index.styled";
+import { ContactHref, ContactNameListItem, ContactNameListItemText } from "./index.styled";
 import {
   contactGridSettingsStorageKey,
   contactListPageBreadcrumb,
@@ -97,9 +97,7 @@ export const Contacts = () => {
           </ListItemAvatar>
           <ContactNameListItemText
             primary={`${row.firstName || ""} ${row.lastName || ""}`}
-            secondary={
-              <ContactEmailHref href={`mailto:${row.email}`}>{row.email}</ContactEmailHref>
-            }
+            secondary={<ContactHref href={`mailto:${row.email}`}>{row.email}</ContactHref>}
           />
         </ContactNameListItem>
       ),

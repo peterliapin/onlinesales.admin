@@ -9,6 +9,7 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  Grid,
   Typography,
 } from "@mui/material";
 import { CardHeaderStyled, DeleteButtonContainer } from "./index.styled";
@@ -116,7 +117,7 @@ export const DataManagementBlock = ({
     }
   };
 
-  const editRecord = async() => {
+  const editRecord = async () => {
     navigate(`/${moduleName}/${itemId}/edit`);
   };
 
@@ -124,8 +125,14 @@ export const DataManagementBlock = ({
     <>
       <Card>
         <CardContent>
-          <CardHeaderStyled title={header}></CardHeaderStyled>
-          <Typography>{description}</Typography>
+          <Grid>
+            <Typography gutterBottom variant="h6" component="div">
+              {header}
+            </Typography>
+          </Grid>
+          <Grid>
+            <Typography>{description}</Typography>
+          </Grid>
         </CardContent>
         <CardActions>
           <DeleteButtonContainer>
@@ -139,19 +146,13 @@ export const DataManagementBlock = ({
               {`Delete ${entity}`}
             </Button>
           </DeleteButtonContainer>
-          {
-            showEditButton && (
-              <DeleteButtonContainer>
-                <Button
-                  startIcon={<EditIcon />}
-                  variant="contained"
-                  onClick={editRecord}
-                >
-                  {`Edit ${entity}`}
-                </Button>
-              </DeleteButtonContainer>
-            )
-          }
+          {showEditButton && (
+            <DeleteButtonContainer>
+              <Button startIcon={<EditIcon />} variant="contained" onClick={editRecord}>
+                {`Edit ${entity}`}
+              </Button>
+            </DeleteButtonContainer>
+          )}
         </CardActions>
       </Card>
       <DataDeleteConfirmation

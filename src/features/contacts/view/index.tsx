@@ -1,15 +1,10 @@
 import { useEffect, useState } from "react";
-import { Divider, ListItemAvatar, Tab, Tabs } from "@mui/material";
+import { Divider, ListItem, ListItemAvatar, Tab, Tabs } from "@mui/material";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { ContactDetailsDto } from "lib/network/swagger-client";
 import { contactFormBreadcrumbLinks } from "../constants";
 import { ModuleWrapper } from "@components/module-wrapper";
-import {
-  AvatarContainer,
-  ContactEmailHref,
-  ContactNameListItem,
-  ContactNameListItemTextLarge,
-} from "../index.styled";
+import { AvatarContainer, ContactNameListItemTextLarge } from "../index.styled";
 
 export const ContactBase = () => {
   const { state } = useLocation();
@@ -29,7 +24,7 @@ export const ContactBase = () => {
 
   return (
     <ModuleWrapper breadcrumbs={contactFormBreadcrumbLinks} currentBreadcrumb={contactFullName}>
-      <ContactNameListItem>
+      <ListItem>
         <ListItemAvatar>
           <AvatarContainer src={contact.avatarUrl!}></AvatarContainer>
         </ListItemAvatar>
@@ -37,7 +32,7 @@ export const ContactBase = () => {
           primary={`${contact.firstName || ""} ${contact.lastName || ""}`}
           secondary={`contact_id: ${contact.id}`}
         />
-      </ContactNameListItem>
+      </ListItem>
       <Tabs value={tabValue} onChange={handleChange}>
         <Tab value="details" label="Details" />
         <Tab value="logs" label="Logs" />

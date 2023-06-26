@@ -1,4 +1,4 @@
-import { CardHeader, Grid, ListItemText, styled } from "@mui/material";
+import { Card, Grid, ListItemText, styled } from "@mui/material";
 
 export const ViewListItemText = styled(ListItemText)`
   .MuiListItemText-primary {
@@ -14,3 +14,8 @@ export const ViewRowGrid = styled(Grid)({
   minHeight: 60,
   alignItems: "center",
 });
+
+export const CardContainer = styled(Card)`
+  height: 100%;
+  position: relative;
+`;
