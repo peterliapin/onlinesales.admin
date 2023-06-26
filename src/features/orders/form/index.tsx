@@ -5,7 +5,16 @@ import { useNotificationsService } from "@hooks";
 import { ContactDetailsDto, OrderDetailsDto } from "@lib/network/swagger-client";
 import { defaultFilterLimit } from "@providers/query-provider";
 import { CoreModule } from "@lib/router";
-import { Autocomplete, Button, Card, CardContent, Grid, TextField, Tooltip } from "@mui/material";
+import {
+  Autocomplete,
+  Button,
+  Card,
+  CardContent,
+  Grid,
+  TextField,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import { useModuleWrapperContext } from "@providers/module-wrapper-provider";
 import { useRequestContext } from "@providers/request-provider";
 import { useCoreModuleNavigation } from "@hooks";
@@ -15,6 +24,7 @@ import zod from "zod";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 import { execSubmitWithToast } from "utils/formik-helper";
 import { useErrorDetailsModal } from "@providers/error-details-modal-provider";
+import { CardContainer } from "../index.styled";
 
 interface OrderFormProps {
   order: OrderDetailsDto | undefined;
@@ -144,9 +154,12 @@ export const OrderForm = ({ order, handleSave, isEdit }: OrderFormProps) => {
     >
       {order && (
         <form onSubmit={formik.handleSubmit}>
-          <Card>
+          <CardContainer>
             <CardContent>
-              <Grid container spacing={3}>
+              <Grid container spacing={3} marginBottom={4}>
+                <Grid xs={12} sm={12} item>
+                  <Typography variant="h6">Contact</Typography>
+                </Grid>
                 <Grid xs={12} sm={6} item>
                   <Autocomplete
                     disabled={formik.isSubmitting}
@@ -168,10 +181,11 @@ export const OrderForm = ({ order, handleSave, isEdit }: OrderFormProps) => {
                     loading={loading}
                     filterOptions={(x) => x}
                     fullWidth
+                    size="small"
                     renderInput={(params) => (
                       <TextField
                         {...params}
-                        label="Contact Name"
+                        label="Contact"
                         value={formik.values.contact || null}
                         error={formik.touched.contactId && Boolean(formik.errors.contactId)}
                         helperText={formik.touched.contactId && formik.errors.contactId}
@@ -179,7 +193,12 @@ export const OrderForm = ({ order, handleSave, isEdit }: OrderFormProps) => {
                     )}
                   />
                 </Grid>
-                <Grid xs={12} sm={6} item>
+              </Grid>
+              <Grid container spacing={4} marginTop={2} marginBottom={4}>
+                <Grid xs={12} sm={12} item>
+                  <Typography variant="h6">Order</Typography>
+                </Grid>
+                <Grid xs={12} sm={4} item>
                   <TextField
                     disabled={formik.isSubmitting}
                     label="Ref No"
@@ -191,9 +210,10 @@ export const OrderForm = ({ order, handleSave, isEdit }: OrderFormProps) => {
                     error={formik.touched.refNo && Boolean(formik.errors.refNo)}
                     helperText={formik.touched.refNo && formik.errors.refNo}
                     fullWidth
+                    size="small"
                   ></TextField>
                 </Grid>
-                <Grid xs={12} sm={6} item>
+                <Grid xs={12} sm={4} item>
                   <TextField
                     disabled={formik.isSubmitting}
                     label="Order No"
@@ -203,9 +223,10 @@ export const OrderForm = ({ order, handleSave, isEdit }: OrderFormProps) => {
                     variant="outlined"
                     onChange={formik.handleChange}
                     fullWidth
+                    size="small"
                   ></TextField>
                 </Grid>
-                <Grid xs={12} sm={6} item>
+                <Grid xs={12} sm={4} item>
                   <TextField
                     disabled={formik.isSubmitting}
                     label="Affiliate Name"
@@ -215,9 +236,15 @@ export const OrderForm = ({ order, handleSave, isEdit }: OrderFormProps) => {
                     variant="outlined"
                     onChange={formik.handleChange}
                     fullWidth
+                    size="small"
                   ></TextField>
                 </Grid>
-                <Grid xs={12} sm={6} item>
+              </Grid>
+              <Grid container spacing={4} marginTop={2} marginBottom={4}>
+                <Grid xs={12} sm={12} item>
+                  <Typography variant="h6">Currency</Typography>
+                </Grid>
+                <Grid xs={12} sm={4} item>
                   <Tooltip title="Exchange Rate field must contain only numbers">
                     <TextField
                       disabled={formik.isSubmitting}
@@ -231,10 +258,11 @@ export const OrderForm = ({ order, handleSave, isEdit }: OrderFormProps) => {
                       helperText={formik.touched.exchangeRate && formik.errors.exchangeRate}
                       onChange={formik.handleChange}
                       fullWidth
+                      size="small"
                     ></TextField>
                   </Tooltip>
                 </Grid>
-                <Grid xs={12} sm={6} item>
+                <Grid xs={12} sm={4} item>
                   <TextField
                     disabled={formik.isSubmitting}
                     label="Currency"
@@ -246,9 +274,15 @@ export const OrderForm = ({ order, handleSave, isEdit }: OrderFormProps) => {
                     helperText={formik.touched.currency && formik.errors.currency}
                     onChange={formik.handleChange}
                     fullWidth
+                    size="small"
                   ></TextField>
                 </Grid>
-                <Grid xs={12} sm={6} item>
+              </Grid>
+              <Grid container spacing={4} marginTop={2} marginBottom={4}>
+                <Grid xs={12} sm={12} item>
+                  <Typography variant="h6">Other</Typography>
+                </Grid>
+                <Grid xs={12} sm={4} item>
                   <TextField
                     disabled={formik.isSubmitting}
                     label="Source"
@@ -258,14 +292,16 @@ export const OrderForm = ({ order, handleSave, isEdit }: OrderFormProps) => {
                     variant="outlined"
                     onChange={formik.handleChange}
                     fullWidth
+                    size="small"
                   ></TextField>
                 </Grid>
-                <Grid xs={12} sm={6} item></Grid>
-                <Grid item xs={6}>
+              </Grid>
+              <Grid container spacing={4} marginTop={2} marginBottom={4} justifyContent="flex-end">
+                <Grid item xs={1}>
                   <Button
                     disabled={formik.isSubmitting}
                     type="submit"
-                    variant="contained"
+                    variant="outlined"
                     color="primary"
                     onClick={handleCancel}
                     fullWidth
@@ -273,7 +309,7 @@ export const OrderForm = ({ order, handleSave, isEdit }: OrderFormProps) => {
                     Cancel
                   </Button>
                 </Grid>
-                <Grid item xs={6}>
+                <Grid item xs={1}>
                   <Button
                     type="submit"
                     disabled={formik.isSubmitting}
@@ -286,7 +322,7 @@ export const OrderForm = ({ order, handleSave, isEdit }: OrderFormProps) => {
                 </Grid>
               </Grid>
             </CardContent>
-          </Card>
+          </CardContainer>
         </form>
       )}
     </ModuleWrapper>
