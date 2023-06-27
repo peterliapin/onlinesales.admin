@@ -22,6 +22,7 @@ import { validate } from "@components/generic-components/edit-components/validat
 import { ArrayEdit } from "./edit-components/array-edit";
 import { DataManagementBlock } from "@components/data-management";
 import { GenericViewDeleteContainer } from "./index.styled";
+import { useCoreModuleNavigation } from "@hooks";
 
 export interface DtoField {
   editable: boolean;
@@ -89,6 +90,7 @@ export function GenericForm<TView extends BasicTypeForGeneric, TCreate, TUpdate>
   customDictionaries,
 }: GenericFormProps<TView, TCreate, TUpdate>) {
   const { setBusy, isBusy, setSaving, isSaving } = useModuleWrapperContext();
+  const handleCoreNavigation = useCoreModuleNavigation();
   const [validationResult, setValidationResult] = useState<ValidationResult>();
 
   const itemId = getItemId();
@@ -221,6 +223,12 @@ export function GenericForm<TView extends BasicTypeForGeneric, TCreate, TUpdate>
     });
   };
 
+  const cancel = () => {
+    const currentPath = window.location.pathname;
+    const modulePath = currentPath.split("/")[1];
+    handleCoreNavigation(modulePath);
+  };
+
   const isValidUpdate = (field: DtoField) => {
     if (field.type == "boolean" && (values[field.name] === true || values[field.name] === false))
       return true;
@@ -346,7 +354,23 @@ export function GenericForm<TView extends BasicTypeForGeneric, TCreate, TUpdate>
                   {getEdit(field)}
                 </Grid>
               ))}
-            <Grid item xs={12} sm={12}>
+          </Grid>
+          <Grid container spacing={3} marginTop={4} justifyContent="flex-end">
+            <Grid item xs={12} sm={1}>
+              {editable && (
+                <Button
+                  type="submit"
+                  disabled={isBusy || isSaving}
+                  variant="outlined"
+                  fullWidth
+                  onClick={cancel}
+                  size="large"
+                >
+                  Cancel
+                </Button>
+              )}
+            </Grid>
+            <Grid item xs={12} sm={1}>
               {editable && (
                 <Button
                   type="submit"

@@ -61,8 +61,10 @@ export const ContactForm = ({ contact, handleSave, isEdit }: ContactFormProps) =
 
   useEffect(() => {
     setBusy(async () => {
-      const countries = await getCountryList(context);
-      const continents = await getContinentList(context);
+      const [countries, continents] = await Promise.all([
+        getCountryList(context),
+        getContinentList(context),
+      ]);
       if (countries) {
         setCountryList(Object.entries(countries).map(([code, name]) => ({ code, name })));
       } else {
@@ -189,430 +191,426 @@ export const ContactForm = ({ contact, handleSave, isEdit }: ContactFormProps) =
       currentBreadcrumb={header}
       saveIndicatorElement={<SavingBar />}
     >
-      {isLoading ? (
-        <div />
-      ) : (
-        <form onSubmit={formik.handleSubmit}>
-          <CardContainer>
-            <CardContent>
-              <Grid container spacing={4} marginBottom={4}>
-                <Grid xs={12} sm={12} item>
-                  <Typography variant="h6">Personal data</Typography>
-                </Grid>
-                <Grid xs={12} sm={1.5} item>
+      <form onSubmit={formik.handleSubmit}>
+        <CardContainer>
+          <CardContent>
+            <Grid container spacing={4} marginBottom={4}>
+              <Grid xs={12} sm={12} item>
+                <Typography variant="h6">Personal data</Typography>
+              </Grid>
+              <Grid xs={12} sm={1.5} item>
+                <Autocomplete
+                  id="prefix"
+                  options={prefixOptions}
+                  size="small"
+                  disabled={isLoading || formik.isSubmitting}
+                  value={prefixOptions.find((c) => c === formik.values.prefix) || ""}
+                  onChange={handlePrefixChange}
+                  fullWidth
+                  renderInput={(params) => <TextField {...params} label="Prefix" />}
+                />
+              </Grid>
+              <Grid xs={12} sm={3} item>
+                <TextField
+                  disabled={isLoading || formik.isSubmitting}
+                  label="First Name"
+                  name="firstName"
+                  value={formik.values.firstName || ""}
+                  placeholder="Enter first name"
+                  variant="outlined"
+                  onChange={formik.handleChange}
+                  error={formik.touched.firstName && Boolean(formik.errors.firstName)}
+                  helperText={formik.touched.firstName && formik.errors.firstName}
+                  size="small"
+                  fullWidth
+                ></TextField>
+              </Grid>
+              <Grid xs={12} sm={3.5} item>
+                <TextField
+                  disabled={isLoading || formik.isSubmitting}
+                  label="Middle Name"
+                  name="middleName"
+                  value={formik.values.middleName || ""}
+                  placeholder="Enter middle name"
+                  variant="outlined"
+                  onChange={formik.handleChange}
+                  size="small"
+                  fullWidth
+                ></TextField>
+              </Grid>
+              <Grid xs={12} sm={4} item>
+                <TextField
+                  disabled={isLoading || formik.isSubmitting}
+                  label="Last Name"
+                  name="lastName"
+                  value={formik.values.lastName || ""}
+                  placeholder="Enter last name"
+                  variant="outlined"
+                  onChange={formik.handleChange}
+                  size="small"
+                  fullWidth
+                ></TextField>
+              </Grid>
+              <Grid xs={12} sm={2} item>
+                <Autocomplete
+                  disabled={isLoading || formik.isSubmitting}
+                  options={languages}
+                  getOptionLabel={(option) => option.label}
+                  placeholder="Select language"
+                  size="small"
+                  fullWidth
+                  value={languages.find((c) => c.value === formik.values.language) || null}
+                  renderInput={(params) => <TextField {...params} label="Language" />}
+                  onChange={handleLanguageChange}
+                />
+              </Grid>
+              <Grid xs={12} sm={2} item>
+                <DateField
+                  disabled={isLoading || formik.isSubmitting}
+                  label="Birthday"
+                  format="MM-DD-YYYY"
+                  size="small"
+                  fullWidth
+                  variant="outlined"
+                  value={(formik.values.birthday && dayjs(formik.values.birthday)) || null}
+                  onChange={(newValue) => handleDateChange(newValue)}
+                />
+              </Grid>
+            </Grid>
+            <Divider></Divider>
+            <Grid container spacing={4} marginTop={2} marginBottom={4}>
+              <Grid xs={12} sm={12} item>
+                <Typography gutterBottom variant="h6" component="div">
+                  Contact data
+                </Typography>
+              </Grid>
+              <Grid xs={12} sm={3} item>
+                <TextField
+                  disabled={isLoading || formik.isSubmitting}
+                  label="Email Address"
+                  name="email"
+                  value={formik.values.email}
+                  placeholder="Enter email address"
+                  type="email"
+                  variant="outlined"
+                  onChange={formik.handleChange}
+                  size="small"
+                  fullWidth
+                  error={formik.touched.email && Boolean(formik.errors.email)}
+                  helperText={formik.touched.email && formik.errors.email}
+                ></TextField>
+              </Grid>
+              <Grid xs={12} sm={3} item>
+                <TextField
+                  disabled={isLoading || formik.isSubmitting}
+                  label="Phone"
+                  name="phone"
+                  value={formik.values.phone || ""}
+                  placeholder="Enter phone number"
+                  variant="outlined"
+                  onChange={formik.handleChange}
+                  size="small"
+                  fullWidth
+                ></TextField>
+              </Grid>
+            </Grid>
+            <Divider></Divider>
+            <Grid container spacing={4} marginTop={2} marginBottom={4}>
+              <Grid xs={12} sm={12} item>
+                <Typography gutterBottom variant="h6" component="div">
+                  Address
+                </Typography>
+              </Grid>
+              <Grid xs={12} sm={4} item>
+                <TextField
+                  disabled={isLoading || formik.isSubmitting}
+                  label="Street address"
+                  name="address1"
+                  value={formik.values.address1 || ""}
+                  placeholder="Enter street address"
+                  variant="outlined"
+                  onChange={formik.handleChange}
+                  size="small"
+                  fullWidth
+                ></TextField>
+              </Grid>
+              <Grid xs={12} sm={4} item>
+                <TextField
+                  disabled={isLoading || formik.isSubmitting}
+                  label="Apt, suite, etc (optional)"
+                  name="address2"
+                  value={formik.values.address2 || ""}
+                  placeholder="Enter apt, suite, etc"
+                  variant="outlined"
+                  onChange={formik.handleChange}
+                  size="small"
+                  fullWidth
+                ></TextField>
+              </Grid>
+              <Grid xs={12} sm={4} item></Grid>
+              <Grid xs={12} sm={4} item>
+                <TextField
+                  disabled={isLoading || formik.isSubmitting}
+                  label="City"
+                  name="cityName"
+                  value={formik.values.cityName || ""}
+                  placeholder="Enter state"
+                  variant="outlined"
+                  onChange={formik.handleChange}
+                  size="small"
+                  fullWidth
+                ></TextField>
+              </Grid>
+              <Grid xs={12} sm={4} item>
+                {!isLoading && (
                   <Autocomplete
-                    id="prefix"
-                    options={prefixOptions}
-                    size="small"
-                    value={prefixOptions.find((c) => c === formik.values.prefix) || ""}
-                    onChange={handlePrefixChange}
+                    disabled={isLoading || formik.isSubmitting}
+                    disablePortal
+                    options={countryList}
+                    getOptionLabel={(option) => option.name}
+                    value={countryList.find((c) => c.code === formik.values.countryCode) || null}
+                    onChange={handleCountryChange}
                     fullWidth
-                    renderInput={(params) => <TextField {...params} label="Prefix" />}
+                    size="small"
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label="Country"
+                        value={
+                          countryList.find((c) => c.code === formik.values.countryCode) || null
+                        }
+                        onChange={formik.handleChange}
+                      />
+                    )}
                   />
-                </Grid>
-                <Grid xs={12} sm={3} item>
-                  <TextField
-                    disabled={formik.isSubmitting}
-                    label="First Name"
-                    name="firstName"
-                    value={formik.values.firstName || ""}
-                    placeholder="Enter first name"
-                    variant="outlined"
-                    onChange={formik.handleChange}
-                    error={formik.touched.firstName && Boolean(formik.errors.firstName)}
-                    helperText={formik.touched.firstName && formik.errors.firstName}
-                    size="small"
-                    fullWidth
-                  ></TextField>
-                </Grid>
-                <Grid xs={12} sm={3.5} item>
-                  <TextField
-                    disabled={formik.isSubmitting}
-                    label="Middle Name"
-                    name="middleName"
-                    value={formik.values.middleName || ""}
-                    placeholder="Enter middle name"
-                    variant="outlined"
-                    onChange={formik.handleChange}
-                    size="small"
-                    fullWidth
-                  ></TextField>
-                </Grid>
-                <Grid xs={12} sm={4} item>
-                  <TextField
-                    disabled={formik.isSubmitting}
-                    label="Last Name"
-                    name="lastName"
-                    value={formik.values.lastName || ""}
-                    placeholder="Enter last name"
-                    variant="outlined"
-                    onChange={formik.handleChange}
-                    size="small"
-                    fullWidth
-                  ></TextField>
-                </Grid>
-                <Grid xs={12} sm={2} item>
+                )}
+              </Grid>
+              <Grid xs={12} sm={4} item></Grid>
+              <Grid xs={12} sm={2} item>
+                <TextField
+                  disabled={isLoading || formik.isSubmitting}
+                  label="State"
+                  name="state"
+                  value={formik.values.state || ""}
+                  placeholder="Enter state"
+                  variant="outlined"
+                  onChange={formik.handleChange}
+                  size="small"
+                  fullWidth
+                ></TextField>
+              </Grid>
+              <Grid xs={12} sm={2} item>
+                <TextField
+                  disabled={isLoading || formik.isSubmitting}
+                  label="Zip code"
+                  name="zip"
+                  value={formik.values.zip || ""}
+                  placeholder="Enter zip"
+                  variant="outlined"
+                  onChange={formik.handleChange}
+                  size="small"
+                  fullWidth
+                ></TextField>
+              </Grid>
+              <Grid xs={12} sm={2} item>
+                {!isLoading && (
                   <Autocomplete
-                    disabled={formik.isSubmitting}
-                    options={languages}
-                    getOptionLabel={(option) => option.label}
-                    placeholder="Select language"
-                    size="small"
+                    disabled={isLoading || formik.isSubmitting}
+                    disablePortal
+                    options={continentList}
+                    getOptionLabel={(option) => option.name}
+                    value={
+                      continentList.find((c) => c.code === formik.values.continentCode) || null
+                    }
+                    onChange={handleContinentChange}
                     fullWidth
-                    value={languages.find((c) => c.value === formik.values.language) || null}
-                    renderInput={(params) => <TextField {...params} label="Language" />}
-                    onChange={handleLanguageChange}
-                  />
-                </Grid>
-                <Grid xs={12} sm={2} item>
-                  <DateField
-                    disabled={formik.isSubmitting}
-                    label="Birthday"
-                    format="MM-DD-YYYY"
                     size="small"
-                    fullWidth
-                    variant="outlined"
-                    value={(formik.values.birthday && dayjs(formik.values.birthday)) || null}
-                    onChange={(newValue) => handleDateChange(newValue)}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label="Continent code"
+                        value={
+                          continentList.find((c) => c.code === formik.values.continentCode) || null
+                        }
+                        onChange={formik.handleChange}
+                      />
+                    )}
                   />
-                </Grid>
+                )}
               </Grid>
-              <Divider></Divider>
-              <Grid container spacing={4} marginTop={2} marginBottom={4}>
-                <Grid xs={12} sm={12} item>
-                  <Typography gutterBottom variant="h6" component="div">
-                    Contact data
-                  </Typography>
-                </Grid>
-                <Grid xs={12} sm={3} item>
-                  <TextField
-                    disabled={formik.isSubmitting}
-                    label="Email Address"
-                    name="email"
-                    value={formik.values.email}
-                    placeholder="Enter email address"
-                    type="email"
-                    variant="outlined"
-                    onChange={formik.handleChange}
-                    size="small"
-                    fullWidth
-                    error={formik.touched.email && Boolean(formik.errors.email)}
-                    helperText={formik.touched.email && formik.errors.email}
-                  ></TextField>
-                </Grid>
-                <Grid xs={12} sm={3} item>
-                  <TextField
-                    disabled={formik.isSubmitting}
-                    label="Phone"
-                    name="phone"
-                    value={formik.values.phone || ""}
-                    placeholder="Enter phone number"
-                    variant="outlined"
-                    onChange={formik.handleChange}
-                    size="small"
-                    fullWidth
-                  ></TextField>
-                </Grid>
+              <Grid xs={12} sm={4} item>
+                <Autocomplete
+                  disabled={isLoading || formik.isSubmitting}
+                  options={timezones}
+                  getOptionLabel={(option) => option.label}
+                  placeholder="Select language"
+                  size="small"
+                  fullWidth
+                  value={timezones.find((c) => c.value === formik.values.timezone) || null}
+                  renderInput={(params) => <TextField {...params} label="Timezone" />}
+                  onChange={handleTimezoneChange}
+                />
               </Grid>
-              <Divider></Divider>
-              <Grid container spacing={4} marginTop={2} marginBottom={4}>
-                <Grid xs={12} sm={12} item>
-                  <Typography gutterBottom variant="h6" component="div">
-                    Address
-                  </Typography>
-                </Grid>
-                <Grid xs={12} sm={4} item>
-                  <TextField
-                    disabled={formik.isSubmitting}
-                    label="Street address"
-                    name="address1"
-                    value={formik.values.address1 || ""}
-                    placeholder="Enter street address"
-                    variant="outlined"
-                    onChange={formik.handleChange}
-                    size="small"
-                    fullWidth
-                  ></TextField>
-                </Grid>
-                <Grid xs={12} sm={4} item>
-                  <TextField
-                    disabled={formik.isSubmitting}
-                    label="Apt, suite, etc (optional)"
-                    name="address2"
-                    value={formik.values.address2 || ""}
-                    placeholder="Enter apt, suite, etc"
-                    variant="outlined"
-                    onChange={formik.handleChange}
-                    size="small"
-                    fullWidth
-                  ></TextField>
-                </Grid>
-                <Grid xs={12} sm={4} item></Grid>
-                <Grid xs={12} sm={4} item>
-                  <TextField
-                    disabled={formik.isSubmitting}
-                    label="City"
-                    name="cityName"
-                    value={formik.values.cityName || ""}
-                    placeholder="Enter state"
-                    variant="outlined"
-                    onChange={formik.handleChange}
-                    size="small"
-                    fullWidth
-                  ></TextField>
-                </Grid>
-                <Grid xs={12} sm={4} item>
-                  {!isLoading && (
-                    <Autocomplete
-                      disabled={formik.isSubmitting}
-                      disablePortal
-                      options={countryList}
-                      getOptionLabel={(option) => option.name}
-                      value={countryList.find((c) => c.code === formik.values.countryCode) || null}
-                      onChange={handleCountryChange}
-                      fullWidth
-                      size="small"
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          label="Country"
-                          value={
-                            countryList.find((c) => c.code === formik.values.countryCode) || null
-                          }
-                          onChange={formik.handleChange}
-                        />
-                      )}
-                    />
-                  )}
-                </Grid>
-                <Grid xs={12} sm={4} item></Grid>
-                <Grid xs={12} sm={2} item>
-                  <TextField
-                    disabled={formik.isSubmitting}
-                    label="State"
-                    name="state"
-                    value={formik.values.state || ""}
-                    placeholder="Enter state"
-                    variant="outlined"
-                    onChange={formik.handleChange}
-                    size="small"
-                    fullWidth
-                  ></TextField>
-                </Grid>
-                <Grid xs={12} sm={2} item>
-                  <TextField
-                    disabled={formik.isSubmitting}
-                    label="Zip code"
-                    name="zip"
-                    value={formik.values.zip || ""}
-                    placeholder="Enter zip"
-                    variant="outlined"
-                    onChange={formik.handleChange}
-                    size="small"
-                    fullWidth
-                  ></TextField>
-                </Grid>
-                <Grid xs={12} sm={2} item>
-                  {!isLoading && (
-                    <Autocomplete
-                      disabled={formik.isSubmitting}
-                      disablePortal
-                      options={continentList}
-                      getOptionLabel={(option) => option.name}
-                      value={
-                        continentList.find((c) => c.code === formik.values.continentCode) || null
-                      }
-                      onChange={handleContinentChange}
-                      fullWidth
-                      size="small"
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          label="Continent code"
-                          value={
-                            continentList.find((c) => c.code === formik.values.continentCode) ||
-                            null
-                          }
-                          onChange={formik.handleChange}
-                        />
-                      )}
-                    />
-                  )}
-                </Grid>
-                <Grid xs={12} sm={4} item>
-                  <Autocomplete
-                    disabled={formik.isSubmitting}
-                    options={timezones}
-                    getOptionLabel={(option) => option.label}
-                    placeholder="Select language"
-                    size="small"
-                    fullWidth
-                    value={timezones.find((c) => c.value === formik.values.timezone) || null}
-                    renderInput={(params) => <TextField {...params} label="Timezone" />}
-                    onChange={handleTimezoneChange}
-                  />
-                </Grid>
+            </Grid>
+            <Divider></Divider>
+            <Grid container spacing={4} marginTop={2} marginBottom={4}>
+              <Grid xs={12} sm={12} item>
+                <Typography gutterBottom variant="h6" component="div">
+                  Job
+                </Typography>
               </Grid>
-              <Divider></Divider>
-              <Grid container spacing={4} marginTop={2} marginBottom={4}>
-                <Grid xs={12} sm={12} item>
-                  <Typography gutterBottom variant="h6" component="div">
-                    Job
-                  </Typography>
-                </Grid>
-                <Grid xs={12} sm={2} item>
-                  <TextField
-                    disabled={formik.isSubmitting}
-                    label="Job title"
-                    name="jobTitle"
-                    value={formik.values.jobTitle || ""}
-                    placeholder="Enter job title"
-                    variant="outlined"
-                    onChange={formik.handleChange}
-                    size="small"
-                    fullWidth
-                  ></TextField>
-                </Grid>
-                <Grid xs={12} sm={2} item>
-                  <TextField
-                    disabled={formik.isSubmitting}
-                    label="Company name"
-                    name="companyName"
-                    value={formik.values.companyName || ""}
-                    placeholder="Enter company name"
-                    variant="outlined"
-                    onChange={formik.handleChange}
-                    size="small"
-                    fullWidth
-                  ></TextField>
-                </Grid>
-                <Grid xs={12} sm={2} item>
-                  <TextField
-                    disabled={formik.isSubmitting}
-                    label="Department"
-                    name="department"
-                    value={formik.values.department || ""}
-                    placeholder="Enter department"
-                    variant="outlined"
-                    onChange={formik.handleChange}
-                    size="small"
-                    fullWidth
-                  ></TextField>
-                </Grid>
+              <Grid xs={12} sm={2} item>
+                <TextField
+                  disabled={isLoading || formik.isSubmitting}
+                  label="Job title"
+                  name="jobTitle"
+                  value={formik.values.jobTitle || ""}
+                  placeholder="Enter job title"
+                  variant="outlined"
+                  onChange={formik.handleChange}
+                  size="small"
+                  fullWidth
+                ></TextField>
               </Grid>
-              <Divider></Divider>
-              <Grid container spacing={4} marginTop={2} marginBottom={4}>
-                <Grid xs={12} sm={12} item>
-                  <Typography gutterBottom variant="h6" component="div">
-                    Social media
-                  </Typography>
-                </Grid>
-                <Grid xs={12} sm={12} item>
-                  <TextField
-                    disabled={formik.isSubmitting}
-                    label="Facebook"
-                    size="small"
-                    value={formik.values.socialMedia?.["facebook"] || ""}
-                    fullWidth
-                    onChange={(event) => handleSocialMediaChange(event, "facebook")}
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <IconButton>
-                            <LinkIcon />
-                          </IconButton>
-                        </InputAdornment>
-                      ),
-                    }}
-                  />
-                </Grid>
-                <Grid xs={12} sm={12} item>
-                  <TextField
-                    disabled={formik.isSubmitting}
-                    label="Instagram"
-                    size="small"
-                    fullWidth
-                    value={formik.values.socialMedia?.["instagram"] || ""}
-                    onChange={(event) => handleSocialMediaChange(event, "instagram")}
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <IconButton>
-                            <LinkIcon />
-                          </IconButton>
-                        </InputAdornment>
-                      ),
-                    }}
-                  />
-                </Grid>
-                <Grid xs={12} sm={12} item>
-                  <TextField
-                    disabled={formik.isSubmitting}
-                    label="Twitter"
-                    size="small"
-                    fullWidth
-                    value={formik.values.socialMedia?.["twitter"] || ""}
-                    onChange={(event) => handleSocialMediaChange(event, "twitter")}
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <IconButton>
-                            <LinkIcon />
-                          </IconButton>
-                        </InputAdornment>
-                      ),
-                    }}
-                  />
-                </Grid>
-                <Grid xs={12} sm={12} item>
-                  <TextField
-                    disabled={formik.isSubmitting}
-                    label="LinkedIn"
-                    size="small"
-                    fullWidth
-                    value={formik.values.socialMedia?.["linkedin"] || ""}
-                    onChange={(event) => handleSocialMediaChange(event, "linkedin")}
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <IconButton>
-                            <LinkIcon />
-                          </IconButton>
-                        </InputAdornment>
-                      ),
-                    }}
-                  />
-                </Grid>
+              <Grid xs={12} sm={2} item>
+                <TextField
+                  disabled={isLoading || formik.isSubmitting}
+                  label="Company name"
+                  name="companyName"
+                  value={formik.values.companyName || ""}
+                  placeholder="Enter company name"
+                  variant="outlined"
+                  onChange={formik.handleChange}
+                  size="small"
+                  fullWidth
+                ></TextField>
               </Grid>
-              <Grid container spacing={4} marginTop={2} marginBottom={4} justifyContent="flex-end">
-                <Grid item xs={1}>
-                  <Button
-                    disabled={formik.isSubmitting}
-                    type="submit"
-                    variant="outlined"
-                    color="primary"
-                    onClick={handleCancel}
-                    fullWidth
-                  >
-                    Cancel
-                  </Button>
-                </Grid>
-                <Grid item xs={1}>
-                  <Button
-                    type="submit"
-                    disabled={formik.isSubmitting}
-                    variant="contained"
-                    color="primary"
-                    fullWidth
-                  >
-                    {isEdit ? "Save" : "Add"}
-                  </Button>
-                </Grid>
+              <Grid xs={12} sm={2} item>
+                <TextField
+                  disabled={isLoading || formik.isSubmitting}
+                  label="Department"
+                  name="department"
+                  value={formik.values.department || ""}
+                  placeholder="Enter department"
+                  variant="outlined"
+                  onChange={formik.handleChange}
+                  size="small"
+                  fullWidth
+                ></TextField>
               </Grid>
-            </CardContent>
-          </CardContainer>
-        </form>
-      )}
+            </Grid>
+            <Divider></Divider>
+            <Grid container spacing={4} marginTop={2} marginBottom={4}>
+              <Grid xs={12} sm={12} item>
+                <Typography gutterBottom variant="h6" component="div">
+                  Social media
+                </Typography>
+              </Grid>
+              <Grid xs={12} sm={12} item>
+                <TextField
+                  disabled={isLoading || formik.isSubmitting}
+                  label="Facebook"
+                  size="small"
+                  value={formik.values.socialMedia?.["facebook"] || ""}
+                  fullWidth
+                  onChange={(event) => handleSocialMediaChange(event, "facebook")}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <IconButton>
+                          <LinkIcon />
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </Grid>
+              <Grid xs={12} sm={12} item>
+                <TextField
+                  disabled={isLoading || formik.isSubmitting}
+                  label="Instagram"
+                  size="small"
+                  fullWidth
+                  value={formik.values.socialMedia?.["instagram"] || ""}
+                  onChange={(event) => handleSocialMediaChange(event, "instagram")}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <IconButton>
+                          <LinkIcon />
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </Grid>
+              <Grid xs={12} sm={12} item>
+                <TextField
+                  disabled={isLoading || formik.isSubmitting}
+                  label="Twitter"
+                  size="small"
+                  fullWidth
+                  value={formik.values.socialMedia?.["twitter"] || ""}
+                  onChange={(event) => handleSocialMediaChange(event, "twitter")}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <IconButton>
+                          <LinkIcon />
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </Grid>
+              <Grid xs={12} sm={12} item>
+                <TextField
+                  disabled={isLoading || formik.isSubmitting}
+                  label="LinkedIn"
+                  size="small"
+                  fullWidth
+                  value={formik.values.socialMedia?.["linkedin"] || ""}
+                  onChange={(event) => handleSocialMediaChange(event, "linkedin")}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <IconButton>
+                          <LinkIcon />
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </Grid>
+            </Grid>
+            <Grid container spacing={4} marginTop={2} marginBottom={4} justifyContent="flex-end">
+              <Grid item xs={1}>
+                <Button
+                  disabled={isLoading || formik.isSubmitting}
+                  type="submit"
+                  variant="outlined"
+                  color="primary"
+                  onClick={handleCancel}
+                  fullWidth
+                >
+                  Cancel
+                </Button>
+              </Grid>
+              <Grid item xs={1}>
+                <Button
+                  type="submit"
+                  disabled={isLoading || formik.isSubmitting}
+                  variant="contained"
+                  color="primary"
+                  fullWidth
+                >
+                  {isEdit ? "Save" : "Add"}
+                </Button>
+              </Grid>
+            </Grid>
+          </CardContent>
+        </CardContainer>
+      </form>
     </ModuleWrapper>
   );
 };

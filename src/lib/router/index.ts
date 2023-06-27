@@ -48,15 +48,11 @@ export const addFormRoute = route("add", {}, {});
 
 export const importFormRoute = route("import", {}, {});
 
-export const contactDetailsRoute = route("details", {}, {});
+export const detailsRoute = route("details", {}, {});
 
 export const contactInvoicesRoute = route("invoices", {}, {});
 
 export const contactLogsRoute = route("logs", {}, {});
-
-export const accountDetailsRoute = route("details", {}, {});
-
-export const orderDetailsRoute = route("details", {}, {});
 
 export const getCoreModuleRoute = (moduleName: CoreModule) => coreModuleRoute({ moduleName }).$;
 

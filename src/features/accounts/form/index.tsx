@@ -6,7 +6,6 @@ import { CoreModule } from "@lib/router";
 import {
   Autocomplete,
   Button,
-  Card,
   CardContent,
   Divider,
   Grid,
@@ -62,8 +61,10 @@ export const AccountForm = ({ account, handleSave, isEdit }: AccountFormProps) =
 
   useEffect(() => {
     setBusy(async () => {
-      const countries = await getCountryList(context);
-      const continents = await getContinentList(context);
+      const [countries, continents] = await Promise.all([
+        getCountryList(context),
+        getContinentList(context),
+      ]);
       if (countries) {
         setCountryList(Object.entries(countries).map(([code, name]) => ({ code, name })));
       } else {
@@ -73,9 +74,6 @@ export const AccountForm = ({ account, handleSave, isEdit }: AccountFormProps) =
         setContinentList(Object.entries(continents).map(([code, name]) => ({ code, name })));
       } else {
         notificationsService.error("Server error: continents list not available.");
-      }
-      if (account.name) {
-        formik.setValues(account);
       }
       setIsLoading(false);
     });
@@ -192,7 +190,7 @@ export const AccountForm = ({ account, handleSave, isEdit }: AccountFormProps) =
               </Grid>
               <Grid xs={12} sm={4} item>
                 <TextField
-                  disabled={formik.isSubmitting}
+                  disabled={isLoading || formik.isSubmitting}
                   label="Name"
                   name="name"
                   value={formik.values.name || ""}
@@ -207,7 +205,7 @@ export const AccountForm = ({ account, handleSave, isEdit }: AccountFormProps) =
               </Grid>
               <Grid xs={12} sm={4} item>
                 <TextField
-                  disabled={formik.isSubmitting}
+                  disabled={isLoading || formik.isSubmitting}
                   label="Site Url"
                   name="siteUrl"
                   value={formik.values.siteUrl || ""}
@@ -220,7 +218,7 @@ export const AccountForm = ({ account, handleSave, isEdit }: AccountFormProps) =
               </Grid>
               <Grid xs={12} sm={4} item>
                 <TextField
-                  disabled={formik.isSubmitting}
+                  disabled={isLoading || formik.isSubmitting}
                   label="Logo Url"
                   name="logoUrl"
                   value={formik.values.logoUrl || ""}
@@ -234,7 +232,7 @@ export const AccountForm = ({ account, handleSave, isEdit }: AccountFormProps) =
               </Grid>
               <Grid xs={12} sm={2} item>
                 <TextField
-                  disabled={formik.isSubmitting}
+                  disabled={isLoading || formik.isSubmitting}
                   label="Employees Range"
                   name="employeesRange"
                   value={formik.values.employeesRange || ""}
@@ -248,7 +246,7 @@ export const AccountForm = ({ account, handleSave, isEdit }: AccountFormProps) =
               <Grid xs={12} sm={2} item>
                 <Tooltip title="Revenue field must contain only numbers">
                   <TextField
-                    disabled={formik.isSubmitting}
+                    disabled={isLoading || formik.isSubmitting}
                     label="Revenue"
                     name="revenue"
                     type="number"
@@ -271,7 +269,7 @@ export const AccountForm = ({ account, handleSave, isEdit }: AccountFormProps) =
               </Grid>
               <Grid xs={12} sm={3} item>
                 <TextField
-                  disabled={formik.isSubmitting}
+                  disabled={isLoading || formik.isSubmitting}
                   label="City"
                   name="city"
                   value={formik.values.cityName}
@@ -284,7 +282,7 @@ export const AccountForm = ({ account, handleSave, isEdit }: AccountFormProps) =
               </Grid>
               <Grid xs={12} sm={3} item>
                 <TextField
-                  disabled={formik.isSubmitting}
+                  disabled={isLoading || formik.isSubmitting}
                   label="State"
                   name="state"
                   value={formik.values.state}
@@ -298,7 +296,7 @@ export const AccountForm = ({ account, handleSave, isEdit }: AccountFormProps) =
               <Grid xs={12} sm={3} item>
                 {!isLoading && (
                   <Autocomplete
-                    disabled={formik.isSubmitting}
+                    disabled={isLoading || formik.isSubmitting}
                     disablePortal
                     options={countryList}
                     getOptionLabel={(option) => option.name}
@@ -322,7 +320,7 @@ export const AccountForm = ({ account, handleSave, isEdit }: AccountFormProps) =
               <Grid xs={12} sm={3} item>
                 {!isLoading && (
                   <Autocomplete
-                    disabled={formik.isSubmitting}
+                    disabled={isLoading || formik.isSubmitting}
                     disablePortal
                     options={continentList}
                     getOptionLabel={(option) => option.name}
@@ -368,7 +366,7 @@ export const AccountForm = ({ account, handleSave, isEdit }: AccountFormProps) =
                         </Grid>
                         <Grid xs={12} sm={6} item>
                           <TextField
-                            disabled={formik.isSubmitting}
+                            disabled={isLoading || formik.isSubmitting}
                             label="Url"
                             value={value}
                             fullWidth
@@ -387,7 +385,7 @@ export const AccountForm = ({ account, handleSave, isEdit }: AccountFormProps) =
                     ))}
                   <Grid xs={12} sm={2} item>
                     <TextField
-                      disabled={formik.isSubmitting}
+                      disabled={isLoading || formik.isSubmitting}
                       label="Name"
                       fullWidth
                       size="small"
@@ -397,7 +395,7 @@ export const AccountForm = ({ account, handleSave, isEdit }: AccountFormProps) =
                   </Grid>
                   <Grid xs={12} sm={6} item>
                     <TextField
-                      disabled={formik.isSubmitting}
+                      disabled={isLoading || formik.isSubmitting}
                       label="Url"
                       fullWidth
                       size="small"
@@ -422,7 +420,7 @@ export const AccountForm = ({ account, handleSave, isEdit }: AccountFormProps) =
               </Grid>
               <Grid xs={12} sm={4} item>
                 <TextField
-                  disabled={formik.isSubmitting}
+                  disabled={isLoading || formik.isSubmitting}
                   label="Tags"
                   name="tags"
                   value={formik.values.tags?.join(",") || ""}
@@ -435,7 +433,7 @@ export const AccountForm = ({ account, handleSave, isEdit }: AccountFormProps) =
               </Grid>
               <Grid xs={12} sm={4} item>
                 <TextField
-                  disabled={formik.isSubmitting}
+                  disabled={isLoading || formik.isSubmitting}
                   label="Source"
                   name="source"
                   value={formik.values.source || ""}
@@ -450,7 +448,7 @@ export const AccountForm = ({ account, handleSave, isEdit }: AccountFormProps) =
             <Grid container spacing={4} marginTop={2} marginBottom={4} justifyContent="flex-end">
               <Grid item xs={1}>
                 <Button
-                  disabled={formik.isSubmitting}
+                  disabled={isLoading || formik.isSubmitting}
                   type="submit"
                   variant="outlined"
                   color="primary"
@@ -463,7 +461,7 @@ export const AccountForm = ({ account, handleSave, isEdit }: AccountFormProps) =
               <Grid item xs={1}>
                 <Button
                   type="submit"
-                  disabled={formik.isSubmitting}
+                  disabled={isLoading || formik.isSubmitting}
                   variant="contained"
                   color="primary"
                   fullWidth
