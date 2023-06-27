@@ -129,7 +129,7 @@ const ItemCard = ({ item, index }: ItemProps) => {
         }}
         variant="outlined"
       >
-        <CardActionArea style={{ marginBottom: 50 }} href={`${location}/view/${item.id}`}>
+        <CardActionArea style={{ marginBottom: 50 }} href={`${location}/${item.id}/view`}>
           <CardMedia
             component="img"
             height="140"
