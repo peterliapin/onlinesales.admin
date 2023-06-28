@@ -1,6 +1,6 @@
 import {
   addFormRoute,
-  contactDetailsRoute,
+  detailsRoute,
   contactInvoicesRoute,
   contactLogsRoute,
   editFormRoute,
@@ -23,7 +23,7 @@ export const ContactsModule = () => {
         <Route path={editFormRoute.template} element={<ContactEdit />} />
         <Route path={viewFormRoute.template} element={<ContactBase />}>
           <Route index element={<ContactView />} />
-          <Route path={contactDetailsRoute.template} element={<ContactView />} />
+          <Route path={detailsRoute.template} element={<ContactView />} />
           <Route path={contactLogsRoute.template} element={<ContactLogs />} />
         </Route>
         <Route path={addFormRoute.template} element={<ContactAdd />} />

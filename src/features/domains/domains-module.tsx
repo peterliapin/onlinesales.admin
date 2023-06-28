@@ -4,6 +4,7 @@ import {
   addFormRoute,
   CoreModule,
   editFormRoute,
+  getCoreModuleRoute,
   getEditFormRoute,
   viewFormRoute,
 } from "lib/router";
@@ -55,14 +56,17 @@ export const DomainsModule = () => {
       const params = useParams();
       return Number(params && params["*"] && params["*"].match(/^(\d+)\/edit$/)?.[1]);
     },
+    onSaved: () => {
+      navigate(getCoreModuleRoute(CoreModule.domains));
+    },
   };
 
   const createFormProps: GenericFormProps<DomainDetailsDto, DomainCreateDto, DomainUpdateDto> = {
     ...formProps,
     mode: "create",
     editable: true,
-    onSaved: (item) => {
-      item.id && navigate(getEditFormRoute(item.id), { state: item });
+    onSaved: () => {
+      navigate(getCoreModuleRoute(CoreModule.domains));
     },
   };
 

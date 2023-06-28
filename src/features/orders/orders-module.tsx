@@ -1,4 +1,4 @@
-import { addFormRoute, editFormRoute, orderDetailsRoute, viewFormRoute } from "lib/router";
+import { addFormRoute, editFormRoute, detailsRoute, viewFormRoute } from "lib/router";
 import { Outlet, Route, Routes } from "react-router-dom";
 import { OrderAdd } from "./add";
 import { OrderEdit } from "./edit";
@@ -14,7 +14,7 @@ export const OrdersModule = () => {
         <Route path={editFormRoute.template} element={<OrderEdit />} />
         <Route path={viewFormRoute.template} element={<OrderViewBase />}>
           <Route index element={<OrderView />} />
-          <Route path={orderDetailsRoute.template} element={<OrderView />} />
+          <Route path={detailsRoute.template} element={<OrderView />} />
         </Route>
         <Route path={addFormRoute.template} element={<OrderAdd />} />
       </Routes>

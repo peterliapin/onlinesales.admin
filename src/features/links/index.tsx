@@ -4,7 +4,7 @@ import {
   GenericModule,
   getSchemaDto,
 } from "@components/generic-components";
-import { CoreModule, getEditFormRoute, getViewFormRoute } from "@lib/router";
+import { CoreModule, getCoreModuleRoute, getEditFormRoute, getViewFormRoute } from "@lib/router";
 import { useNavigate, useParams } from "react-router-dom";
 
 import swaggerJson from "@lib/network/swagger.json";
@@ -81,13 +81,16 @@ export const LinksModule = () => {
         const params = useParams();
         return Number(params && params["*"] && params["*"].match(/^(\d+)\/edit$/)?.[1]);
       },
+      onSaved: () => {
+        navigate(getCoreModuleRoute(CoreModule.links));
+      },
     },
     createFormProps: {
       ...formProps,
       mode: "create",
       editable: true,
-      onSaved: (item) => {
-        item.id && navigate(getEditFormRoute(item.id), { state: item });
+      onSaved: () => {
+        navigate(getCoreModuleRoute(CoreModule.links));
       },
     },
   });
