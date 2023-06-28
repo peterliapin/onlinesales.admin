@@ -91,3 +91,11 @@ export interface CustomFieldSourceDictionary {
 export interface CustomFieldSourceDictionaries {
   [x: string]: CustomFieldSourceDictionary | undefined;
 }
+
+export type JsonArray = {
+  [key: string]: any;
+};
+
+export const isJsonArray = (item: any): item is JsonArray => {
+  return typeof item === "object" && item !== null;
+};

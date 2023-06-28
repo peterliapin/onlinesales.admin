@@ -8,7 +8,7 @@ import {
 } from "@components/generic-components/common";
 import { useEffect, useState } from "react";
 import { useModuleWrapperContext } from "@providers/module-wrapper-provider";
-import { Button, Card, CardContent, Grid } from "@mui/material";
+import { Button, Card, CardContent, Grid, Tab, Tabs, Typography } from "@mui/material";
 import {
   NumberEdit,
   TextEdit,
@@ -21,8 +21,12 @@ import {
 import { validate } from "@components/generic-components/edit-components/validator";
 import { ArrayEdit } from "./edit-components/array-edit";
 import { DataManagementBlock } from "@components/data-management";
-import { GenericViewDeleteContainer } from "./index.styled";
+import { GenericViewDeleteContainer, StyledDivider } from "./index.styled";
 import { useCoreModuleNavigation } from "@hooks";
+import { TextView } from "./view-components/text-view";
+import { BoolView } from "./view-components/bool-view";
+import { DateTimeView } from "./view-components/datetime-view";
+import { ArrayView } from "./view-components/array-view";
 
 export interface DtoField {
   editable: boolean;
@@ -92,7 +96,6 @@ export function GenericForm<TView extends BasicTypeForGeneric, TCreate, TUpdate>
   const { setBusy, isBusy, setSaving, isSaving } = useModuleWrapperContext();
   const handleCoreNavigation = useCoreModuleNavigation();
   const [validationResult, setValidationResult] = useState<ValidationResult>();
-
   const itemId = getItemId();
 
   const updateFields: DtoField[] = Object.keys(updateSchema.properties).map((key) => {
@@ -342,20 +345,60 @@ export function GenericForm<TView extends BasicTypeForGeneric, TCreate, TUpdate>
     }
   };
 
+  const getView = (field: DtoField) => {
+    const commonProps = {
+      key: field.name,
+      label: field.label,
+      value: values[field.name],
+    };
+
+    switch (field.type) {
+      case "boolean":
+        return BoolView({ ...commonProps });
+      case "string":
+        if (field.format === "date-time") {
+          return DateTimeView({ ...commonProps });
+        } else {
+          return TextView({ ...commonProps });
+        }
+      case "array":
+        return ArrayView({ ...commonProps });
+      default:
+        return TextView({ ...commonProps });
+    }
+  };
+
   return (
     <>
+      {!editable && (
+        <>
+          <Tabs value="view">
+            <Tab label="Overview" value="view" />
+          </Tabs>
+          <StyledDivider></StyledDivider>
+        </>
+      )}
       <Card>
         <CardContent>
-          <Grid container spacing={3}>
+          <Grid container spacing={4} marginBottom={4}>
+            <Grid xs={12} sm={12} item>
+              <Typography variant="h6">Details</Typography>
+            </Grid>
             {fieldsSet()
               .filter((field) => !field.hide)
-              .map((field) => (
-                <Grid key={field.name} item xs={6} sm={6}>
-                  {getEdit(field)}
-                </Grid>
-              ))}
+              .map((field) =>
+                editable ? (
+                  <Grid key={field.name} item xs={4} sm={4}>
+                    {getEdit(field)}
+                  </Grid>
+                ) : (
+                  <Grid key={field.name} item xs={3} sm={3}>
+                    {getView(field)}
+                  </Grid>
+                )
+              )}
           </Grid>
-          <Grid container spacing={3} marginTop={4} justifyContent="flex-end">
+          <Grid container spacing={4} justifyContent="flex-end">
             <Grid item xs={12} sm={1}>
               {editable && (
                 <Button
@@ -364,7 +407,7 @@ export function GenericForm<TView extends BasicTypeForGeneric, TCreate, TUpdate>
                   variant="outlined"
                   fullWidth
                   onClick={cancel}
-                  size="large"
+                  size="small"
                 >
                   Cancel
                 </Button>
@@ -378,7 +421,7 @@ export function GenericForm<TView extends BasicTypeForGeneric, TCreate, TUpdate>
                   variant="contained"
                   fullWidth
                   onClick={save}
-                  size="large"
+                  size="small"
                 >
                   Save
                 </Button>
@@ -388,16 +431,20 @@ export function GenericForm<TView extends BasicTypeForGeneric, TCreate, TUpdate>
         </CardContent>
       </Card>
       {!editable && deleteOptionProps && (
-        <GenericViewDeleteContainer>
-          <DataManagementBlock
-            header={deleteOptionProps!.header}
-            description={deleteOptionProps!.description}
-            entity={deleteOptionProps!.entity}
-            handleDeleteAsync={(id) => deleteOptionProps!.deleteItemFn(id as number)}
-            itemId={itemId!}
-            successNavigationRoute={deleteOptionProps!.listRoute}
-          ></DataManagementBlock>
-        </GenericViewDeleteContainer>
+        <Grid container spacing={3}>
+          <Grid item xs={8} sm={8}>
+            <GenericViewDeleteContainer>
+              <DataManagementBlock
+                header={deleteOptionProps!.header}
+                description={deleteOptionProps!.description}
+                entity={deleteOptionProps!.entity}
+                handleDeleteAsync={(id) => deleteOptionProps!.deleteItemFn(id as number)}
+                itemId={itemId!}
+                successNavigationRoute={deleteOptionProps!.listRoute}
+              ></DataManagementBlock>
+            </GenericViewDeleteContainer>
+          </Grid>
+        </Grid>
       )}
     </>
   );

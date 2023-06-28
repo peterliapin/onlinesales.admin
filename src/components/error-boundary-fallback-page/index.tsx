@@ -1,6 +1,6 @@
 import { FallbackProps } from "react-error-boundary";
 
-export function ErrorBoundaryFallbackPage ({error, resetErrorBoundary} : FallbackProps) {
+export function ErrorBoundaryFallbackPage({ error, resetErrorBoundary }: FallbackProps) {
   return (
     <div>
       <span>Something went wrong</span>
@@ -8,4 +8,4 @@ export function ErrorBoundaryFallbackPage ({error, resetErrorBoundary} : Fallbac
       {`${error}`}
     </div>
   );
-};
+}

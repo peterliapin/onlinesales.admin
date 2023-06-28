@@ -24,10 +24,7 @@ export const ModuleLoader = () => {
 
   return (
     <ModuleWrapperProvider>
-      <ErrorBoundary
-        FallbackComponent={ErrorBoundaryFallbackPage}
-        resetKeys={[moduleName]}
-      >
+      <ErrorBoundary FallbackComponent={ErrorBoundaryFallbackPage} resetKeys={[moduleName]}>
         <Suspense fallback="Loading...">
           {moduleName === CoreModule.blog && <BlogModule />}
           {moduleName === CoreModule.contacts && <ContactsModule />}

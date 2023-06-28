@@ -315,31 +315,32 @@ export const EmailTemplateEdit = ({ readonly }: EmailTemplateEditProps) => {
                     }}
                   />
                 </Grid>
-                <Grid container item spacing={3}>
-                  <Grid item xs={6}>
-                    <Button
-                      disabled={formik.isSubmitting}
-                      variant="contained"
-                      color="primary"
-                      onClick={() => handleNavigation(CoreModule.emailTemplates)}
-                      fullWidth
-                      size="large"
-                    >
-                    Cancel
-                    </Button>
+                {!readonly && (
+                  <Grid container item spacing={3} justifyContent="flex-end">
+                    <Grid item xs={2}>
+                      <Button
+                        disabled={formik.isSubmitting}
+                        variant="outlined"
+                        color="primary"
+                        onClick={() => handleNavigation(CoreModule.emailTemplates)}
+                        fullWidth
+                        size="large"
+                      >
+                        Cancel
+                      </Button>
+                    </Grid>
+                    <Grid item xs={2}>
+                      <Button
+                        type="submit"
+                        variant="contained"
+                        fullWidth
+                        size="large"
+                      >
+                        Save
+                      </Button>
+                    </Grid>
                   </Grid>
-                  <Grid item xs={6}>
-                    <Button
-                      disabled={readonly}
-                      type="submit"
-                      variant="contained"
-                      fullWidth
-                      size="large"
-                    >
-                      Save
-                    </Button>
-                  </Grid>
-                </Grid>
+                )}
               </Grid>
             </form>
           </CardContent>

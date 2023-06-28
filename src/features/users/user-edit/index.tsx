@@ -56,7 +56,7 @@ const TabPanel = (props: TabPanelProps) => {
   );
 };
 
-export const UserEdit = ({ readonly } : UserEditProps) => {
+export const UserEdit = ({ readonly }: UserEditProps) => {
   const { setSaving, setBusy } = useModuleWrapperContext();
 
   const { notificationsService } = useNotificationsService();
@@ -171,10 +171,12 @@ export const UserEdit = ({ readonly } : UserEditProps) => {
                           width: 96,
                           height: 96,
                         }}
-                        badgeContent={ !readonly ? (
-                          <StyledAvatar onClick={handleImageUpload}>
-                            <AddAPhotoIcon/>
-                          </StyledAvatar> ) : undefined
+                        badgeContent={
+                          !readonly ? (
+                            <StyledAvatar onClick={handleImageUpload}>
+                              <AddAPhotoIcon />
+                            </StyledAvatar>
+                          ) : undefined
                         }
                       >
                         <Avatar
@@ -238,54 +240,51 @@ export const UserEdit = ({ readonly } : UserEditProps) => {
                     </Grid>
                   )}
                 </Grid>
-                <Grid 
-                  container 
-                  item 
-                  spacing={3}
-                  sx={{
-                    marginTop: "1rem",
-                  }}
-                >
-                  <Grid item xs={6}>
-                    <Button
-                      disabled={formik.isSubmitting}
-                      variant="contained"
-                      color="primary"
-                      onClick={() => handleNavigation(CoreModule.users)}
-                      fullWidth
-                      size="large"
-                    >
-                    Cancel
-                    </Button>
-                  </Grid>
-                  <Grid item xs={6}>
-                    <Button
-                      disabled={readonly}
-                      type="submit"
-                      variant="contained"
-                      fullWidth
-                      size="large"
-                    >
-                      Save
-                    </Button>
-                  </Grid>
-                  {id && readonly && (
-                    <Grid item xs={12}>
-                      <DataManagementBlock
-                        header="Data Management"
-                        description="Please be aware that what
-                        has been deleted can never be brought back."
-                        entity="user"
-                        handleDeleteAsync={(id) => client.api.usersDelete(id as string)}
-                        itemId={id}
-                        successNavigationRoute={CoreModule.users}
-                      ></DataManagementBlock>
+                {!readonly && (
+                  <Grid
+                    container
+                    item
+                    spacing={3}
+                    sx={{
+                      marginTop: "1rem",
+                    }}
+                  >
+                    <Grid item xs={1}>
+                      <Button
+                        disabled={formik.isSubmitting}
+                        variant="outlined"
+                        color="primary"
+                        onClick={() => handleNavigation(CoreModule.users)}
+                        fullWidth
+                      >
+                        Cancel
+                      </Button>
                     </Grid>
-                  )}
-                </Grid>
+                    <Grid item xs={1}>
+                      <Button type="submit" variant="contained" fullWidth>
+                        Save
+                      </Button>
+                    </Grid>
+                  </Grid>
+                )}
               </TabPanel>
             </CardContent>
           </Card>
+          {id && readonly && (
+            <Grid container spacing={3} marginTop={1}>
+              <Grid item xs={8} sm={8}>
+                <DataManagementBlock
+                  header="Data Management"
+                  description="Please be aware that what
+                        has been deleted can never be brought back."
+                  entity="user"
+                  handleDeleteAsync={(id) => client.api.usersDelete(id as string)}
+                  itemId={id}
+                  successNavigationRoute={CoreModule.users}
+                ></DataManagementBlock>
+              </Grid>
+            </Grid>
+          )}
         </form>
       </UserEditContainer>
     </ModuleWrapper>

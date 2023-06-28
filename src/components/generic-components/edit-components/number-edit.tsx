@@ -32,6 +32,7 @@ export const NumberEdit = ({
       }}
       variant={"outlined"}
       fullWidth={true}
+      size={"small"}
     />
   );
 };

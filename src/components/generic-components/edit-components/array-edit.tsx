@@ -30,7 +30,10 @@ export const ArrayEdit = ({
 }: EditProps<any>): ReactNode => {
   const [open, setOpen] = useState(false);
 
-  if (!value) return <TextField key={key} label={label} value={"N/A"} disabled={true} />;
+  if (!value)
+    return (
+      <TextField key={key} label={label} value={"N/A"} disabled={true} size={"small"} fullWidth />
+    );
 
   if (!isJsonArray(value)) {
     const arrayString = value.join(",");
@@ -47,6 +50,7 @@ export const ArrayEdit = ({
         value={arrayString}
         variant={"outlined"}
         fullWidth={true}
+        size={"small"}
       />
     );
   }
@@ -77,6 +81,7 @@ export const ArrayEdit = ({
         onClick={handleOpen}
         variant={"outlined"}
         fullWidth={true}
+        size={"small"}
       />
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>{label}</DialogTitle>
