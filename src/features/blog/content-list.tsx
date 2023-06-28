@@ -20,6 +20,9 @@ import { ModuleWrapper } from "@components/module-wrapper";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { totalCountHeaderName } from "@providers/query-provider";
 import { buildAbsoluteUrl } from "@lib/network/utils";
+import { useNavigate } from "react-router-dom";
+import { useRouteParams } from "typesafe-routes";
+import { coreModuleRoute } from "@lib/router";
 
 export const ContentList = () => {
   const { setBusy } = useModuleWrapperContext();
@@ -117,6 +120,16 @@ interface ItemProps {
 }
 
 const ItemCard = ({ item, index }: ItemProps) => {
+  const navigate = useNavigate();
+
+  const onClickView = () => {
+    navigate(`${item.id}/view`);
+  };
+
+  const onClickEdit = () => {
+    navigate(`${item.id}/edit`);
+  };
+
   if (!item || !item.id) {
     return <DummyDiv />;
   }
@@ -129,7 +142,7 @@ const ItemCard = ({ item, index }: ItemProps) => {
         }}
         variant="outlined"
       >
-        <CardActionArea style={{ marginBottom: 50 }} href={`${location}/view/${item.id}`}>
+        <CardActionArea style={{ marginBottom: 50 }} onClick={onClickEdit}>
           <CardMedia
             component="img"
             height="140"
@@ -148,10 +161,10 @@ const ItemCard = ({ item, index }: ItemProps) => {
         <CardActions style={{ position: "absolute", bottom: 0, width: "100%" }}>
           <Grid container spacing={1}>
             <Grid item xs={6}>
-              <Button size="small" color="primary" href={`${location}/${item.id}/view`}>
+              <Button size="small" color="primary" onClick={onClickView}>
                 View
               </Button>
-              <Button size="small" color="primary" href={`${location}/${item.id}/edit`}>
+              <Button size="small" color="primary" onClick={onClickEdit}>
                 Edit
               </Button>
             </Grid>
