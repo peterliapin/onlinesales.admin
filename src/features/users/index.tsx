@@ -7,7 +7,7 @@ export const UserModule = () => {
     <Routes>
       <Route path={"/"} element={<UserList />} />
       <Route path={"/:id/edit"} element={<UserEdit />} />
-      <Route path={"/:id/view"} element={<UserEdit readonly/>} />
+      <Route path={"/:id/view"} element={<UserEdit readonly />} />
       <Route path={"/add"} element={<UserEdit />} />
     </Routes>
   );

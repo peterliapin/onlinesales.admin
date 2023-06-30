@@ -142,13 +142,19 @@ export const DataManagementBlock = ({
               variant="contained"
               color="error"
               onClick={handleDelete}
+              size="small"
             >
               {`Delete ${entity}`}
             </Button>
           </DeleteButtonContainer>
           {showEditButton && (
             <DeleteButtonContainer>
-              <Button startIcon={<EditIcon />} variant="contained" onClick={editRecord}>
+              <Button
+                startIcon={<EditIcon />}
+                size="small"
+                variant="contained"
+                onClick={editRecord}
+              >
                 {`Edit ${entity}`}
               </Button>
             </DeleteButtonContainer>

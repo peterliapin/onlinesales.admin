@@ -36,6 +36,7 @@ export const TextEdit = ({
       }}
       variant={"outlined"}
       fullWidth={true}
+      size={"small"}
     />
   );
 };

@@ -1,6 +1,6 @@
 import { ModuleWrapper } from "@components/module-wrapper";
 import { AccountDetailsDto } from "@lib/network/swagger-client";
-import { ListItem, ListItemAvatar, Tab, Tabs } from "@mui/material";
+import { Divider, ListItem, ListItemAvatar, Tab, Tabs } from "@mui/material";
 import { useState } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { accountFormBreadcrumbLinks } from "../constants";
@@ -39,6 +39,7 @@ export const AccountViewBase = () => {
       <Tabs value={tabValue} onChange={handleChange}>
         <Tab value="details" label="Overview" />
       </Tabs>
+      <Divider></Divider>
       <Outlet />
     </ModuleWrapper>
   );

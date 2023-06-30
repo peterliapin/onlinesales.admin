@@ -19,6 +19,7 @@ export const EnumEdit = ({
       title={example}
       freeSolo
       autoSelect
+      size={"small"}
       disabled={disabled}
       value={value}
       onChange={(ev, val) => {

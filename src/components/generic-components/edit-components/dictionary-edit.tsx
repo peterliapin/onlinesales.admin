@@ -20,6 +20,7 @@ export const DictionaryEdit = ({
       title={example}
       freeSolo
       autoSelect
+      size={"small"}
       disabled={disabled}
       options={valueOptions || []}
       getOptionLabel={(option: DictItem | string) => {

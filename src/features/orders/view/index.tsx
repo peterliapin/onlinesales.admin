@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Tab, Tabs } from "@mui/material";
+import { Divider, Tab, Tabs } from "@mui/material";
 
 import { orderFormBreadcrumbLinks } from "../constants";
 import { ModuleWrapper } from "@components/module-wrapper";
@@ -21,6 +21,7 @@ export const OrderViewBase = () => {
         <Tab value="details" label="Overview" />
       </Tabs>
       <Outlet />
+      <Divider></Divider>
     </ModuleWrapper>
   );
 };
