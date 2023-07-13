@@ -23,6 +23,7 @@ PojosMetadataMap.create<ContentDetailsDto>("ContentDetailsDto", {
   id: Number,
   createdAt: String,
   updatedAt: String,
+  publishedAt: String,
 });
 
 PojosMetadataMap.create<ContentDetails>("ContentDetails", {
@@ -32,6 +33,7 @@ PojosMetadataMap.create<ContentDetails>("ContentDetails", {
   allowComments: Boolean,
   createdAt: String,
   updatedAt: String,
+  publishedAt: String,
   description: String,
   body: String,
   coverImageUrl: String,
@@ -56,6 +58,7 @@ PojosMetadataMap.create<ContentUpdateDto>("ContentUpdateDto", {
   category: String,
   tags: [String],
   allowComments: Boolean,
+  publishedAt: String,
 });
 PojosMetadataMap.create<ContentCreateDto>("ContentCreateDto", {
   title: String,
@@ -70,6 +73,7 @@ PojosMetadataMap.create<ContentCreateDto>("ContentCreateDto", {
   category: String,
   tags: [String],
   allowComments: Boolean,
+  publishedAt: String,
 });
 
 createMap<ContentDetailsDto, ContentDetails>(

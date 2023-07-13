@@ -1,3 +1,4 @@
+import dayjs from "dayjs";
 import zod from "zod";
 import { TypeDefaultValues } from "./types";
 
@@ -25,6 +26,7 @@ export const ContentEditDefaultValues: TypeDefaultValues[] = [
       category: "",
       createdAt: "",
       updatedAt: "",
+      publishedAt: dayjs().toISOString(),
       files: null,
     },
   },
@@ -47,6 +49,7 @@ export const ContentEditDefaultValues: TypeDefaultValues[] = [
       category: "",
       createdAt: "",
       updatedAt: "",
+      publishedAt: dayjs().toISOString(),
       files: null,
     },
   },

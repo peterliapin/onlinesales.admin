@@ -3342,6 +3342,13 @@ export interface ContentCreateDto {
    * @example "string"
    */
   source?: string | null;
+  /**
+   * Published At
+   * @format date-time
+   * @pattern ^(\d{4})-(1[0-2]|0[1-9])-(3[01]|[12][0-9]|0[1-9])T(2[0-4]|1[0-9]|0[1-9]):(2[0-4]|1[0-9]|0[1-9]):([1-5]?0[0-9]).(\d{7})Z$
+   * @example "2023-04-18T12:00:00.0000000Z"
+   */
+  publishedAt?: string | null;
 }
 
 export interface ContentDetailsDto {
@@ -3417,6 +3424,13 @@ export interface ContentDetailsDto {
    * @example "string"
    */
   source?: string | null;
+  /**
+   * Published At
+   * @format date-time
+   * @pattern ^(\d{4})-(1[0-2]|0[1-9])-(3[01]|[12][0-9]|0[1-9])T(2[0-4]|1[0-9]|0[1-9]):(2[0-4]|1[0-9]|0[1-9]):([1-5]?0[0-9]).(\d{7})Z$
+   * @example "2023-04-18T12:00:00.0000000Z"
+   */
+  publishedAt?: string | null;
   /**
    * Id
    * @format int32
@@ -3547,6 +3561,13 @@ export interface ContentImportDto {
    * @example true
    */
   allowComments?: boolean | null;
+  /**
+   * Published At
+   * @format date-time
+   * @pattern ^(\d{4})-(1[0-2]|0[1-9])-(3[01]|[12][0-9]|0[1-9])T(2[0-4]|1[0-9]|0[1-9]):(2[0-4]|1[0-9]|0[1-9]):([1-5]?0[0-9]).(\d{7})Z$
+   * @example "2023-04-18T12:00:00.0000000Z"
+   */
+  publishedAt?: string | null;
 }
 
 export interface ContentUpdateDto {
@@ -3621,6 +3642,13 @@ export interface ContentUpdateDto {
    * @example "string"
    */
   source?: string | null;
+  /**
+   * Published At
+   * @format date-time
+   * @pattern ^(\d{4})-(1[0-2]|0[1-9])-(3[01]|[12][0-9]|0[1-9])T(2[0-4]|1[0-9]|0[1-9]):(2[0-4]|1[0-9]|0[1-9]):([1-5]?0[0-9]).(\d{7})Z$
+   * @example "2023-04-18T12:00:00.0000000Z"
+   */
+  publishedAt?: string | null;
 }
 
 export interface DealCreateDto {
@@ -4436,6 +4464,14 @@ export interface EmailTemplateUpdateDto {
    * @example 1
    */
   emailGroupId?: number | null;
+}
+
+export interface FileDetailsDto {
+  /**
+   * Location
+   * @example "string"
+   */
+  location?: string;
 }
 
 export interface ImapAccountCreateDto {
@@ -5748,7 +5784,7 @@ export class HttpClient<SecurityDataType = unknown> {
 
 /**
  * @title OnlineSales API
- * @version 1.2.8.0
+ * @version 1.2.9.0
  */
 export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
   api = {
@@ -7250,6 +7286,48 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
+     * @tags Files
+     * @name FilesCreate
+     * @request POST:/api/files
+     * @secure
+     */
+    filesCreate: (
+      data: {
+        /** @format binary */
+        File: File;
+        ScopeUid: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<FileDetailsDto, void | ProblemDetails>({
+        path: `/api/files`,
+        method: "POST",
+        body: data,
+        secure: true,
+        type: ContentType.FormData,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Files
+     * @name FilesDetail
+     * @request GET:/api/files/{pathToFile}
+     * @secure
+     */
+    filesDetail: (pathToFile: string, params: RequestParams = {}) =>
+      this.request<void, ProblemDetails>({
+        path: `/api/files/${pathToFile}`,
+        method: "GET",
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
      * @tags Identity
      * @name IdentityExternalLoginList
      * @request GET:/api/identity/external-login
@@ -7601,12 +7679,12 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      *
      * @tags Media
      * @name MediaDetail
-     * @request GET:/api/media/{scopeUid}/{fileName}
+     * @request GET:/api/media/{pathToFile}
      * @secure
      */
-    mediaDetail: (scopeUid: string, fileName: string, params: RequestParams = {}) =>
+    mediaDetail: (pathToFile: string, params: RequestParams = {}) =>
       this.request<void, ProblemDetails>({
-        path: `/api/media/${scopeUid}/${fileName}`,
+        path: `/api/media/${pathToFile}`,
         method: "GET",
         secure: true,
         ...params,
