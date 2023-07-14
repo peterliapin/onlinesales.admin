@@ -17,6 +17,7 @@ export interface ContentDetails {
   category: string;
   createdAt: string | null;
   updatedAt: string | null;
+  publishedAt: string | null;
   files: File[] | null;
 }
 

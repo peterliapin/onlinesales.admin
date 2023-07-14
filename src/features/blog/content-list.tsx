@@ -170,7 +170,7 @@ const ItemCard = ({ item, index }: ItemProps) => {
             </Grid>
             <Grid item xs={6} style={{ display: "flex", justifyContent: "flex-end" }}>
               <TimestampContainer>
-                {item.createdAt && new Date(item.createdAt).toLocaleDateString()}
+                {item.publishedAt && new Date(item.publishedAt).toLocaleDateString()}
               </TimestampContainer>
             </Grid>
           </Grid>

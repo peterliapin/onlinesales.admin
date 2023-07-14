@@ -11,16 +11,13 @@ import { useRequestContext } from "@providers/request-provider";
 import { ContentEditContainer } from "../index.styled";
 import {
   Autocomplete,
-  Box,
   Button,
   Card,
   CardContent,
   Checkbox,
-  CircularProgress,
   FormControlLabel,
   Grid,
   TextField,
-  Typography,
 } from "@mui/material";
 import { useFormik, FormikHelpers } from "formik";
 import {
@@ -53,13 +50,12 @@ import { ModuleWrapper } from "@components/module-wrapper";
 import { RemoteAutocomplete } from "@components/remote-autocomplete";
 import { RemoteValues } from "@components/remote-autocomplete/types";
 import { SavingBar } from "@components/saving-bar";
-import { ErrorDetailsModal } from "@components/error-details";
-import { set } from "lodash";
-import { networkErrorToStringArray } from "utils/general-helper";
 import { useErrorDetailsModal } from "@providers/error-details-modal-provider";
 import { LanguageAutocomplete } from "@components/language-autocomplete";
 import { execSubmitWithToast } from "utils/formik-helper";
 import { CoreModule } from "@lib/router";
+import { DatePicker } from "@mui/x-date-pickers";
+import dayjs, { Dayjs } from "dayjs";
 
 interface ContentEditProps {
   readonly?: boolean;
@@ -225,6 +221,13 @@ export const ContentEdit = (props: ContentEditProps) => {
       formik.setFieldValue("type", value);
     }
     setWasModified(true);
+  };
+
+  const handleDateChange = (field: string, newValue: Dayjs | null) => {
+    if (newValue && newValue.isValid()) {
+      setWasModified(true);
+      formik.setFieldValue(field, newValue.toISOString());
+    }
   };
 
   const onCoverImageChange = (url: ImageData) => {
@@ -426,7 +429,7 @@ export const ContentEdit = (props: ContentEditProps) => {
                     fullWidth
                   />
                 </Grid>
-                <Grid xs={6} sm={6} item>
+                <Grid xs={3} sm={3} item>
                   <LanguageAutocomplete
                     value={formik.values.language}
                     onChange={(val) => autoCompleteValueUpdate<string | null>("language", val)}
@@ -442,6 +445,17 @@ export const ContentEdit = (props: ContentEditProps) => {
                         fullWidth
                       />
                     )}
+                  />
+                </Grid>
+                <Grid xs={3} sm={3} item>
+                  <DatePicker
+                    label="Published At"
+                    disabled={props.readonly}
+                    value={
+                      (formik.values.publishedAt && dayjs(formik.values.publishedAt)) || dayjs()
+                    }
+                    onChange={(newValue) => handleDateChange("publishedAt", newValue)}
+                    slotProps={{ textField: { fullWidth: true } }}
                   />
                 </Grid>
                 <Grid xs={6} sm={6} item>
