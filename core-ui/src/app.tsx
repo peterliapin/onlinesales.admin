@@ -3,7 +3,7 @@ import { ThemeProvider } from "providers/theme-provider";
 import { AppHeader } from "components/app-header";
 import { Sidebar } from "@components/side-bar";
 import { AppLayoutContainer, MainContentContainer } from "components/layout";
-import { coreModuleRoute, rootRoute } from "@lib/router";
+import { coreModuleRoute, pluginRoute, rootRoute } from "@lib/router";
 import { ModuleLoader } from "@features/module-loader";
 import { RequestProvider } from "@providers/request-provider";
 import { AuthProvider } from "@providers/auth-provider";
@@ -13,6 +13,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { UserProvider } from "@providers/user-provider";
 import { ErrorDetailsModalProvider } from "@providers/error-details-modal-provider";
 import "react-toastify/dist/ReactToastify.css";
+import { PluginLoader } from "@features/plugin-loader/PluginLoader";
 
 export const App = () => {
   return (
@@ -39,6 +40,7 @@ export const App = () => {
                     >
                       <Route path={rootRoute} element={<ModuleLoader />} />
                       <Route path={`${coreModuleRoute.template}/*`} element={<ModuleLoader />} />
+                      <Route path={`${pluginRoute.template}/*`} element={<PluginLoader />} />
                     </Route>
                   </Routes>
                 </BrowserRouter>

@@ -256,11 +256,12 @@ export const ContactForm = ({ contact, handleSave, isEdit }: ContactFormProps) =
                   disabled={isLoading || formik.isSubmitting}
                   options={languages}
                   getOptionLabel={(option) => option.label}
-                  placeholder="Select language"
                   size="small"
                   fullWidth
                   value={languages.find((c) => c.value === formik.values.language) || null}
-                  renderInput={(params) => <TextField {...params} label="Language" />}
+                  renderInput={(params) => (
+                    <TextField {...params} placeholder="Select language" label="Language" />
+                  )}
                   onChange={handleLanguageChange}
                 />
               </Grid>
@@ -443,11 +444,12 @@ export const ContactForm = ({ contact, handleSave, isEdit }: ContactFormProps) =
                   disabled={isLoading || formik.isSubmitting}
                   options={timezones}
                   getOptionLabel={(option) => option.label}
-                  placeholder="Select language"
                   size="small"
                   fullWidth
                   value={timezones.find((c) => c.value === formik.values.timezone) || null}
-                  renderInput={(params) => <TextField {...params} label="Timezone" />}
+                  renderInput={(params) => (
+                    <TextField {...params} placeholder="Select language" label="Timezone" />
+                  )}
                   onChange={handleTimezoneChange}
                 />
               </Grid>

@@ -1,7 +1,7 @@
 import { generateApi } from "swagger-typescript-api";
 import path from "path";
 import dotenv from "dotenv";
-import fs from 'fs';
+import fs from "fs";
 
 dotenv.config();
 
@@ -21,8 +21,8 @@ generateApi({
       console.error(err);
       return;
     }
-    console.log('Swagger JSON file has been saved!');
+    console.log("Swagger JSON file has been saved!");
   });
 }).catch((err) => {
-  console.error('Error generating API:', err);
+  console.error("Error generating API:", err);
 });

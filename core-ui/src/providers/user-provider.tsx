@@ -19,7 +19,8 @@ export const UserProvider = memo(function UserProvider({ children }: PropsWithCh
 
   const infoRetrieve = async () => {
     const resp = await requestContext.client.api.usersMeList();
-    if (resp.error) {
+
+    if (!resp || resp.error) {
       notificationsService.error("Unable to retrieve user info data");
       setCurrentUser(null);
       return;

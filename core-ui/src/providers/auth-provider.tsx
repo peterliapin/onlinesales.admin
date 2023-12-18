@@ -15,6 +15,8 @@ const msalConfig: Configuration = {
   },
 };
 
+console.log("MSAL CONFIG: ", msalConfig);
+
 const msalInstance = new PublicClientApplication(msalConfig);
 
 export const Loading = () => {

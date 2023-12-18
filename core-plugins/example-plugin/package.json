@@ -1,0 +1,38 @@
+{
+  "name": "onlinesales.example-plugin",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Example plugin project for Admin UI for OnlineSales (lightweight, extendable headless CMS for product websites)",
+  "keywords": [
+    "onlinesales",
+    "plugins"
+  ],
+  "scripts": {
+    "start": "cross-env TS_NODE_PROJECT=\"../webpack/tsconfig.json\" webpack serve --config=\"./webpack.config.ts\"  --mode=development",
+    "build": "cross-env TS_NODE_PROJECT=\"../webpack/tsconfig.json\" webpack --config=\"./webpack.config.ts\" --mode=production"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/dotenv-webpack": "^7.0.3",
+    "@types/node": "^18.11.18",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.0.10",
+    "clean-webpack-plugin": "^4.0.0",
+    "cross-env": "^7.0.3",
+    "css-loader": "^6.7.3",
+    "dotenv": "^16.0.3",
+    "dotenv-webpack": "^8.0.1",
+    "style-loader": "^3.3.1",
+    "ts-loader": "^9.4.2",
+    "ts-node": "^10.9.1",
+    "tsconfig-paths": "^4.1.2",
+    "tsconfig-paths-webpack-plugin": "^4.0.0",
+    "typescript": "^4.9.4",
+    "webpack": "^5.75.0",
+    "webpack-cli": "^5.0.1",
+    "webpack-dev-server": "^4.11.1"
+  }
+}

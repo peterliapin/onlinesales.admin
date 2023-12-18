@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "target": "ES5",
+    "module": "CommonJS",
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
+    "types": [
+      "node",
+    ],
+  },
+  "include": [
+    "../**/webpack.config.ts",
+    "webpack.config.ts"
+  ]
+}

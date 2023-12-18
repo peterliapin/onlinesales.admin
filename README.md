@@ -9,7 +9,7 @@ This project is currently in active development
 ## Requirements
 
 - node >= 18.13.0
-- npm >= 9.3.0
+- npm >= 8
 
 This project uses `.nvmrc` config. You can run `nvm use` to install required version of node
 

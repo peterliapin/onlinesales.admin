@@ -12,14 +12,24 @@ import {
   Email,
   Book,
 } from "@mui/icons-material";
-import { CoreModule, coreModuleRoute, getCoreModuleRoute } from "lib/router";
+import {
+  CoreModule,
+  coreModuleRoute,
+  getCoreModuleRoute,
+  getPluginRoute,
+  pluginRoute,
+} from "@lib/router";
 import { SidebarLinkButton } from "./sidebar-link-button";
 import { ListSubheaderStyled, SidebarStyled } from "./index.styled";
 import { useRouteParams } from "typesafe-routes";
 import { Newspaper } from "@mui/icons-material";
+import { useAvailablePlugins } from "@lib/plugins/useAvailablePlugins";
 
 export const Sidebar = () => {
   const { moduleName } = useRouteParams(coreModuleRoute);
+  const { pluginName: urlPluginName } = useRouteParams(pluginRoute);
+
+  const { plugins } = useAvailablePlugins();
 
   return (
     <SidebarStyled>
@@ -127,6 +137,20 @@ export const Sidebar = () => {
           />
         </ListItem>
       </List>
+      {plugins.length > 0 && (
+        <List component="nav" subheader={<ListSubheaderStyled>Plugins</ListSubheaderStyled>}>
+          {plugins.map(({ pluginName, pluginTitle }) => (
+            <ListItem key={pluginName}>
+              <SidebarLinkButton
+                title={pluginTitle}
+                to={getPluginRoute(pluginName)}
+                Icon={Info}
+                selected={pluginName === urlPluginName}
+              />
+            </ListItem>
+          ))}
+        </List>
+      )}
     </SidebarStyled>
   );
 };

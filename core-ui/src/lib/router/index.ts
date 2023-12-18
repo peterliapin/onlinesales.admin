@@ -1,4 +1,4 @@
-import { Parser, route, intParser } from "typesafe-routes";
+import { Parser, route, intParser, stringParser } from "typesafe-routes";
 
 export const enum CoreModule {
   contacts = "contacts",
@@ -19,6 +19,8 @@ const coreModuleParser: Parser<CoreModule> = {
   parse: (value) => value as CoreModule,
   serialize: (moduleName) => moduleName,
 };
+
+export const pluginRoute = route("/plugins/:pluginName", { pluginName: stringParser }, {});
 
 export const coreModuleRoute = route(
   "/:moduleName",
@@ -55,6 +57,8 @@ export const contactInvoicesRoute = route("invoices", {}, {});
 export const contactLogsRoute = route("logs", {}, {});
 
 export const getCoreModuleRoute = (moduleName: CoreModule) => coreModuleRoute({ moduleName }).$;
+
+export const getPluginRoute = (pluginName: string) => pluginRoute({ pluginName }).$;
 
 export const getEditFormRoute = (id: number) => editFormRoute({ id: id }).$;
 

@@ -1,29 +1,15 @@
 {
   "compilerOptions": {
-    "lib": ["dom", "dom.iterable", "es2020", "esnext"],
-    "jsx": "react-jsx",
     "moduleResolution": "node",
     "allowJs": false,
     "target": "ESNext",
     "module": "ESNext",
     "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "forceConsistentCasingInFileNames": true,
     "strict": true,
     "skipLibCheck": true,
     "resolveJsonModule": true,
-    "baseUrl": "./src",
-    "paths": {
-      "@providers/*": ["providers/*"],
-      "@lib/*": ["lib/*"],
-      "@features/*": ["features/*"],
-      "@components/*": ["components/*"],
-      "@hooks": ["hooks/index"],
-    },
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
     "types": [
-      "node"
+      "node",
     ],
-  }
+  },
 }
