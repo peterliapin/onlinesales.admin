@@ -37,7 +37,7 @@ export const DropdownMenu = () => {
   };
 
   const handleProfileClick = () => {
-    navigate(`/users/${userInfo?.details?.id}/edit`);
+    navigate("/users/me/edit");
   };
 
   return (
