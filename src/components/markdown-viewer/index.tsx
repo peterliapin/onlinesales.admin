@@ -6,6 +6,7 @@ import { MarkdownViewerProps } from "./types";
 import remarkGfm from "remark-gfm";
 import remarkBreaks from "remark-breaks";
 import remarkDirective from "remark-directive";
+import rehypeRaw from "rehype-raw";
 import { visit } from "unist-util-visit";
 import { h } from "hastscript";
 //Styles
@@ -50,8 +51,10 @@ const MarkdownViewer = ({ source }: MarkdownViewerProps) => {
   useEffect(() => {
     onChange(source);
   }, [source]);
+
   return (
     <ReactMarkdown
+      rehypePlugins={[rehypeRaw]}
       remarkPlugins={[remarkGfm, remarkBreaks, remarkDirective, DirectiveHandler]}
       transformImageUri={ImageUriTransformer}
     >
